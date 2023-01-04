@@ -4,7 +4,7 @@ import com.willbsp.habits.data.Habit
 import com.willbsp.habits.data.database.HabitDao
 import kotlinx.coroutines.flow.Flow
 
-class OfflineHabitsRepository(private val habitDao: HabitDao) : HabitRepository {
+class OfflineHabitRepository(private val habitDao: HabitDao) : HabitRepository {
 
     override fun getAllHabitsStream(): Flow<List<Habit>> {
         return habitDao.getAllHabits()
