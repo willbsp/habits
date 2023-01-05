@@ -1,3 +1,16 @@
 <resources>
     <string name="app_name">Habits</string>
+    <string name="topbar_back">Back</string>
+
+    <!--add habit screen start-->
+    <string name="add_habit_title">Add Habit</string>
+    <string name="add_habit_add_habit">Add item</string>
+    <string name="add_habit_name">Name</string>
+    <string name="add_habit_frequency">Frequency</string>
+    <!--add habit screen end-->
+
+    <!--home screen start-->
+    <string name="home_screen_add_habit">Add Habit</string>
+    <!--home screen end-->
+
 </resources>
