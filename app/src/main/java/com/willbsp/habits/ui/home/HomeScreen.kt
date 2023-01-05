@@ -2,12 +2,14 @@ package com.willbsp.habits.ui.home
 
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.willbsp.habits.ui.theme.HabitsTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -21,7 +23,10 @@ fun HomeScreen(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = navigateToAddHabit,
-                modifier = Modifier.navigationBarsPadding()
+                shape = CircleShape,
+                modifier = Modifier
+                    .navigationBarsPadding()
+                    .padding(10.dp)
             ) {
                 Icon(
                     imageVector = Icons.Default.Add,
@@ -40,7 +45,7 @@ fun HomeScreen(
 
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun HomeScreenPreview() {
     HabitsTheme() {
