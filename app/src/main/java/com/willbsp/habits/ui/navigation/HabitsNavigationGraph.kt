@@ -24,7 +24,9 @@ fun HabitsNavigationGraph(
             )
         }
         composable(route = "addhabitscreen") {
-            AddHabitScreen()
+            AddHabitScreen(
+                popToHome = { navController.navigateUp() }
+            )
         }
         // TODO when it comes to adding edit screen can use composable(arguments = x) for habit
     }
