@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface HabitDao {
 
-    @Query("SELECT * from habit ORDER BY name ASC")
+    @Query("SELECT * from habit")
     fun getAllHabits(): Flow<List<Habit>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE) // TODO will need to change this
