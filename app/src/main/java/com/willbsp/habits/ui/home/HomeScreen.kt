@@ -1,19 +1,30 @@
 package com.willbsp.habits.ui.home
 
-import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.willbsp.habits.R
+import com.willbsp.habits.data.Habit
+import com.willbsp.habits.data.HabitFrequency
+import com.willbsp.habits.di.AppViewModelProvider
 import com.willbsp.habits.ui.HabitsAppTopBar
 import com.willbsp.habits.ui.theme.HabitsTheme
-import com.willbsp.habits.R
+import com.willbsp.habits.ui.theme.Typography
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -43,7 +54,7 @@ fun HomeScreen(
             ) {
                 Icon(
                     imageVector = Icons.Default.Add,
-                    contentDescription = "Add item" // TODO strings.xml
+                    contentDescription = stringResource(R.string.home_screen_add_habit)
                 )
             }
         }
@@ -115,6 +126,11 @@ private fun HabitCard(
 @Composable
 fun HomeScreenPreview() {
     HabitsTheme() {
-        HomeScreen() {}
+        HabitsList(
+            habitsList = listOf(
+                Habit(id = 0, name = "Running", frequency = HabitFrequency.DAILY),
+                Habit(id = 1, name = "Programming", frequency = HabitFrequency.DAILY)
+            )
+        )
     }
 }
