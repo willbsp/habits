@@ -3,7 +3,7 @@ package com.willbsp.habits.di
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.willbsp.habits.ui.addhabit.AddHabitViewModel
+import com.willbsp.habits.ui.add.AddHabitViewModel
 import com.willbsp.habits.ui.home.HomeScreenViewModel
 
 object AppViewModelProvider {

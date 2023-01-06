@@ -5,7 +5,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.willbsp.habits.ui.addhabit.AddHabitScreen
+import com.willbsp.habits.ui.add.AddHabitScreen
 import com.willbsp.habits.ui.home.HomeScreen
 
 @Composable
@@ -25,7 +25,8 @@ fun HabitsNavigationGraph(
         }
         composable(route = "addhabitscreen") {
             AddHabitScreen(
-                popToHome = { navController.navigateUp() }
+                navigateUp = { navController.navigateUp() },
+                navigateBack = { navController.popBackStack() }
             )
         }
         // TODO when it comes to adding edit screen can use composable(arguments = x) for habit
