@@ -5,11 +5,13 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.willbsp.habits.data.Habit
+import com.willbsp.habits.data.Entry
 
-@Database(entities = [Habit::class], version = 1, exportSchema = false)
+@Database(entities = [Habit::class, Entry::class], version = 1, exportSchema = false)
 abstract class HabitDatabase : RoomDatabase() {
 
     abstract fun habitDao(): HabitDao
+    abstract fun entryDeo(): EntryDao
 
     companion object { // Database is a singleton
 
