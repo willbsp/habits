@@ -6,7 +6,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -26,16 +25,31 @@ import com.willbsp.habits.ui.HabitsAppTopBar
 import com.willbsp.habits.ui.theme.HabitsTheme
 import com.willbsp.habits.ui.theme.Typography
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
-    navigateToAddHabit: () -> Unit = {},
-    viewModel: HomeScreenViewModel = viewModel(factory = AppViewModelProvider.Factory),
-    habitsList: List<Habit> = listOf() // TODO temp for building
+    navigateToAddHabit: () -> Unit,
+    viewModel: HomeScreenViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
 
     val homeUiState by viewModel.homeUiState.collectAsState()
+
+    Home(
+        modifier = modifier,
+        navigateToAddHabit = navigateToAddHabit,
+        homeUiState = homeUiState
+    )
+
+}
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun Home(
+    modifier: Modifier = Modifier,
+    navigateToAddHabit: () -> Unit,
+    homeUiState: HomeUiState
+) {
 
     Scaffold(
         topBar = {
@@ -61,15 +75,13 @@ fun HomeScreen(
     ) { innerPadding -> // TODO
 
         HabitsList(
-            //habitsList = habitsList,
             habitsList = homeUiState.habitsList,
-            modifier = Modifier
+            modifier = modifier
                 .padding(innerPadding)
                 .padding(10.dp)
         )
 
     }
-
 }
 
 @Composable
@@ -104,12 +116,12 @@ private fun HabitCard(
             Text(text = habit.name, style = Typography.titleLarge)
             Spacer(modifier = Modifier.weight(1f))
             //if (habit.completed) {
-                IconButton(onClick = { /*TODO*/ }) {
-                    Icon(
-                        imageVector = Icons.Default.Done,
-                        contentDescription = stringResource(R.string.home_screen_completed)
-                    )
-                }
+            IconButton(onClick = { /*TODO*/ }) {
+                Icon(
+                    imageVector = Icons.Default.Done,
+                    contentDescription = stringResource(R.string.home_screen_completed)
+                )
+            }
             /*} else {
                 IconButton(onClick = { /*TODO*/ }) {
                     Icon(
@@ -125,11 +137,24 @@ private fun HabitCard(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun HomeScreenPreview() {
-    HabitsTheme() {
-        HabitsList(
-            habitsList = listOf(
-                Habit(id = 0, name = "Running", frequency = HabitFrequency.DAILY),
-                Habit(id = 1, name = "Programming", frequency = HabitFrequency.DAILY)
+    HabitsTheme {
+        Home(
+            navigateToAddHabit = {},
+            homeUiState = HomeUiState(
+                listOf(
+                    Habit(
+                        id = 0, name = "Running", frequency = HabitFrequency.DAILY
+                    ),
+                    Habit(
+                        id = 1, name = "Swimming", frequency = HabitFrequency.WEEKLY
+                    ),
+                    Habit(
+                        id = 2, name = "Reading", frequency = HabitFrequency.DAILY
+                    ),
+                    Habit(
+                        id = 3, name = "Piano Practice", frequency = HabitFrequency.DAILY
+                    ),
+                )
             )
         )
     }
