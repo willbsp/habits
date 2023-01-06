@@ -48,7 +48,7 @@ fun AddHabitScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddHabit(
+private fun AddHabit(
     modifier: Modifier = Modifier,
     navigateUp: () -> Unit,
     onSaveClick: () -> Unit,
@@ -94,7 +94,7 @@ fun AddHabit(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddHabitForm(
+private fun AddHabitForm(
     modifier: Modifier = Modifier,
     onValueChange: (HabitUiState) -> Unit,
     habitUiState: HabitUiState
@@ -119,7 +119,7 @@ fun AddHabitForm(
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun AddHabitScreenPreview() {
+private fun AddHabitScreenPreview() {
     HabitsTheme() {
         AddHabit(
             navigateUp = {},
