@@ -19,8 +19,12 @@ import com.willbsp.habits.R
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
-    navigateToAddHabit: () -> Unit
+    navigateToAddHabit: () -> Unit = {},
+    viewModel: HomeScreenViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    habitsList: List<Habit> = listOf() // TODO temp for building
 ) {
+
+    val homeUiState by viewModel.homeUiState.collectAsState()
 
     Scaffold(
         topBar = {
@@ -45,9 +49,12 @@ fun HomeScreen(
         }
     ) { innerPadding -> // TODO
 
-        Text(
-            text = "hi",
-            modifier = modifier.padding(innerPadding)
+        HabitsList(
+            //habitsList = habitsList,
+            habitsList = homeUiState.habitsList,
+            modifier = Modifier
+                .padding(innerPadding)
+                .padding(10.dp)
         )
 
     }
