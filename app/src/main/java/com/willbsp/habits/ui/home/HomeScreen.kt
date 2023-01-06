@@ -54,6 +54,56 @@ fun HomeScreen(
 
 }
 
+@Composable
+private fun HabitsList( // TODO go through all composable files and make any private
+    habitsList: List<Habit>,
+    modifier: Modifier = Modifier
+) {
+
+    LazyColumn(modifier = modifier, verticalArrangement = Arrangement.spacedBy(10.dp)) {
+        items(items = habitsList, key = { it.id }) { habit ->
+            HabitCard(habit = habit)
+        }
+    }
+
+}
+
+@Composable
+private fun HabitCard(
+    habit: Habit,
+    modifier: Modifier = Modifier
+) {
+    Card(
+        modifier = modifier.height(50.dp), // TODO not needed
+        elevation = CardDefaults.cardElevation() // TODO is there a default relating to the theme
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(10.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(text = habit.name, style = Typography.titleLarge)
+            Spacer(modifier = Modifier.weight(1f))
+            //if (habit.completed) {
+                IconButton(onClick = { /*TODO*/ }) {
+                    Icon(
+                        imageVector = Icons.Default.Done,
+                        contentDescription = stringResource(R.string.home_screen_completed)
+                    )
+                }
+            /*} else {
+                IconButton(onClick = { /*TODO*/ }) {
+                    Icon(
+                        imageVector = Icons.Default.Close,
+                        contentDescription = stringResource(R.string.home_screen_uncompleted)
+                    )
+                }
+            }*/
+        }
+    }
+}
+
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun HomeScreenPreview() {
