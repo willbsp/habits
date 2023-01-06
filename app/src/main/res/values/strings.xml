@@ -11,6 +11,8 @@
 
     <!--home screen start-->
     <string name="home_screen_add_habit">Add Habit</string>
+    <string name="home_screen_completed">Completed</string>
+    <string name="home_screen_uncompleted">Uncompleted</string>
     <!--home screen end-->
 
 </resources>
