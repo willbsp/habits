@@ -1,12 +1,14 @@
 package com.willbsp.habits.ui.add
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -14,6 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.willbsp.habits.R
+import com.willbsp.habits.data.HabitFrequency
 import com.willbsp.habits.di.AppViewModelProvider
 import com.willbsp.habits.ui.HabitsAppTopBar
 import com.willbsp.habits.ui.theme.HabitsTheme
@@ -113,14 +116,77 @@ private fun AddHabitForm(
             modifier = Modifier.fillMaxWidth()
         )
 
+        TextFieldDropdown(
+            onValueChange = onValueChange,
+            habitUiState = habitUiState
+        )
+
     }
 
 }
 
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun TextFieldDropdown( // TODO better animated dropdown
+    modifier: Modifier = Modifier,
+    onValueChange: (HabitUiState) -> Unit,
+    habitUiState: HabitUiState
+) {
+
+    var expanded by remember { mutableStateOf(false) }
+    var stringResource by remember { mutableStateOf(habitUiState.frequency.userReadableStringRes) }
+
+    val icon = if (expanded)
+        Icons.Filled.KeyboardArrowUp
+    else
+        Icons.Filled.KeyboardArrowDown
+
+    Column(
+        modifier = modifier
+    ) {
+        OutlinedTextField(
+            readOnly = true,
+            value = stringResource(stringResource),
+            onValueChange = { },
+            modifier = Modifier
+                .fillMaxWidth(),
+            label = { Text("Frequency") },
+            trailingIcon = {
+                Icon(icon, "contentDescription",
+                    Modifier.clickable {
+                        expanded = !expanded
+                    }
+                )
+            }
+        )
+
+        // Create a drop-down menu with list of cities,
+        // when clicked, set the Text Field text as the city selected
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
+            modifier = Modifier
+        ) {
+            HabitFrequency.values().forEach { frequency ->
+                DropdownMenuItem(
+                    text = { Text(stringResource(frequency.userReadableStringRes)) },
+                    onClick = {
+                        onValueChange(habitUiState.copy(frequency = frequency))
+                        stringResource = frequency.userReadableStringRes
+                        expanded = false
+                    }
+                )
+            }
+        }
+    }
+}
+
+
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun AddHabitScreenPreview() {
-    HabitsTheme() {
+    HabitsTheme {
         AddHabit(
             navigateUp = {},
             onSaveClick = {},

@@ -1,11 +1,13 @@
 package com.willbsp.habits.data
 
+import androidx.annotation.StringRes
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.willbsp.habits.R
 
-enum class HabitFrequency {
-    DAILY,
-    WEEKLY
+enum class HabitFrequency(@StringRes val userReadableStringRes: Int) {
+    DAILY(R.string.frequency_daily),
+    WEEKLY(R.string.frequency_weekly)
 }
 
 @Entity(tableName = "habit")

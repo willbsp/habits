@@ -2,6 +2,11 @@
     <string name="app_name">Habits</string>
     <string name="topbar_back">Back</string>
 
+    <!--habit frequency-->
+    <string name="frequency_daily">Daily</string>
+    <string name="frequency_weekly">Weekly</string>
+    <!--end habit frequency-->
+
     <!--add habit screen start-->
     <string name="add_habit_title">Add Habit</string>
     <string name="add_habit_add_habit">Add item</string>
