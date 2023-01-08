@@ -18,9 +18,9 @@ fun HabitsNavigationGraph(
         startDestination = "home", // TODO
         modifier = modifier
     ) {
-        composable(route = "home") { // TODO strings.xml or enum?
+        composable(route = "home") { // TODO make into an enum
             HomeScreen(
-                navigateToAddHabit = { navController.navigate("addhabitscreen")}
+                navigateToAddHabit = { navController.navigate("addhabitscreen") }
             )
         }
         composable(route = "addhabitscreen") {
