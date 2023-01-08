@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.stateIn
 
 data class HomeUiState(val habitsList: List<Habit> = listOf())
 
-class HomeScreenViewModel(private val habitsRepository: HabitRepository): ViewModel() {
+class HomeScreenViewModel(habitsRepository: HabitRepository) : ViewModel() {
 
     val homeUiState: StateFlow<HomeUiState> =
         habitsRepository.getAllHabitsStream().map { HomeUiState(it) }
@@ -21,8 +21,8 @@ class HomeScreenViewModel(private val habitsRepository: HabitRepository): ViewMo
                 initialValue = HomeUiState()
             )
 
-    companion object{
-        val TIMEOUT_MILLIS = 5_000L;
+    companion object {
+        const val TIMEOUT_MILLIS = 5_000L
     }
 
 }
