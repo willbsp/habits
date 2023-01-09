@@ -85,7 +85,7 @@ private fun Home(
 }
 
 @Composable
-private fun HabitsList( // TODO go through all composable files and make any private
+private fun HabitsList(
     habitsList: List<Habit>,
     modifier: Modifier = Modifier
 ) {
@@ -136,7 +136,7 @@ private fun HabitCard(
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun HomeScreenPreview() {
+private fun HomeScreenPreview() {
     HabitsTheme {
         Home(
             navigateToAddHabit = {},
