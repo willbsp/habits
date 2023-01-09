@@ -12,6 +12,9 @@ interface AppContainer {
 // TODO look at inventory example for examples of code comments
 class AppDataContainer(private val context: Context) : AppContainer {
     override val habitsRepository: HabitRepository by lazy {
-        OfflineHabitRepository(HabitDatabase.getDatabase(context).habitDao())
+        OfflineHabitRepository(
+            habitDao = HabitDatabase.getDatabase(context).habitDao(),
+            entryDao = HabitDatabase.getDatabase(context).entryDao()
+        )
     }
 }
