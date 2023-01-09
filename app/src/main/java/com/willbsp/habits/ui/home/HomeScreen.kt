@@ -1,5 +1,6 @@
 package com.willbsp.habits.ui.home
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -8,10 +9,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -64,7 +62,8 @@ private fun Home(
         topBar = {
             HabitsAppTopBar(
                 title = stringResource(R.string.app_name),
-                canNavigateBack = false
+                canNavigateBack = false,
+                navigateToSettings = {}
             )
         },
         floatingActionButton = {
@@ -83,16 +82,34 @@ private fun Home(
         }
     ) { innerPadding -> // TODO
 
-        HabitsList(
-            habitsList = homeUiState.habitsList,
+        Column(
             modifier = modifier
                 .padding(innerPadding)
-                .padding(10.dp)
-        )
+                .padding(horizontal = 20.dp)
+                .fillMaxSize()
+        ) {
+
+            Text( // TODO could have title area change colour when list is scrolled, e.g timers in google clock
+                text = stringResource(R.string.home_screen_today),
+                style = Typography.titleLarge,
+                modifier = Modifier.padding(horizontal = 10.dp) // keep inline with habit titles
+            )
+
+            Spacer(modifier = Modifier.height(10.dp))
+
+            HabitsList(
+                habitsList = homeUiState.habitsList,
+                buttonOnClick = buttonOnClick,
+                modifier = Modifier
+            )
+
+        }
+
 
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun HabitsList(
     habitsList: List<Habit>,
@@ -104,7 +121,11 @@ private fun HabitsList(
         items(items = habitsList, key = { it.id }) { habit ->
             HabitCard(habit = habit, buttonOnClick = buttonOnClick)
         }
+        // Spacer at the bottom ensures that FAB does not obscure habits at the bottom of the list
+        this.stickyHeader { Spacer(modifier.height(100.dp)) }
     }
+
+    Spacer(modifier = Modifier.height(50.dp))
 
 }
 
@@ -114,33 +135,41 @@ private fun HabitCard(
     buttonOnClick: (Habit) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Card(
-        modifier = modifier.height(70.dp), // TODO not needed
-        elevation = CardDefaults.cardElevation() // TODO is there a default relating to the theme
+    ElevatedCard(
+        modifier = modifier.height(70.dp),
+        colors = CardDefaults.cardColors()
     ) {
+
+        var checked by remember { mutableStateOf(false) }
+
         Row(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(10.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(text = habit.name, style = Typography.titleLarge)
+
+            Text(
+                text = habit.name,
+                style = Typography.titleLarge,
+            )
+
             Spacer(modifier = Modifier.weight(1f))
-            //if (habit.completed) {
-            IconButton(onClick = { buttonOnClick(habit) }) {
+
+            IconToggleButton(
+                onCheckedChange = {
+                    buttonOnClick(habit)
+                    checked = !checked
+                },
+                checked = checked,
+                colors = IconButtonDefaults.filledIconToggleButtonColors()
+            ) {
                 Icon(
                     imageVector = Icons.Default.Done,
                     contentDescription = stringResource(R.string.home_screen_completed)
                 )
             }
-            /*} else {
-                IconButton(onClick = { /*TODO*/ }) {
-                    Icon(
-                        imageVector = Icons.Default.Close,
-                        contentDescription = stringResource(R.string.home_screen_uncompleted)
-                    )
-                }
-            }*/
+
         }
     }
 }

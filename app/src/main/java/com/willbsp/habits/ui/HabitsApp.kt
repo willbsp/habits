@@ -2,10 +2,13 @@ package com.willbsp.habits.ui
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.willbsp.habits.R
@@ -22,6 +25,7 @@ fun HabitsAppTopBar(
     title: String,
     modifier: Modifier = Modifier,
     canNavigateBack: Boolean,
+    navigateToSettings: () -> Unit = {},
     navigateUp: () -> Unit = {}
 ) {
     if (canNavigateBack) {
@@ -35,9 +39,28 @@ fun HabitsAppTopBar(
                         contentDescription = stringResource(R.string.topbar_back)
                     )
                 }
-            }
+            },
         )
     } else {
-        CenterAlignedTopAppBar(title = { Text(title) }, modifier = modifier)
+        CenterAlignedTopAppBar(
+            title = { Text(text = title, fontWeight = FontWeight.Bold) },
+            modifier = modifier,
+            navigationIcon = {
+                IconButton(onClick = {/* TODO */ }) {
+                    Icon(
+                        imageVector = Icons.Filled.DateRange,
+                        contentDescription = ""
+                    )
+                }
+            },
+            actions = {
+                IconButton(onClick = navigateToSettings) {
+                    Icon(
+                        imageVector = Icons.Filled.Settings,
+                        contentDescription = stringResource(R.string.settings)
+                    )
+                }
+            }
+        )
     }
 }

@@ -17,12 +17,13 @@ data class HomeUiState(val habitsList: List<Habit> = listOf())
 class HomeScreenViewModel(private val habitsRepository: HabitRepository) : ViewModel() {
 
     val homeUiState: StateFlow<HomeUiState> =
-        habitsRepository.getAllHabitsStream().map { HomeUiState(it) }
-            .stateIn(
-                scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
-                initialValue = HomeUiState()
-            )
+        habitsRepository.getAllHabitsStream().map {
+            HomeUiState(it)
+        }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
+            initialValue = HomeUiState()
+        )
 
     /*fun updateUiState(newHomeUiState: HomeUiState) {
         homeUiState = newHomeUiState;
