@@ -11,6 +11,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -24,6 +25,7 @@ import com.willbsp.habits.di.AppViewModelProvider
 import com.willbsp.habits.ui.HabitsAppTopBar
 import com.willbsp.habits.ui.theme.HabitsTheme
 import com.willbsp.habits.ui.theme.Typography
+import kotlinx.coroutines.launch
 
 @Composable
 fun HomeScreen(
@@ -33,10 +35,16 @@ fun HomeScreen(
 ) {
 
     val homeUiState by viewModel.homeUiState.collectAsState()
+    val coroutineScope = rememberCoroutineScope()
 
     Home(
         modifier = modifier,
         navigateToAddHabit = navigateToAddHabit,
+        buttonOnClick = {
+            coroutineScope.launch {
+                viewModel.saveEntry(it)
+            }
+        },
         homeUiState = homeUiState
     )
 
@@ -47,6 +55,7 @@ fun HomeScreen(
 @Composable
 private fun Home(
     modifier: Modifier = Modifier,
+    buttonOnClick: (Habit) -> Unit,
     navigateToAddHabit: () -> Unit,
     homeUiState: HomeUiState
 ) {
@@ -87,12 +96,13 @@ private fun Home(
 @Composable
 private fun HabitsList(
     habitsList: List<Habit>,
+    buttonOnClick: (Habit) -> Unit,
     modifier: Modifier = Modifier
 ) {
 
     LazyColumn(modifier = modifier, verticalArrangement = Arrangement.spacedBy(10.dp)) {
         items(items = habitsList, key = { it.id }) { habit ->
-            HabitCard(habit = habit)
+            HabitCard(habit = habit, buttonOnClick = buttonOnClick)
         }
     }
 
@@ -101,10 +111,11 @@ private fun HabitsList(
 @Composable
 private fun HabitCard(
     habit: Habit,
+    buttonOnClick: (Habit) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Card(
-        modifier = modifier.height(50.dp), // TODO not needed
+        modifier = modifier.height(70.dp), // TODO not needed
         elevation = CardDefaults.cardElevation() // TODO is there a default relating to the theme
     ) {
         Row(
@@ -116,7 +127,7 @@ private fun HabitCard(
             Text(text = habit.name, style = Typography.titleLarge)
             Spacer(modifier = Modifier.weight(1f))
             //if (habit.completed) {
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = { buttonOnClick(habit) }) {
                 Icon(
                     imageVector = Icons.Default.Done,
                     contentDescription = stringResource(R.string.home_screen_completed)
@@ -155,7 +166,8 @@ private fun HomeScreenPreview() {
                         id = 3, name = "Piano Practice", frequency = HabitFrequency.DAILY
                     ),
                 )
-            )
+            ),
+            buttonOnClick = {}
         )
     }
 }
