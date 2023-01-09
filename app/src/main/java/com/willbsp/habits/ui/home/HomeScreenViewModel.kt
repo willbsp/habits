@@ -2,7 +2,7 @@ package com.willbsp.habits.ui.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.willbsp.habits.data.Habit
+import com.willbsp.habits.data.model.Habit
 import com.willbsp.habits.data.repo.HabitRepository
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow

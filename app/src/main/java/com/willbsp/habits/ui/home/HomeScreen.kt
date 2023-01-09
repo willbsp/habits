@@ -18,8 +18,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.willbsp.habits.R
-import com.willbsp.habits.data.Habit
-import com.willbsp.habits.data.HabitFrequency
+import com.willbsp.habits.data.model.Habit
+import com.willbsp.habits.data.model.HabitFrequency
 import com.willbsp.habits.di.AppViewModelProvider
 import com.willbsp.habits.ui.HabitsAppTopBar
 import com.willbsp.habits.ui.theme.HabitsTheme

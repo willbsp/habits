@@ -1,7 +1,7 @@
 package com.willbsp.habits.data.repo
 
-import com.willbsp.habits.data.Habit
 import com.willbsp.habits.data.database.HabitDao
+import com.willbsp.habits.data.model.Habit
 import kotlinx.coroutines.flow.Flow
 
 class OfflineHabitRepository(private val habitDao: HabitDao) : HabitRepository {

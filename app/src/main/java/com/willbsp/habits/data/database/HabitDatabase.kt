@@ -4,8 +4,8 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.willbsp.habits.data.Habit
-import com.willbsp.habits.data.Entry
+import com.willbsp.habits.data.model.Entry
+import com.willbsp.habits.data.model.Habit
 
 @Database(entities = [Habit::class, Entry::class], version = 1, exportSchema = false)
 abstract class HabitDatabase : RoomDatabase() {

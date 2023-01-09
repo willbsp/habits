@@ -4,8 +4,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import com.willbsp.habits.data.Habit
-import com.willbsp.habits.data.HabitFrequency
+import com.willbsp.habits.data.model.Habit
+import com.willbsp.habits.data.model.HabitFrequency
 import com.willbsp.habits.data.repo.HabitRepository
 
 data class HabitUiState(
@@ -23,7 +23,12 @@ class AddHabitViewModel(private val habitsRepository: HabitRepository) : ViewMod
     }
 
     suspend fun saveHabit() { // TODO validation needed
-        habitsRepository.insertHabit(Habit(name = habitUiState.name, frequency = habitUiState.frequency))
+        habitsRepository.insertHabit(
+            Habit(
+                name = habitUiState.name,
+                frequency = habitUiState.frequency
+            )
+        )
     }
 
 }

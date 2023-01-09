@@ -1,4 +1,4 @@
-package com.willbsp.habits.data
+package com.willbsp.habits.data.model
 
 import androidx.annotation.StringRes
 import androidx.room.Entity

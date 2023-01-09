@@ -1,6 +1,6 @@
 package com.willbsp.habits.data.repo
 
-import com.willbsp.habits.data.Habit
+import com.willbsp.habits.data.model.Habit
 import kotlinx.coroutines.flow.Flow
 
 interface HabitRepository {

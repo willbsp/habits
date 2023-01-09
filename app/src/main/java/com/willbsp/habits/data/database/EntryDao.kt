@@ -1,7 +1,7 @@
 package com.willbsp.habits.data.database
 
 import androidx.room.*
-import com.willbsp.habits.data.Entry
+import com.willbsp.habits.data.model.Entry
 import kotlinx.coroutines.flow.Flow
 
 @Dao
