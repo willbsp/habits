@@ -11,7 +11,7 @@ import com.willbsp.habits.data.model.Habit
 abstract class HabitDatabase : RoomDatabase() {
 
     abstract fun habitDao(): HabitDao
-    abstract fun entryDeo(): EntryDao
+    abstract fun entryDao(): EntryDao
 
     companion object { // Database is a singleton
 
