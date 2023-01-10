@@ -8,17 +8,17 @@ import com.willbsp.habits.data.model.Habit
 import com.willbsp.habits.data.model.HabitFrequency
 import com.willbsp.habits.data.repo.HabitRepository
 
-data class HabitUiState(
+data class AddHabitUiState(
     val name: String = "",
     val frequency: HabitFrequency = HabitFrequency.DAILY
 )
 
 class AddHabitViewModel(private val habitsRepository: HabitRepository) : ViewModel() {
 
-    var habitUiState by mutableStateOf(HabitUiState())
+    var habitUiState by mutableStateOf(AddHabitUiState())
         private set
 
-    fun updateUiState(newHabitsUiState: HabitUiState) {
+    fun updateUiState(newHabitsUiState: AddHabitUiState) {
         habitUiState = newHabitsUiState.copy()
     }
 

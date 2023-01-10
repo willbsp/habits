@@ -55,8 +55,8 @@ private fun AddHabit(
     modifier: Modifier = Modifier,
     navigateUp: () -> Unit,
     onSaveClick: () -> Unit,
-    onValueChange: (HabitUiState) -> Unit,
-    habitUiState: HabitUiState
+    onValueChange: (AddHabitUiState) -> Unit,
+    habitUiState: AddHabitUiState
 ) {
 
     Scaffold(
@@ -99,8 +99,8 @@ private fun AddHabit(
 @Composable
 private fun AddHabitForm(
     modifier: Modifier = Modifier,
-    onValueChange: (HabitUiState) -> Unit,
-    habitUiState: HabitUiState
+    onValueChange: (AddHabitUiState) -> Unit,
+    habitUiState: AddHabitUiState
 ) {
 
     Column(
@@ -108,7 +108,7 @@ private fun AddHabitForm(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        OutlinedTextField(
+        OutlinedTextField( // TODO need to cap habit name length
             value = habitUiState.name,
             singleLine = true,
             onValueChange = { onValueChange(habitUiState.copy(name = it)) },
@@ -130,8 +130,8 @@ private fun AddHabitForm(
 @Composable
 private fun TextFieldDropdown( // TODO better animated dropdown
     modifier: Modifier = Modifier,
-    onValueChange: (HabitUiState) -> Unit,
-    habitUiState: HabitUiState
+    onValueChange: (AddHabitUiState) -> Unit,
+    habitUiState: AddHabitUiState
 ) {
 
     var expanded by remember { mutableStateOf(false) }
@@ -191,7 +191,7 @@ private fun AddHabitScreenPreview() {
             navigateUp = {},
             onSaveClick = {},
             onValueChange = {},
-            habitUiState = HabitUiState()
+            habitUiState = AddHabitUiState()
         )
     }
 }
