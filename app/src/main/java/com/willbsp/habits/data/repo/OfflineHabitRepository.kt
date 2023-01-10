@@ -4,7 +4,6 @@ import com.willbsp.habits.data.database.EntryDao
 import com.willbsp.habits.data.database.HabitDao
 import com.willbsp.habits.data.model.Entry
 import com.willbsp.habits.data.model.Habit
-import com.willbsp.habits.data.model.HabitWithEntries
 import kotlinx.coroutines.flow.Flow
 
 class OfflineHabitRepository(
@@ -16,28 +15,36 @@ class OfflineHabitRepository(
         return habitDao.getAllHabits()
     }
 
-    override fun getAllHabitsWithEntriesStream(): Flow<List<HabitWithEntries>> {
-        return habitDao.getHabitsWithEntries()
-    }
-
-    override fun entryExistsForDate(date: String, habitId: Int): Flow<Boolean> {
+    override fun entryExistsForDateStream(date: String, habitId: Int): Flow<Boolean> {
         return entryDao.entryExistsForDate(date, habitId)
     }
 
-    override suspend fun insertEntry(entry: Entry) {
-        entryDao.insert(entry)
+    override suspend fun getEntryForDate(date: String, habitId: Int): Entry? {
+        return entryDao.getEntryForDate(date, habitId)
     }
 
     override suspend fun insertHabit(habit: Habit) {
         habitDao.insert(habit)
     }
 
+    override suspend fun insertEntry(entry: Entry) {
+        entryDao.insert(entry)
+    }
+
     override suspend fun deleteHabit(habit: Habit) {
         habitDao.delete(habit)
     }
 
+    override suspend fun deleteEntry(entry: Entry) {
+        entryDao.delete(entry)
+    }
+
     override suspend fun updateHabit(habit: Habit) {
         habitDao.update(habit)
+    }
+
+    override suspend fun updateEntry(entry: Entry) {
+        entryDao.update(entry)
     }
 
 }
