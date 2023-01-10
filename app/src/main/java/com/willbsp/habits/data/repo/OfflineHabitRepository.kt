@@ -20,6 +20,10 @@ class OfflineHabitRepository(
         return habitDao.getHabitsWithEntries()
     }
 
+    override fun entryExistsForDate(date: String, habitId: Int): Flow<Boolean> {
+        return entryDao.entryExistsForDate(date, habitId)
+    }
+
     override suspend fun insertEntry(entry: Entry) {
         entryDao.insert(entry)
     }

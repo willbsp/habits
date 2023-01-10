@@ -11,6 +11,8 @@ interface HabitRepository {
 
     fun getAllHabitsWithEntriesStream(): Flow<List<HabitWithEntries>> // TODO not to be performed on main thread!!!
 
+    fun entryExistsForDate(date: String, habitId: Int): Flow<Boolean>
+
     suspend fun insertEntry(entry: Entry)
 
     suspend fun insertHabit(habit: Habit)

@@ -10,6 +10,9 @@ interface EntryDao {
     @Query("SELECT * from entries ORDER BY id ASC")
     fun getAllEntries(): Flow<List<Entry>>
 
+    @Query("SELECT EXISTS(SELECT * FROM entries WHERE date = :date AND habit_id = :habitId)")
+    fun entryExistsForDate(date: String, habitId: Int): Flow<Boolean>
+
     @Insert(onConflict = OnConflictStrategy.IGNORE) // TODO will need to change this
     suspend fun insert(entry: Entry)
 
