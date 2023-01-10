@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.willbsp.habits.R
 import com.willbsp.habits.data.model.Habit
+import com.willbsp.habits.data.model.HabitFrequency
 import com.willbsp.habits.di.AppViewModelProvider
 import com.willbsp.habits.ui.HabitsAppTopBar
 import com.willbsp.habits.ui.theme.HabitsTheme
@@ -177,20 +178,27 @@ private fun HomeScreenPreview() {
         Home(
             navigateToAddHabit = {},
             homeUiState = HomeUiState(
-                /*listOf(
-                    Habit(
-                        id = 0, name = "Running", frequency = HabitFrequency.DAILY
+                listOf(
+                    HomeHabitUiState(
+                        habit = Habit(id = 0, name = "Running", frequency = HabitFrequency.DAILY),
+                        completed = false
                     ),
-                    Habit(
-                        id = 1, name = "Swimming", frequency = HabitFrequency.WEEKLY
+                    HomeHabitUiState(
+                        Habit(
+                            id = 1, name = "Swimming", frequency = HabitFrequency.WEEKLY
+                        ), completed = true
                     ),
-                    Habit(
-                        id = 2, name = "Reading", frequency = HabitFrequency.DAILY
+                    HomeHabitUiState(
+                        Habit(
+                            id = 2, name = "Reading", frequency = HabitFrequency.DAILY
+                        ), completed = false
                     ),
-                    Habit(
-                        id = 3, name = "Piano Practice", frequency = HabitFrequency.DAILY
+                    HomeHabitUiState(
+                        Habit(
+                            id = 3, name = "Piano Practice", frequency = HabitFrequency.DAILY
+                        ), completed = true
                     ),
-                )*/
+                )
             ),
             buttonOnClick = {}
         )
