@@ -18,7 +18,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.willbsp.habits.R
 import com.willbsp.habits.data.model.Habit
-import com.willbsp.habits.data.model.HabitFrequency
 import com.willbsp.habits.di.AppViewModelProvider
 import com.willbsp.habits.ui.HabitsAppTopBar
 import com.willbsp.habits.ui.theme.HabitsTheme
@@ -32,7 +31,7 @@ fun HomeScreen(
     viewModel: HomeScreenViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
 
-    val homeUiState by viewModel.homeUiState.collectAsState()
+    val homeUiState by viewModel.homeUiState.collectAsState(HomeUiState())
     val coroutineScope = rememberCoroutineScope()
 
     Home(
@@ -112,13 +111,13 @@ private fun Home(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun HabitsList(
-    habitsList: List<Habit>,
+    habitsList: List<HabitHomeUiState>,
     buttonOnClick: (Habit) -> Unit,
     modifier: Modifier = Modifier
 ) {
 
     LazyColumn(modifier = modifier, verticalArrangement = Arrangement.spacedBy(10.dp)) {
-        items(items = habitsList, key = { it.id }) { habit ->
+        items(items = habitsList, key = { it.habit.id }) { habit ->
             HabitCard(habit = habit, buttonOnClick = buttonOnClick)
         }
         // Spacer at the bottom ensures that FAB does not obscure habits at the bottom of the list
@@ -131,7 +130,7 @@ private fun HabitsList(
 
 @Composable
 private fun HabitCard(
-    habit: Habit,
+    habit: HabitHomeUiState,
     buttonOnClick: (Habit) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -139,8 +138,6 @@ private fun HabitCard(
         modifier = modifier.height(70.dp),
         colors = CardDefaults.cardColors()
     ) {
-
-        var checked by remember { mutableStateOf(false) }
 
         Row(
             modifier = Modifier
@@ -150,7 +147,7 @@ private fun HabitCard(
         ) {
 
             Text(
-                text = habit.name,
+                text = habit.habit.name,
                 style = Typography.titleLarge,
             )
 
@@ -158,10 +155,9 @@ private fun HabitCard(
 
             IconToggleButton(
                 onCheckedChange = {
-                    buttonOnClick(habit)
-                    checked = !checked
+                    buttonOnClick(habit.habit)
                 },
-                checked = checked,
+                checked = habit.completed,
                 colors = IconButtonDefaults.filledIconToggleButtonColors()
             ) {
                 Icon(
@@ -181,7 +177,7 @@ private fun HomeScreenPreview() {
         Home(
             navigateToAddHabit = {},
             homeUiState = HomeUiState(
-                listOf(
+                /*listOf(
                     Habit(
                         id = 0, name = "Running", frequency = HabitFrequency.DAILY
                     ),
@@ -194,7 +190,7 @@ private fun HomeScreenPreview() {
                     Habit(
                         id = 3, name = "Piano Practice", frequency = HabitFrequency.DAILY
                     ),
-                )
+                )*/
             ),
             buttonOnClick = {}
         )
