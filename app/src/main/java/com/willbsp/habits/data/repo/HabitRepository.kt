@@ -9,7 +9,7 @@ interface HabitRepository {
 
     fun getAllHabitsStream(): Flow<List<Habit>>
 
-    fun getAllHabitsWithEntriesStream(): Flow<List<HabitWithEntries>> // TODO not to be performed on main thread!!!
+    fun entryExistsForDateStream(date: String, habitId: Int): Flow<Boolean>
 
     fun entryExistsForDate(date: String, habitId: Int): Flow<Boolean>
 
