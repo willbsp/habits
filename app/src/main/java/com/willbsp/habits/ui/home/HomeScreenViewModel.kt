@@ -10,27 +10,28 @@ import kotlinx.coroutines.flow.*
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
+
 data class HomeUiState(
-    val habitsList: List<HabitHomeUiState> = listOf()
+    val habitUiState: List<HomeHabitUiState> = listOf()
 )
 
-data class HabitHomeUiState( // TODO better organisation of ui state type names
+data class HomeHabitUiState(
     val habit: Habit,
     val completed: Boolean
 )
 
 class HomeScreenViewModel(private val habitsRepository: HabitRepository) : ViewModel() {
 
-    @OptIn(ExperimentalCoroutinesApi::class) // comment so this actually makes sense TODO
+    @OptIn(ExperimentalCoroutinesApi::class)
     val homeUiState: StateFlow<HomeUiState> =
         habitsRepository.getAllHabitsStream().flatMapLatest { habitList ->
-            val habitHomeUiStateFlows: List<Flow<HabitHomeUiState>> = habitList.map { habit ->
-                habitsRepository.entryExistsForDate(getCurrentDate(), habit.id).map {
-                    HabitHomeUiState(habit, it)
+            val homeHabitUiStateFlows: List<Flow<HomeHabitUiState>> = habitList.map { habit ->
+                habitsRepository.entryExistsForDateStream(getCurrentDate(), habit.id).map {
+                    HomeHabitUiState(habit, it)
                 }
             }
-            combine(habitHomeUiStateFlows) { habitHomeUiStateArray ->
-                HomeUiState(habitHomeUiStateArray.map { it })
+            combine(homeHabitUiStateFlows) { homeHabitUiStateArray ->
+                HomeUiState(homeHabitUiStateArray.toList())
             }
         }.stateIn(
             scope = viewModelScope,
@@ -38,17 +39,19 @@ class HomeScreenViewModel(private val habitsRepository: HabitRepository) : ViewM
             initialValue = HomeUiState()
         )
 
-    /*fun updateUiState(newHomeUiState: HomeUiState) {
-        homeUiState = newHomeUiState;
-    }*/
-
-    suspend fun saveEntry(habit: Habit) {
-        habitsRepository.insertEntry(
-            Entry(
-                habitId = habit.id,
-                date = getCurrentDate()
+    suspend fun toggleEntry(habit: Habit) {
+        val date: String = getCurrentDate()
+        val entry: Entry? = habitsRepository.getEntryForDate(date, habit.id)
+        if (entry == null) {
+            habitsRepository.insertEntry(
+                Entry(
+                    habitId = habit.id,
+                    date = date
+                )
             )
-        )
+        } else {
+            habitsRepository.deleteEntry(entry)
+        }
     }
 
     private fun getCurrentDate(): String {

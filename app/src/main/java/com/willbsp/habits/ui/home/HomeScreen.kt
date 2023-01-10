@@ -37,9 +37,9 @@ fun HomeScreen(
     Home(
         modifier = modifier,
         navigateToAddHabit = navigateToAddHabit,
-        buttonOnClick = {
+        buttonOnClick = { habit ->
             coroutineScope.launch {
-                viewModel.saveEntry(it)
+                viewModel.toggleEntry(habit)
             }
         },
         homeUiState = homeUiState
@@ -97,7 +97,7 @@ private fun Home(
             Spacer(modifier = Modifier.height(10.dp))
 
             HabitsList(
-                habitHomeUiStateList = homeUiState.habitsList,
+                habitUiStateList = homeUiState.habitUiState,
                 buttonOnClick = buttonOnClick,
                 modifier = Modifier
             )
@@ -111,14 +111,14 @@ private fun Home(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun HabitsList(
-    habitHomeUiStateList: List<HabitHomeUiState>,
+    habitUiStateList: List<HomeHabitUiState>,
     buttonOnClick: (Habit) -> Unit,
     modifier: Modifier = Modifier
 ) {
 
     LazyColumn(modifier = modifier, verticalArrangement = Arrangement.spacedBy(10.dp)) {
-        items(items = habitHomeUiStateList, key = { it.habit.id }) { habit ->
-            HabitCard(habitHomeUiState = habit, buttonOnClick = buttonOnClick)
+        items(items = habitUiStateList, key = { it.habit.id }) { habit ->
+            HabitCard(habitUiState = habit, buttonOnClick = buttonOnClick)
         }
         // Spacer at the bottom ensures that FAB does not obscure habits at the bottom of the list
         this.stickyHeader { Spacer(modifier.height(100.dp)) }
@@ -130,7 +130,7 @@ private fun HabitsList(
 
 @Composable
 private fun HabitCard(
-    habitHomeUiState: HabitHomeUiState,
+    habitUiState: HomeHabitUiState,
     buttonOnClick: (Habit) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -147,7 +147,7 @@ private fun HabitCard(
         ) {
 
             Text(
-                text = habitHomeUiState.habit.name,
+                text = habitUiState.habit.name,
                 style = Typography.titleLarge,
             )
 
@@ -155,9 +155,9 @@ private fun HabitCard(
 
             IconToggleButton(
                 onCheckedChange = {
-                    buttonOnClick(habitHomeUiState.habit)
+                    buttonOnClick(habitUiState.habit)
                 },
-                checked = habitHomeUiState.completed,
+                checked = habitUiState.completed,
                 colors = IconButtonDefaults.filledIconToggleButtonColors()
             ) {
                 Icon(
