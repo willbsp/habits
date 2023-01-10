@@ -9,6 +9,5 @@ data class Entry(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     @ColumnInfo(name = "habit_id") var habitId: Int,
-    val date: String,
-    val completed: Boolean
+    val date: String
 )
