@@ -5,20 +5,33 @@ import androidx.lifecycle.viewModelScope
 import com.willbsp.habits.data.model.Entry
 import com.willbsp.habits.data.model.Habit
 import com.willbsp.habits.data.repo.HabitRepository
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.*
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-data class HomeUiState(val habitsList: List<Habit> = listOf())
+data class HomeUiState(
+    val habitsList: List<HabitHomeUiState> = listOf()
+)
+
+data class HabitHomeUiState( // TODO better organisation of ui state type names
+    val habit: Habit,
+    val completed: Boolean
+)
 
 class HomeScreenViewModel(private val habitsRepository: HabitRepository) : ViewModel() {
 
+    @OptIn(ExperimentalCoroutinesApi::class) // comment so this actually makes sense TODO
     val homeUiState: StateFlow<HomeUiState> =
-        habitsRepository.getAllHabitsStream().map {
-            HomeUiState(it)
+        habitsRepository.getAllHabitsStream().flatMapLatest { habitList ->
+            val habitHomeUiStateFlows: List<Flow<HabitHomeUiState>> = habitList.map { habit ->
+                habitsRepository.entryExistsForDate(getCurrentDate(), habit.id).map {
+                    HabitHomeUiState(habit, it)
+                }
+            }
+            combine(habitHomeUiStateFlows) { habitHomeUiStateArray ->
+                HomeUiState(habitHomeUiStateArray.map { it })
+            }
         }.stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
@@ -30,15 +43,17 @@ class HomeScreenViewModel(private val habitsRepository: HabitRepository) : ViewM
     }*/
 
     suspend fun saveEntry(habit: Habit) {
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-        val currentDate = LocalDateTime.now().format(formatter)
         habitsRepository.insertEntry(
             Entry(
                 habitId = habit.id,
-                date = currentDate,
-                completed = true
+                date = getCurrentDate()
             )
         )
+    }
+
+    private fun getCurrentDate(): String {
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        return LocalDateTime.now().format(formatter)
     }
 
     companion object {
