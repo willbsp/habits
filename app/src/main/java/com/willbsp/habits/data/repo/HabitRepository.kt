@@ -2,7 +2,6 @@ package com.willbsp.habits.data.repo
 
 import com.willbsp.habits.data.model.Entry
 import com.willbsp.habits.data.model.Habit
-import com.willbsp.habits.data.model.HabitWithEntries
 import kotlinx.coroutines.flow.Flow
 
 interface HabitRepository {
@@ -11,14 +10,18 @@ interface HabitRepository {
 
     fun entryExistsForDateStream(date: String, habitId: Int): Flow<Boolean>
 
-    fun entryExistsForDate(date: String, habitId: Int): Flow<Boolean>
-
-    suspend fun insertEntry(entry: Entry)
+    suspend fun getEntryForDate(date: String, habitId: Int): Entry?
 
     suspend fun insertHabit(habit: Habit)
 
+    suspend fun insertEntry(entry: Entry)
+
     suspend fun deleteHabit(habit: Habit)
 
+    suspend fun deleteEntry(entry: Entry)
+
     suspend fun updateHabit(habit: Habit)
+
+    suspend fun updateEntry(entry: Entry)
 
 }
