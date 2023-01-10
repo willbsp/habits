@@ -97,7 +97,7 @@ private fun Home(
             Spacer(modifier = Modifier.height(10.dp))
 
             HabitsList(
-                habitsList = homeUiState.habitsList,
+                habitHomeUiStateList = homeUiState.habitsList,
                 buttonOnClick = buttonOnClick,
                 modifier = Modifier
             )
@@ -111,14 +111,14 @@ private fun Home(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun HabitsList(
-    habitsList: List<HabitHomeUiState>,
+    habitHomeUiStateList: List<HabitHomeUiState>,
     buttonOnClick: (Habit) -> Unit,
     modifier: Modifier = Modifier
 ) {
 
     LazyColumn(modifier = modifier, verticalArrangement = Arrangement.spacedBy(10.dp)) {
-        items(items = habitsList, key = { it.habit.id }) { habit ->
-            HabitCard(habit = habit, buttonOnClick = buttonOnClick)
+        items(items = habitHomeUiStateList, key = { it.habit.id }) { habit ->
+            HabitCard(habitHomeUiState = habit, buttonOnClick = buttonOnClick)
         }
         // Spacer at the bottom ensures that FAB does not obscure habits at the bottom of the list
         this.stickyHeader { Spacer(modifier.height(100.dp)) }
@@ -130,7 +130,7 @@ private fun HabitsList(
 
 @Composable
 private fun HabitCard(
-    habit: HabitHomeUiState,
+    habitHomeUiState: HabitHomeUiState,
     buttonOnClick: (Habit) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -147,7 +147,7 @@ private fun HabitCard(
         ) {
 
             Text(
-                text = habit.habit.name,
+                text = habitHomeUiState.habit.name,
                 style = Typography.titleLarge,
             )
 
@@ -155,9 +155,9 @@ private fun HabitCard(
 
             IconToggleButton(
                 onCheckedChange = {
-                    buttonOnClick(habit.habit)
+                    buttonOnClick(habitHomeUiState.habit)
                 },
-                checked = habit.completed,
+                checked = habitHomeUiState.completed,
                 colors = IconButtonDefaults.filledIconToggleButtonColors()
             ) {
                 Icon(
