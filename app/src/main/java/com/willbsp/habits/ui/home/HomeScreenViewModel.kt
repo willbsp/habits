@@ -3,7 +3,6 @@ package com.willbsp.habits.ui.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.willbsp.habits.data.model.Entry
-import com.willbsp.habits.data.model.Habit
 import com.willbsp.habits.data.repo.HabitRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
@@ -12,11 +11,12 @@ import java.time.format.DateTimeFormatter
 
 
 data class HomeUiState(
-    val habitUiState: List<HomeHabitUiState> = listOf()
+    val state: List<HomeHabitUiState> = listOf()
 )
 
 data class HomeHabitUiState(
-    val habit: Habit,
+    val id: Int,
+    val name: String,
     val completed: Boolean
 )
 
@@ -26,9 +26,10 @@ class HomeScreenViewModel(private val habitsRepository: HabitRepository) : ViewM
     val homeUiState: StateFlow<HomeUiState> =
         habitsRepository.getAllHabitsStream().flatMapLatest { habitList ->
             val homeHabitUiStateFlows: List<Flow<HomeHabitUiState>> = habitList.map { habit ->
-                habitsRepository.entryExistsForDateStream(getCurrentDate(), habit.id).map {
-                    HomeHabitUiState(habit, it)
-                }
+                habitsRepository.entryExistsForDateStream(getCurrentDate(), habit.id)
+                    .map { exists ->
+                        HomeHabitUiState(habit.id, habit.name, exists)
+                    }
             }
             combine(homeHabitUiStateFlows) { homeHabitUiStateArray ->
                 HomeUiState(homeHabitUiStateArray.toList())
@@ -39,13 +40,13 @@ class HomeScreenViewModel(private val habitsRepository: HabitRepository) : ViewM
             initialValue = HomeUiState()
         )
 
-    suspend fun toggleEntry(habit: Habit) {
+    suspend fun toggleEntry(habitId: Int) {
         val date: String = getCurrentDate()
-        val entry: Entry? = habitsRepository.getEntryForDate(date, habit.id)
+        val entry: Entry? = habitsRepository.getEntryForDate(date, habitId)
         if (entry == null) {
             habitsRepository.insertEntry(
                 Entry(
-                    habitId = habit.id,
+                    habitId = habitId,
                     date = date
                 )
             )

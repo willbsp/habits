@@ -17,8 +17,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.willbsp.habits.R
-import com.willbsp.habits.data.model.Habit
-import com.willbsp.habits.data.model.HabitFrequency
 import com.willbsp.habits.di.AppViewModelProvider
 import com.willbsp.habits.ui.HabitsAppTopBar
 import com.willbsp.habits.ui.theme.HabitsTheme
@@ -38,9 +36,9 @@ fun HomeScreen(
     Home(
         modifier = modifier,
         navigateToAddHabit = navigateToAddHabit,
-        buttonOnClick = { habit ->
+        buttonOnClick = { id ->
             coroutineScope.launch {
-                viewModel.toggleEntry(habit)
+                viewModel.toggleEntry(id)
             }
         },
         homeUiState = homeUiState
@@ -53,7 +51,7 @@ fun HomeScreen(
 @Composable
 private fun Home(
     modifier: Modifier = Modifier,
-    buttonOnClick: (Habit) -> Unit,
+    buttonOnClick: (Int) -> Unit,
     navigateToAddHabit: () -> Unit,
     homeUiState: HomeUiState
 ) {
@@ -98,7 +96,7 @@ private fun Home(
             Spacer(modifier = Modifier.height(10.dp))
 
             HabitsList(
-                habitUiStateList = homeUiState.habitUiState,
+                habitUiStateList = homeUiState.state,
                 buttonOnClick = buttonOnClick,
                 modifier = Modifier
             )
@@ -113,12 +111,12 @@ private fun Home(
 @Composable
 private fun HabitsList(
     habitUiStateList: List<HomeHabitUiState>,
-    buttonOnClick: (Habit) -> Unit,
+    buttonOnClick: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
 
     LazyColumn(modifier = modifier, verticalArrangement = Arrangement.spacedBy(10.dp)) {
-        items(items = habitUiStateList, key = { it.habit.id }) { habit ->
+        items(items = habitUiStateList, key = { it }) { habit ->
             HabitCard(habitUiState = habit, buttonOnClick = buttonOnClick)
         }
         // Spacer at the bottom ensures that FAB does not obscure habits at the bottom of the list
@@ -132,7 +130,7 @@ private fun HabitsList(
 @Composable
 private fun HabitCard(
     habitUiState: HomeHabitUiState,
-    buttonOnClick: (Habit) -> Unit,
+    buttonOnClick: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     ElevatedCard(
@@ -148,7 +146,7 @@ private fun HabitCard(
         ) {
 
             Text(
-                text = habitUiState.habit.name,
+                text = habitUiState.name,
                 style = Typography.titleLarge,
             )
 
@@ -156,7 +154,7 @@ private fun HabitCard(
 
             IconToggleButton(
                 onCheckedChange = {
-                    buttonOnClick(habitUiState.habit)
+                    buttonOnClick(habitUiState.id)
                 },
                 checked = habitUiState.completed,
                 colors = IconButtonDefaults.filledIconToggleButtonColors()
@@ -180,23 +178,24 @@ private fun HomeScreenPreview() {
             homeUiState = HomeUiState(
                 listOf(
                     HomeHabitUiState(
-                        habit = Habit(id = 0, name = "Running", frequency = HabitFrequency.DAILY),
+                        id = 0,
+                        name = "Running",
                         completed = false
                     ),
                     HomeHabitUiState(
-                        Habit(
-                            id = 1, name = "Swimming", frequency = HabitFrequency.WEEKLY
-                        ), completed = true
+                        id = 1,
+                        name = "Swimming",
+                        completed = true
                     ),
                     HomeHabitUiState(
-                        Habit(
-                            id = 2, name = "Reading", frequency = HabitFrequency.DAILY
-                        ), completed = false
+                        id = 2,
+                        name = "Reading",
+                        completed = false
                     ),
                     HomeHabitUiState(
-                        Habit(
-                            id = 3, name = "Piano Practice", frequency = HabitFrequency.DAILY
-                        ), completed = true
+                        id = 3,
+                        name = "Piano Practice",
+                        completed = true
                     ),
                 )
             ),
