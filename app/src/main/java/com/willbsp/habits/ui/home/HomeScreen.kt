@@ -116,7 +116,7 @@ private fun HabitsList(
 ) {
 
     LazyColumn(modifier = modifier, verticalArrangement = Arrangement.spacedBy(10.dp)) {
-        items(items = habitUiStateList, key = { it }) { habit ->
+        items(items = habitUiStateList, key = { it.id }) { habit ->
             HabitCard(habitUiState = habit, buttonOnClick = buttonOnClick)
         }
         // Spacer at the bottom ensures that FAB does not obscure habits at the bottom of the list
