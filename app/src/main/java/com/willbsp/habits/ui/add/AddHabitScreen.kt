@@ -161,8 +161,6 @@ private fun TextFieldDropdown( // TODO better animated dropdown
             }
         )
 
-        // Create a drop-down menu with list of cities,
-        // when clicked, set the Text Field text as the city selected
         DropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false },
@@ -179,6 +177,7 @@ private fun TextFieldDropdown( // TODO better animated dropdown
                 )
             }
         }
+
     }
 }
 
