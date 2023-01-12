@@ -151,9 +151,9 @@ private fun TextFieldDropdown( // TODO better animated dropdown
             onValueChange = { },
             modifier = Modifier
                 .fillMaxWidth(),
-            label = { Text("Frequency") },
+            label = { Text(stringResource(R.string.add_habit_frequency)) },
             trailingIcon = {
-                Icon(icon, "contentDescription",
+                Icon(icon, stringResource(R.string.add_habit_frequency),
                     Modifier.clickable {
                         expanded = !expanded
                     }
