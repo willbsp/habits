@@ -6,9 +6,10 @@ import com.willbsp.habits.data.model.Entry
 import com.willbsp.habits.data.repo.HabitRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
+import java.time.Clock
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-
+import java.util.*
 
 data class HomeUiState(
     val state: List<HomeHabitUiState> = listOf()
@@ -20,7 +21,10 @@ data class HomeHabitUiState(
     val completed: Boolean
 )
 
-class HomeScreenViewModel(private val habitsRepository: HabitRepository) : ViewModel() {
+class HomeScreenViewModel(
+    private val habitsRepository: HabitRepository,
+    private val clock: Clock
+) : ViewModel() {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val homeUiState: StateFlow<HomeUiState> =
@@ -56,8 +60,8 @@ class HomeScreenViewModel(private val habitsRepository: HabitRepository) : ViewM
     }
 
     private fun getCurrentDate(): String {
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-        return LocalDateTime.now().format(formatter)
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd") // TODO make constant
+        return LocalDateTime.now(clock).format(formatter)
     }
 
     companion object {
