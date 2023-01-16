@@ -1,4 +1,4 @@
-package com.willbsp.habits
+package com.willbsp.habits.rules
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi

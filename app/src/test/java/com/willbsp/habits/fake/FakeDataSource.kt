@@ -26,6 +26,15 @@ object FakeDataSource {
         entry2H2
     )
 
+    fun habitExists(name: String): Boolean {
+        habitTable.forEach {
+            if (it.name == name) {
+                return true
+            }
+        }
+        return false
+    }
+
     fun entryExists(date: String, habitId: Int): Boolean {
         entryTable.forEach {
             if (it.habitId == habitId && it.date == date) {

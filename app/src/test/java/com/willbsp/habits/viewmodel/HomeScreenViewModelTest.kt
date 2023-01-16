@@ -1,7 +1,8 @@
-package com.willbsp.habits
+package com.willbsp.habits.viewmodel
 
 import com.willbsp.habits.fake.FakeDataSource
 import com.willbsp.habits.fake.FakeOfflineHabitRepository
+import com.willbsp.habits.rules.TestDispatcherRule
 import com.willbsp.habits.ui.home.HomeHabitUiState
 import com.willbsp.habits.ui.home.HomeScreenViewModel
 import com.willbsp.habits.ui.home.HomeUiState
@@ -38,7 +39,6 @@ class HomeScreenViewModelTest {
             habitsRepository = fakeRepository, clock = clock
         )
     }
-
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
