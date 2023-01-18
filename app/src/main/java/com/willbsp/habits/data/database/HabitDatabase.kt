@@ -1,8 +1,6 @@
 package com.willbsp.habits.data.database
 
-import android.content.Context
 import androidx.room.Database
-import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.willbsp.habits.data.model.Entry
 import com.willbsp.habits.data.model.Habit
@@ -12,21 +10,5 @@ abstract class HabitDatabase : RoomDatabase() {
 
     abstract fun habitDao(): HabitDao
     abstract fun entryDao(): EntryDao
-
-    companion object { // Database is a singleton
-
-        @Volatile
-        private var Instance: HabitDatabase? = null
-
-        fun getDatabase(context: Context): HabitDatabase {
-            return Instance ?: synchronized(this) {
-                Room.databaseBuilder(context, HabitDatabase::class.java, "habit_database")
-                    .fallbackToDestructiveMigration() // TODO will need to change at some point
-                    .build()
-                    .also { Instance = it }
-            }
-        }
-
-    }
 
 }
