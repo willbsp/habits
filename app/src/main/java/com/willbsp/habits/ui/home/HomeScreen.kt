@@ -15,9 +15,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.willbsp.habits.R
-import com.willbsp.habits.di.AppViewModelProvider
 import com.willbsp.habits.ui.HabitsAppTopBar
 import com.willbsp.habits.ui.theme.HabitsTheme
 import com.willbsp.habits.ui.theme.Typography
@@ -26,10 +25,10 @@ import kotlinx.coroutines.launch
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
-    navigateToAddHabit: () -> Unit,
-    viewModel: HomeScreenViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    navigateToAddHabit: () -> Unit
 ) {
 
+    val viewModel = hiltViewModel<HomeScreenViewModel>()
     val homeUiState by viewModel.homeUiState.collectAsState(HomeUiState())
     val coroutineScope = rememberCoroutineScope()
 
