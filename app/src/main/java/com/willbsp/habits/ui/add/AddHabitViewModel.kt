@@ -7,13 +7,18 @@ import androidx.lifecycle.ViewModel
 import com.willbsp.habits.data.model.Habit
 import com.willbsp.habits.data.model.HabitFrequency
 import com.willbsp.habits.data.repo.HabitRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
 data class AddHabitUiState(
     val name: String = "",
     val frequency: HabitFrequency = HabitFrequency.DAILY
 )
 
-class AddHabitViewModel(private val habitsRepository: HabitRepository) : ViewModel() {
+@HiltViewModel
+class AddHabitViewModel @Inject constructor(
+    private val habitsRepository: HabitRepository
+) : ViewModel() {
 
     var habitUiState by mutableStateOf(AddHabitUiState())
         private set

@@ -4,12 +4,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.willbsp.habits.data.model.Entry
 import com.willbsp.habits.data.repo.HabitRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 import java.time.Clock
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
+import javax.inject.Inject
 
 data class HomeUiState(
     val state: List<HomeHabitUiState> = listOf()
@@ -21,9 +23,10 @@ data class HomeHabitUiState(
     val completed: Boolean
 )
 
-class HomeScreenViewModel(
+@HiltViewModel
+class HomeScreenViewModel @Inject constructor(
     private val habitsRepository: HabitRepository,
-    private val clock: Clock
+    private val clock: Clock = Clock.systemDefaultZone()
 ) : ViewModel() {
 
     @OptIn(ExperimentalCoroutinesApi::class)
