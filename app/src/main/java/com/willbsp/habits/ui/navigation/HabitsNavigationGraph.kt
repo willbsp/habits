@@ -20,7 +20,7 @@ fun HabitsNavigationGraph(
 ) {
     NavHost(
         navController = navController,
-        startDestination = "home", // TODO
+        startDestination = HabitsNavigationDestination.HOME.route,
         modifier = modifier
     ) {
         composable(route = HabitsNavigationDestination.HOME.route) {
@@ -32,8 +32,12 @@ fun HabitsNavigationGraph(
         }
         composable(route = HabitsNavigationDestination.ADD.route) {
             AddHabitScreen(
-                navigateUp = { navController.navigateUp() },
-                navigateBack = { navController.popBackStack() }
+                navigateUp = {
+                    navController.navigateUp()
+                },
+                navigateBack = {
+                    navController.popBackStack()
+                }
             )
         }
         // TODO when it comes to adding edit screen can use composable(arguments = x) for habit
