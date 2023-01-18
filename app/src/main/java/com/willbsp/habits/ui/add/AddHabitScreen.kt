@@ -37,8 +37,8 @@ fun AddHabitScreen(
         navigateUp = navigateUp,
         onSaveClick = {
             coroutineScope.launch {
-                viewModel.saveHabit()
                 navigateBack()
+                viewModel.saveHabit()
             }
         },
         onValueChange = {
