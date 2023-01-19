@@ -26,7 +26,7 @@ data class HomeHabitUiState(
 @HiltViewModel
 class HomeScreenViewModel @Inject constructor(
     private val habitsRepository: HabitRepository,
-    private val clock: Clock = Clock.systemDefaultZone()
+    private val clock: Clock
 ) : ViewModel() {
 
     @OptIn(ExperimentalCoroutinesApi::class)
