@@ -2,7 +2,7 @@ package com.willbsp.habits.viewmodel
 
 import com.willbsp.habits.data.model.HabitFrequency
 import com.willbsp.habits.fake.FakeDataSource
-import com.willbsp.habits.fake.FakeOfflineHabitRepository
+import com.willbsp.habits.fake.FakeHabitRepository
 import com.willbsp.habits.ui.add.AddHabitViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -12,12 +12,12 @@ import org.junit.Test
 
 class AddHabitViewModelTest {
 
-    private lateinit var fakeRepository: FakeOfflineHabitRepository
+    private lateinit var fakeRepository: FakeHabitRepository
     private lateinit var addHabitViewModel: AddHabitViewModel
 
     @Before
     fun createViewModel() {
-        fakeRepository = FakeOfflineHabitRepository()
+        fakeRepository = FakeHabitRepository()
         addHabitViewModel = AddHabitViewModel(
             habitsRepository = fakeRepository
         )

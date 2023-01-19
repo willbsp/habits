@@ -5,8 +5,9 @@ import com.willbsp.habits.data.database.HabitDao
 import com.willbsp.habits.data.model.Entry
 import com.willbsp.habits.data.model.Habit
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-class OfflineHabitRepository(
+class OfflineHabitRepository @Inject constructor(
     private val habitDao: HabitDao,
     private val entryDao: EntryDao
 ) : HabitRepository {
