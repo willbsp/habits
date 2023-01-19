@@ -11,4 +11,6 @@ abstract class HabitDatabase : RoomDatabase() {
     abstract fun habitDao(): HabitDao
     abstract fun entryDao(): EntryDao
 
+    abstract fun habitEntryDao(): HabitEntryDao
+
 }
