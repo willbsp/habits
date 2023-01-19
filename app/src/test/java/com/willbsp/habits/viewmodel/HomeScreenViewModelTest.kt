@@ -1,7 +1,7 @@
 package com.willbsp.habits.viewmodel
 
 import com.willbsp.habits.fake.FakeDataSource
-import com.willbsp.habits.fake.FakeOfflineHabitRepository
+import com.willbsp.habits.fake.FakeHabitRepository
 import com.willbsp.habits.rules.TestDispatcherRule
 import com.willbsp.habits.ui.home.HomeHabitUiState
 import com.willbsp.habits.ui.home.HomeScreenViewModel
@@ -29,12 +29,12 @@ class HomeScreenViewModelTest {
     private val clock: Clock =
         Clock.fixed(Instant.parse(time), Clock.systemDefaultZone().zone)
 
-    private lateinit var fakeRepository: FakeOfflineHabitRepository
+    private lateinit var fakeRepository: FakeHabitRepository
     private lateinit var homeViewModel: HomeScreenViewModel
 
     @Before
     fun createViewModel() {
-        fakeRepository = FakeOfflineHabitRepository()
+        fakeRepository = FakeHabitRepository()
         homeViewModel = HomeScreenViewModel(
             habitsRepository = fakeRepository, clock = clock
         )
@@ -64,7 +64,7 @@ class HomeScreenViewModelTest {
             homeViewModel.homeUiState.collect()
         }
 
-        fakeRepository.emit()
+        //fakeRepository.emit()
         assertEquals(initialHomeUiState, homeViewModel.homeUiState.value)
 
         job.cancel()
@@ -80,7 +80,7 @@ class HomeScreenViewModelTest {
         }
 
         homeViewModel.toggleEntry(habitId = 1)
-        fakeRepository.emit()
+        //fakeRepository.emit()
 
         var found = false
         homeViewModel.homeUiState.value.state.forEach {
@@ -103,7 +103,7 @@ class HomeScreenViewModelTest {
         }
 
         homeViewModel.toggleEntry(habitId = 2)
-        fakeRepository.emit()
+        //fakeRepository.emit()
 
         var found = false
         homeViewModel.homeUiState.value.state.forEach {
