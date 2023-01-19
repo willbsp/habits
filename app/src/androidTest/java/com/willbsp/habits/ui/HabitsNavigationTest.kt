@@ -1,37 +1,43 @@
 package com.willbsp.habits.ui
 
-import androidx.activity.ComponentActivity
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performTextInput
 import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.testing.TestNavHostController
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.willbsp.habits.HiltComponentActivity
 import com.willbsp.habits.R
 import com.willbsp.habits.helper.assertCurrentRouteName
 import com.willbsp.habits.ui.navigation.HabitsNavigationDestination
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
+@HiltAndroidTest
 @RunWith(AndroidJUnit4::class)
 class HabitsNavigationTest {
 
-    @get:Rule
-    val composeTestRule = createAndroidComposeRule<ComponentActivity>()
+    @get:Rule(order = 0)
+    val hiltRule = HiltAndroidRule(this)
+
+    @get:Rule(order = 1)
+    val composeTestRule = createAndroidComposeRule<HiltComponentActivity>()
     private lateinit var navController: TestNavHostController
 
-    private fun navigateToAddHabitScreen() {
-        val addText = composeTestRule.activity.getString(R.string.home_screen_add_habit)
-        composeTestRule.onNodeWithContentDescription(addText).performClick()
+    @Before
+    fun init() {
+        hiltRule.inject()
+        setupHabitsNavHost()
     }
 
-    // TODO implement test tags
-
-    @Before
-    fun setupHabitsNavHost() {
+    private fun setupHabitsNavHost() {
         composeTestRule.setContent {
             navController = TestNavHostController(LocalContext.current)
             navController.navigatorProvider.addNavigator(ComposeNavigator())
@@ -39,6 +45,7 @@ class HabitsNavigationTest {
         }
     }
 
+    // TODO implement test tags
     @Test
     fun navHost_verifyStartDestination() {
         navController.assertCurrentRouteName(HabitsNavigationDestination.HOME.route)
@@ -71,16 +78,19 @@ class HabitsNavigationTest {
         navController.assertCurrentRouteName(HabitsNavigationDestination.HOME.route)
     }
 
-    /*@Test
-    fun navHost_addHabit_displayedHabitOnHome() {
+    @Test
+    fun navHost_verifyAddHabitNavigatesBackToHome() {
         navigateToAddHabitScreen()
         val nameText = composeTestRule.activity.getString(R.string.add_habit_name)
         composeTestRule.onNodeWithText(nameText).performClick().performTextInput("Swimming")
         val doneText = composeTestRule.activity.getString(R.string.add_habit_add_habit)
         composeTestRule.onNodeWithContentDescription(doneText).performClick()
-        composeTestRule.onNodeWithText("Swimming").assertExists()
-    }*/
-    // should be for testing state, not navigation TODO
+        navController.assertCurrentRouteName(HabitsNavigationDestination.HOME.route)
+    }
 
+    private fun navigateToAddHabitScreen() {
+        val addText = composeTestRule.activity.getString(R.string.home_screen_add_habit)
+        composeTestRule.onNodeWithContentDescription(addText).performClick()
+    }
 
 }
