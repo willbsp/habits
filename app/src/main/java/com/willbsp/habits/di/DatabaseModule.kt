@@ -9,12 +9,11 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import java.time.Clock
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-class AppModule { // TODO split up into multiple modules?
+class DatabaseModule {
 
     @Singleton
     @Provides
@@ -31,10 +30,5 @@ class AppModule { // TODO split up into multiple modules?
     @Singleton
     @Provides
     fun provideEntryDao(db: HabitDatabase) = db.entryDao()
-
-    // TODO TODO TODO TODO NEXT THING IS SORT BELOW THEN MERGE INTO DEV BRANCH
-    @Singleton
-    @Provides
-    fun provideClock(): Clock = Clock.systemDefaultZone() // TODO must be better way to do this
 
 }
