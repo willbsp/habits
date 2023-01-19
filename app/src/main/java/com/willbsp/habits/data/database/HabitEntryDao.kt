@@ -2,6 +2,7 @@ package com.willbsp.habits.data.database
 
 import androidx.room.Dao
 import androidx.room.Query
+import com.willbsp.habits.data.model.HabitEntry
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -17,6 +18,3 @@ interface HabitEntryDao {
     fun getTodayHabitEntries(date: String): Flow<List<HabitEntry>>
 
 }
-
-// TODO TODO TODO move to another file
-data class HabitEntry(val habitId: Int, val habitName: String, val completed: Boolean)

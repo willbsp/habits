@@ -1,8 +1,8 @@
 package com.willbsp.habits.fake
 
-import com.willbsp.habits.data.database.HabitEntry
 import com.willbsp.habits.data.model.Entry
 import com.willbsp.habits.data.model.Habit
+import com.willbsp.habits.data.model.HabitEntry
 import com.willbsp.habits.data.repo.HabitRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
