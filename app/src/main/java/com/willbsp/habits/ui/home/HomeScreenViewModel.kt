@@ -5,12 +5,13 @@ import androidx.lifecycle.viewModelScope
 import com.willbsp.habits.data.model.Entry
 import com.willbsp.habits.data.repo.HabitRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import java.time.Clock
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import java.util.*
 import javax.inject.Inject
 
 data class HomeUiState(
@@ -29,18 +30,14 @@ class HomeScreenViewModel @Inject constructor(
     private val clock: Clock
 ) : ViewModel() {
 
-    @OptIn(ExperimentalCoroutinesApi::class)
+
     val homeUiState: StateFlow<HomeUiState> =
-        habitsRepository.getAllHabitsStream().flatMapLatest { habitList ->
-            val homeHabitUiStateFlows: List<Flow<HomeHabitUiState>> = habitList.map { habit ->
-                habitsRepository.entryExistsForDateStream(getCurrentDate(), habit.id)
-                    .map { exists ->
-                        HomeHabitUiState(habit.id, habit.name, exists)
-                    }
-            }
-            combine(homeHabitUiStateFlows) { homeHabitUiStateArray ->
-                HomeUiState(homeHabitUiStateArray.toList())
-            }
+        habitsRepository.getTodaysHabitEntriesStream().map {
+            HomeUiState(
+                it.map { entry ->
+                    HomeHabitUiState(entry.habitId, entry.habitName, entry.completed)
+                }
+            )
         }.stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),

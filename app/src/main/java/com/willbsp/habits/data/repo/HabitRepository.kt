@@ -1,14 +1,13 @@
 package com.willbsp.habits.data.repo
 
+import com.willbsp.habits.data.database.HabitEntry
 import com.willbsp.habits.data.model.Entry
 import com.willbsp.habits.data.model.Habit
 import kotlinx.coroutines.flow.Flow
 
 interface HabitRepository {
 
-    fun getAllHabitsStream(): Flow<List<Habit>>
-
-    fun entryExistsForDateStream(date: String, habitId: Int): Flow<Boolean>
+    fun getTodaysHabitEntriesStream(): Flow<List<HabitEntry>>
 
     suspend fun getEntryForDate(date: String, habitId: Int): Entry?
 

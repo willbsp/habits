@@ -1,11 +1,11 @@
 package com.willbsp.habits.fake
 
+import com.willbsp.habits.data.database.HabitEntry
 import com.willbsp.habits.data.model.Entry
 import com.willbsp.habits.data.model.Habit
 import com.willbsp.habits.data.repo.HabitRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class FakeHabitRepository @Inject constructor() : HabitRepository {
@@ -13,12 +13,8 @@ class FakeHabitRepository @Inject constructor() : HabitRepository {
     private val habitsStream = MutableSharedFlow<List<Habit>>()
     private suspend fun emit() = habitsStream.emit(FakeDataSource.habitTable)
 
-    override fun getAllHabitsStream(): Flow<List<Habit>> {
-        return habitsStream
-    }
-
-    override fun entryExistsForDateStream(date: String, habitId: Int): Flow<Boolean> {
-        return flow { emit(FakeDataSource.entryExists(date, habitId)) }
+    override fun getTodaysHabitEntriesStream(): Flow<List<HabitEntry>> {
+        TODO("Not yet implemented")
     }
 
     override suspend fun getEntryForDate(date: String, habitId: Int): Entry? {
