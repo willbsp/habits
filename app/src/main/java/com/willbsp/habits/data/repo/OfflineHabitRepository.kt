@@ -7,53 +7,37 @@ import com.willbsp.habits.data.model.Entry
 import com.willbsp.habits.data.model.Habit
 import com.willbsp.habits.data.model.HabitEntry
 import kotlinx.coroutines.flow.Flow
-import java.time.Clock
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 class OfflineHabitRepository @Inject constructor(
     private val habitDao: HabitDao,
     private val entryDao: EntryDao,
-    private val habitEntryDao: HabitEntryDao,
-    private val clock: Clock
+    private val habitEntryDao: HabitEntryDao
 ) : HabitRepository {
 
-    private fun getCurrentDate(): String {
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd") // TODO make constant
-        return LocalDateTime.now(clock).format(formatter)
-    }
-
-    override fun getTodaysHabitEntriesStream(): Flow<List<HabitEntry>> {
-        return habitEntryDao.getTodayHabitEntries(getCurrentDate())
+    override fun getHabitEntriesForDateStream(date: String): Flow<List<HabitEntry>> {
+        return habitEntryDao.getHabitEntriesForDate(date)
     }
 
     override suspend fun getEntryForDate(date: String, habitId: Int): Entry? {
         return entryDao.getEntryForDate(date, habitId)
     }
 
-    override suspend fun insertHabit(habit: Habit) {
+    override suspend fun addHabit(habit: Habit) {
         habitDao.insert(habit)
     }
 
-    override suspend fun insertEntry(entry: Entry) {
-        entryDao.insert(entry)
+    override suspend fun toggleEntry(
+        habitId: Int,
+        date: String
+    ) { // TODO create exception if habit does not exist
+        val entry: Entry? = entryDao.getEntryForDate(date, habitId)
+        if (entry == null) entryDao.insert(Entry(habitId = habitId, date = date))
+        else entryDao.delete(entry)
     }
 
     override suspend fun deleteHabit(habit: Habit) {
         habitDao.delete(habit)
-    }
-
-    override suspend fun deleteEntry(entry: Entry) {
-        entryDao.delete(entry)
-    }
-
-    override suspend fun updateHabit(habit: Habit) {
-        habitDao.update(habit)
-    }
-
-    override suspend fun updateEntry(entry: Entry) {
-        entryDao.update(entry)
     }
 
 }
