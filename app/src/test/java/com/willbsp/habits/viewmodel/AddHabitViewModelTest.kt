@@ -1,12 +1,12 @@
 package com.willbsp.habits.viewmodel
 
 import com.willbsp.habits.data.model.HabitFrequency
-import com.willbsp.habits.fake.FakeDataSource
 import com.willbsp.habits.fake.FakeHabitRepository
 import com.willbsp.habits.ui.add.AddHabitViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
@@ -49,7 +49,12 @@ class AddHabitViewModelTest {
         val updatedUiState = addHabitViewModel.habitUiState.copy(name = "Reading")
         addHabitViewModel.updateUiState(updatedUiState)
         addHabitViewModel.saveHabit()
-        assertEquals(true, FakeDataSource.habitExists("Reading"))
+        var found = false
+        fakeRepository.habits.forEach {
+            if (it.name == "Reading")
+                found = true
+        }
+        assertTrue(found)
     }
 
 }
