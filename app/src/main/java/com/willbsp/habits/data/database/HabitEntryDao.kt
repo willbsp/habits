@@ -15,6 +15,6 @@ interface HabitEntryDao {
                 "END AS completed " +
                 "FROM habit"
     )
-    fun getTodayHabitEntries(date: String): Flow<List<HabitEntry>>
+    fun getHabitEntriesForDate(date: String): Flow<List<HabitEntry>>
 
 }
