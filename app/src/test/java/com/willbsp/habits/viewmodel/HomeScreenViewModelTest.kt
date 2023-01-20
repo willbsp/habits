@@ -1,6 +1,7 @@
 package com.willbsp.habits.viewmodel
 
-import com.willbsp.habits.fake.FakeDataSource
+import com.willbsp.habits.TestData.habit1
+import com.willbsp.habits.TestData.habit2
 import com.willbsp.habits.fake.FakeHabitRepository
 import com.willbsp.habits.rules.TestDispatcherRule
 import com.willbsp.habits.ui.home.HomeHabitUiState
@@ -17,17 +18,14 @@ import org.junit.Rule
 import org.junit.Test
 import java.time.Clock
 import java.time.Instant
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
 class HomeScreenViewModelTest {
 
     @get:Rule
     val testDispatcher = TestDispatcherRule()
 
-    private val time = "2023-04-13T10:30:45Z"
-    private val clock: Clock =
-        Clock.fixed(Instant.parse(time), Clock.systemDefaultZone().zone)
+    private val date = "2023-04-15"
+    private val time = "T10:30:45Z"
 
     private lateinit var fakeRepository: FakeHabitRepository
     private lateinit var homeViewModel: HomeScreenViewModel
@@ -36,36 +34,66 @@ class HomeScreenViewModelTest {
     fun createViewModel() {
         fakeRepository = FakeHabitRepository()
         homeViewModel = HomeScreenViewModel(
-            habitsRepository = fakeRepository, clock = clock
+            habitsRepository = fakeRepository,
+            clock = Clock.fixed(Instant.parse(date + time), Clock.systemDefaultZone().zone)
         )
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun viewModelHomeUiState_verifyHomeUiStateInitialValue() = runTest {
+    fun viewModelHomeUiState_verifyHomeUiStateInitialEmptyValue() = runTest {
 
-        val initialHomeUiState = HomeUiState(
-            buildList {
-                val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-                val date = LocalDateTime.now(clock).format(formatter)
-                FakeDataSource.habitTable.forEach { habit ->
-                    var completed = false
-                    FakeDataSource.entryTable.forEach { entry ->
-                        if (habit.id == entry.habitId && entry.date == date) {
-                            completed = true
-                        }
-                    }
-                    this.add(HomeHabitUiState(habit.id, habit.name, completed))
-                }
-            }
+        val expectedHomeUiState = HomeUiState()
+        val job = launch(UnconfinedTestDispatcher()) {
+            homeViewModel.homeUiState.collect()
+        }
+
+        assertEquals(expectedHomeUiState, homeViewModel.homeUiState.value)
+
+        job.cancel()
+
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun viewModelHomeUiState_verifyHomeUiStateInitialSetValue() = runTest {
+
+        val expectedHomeUiState = HomeUiState(
+            listOf(
+                HomeHabitUiState(habit1.id, habit1.name, true),
+                HomeHabitUiState(habit2.id, habit2.name, false)
+            )
+        )
+
+        addTwoHabit()
+        fakeRepository.toggleEntry(habit1.id, date)
+
+        val job = launch(UnconfinedTestDispatcher()) {
+            homeViewModel.homeUiState.collect()
+        }
+
+        assertEquals(expectedHomeUiState, homeViewModel.homeUiState.value)
+
+        job.cancel()
+
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun viewModelHomeUiState_verifyNewHabitsDisplayed() = runTest {
+
+        val expectedHomeUiState = HomeUiState(
+            listOf(
+                HomeHabitUiState(habit1.id, habit1.name, false)
+            )
         )
 
         val job = launch(UnconfinedTestDispatcher()) {
             homeViewModel.homeUiState.collect()
         }
 
-        //fakeRepository.emit()
-        assertEquals(initialHomeUiState, homeViewModel.homeUiState.value)
+        addOneHabit()
+        assertEquals(expectedHomeUiState, homeViewModel.homeUiState.value)
 
         job.cancel()
 
@@ -73,22 +101,22 @@ class HomeScreenViewModelTest {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun viewModelToggleEntry_createsEntryForCurrentDay() = runTest {
+    fun viewModelHomeUiState_verifyCompletedDisplayed() = runTest {
+
+        val expectedHomeUiState = HomeUiState(
+            listOf(
+                HomeHabitUiState(habit1.id, habit1.name, false),
+                HomeHabitUiState(habit2.id, habit2.name, true)
+            )
+        )
 
         val job = launch(UnconfinedTestDispatcher()) {
             homeViewModel.homeUiState.collect()
         }
 
-        homeViewModel.toggleEntry(habitId = 1)
-        //fakeRepository.emit()
-
-        var found = false
-        homeViewModel.homeUiState.value.state.forEach {
-            if (it.id == 1 && it.completed) {
-                found = true
-            }
-        }
-        assertTrue(found)
+        addTwoHabit()
+        homeViewModel.toggleEntry(habit2.id)
+        assertEquals(expectedHomeUiState, homeViewModel.homeUiState.value)
 
         job.cancel()
 
@@ -96,25 +124,35 @@ class HomeScreenViewModelTest {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun viewModelToggleEntry_deletesEntryForCurrentDay() = runTest {
+    fun viewModelHomeUiState_verifyUncompletedDisplayed() = runTest {
+
+        addOneHabit()
+        fakeRepository.toggleEntry(habit1.id, date)
+
+        val expectedHomeUiState = HomeUiState(
+            listOf(
+                HomeHabitUiState(habit1.id, habit1.name, false)
+            )
+        )
 
         val job = launch(UnconfinedTestDispatcher()) {
             homeViewModel.homeUiState.collect()
         }
 
-        homeViewModel.toggleEntry(habitId = 2)
-        //fakeRepository.emit()
-
-        var found = false
-        homeViewModel.homeUiState.value.state.forEach {
-            if (it.id == 2 && it.completed) {
-                found = true
-            }
-        }
-        assertFalse(found)
+        homeViewModel.toggleEntry(habit1.id)
+        assertEquals(expectedHomeUiState, homeViewModel.homeUiState.value)
 
         job.cancel()
 
+    }
+
+    private suspend fun addOneHabit() {
+        fakeRepository.addHabit(habit1)
+    }
+
+    private suspend fun addTwoHabit() {
+        fakeRepository.addHabit(habit1)
+        fakeRepository.addHabit(habit2)
     }
 
 }
