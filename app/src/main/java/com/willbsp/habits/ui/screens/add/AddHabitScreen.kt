@@ -1,4 +1,4 @@
-package com.willbsp.habits.ui.add
+package com.willbsp.habits.ui.screens.add
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*

@@ -2,7 +2,7 @@ package com.willbsp.habits.viewmodel
 
 import com.willbsp.habits.data.model.HabitFrequency
 import com.willbsp.habits.fake.FakeHabitRepository
-import com.willbsp.habits.ui.add.AddHabitViewModel
+import com.willbsp.habits.ui.screens.add.AddHabitViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals

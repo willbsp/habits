@@ -4,9 +4,9 @@ import com.willbsp.habits.TestData.habit1
 import com.willbsp.habits.TestData.habit2
 import com.willbsp.habits.fake.FakeHabitRepository
 import com.willbsp.habits.rules.TestDispatcherRule
-import com.willbsp.habits.ui.home.HomeHabitUiState
-import com.willbsp.habits.ui.home.HomeScreenViewModel
-import com.willbsp.habits.ui.home.HomeUiState
+import com.willbsp.habits.ui.screens.home.HomeHabitUiState
+import com.willbsp.habits.ui.screens.home.HomeScreenViewModel
+import com.willbsp.habits.ui.screens.home.HomeUiState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch

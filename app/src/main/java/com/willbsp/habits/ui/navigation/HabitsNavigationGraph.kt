@@ -6,10 +6,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.willbsp.habits.ui.add.AddHabitScreen
-import com.willbsp.habits.ui.add.AddHabitViewModel
-import com.willbsp.habits.ui.home.HomeScreen
-import com.willbsp.habits.ui.home.HomeScreenViewModel
+import com.willbsp.habits.ui.screens.add.AddHabitScreen
+import com.willbsp.habits.ui.screens.add.AddHabitViewModel
+import com.willbsp.habits.ui.screens.home.HomeScreen
+import com.willbsp.habits.ui.screens.home.HomeScreenViewModel
 
 enum class HabitsNavigationDestination(val route: String) {
     HOME(route = "home"),

@@ -1,4 +1,4 @@
-package com.willbsp.habits.ui.home
+package com.willbsp.habits.ui.screens.home
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
@@ -53,6 +53,7 @@ private fun Home(
     navigateToAddHabit: () -> Unit,
     homeUiState: HomeUiState
 ) {
+
 
     Scaffold(
         topBar = {

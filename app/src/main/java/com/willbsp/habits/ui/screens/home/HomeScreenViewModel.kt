@@ -1,8 +1,9 @@
-package com.willbsp.habits.ui.home
+package com.willbsp.habits.ui.screens.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.willbsp.habits.common.getCurrentFormattedDate
+import com.willbsp.habits.data.model.HabitEntry
 import com.willbsp.habits.data.repo.HabitRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
@@ -32,7 +33,7 @@ class HomeScreenViewModel @Inject constructor(
         habitsRepository.getHabitEntriesForDateStream(clock.getCurrentFormattedDate()).map {
             HomeUiState(
                 it.map { entry ->
-                    HomeHabitUiState(entry.habitId, entry.habitName, entry.completed)
+                    entry.toHomeHabitUiState()
                 }
             )
         }.stateIn(
@@ -49,4 +50,8 @@ class HomeScreenViewModel @Inject constructor(
         const val TIMEOUT_MILLIS = 5_000L
     }
 
+}
+
+fun HabitEntry.toHomeHabitUiState(): HomeHabitUiState {
+    return HomeHabitUiState(this.habitId, this.habitName, this.completed)
 }
