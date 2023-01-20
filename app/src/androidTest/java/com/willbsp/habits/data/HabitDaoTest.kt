@@ -4,9 +4,10 @@ import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.willbsp.habits.TestData.habit1
+import com.willbsp.habits.TestData.habit2
 import com.willbsp.habits.data.database.HabitDao
 import com.willbsp.habits.data.database.HabitDatabase
-import com.willbsp.habits.data.model.Habit
 import com.willbsp.habits.data.model.HabitFrequency
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -23,8 +24,6 @@ class HabitDaoTest {
 
     private lateinit var habitDao: HabitDao
     private lateinit var habitDatabase: HabitDatabase
-    private val habit1 = Habit(1, "Running", HabitFrequency.DAILY)
-    private val habit2 = Habit(2, "Reading", HabitFrequency.WEEKLY)
 
     @Before
     fun createDb() {

@@ -4,13 +4,13 @@ import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.willbsp.habits.TestData.entry1
+import com.willbsp.habits.TestData.entry2
+import com.willbsp.habits.TestData.habit1
+import com.willbsp.habits.TestData.habit2
 import com.willbsp.habits.data.database.EntryDao
 import com.willbsp.habits.data.database.HabitDao
 import com.willbsp.habits.data.database.HabitDatabase
-import com.willbsp.habits.data.model.Entry
-import com.willbsp.habits.data.model.Habit
-import com.willbsp.habits.data.model.HabitFrequency
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert.*
@@ -26,11 +26,6 @@ class EntryDaoTest {
     private lateinit var habitDao: HabitDao
     private lateinit var habitDatabase: HabitDatabase
 
-    private val entry1: Entry = Entry(1, 1, "2023-01-13")
-    private val habit1 = Habit(1, "Running", HabitFrequency.DAILY)
-
-    private val entry2: Entry = Entry(2, 2, "2023-04-15")
-    private val habit2 = Habit(2, "Reading", HabitFrequency.WEEKLY)
 
     @Before
     fun createDb() {
@@ -53,10 +48,10 @@ class EntryDaoTest {
     fun daoEntryExistsForDate_returnsIfEntryExists() = runBlocking {
         addTwoHabitsToDb()
         addTwoEntriesToDb()
-        val exists1 = entryDao.entryExistsForDate(entry1.date, entry1.habitId).first()
-        val exists2 = entryDao.entryExistsForDate(entry2.date, entry2.habitId).first()
-        assertTrue(exists1)
-        assertTrue(exists2)
+        val actualEntry1 = entryDao.getEntryForDate(entry1.date, entry1.habitId)
+        val actualEntry2 = entryDao.getEntryForDate(entry2.date, entry2.habitId)
+        assertEquals(entry1, actualEntry1)
+        assertEquals(entry2, actualEntry2)
     }
 
     @Test
