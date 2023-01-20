@@ -16,6 +16,6 @@ import androidx.room.PrimaryKey
 data class Entry(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
-    @ColumnInfo(name = "habit_id") var habitId: Int,
+    @ColumnInfo(name = "habit_id", index = true) var habitId: Int,
     val date: String
 )
