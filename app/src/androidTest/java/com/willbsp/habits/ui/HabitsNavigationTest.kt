@@ -46,6 +46,7 @@ class HabitsNavigationTest {
     }
 
     // TODO implement test tags
+    // TODO update for settings screen
     @Test
     fun navHost_verifyStartDestination() {
         navController.assertCurrentRouteName(HabitsNavigationDestination.HOME.route)
