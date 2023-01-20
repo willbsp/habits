@@ -79,7 +79,7 @@ private fun AddHabit(
                 )
             }
         }
-    ) { innerPadding -> // TODO
+    ) { innerPadding ->
 
         AddHabitForm(
             modifier = modifier

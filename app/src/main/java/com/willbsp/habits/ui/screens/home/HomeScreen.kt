@@ -25,7 +25,8 @@ import kotlinx.coroutines.launch
 fun HomeScreen(
     modifier: Modifier = Modifier,
     viewModel: HomeScreenViewModel,
-    navigateToAddHabit: () -> Unit
+    navigateToAddHabit: () -> Unit,
+    navigateToSettings: () -> Unit
 ) {
 
     val homeUiState by viewModel.homeUiState.collectAsState(HomeUiState())
@@ -34,6 +35,7 @@ fun HomeScreen(
     Home(
         modifier = modifier,
         navigateToAddHabit = navigateToAddHabit,
+        navigateToSettings = navigateToSettings,
         buttonOnClick = { id ->
             coroutineScope.launch {
                 viewModel.toggleEntry(id)
@@ -51,6 +53,7 @@ private fun Home(
     modifier: Modifier = Modifier,
     buttonOnClick: (Int) -> Unit,
     navigateToAddHabit: () -> Unit,
+    navigateToSettings: () -> Unit,
     homeUiState: HomeUiState
 ) {
 
@@ -60,7 +63,7 @@ private fun Home(
             HabitsAppTopBar(
                 title = stringResource(R.string.app_name),
                 canNavigateBack = false,
-                navigateToSettings = {}
+                navigateToSettings = navigateToSettings
             )
         },
         floatingActionButton = {
@@ -174,6 +177,7 @@ private fun HomeScreenPreview() {
     HabitsTheme {
         Home(
             navigateToAddHabit = {},
+            navigateToSettings = {},
             homeUiState = HomeUiState(
                 listOf(
                     HomeHabitUiState(

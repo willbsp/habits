@@ -22,4 +22,8 @@
     <string name="home_screen_today">Today</string>
     <!--home screen end-->
 
+    <!--settings screen start-->
+    <string name="settings_title">Settings</string>
+    <!--settings screen end-->
+
 </resources>

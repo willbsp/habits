@@ -19,6 +19,7 @@ fun HabitsApp(navController: NavHostController = rememberNavController()) {
     HabitsNavigationGraph(navController = navController)
 }
 
+// TODO sort the top bar so can be reused not just for home screen e.g navigateToSettings
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HabitsAppTopBar(

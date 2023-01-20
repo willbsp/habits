@@ -10,10 +10,12 @@ import com.willbsp.habits.ui.screens.add.AddHabitScreen
 import com.willbsp.habits.ui.screens.add.AddHabitViewModel
 import com.willbsp.habits.ui.screens.home.HomeScreen
 import com.willbsp.habits.ui.screens.home.HomeScreenViewModel
+import com.willbsp.habits.ui.screens.settings.SettingsScreen
 
 enum class HabitsNavigationDestination(val route: String) {
     HOME(route = "home"),
-    ADD(route = "add")
+    ADD(route = "add"),
+    SETTINGS(route = "settings")
 }
 
 @Composable
@@ -32,6 +34,9 @@ fun HabitsNavigationGraph(
                 viewModel = viewModel,
                 navigateToAddHabit = {
                     navController.navigate(HabitsNavigationDestination.ADD.route)
+                },
+                navigateToSettings = {
+                    navController.navigate(HabitsNavigationDestination.SETTINGS.route)
                 }
             )
         }
@@ -44,6 +49,13 @@ fun HabitsNavigationGraph(
                 },
                 navigateBack = {
                     navController.popBackStack()
+                }
+            )
+        }
+        composable(route = HabitsNavigationDestination.SETTINGS.route) {
+            SettingsScreen(
+                navigateUp = {
+                    navController.navigateUp()
                 }
             )
         }
