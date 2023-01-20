@@ -2,7 +2,7 @@ package com.willbsp.habits.ui.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.willbsp.habits.data.model.Entry
+import com.willbsp.habits.common.getCurrentFormattedDate
 import com.willbsp.habits.data.repo.HabitRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
@@ -10,8 +10,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import java.time.Clock
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 data class HomeUiState(
@@ -30,9 +28,8 @@ class HomeScreenViewModel @Inject constructor(
     private val clock: Clock
 ) : ViewModel() {
 
-
     val homeUiState: StateFlow<HomeUiState> =
-        habitsRepository.getTodaysHabitEntriesStream().map {
+        habitsRepository.getHabitEntriesForDateStream(clock.getCurrentFormattedDate()).map {
             HomeUiState(
                 it.map { entry ->
                     HomeHabitUiState(entry.habitId, entry.habitName, entry.completed)
@@ -45,23 +42,7 @@ class HomeScreenViewModel @Inject constructor(
         )
 
     suspend fun toggleEntry(habitId: Int) {
-        val date: String = getCurrentDate()
-        val entry: Entry? = habitsRepository.getEntryForDate(date, habitId)
-        if (entry == null) {
-            habitsRepository.insertEntry(
-                Entry(
-                    habitId = habitId,
-                    date = date
-                )
-            )
-        } else {
-            habitsRepository.deleteEntry(entry)
-        }
-    }
-
-    private fun getCurrentDate(): String {
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd") // TODO make constant
-        return LocalDateTime.now(clock).format(formatter)
+        habitsRepository.toggleEntry(habitId, clock.getCurrentFormattedDate())
     }
 
     companion object {

@@ -28,7 +28,7 @@ class AddHabitViewModel @Inject constructor(
     }
 
     suspend fun saveHabit() { // TODO validation needed
-        habitsRepository.insertHabit(
+        habitsRepository.addHabit(
             Habit(
                 name = habitUiState.name,
                 frequency = habitUiState.frequency
