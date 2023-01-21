@@ -22,10 +22,11 @@ fun HabitCard(
     habitUiState: HomeHabitUiState,
     completedOnClick: (Int) -> Unit,
     navigateToEditHabit: (Int) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    expandedInitialValue: Boolean = false
 ) {
 
-    var expanded by remember { mutableStateOf(false) }
+    var expanded by remember { mutableStateOf(expandedInitialValue) }
 
     ElevatedCard(
         modifier = modifier.wrapContentHeight(),
@@ -180,6 +181,22 @@ fun HabitCardPreview() {
             completed = true
         ),
         completedOnClick = {},
-        navigateToEditHabit = {}
+        navigateToEditHabit = {},
+        expandedInitialValue = false
+    )
+}
+
+@Preview
+@Composable
+fun HabitCardExpandedPreview() {
+    HabitCard(
+        habitUiState = HomeHabitUiState(
+            id = 1,
+            name = "Walking",
+            completed = true
+        ),
+        completedOnClick = {},
+        navigateToEditHabit = {},
+        expandedInitialValue = true
     )
 }
