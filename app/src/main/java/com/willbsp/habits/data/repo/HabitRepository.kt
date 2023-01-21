@@ -9,6 +9,8 @@ interface HabitRepository {
 
     fun getHabitEntriesForDateStream(date: String): Flow<List<HabitEntry>>
 
+    suspend fun getHabitById(id: Int): Habit
+
     suspend fun getEntryForDate(date: String, habitId: Int): Entry?
 
     suspend fun addHabit(habit: Habit)

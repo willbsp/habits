@@ -19,6 +19,10 @@ class OfflineHabitRepository @Inject constructor(
         return habitEntryDao.getHabitEntriesForDate(date)
     }
 
+    override suspend fun getHabitById(id: Int): Habit {
+        return habitDao.getHabitById(id)
+    }
+
     override suspend fun getEntryForDate(date: String, habitId: Int): Entry? {
         return entryDao.getEntryForDate(date, habitId)
     }
