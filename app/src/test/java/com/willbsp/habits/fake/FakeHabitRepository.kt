@@ -20,6 +20,10 @@ class FakeHabitRepository : HabitRepository {
         return observableHabitEntries
     }
 
+    override suspend fun getHabitById(id: Int): Habit {
+        TODO("Not yet implemented")
+    }
+
     override suspend fun getEntryForDate(date: String, habitId: Int): Entry? {
         entries.forEach {
             if (it.habitId == habitId && it.date == date)
@@ -31,6 +35,10 @@ class FakeHabitRepository : HabitRepository {
     override suspend fun addHabit(habit: Habit) {
         habits.add(habit)
         emit()
+    }
+
+    override suspend fun updateHabit(habit: Habit) {
+        TODO("Not yet implemented")
     }
 
     override suspend fun toggleEntry(habitId: Int, date: String) {
@@ -45,11 +53,6 @@ class FakeHabitRepository : HabitRepository {
         habits.remove(habit)
         emit()
     }
-
-    /**
-     * Used to check value of habits
-     */
-
 
     /**
      * Call after every change to the data to imitate flows emitting when database is changed
