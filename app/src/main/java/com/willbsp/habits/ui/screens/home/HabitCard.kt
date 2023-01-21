@@ -11,6 +11,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.willbsp.habits.R
@@ -46,6 +47,7 @@ fun HabitCard(
 
                 Row(
                     modifier = Modifier
+                        .height(50.dp)
                         .fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -68,9 +70,11 @@ fun HabitCard(
 
                 if (expanded) {
 
+                    Spacer(modifier = Modifier.height(10.dp))
+
                     Row(
                         modifier = Modifier
-                            .height(80.dp)
+                            .height(90.dp)
                             .fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
@@ -105,14 +109,14 @@ fun HabitCardDaysRow(
 
     Row(
         modifier = modifier,
-        horizontalArrangement = Arrangement.spacedBy(10.dp)
+        horizontalArrangement = Arrangement.spacedBy(15.dp)
     ) {
 
-        HabitCardDay(day = "M")
-        HabitCardDay(day = "S")
-        HabitCardDay(day = "S")
-        HabitCardDay(day = "F")
-        HabitCardDay(day = "T")
+        HabitCardDay(weekday = "Mon\n21")
+        HabitCardDay(weekday = "Sun\n20")
+        HabitCardDay(weekday = "Sat\n19")
+        HabitCardDay(weekday = "Fri\n18")
+        HabitCardDay(weekday = "Thu\n17")
 
     }
 
@@ -121,7 +125,7 @@ fun HabitCardDaysRow(
 @Composable
 fun HabitCardDay(
     modifier: Modifier = Modifier,
-    day: String
+    weekday: String
 ) {
 
     Column(
@@ -130,9 +134,12 @@ fun HabitCardDay(
     ) {
 
         Text(
-            text = day,
-            style = Typography.bodyMedium
+            text = weekday,
+            style = Typography.bodyLarge,
+            textAlign = TextAlign.Center
         )
+
+        Spacer(modifier = Modifier.height(2.dp))
 
         HabitToggleButton(
             onCheckedChange = {},
