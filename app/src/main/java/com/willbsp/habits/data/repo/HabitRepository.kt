@@ -15,6 +15,8 @@ interface HabitRepository {
 
     suspend fun addHabit(habit: Habit)
 
+    suspend fun updateHabit(habit: Habit)
+
     suspend fun toggleEntry(habitId: Int, date: String)
 
     suspend fun deleteHabit(habit: Habit)

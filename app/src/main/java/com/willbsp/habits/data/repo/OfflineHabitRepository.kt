@@ -31,6 +31,10 @@ class OfflineHabitRepository @Inject constructor(
         habitDao.insert(habit)
     }
 
+    override suspend fun updateHabit(habit: Habit) {
+        habitDao.update(habit)
+    }
+
     override suspend fun toggleEntry(
         habitId: Int,
         date: String
