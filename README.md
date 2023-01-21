@@ -1,5 +1,5 @@
 # Habits ✅
-Android app for tracking and helping to maintain good habits
+Android app for tracking and helping to maintain good habits built in Jetpack Compose
 
 ## Features
 - **Supports material you** - Habits follows the latest material design guidelines and supports dynamic colour theming out of the box.
