@@ -7,10 +7,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -119,7 +117,7 @@ private fun HabitsList(
 
     LazyColumn(modifier = modifier, verticalArrangement = Arrangement.spacedBy(10.dp)) {
         items(items = habitUiStateList, key = { it.id }) { habit ->
-            HabitCard(habitUiState = habit, buttonOnClick = buttonOnClick)
+            HabitCard(habitUiState = habit, completedOnClick = buttonOnClick)
         }
         // Spacer at the bottom ensures that FAB does not obscure habits at the bottom of the list
         this.stickyHeader { Spacer(modifier.height(100.dp)) }
@@ -127,48 +125,6 @@ private fun HabitsList(
 
     Spacer(modifier = Modifier.height(50.dp))
 
-}
-
-@Composable
-private fun HabitCard(
-    habitUiState: HomeHabitUiState,
-    buttonOnClick: (Int) -> Unit,
-    modifier: Modifier = Modifier
-) {
-    ElevatedCard(
-        modifier = modifier.height(70.dp),
-        colors = CardDefaults.cardColors()
-    ) {
-
-        Row(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(10.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-
-            Text(
-                text = habitUiState.name,
-                style = Typography.titleLarge,
-            )
-
-            Spacer(modifier = Modifier.weight(1f))
-
-            IconToggleButton(
-                onCheckedChange = {
-                    buttonOnClick(habitUiState.id)
-                },
-                checked = habitUiState.completed,
-                colors = IconButtonDefaults.filledIconToggleButtonColors()
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Done,
-                    contentDescription = stringResource(R.string.home_screen_completed)
-                )
-            }
-
-        }
-    }
 }
 
 @Preview(showBackground = true, showSystemUi = true)
