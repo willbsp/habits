@@ -24,6 +24,7 @@ fun HomeScreen(
     modifier: Modifier = Modifier,
     viewModel: HomeScreenViewModel,
     navigateToAddHabit: () -> Unit,
+    navigateToEditHabit: (Int) -> Unit,
     navigateToSettings: () -> Unit
 ) {
 
@@ -33,6 +34,7 @@ fun HomeScreen(
     Home(
         modifier = modifier,
         navigateToAddHabit = navigateToAddHabit,
+        navigateToEditHabit = navigateToEditHabit,
         navigateToSettings = navigateToSettings,
         buttonOnClick = { id ->
             coroutineScope.launch {
@@ -51,6 +53,7 @@ private fun Home(
     modifier: Modifier = Modifier,
     buttonOnClick: (Int) -> Unit,
     navigateToAddHabit: () -> Unit,
+    navigateToEditHabit: (Int) -> Unit,
     navigateToSettings: () -> Unit,
     homeUiState: HomeUiState
 ) {
@@ -80,6 +83,7 @@ private fun Home(
         }
     ) { innerPadding -> // TODO
 
+
         Column(
             modifier = modifier
                 .padding(innerPadding)
@@ -98,6 +102,7 @@ private fun Home(
             HabitsList(
                 habitUiStateList = homeUiState.state,
                 buttonOnClick = buttonOnClick,
+                navigateToEditHabit = navigateToEditHabit,
                 modifier = Modifier
             )
 
@@ -112,12 +117,17 @@ private fun Home(
 private fun HabitsList(
     habitUiStateList: List<HomeHabitUiState>,
     buttonOnClick: (Int) -> Unit,
+    navigateToEditHabit: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
 
     LazyColumn(modifier = modifier, verticalArrangement = Arrangement.spacedBy(10.dp)) {
         items(items = habitUiStateList, key = { it.id }) { habit ->
-            HabitCard(habitUiState = habit, completedOnClick = buttonOnClick)
+            HabitCard(
+                habitUiState = habit,
+                completedOnClick = buttonOnClick,
+                navigateToEditHabit = navigateToEditHabit
+            )
         }
         // Spacer at the bottom ensures that FAB does not obscure habits at the bottom of the list
         this.stickyHeader { Spacer(modifier.height(100.dp)) }
@@ -133,6 +143,7 @@ private fun HomeScreenPreview() {
     HabitsTheme {
         Home(
             navigateToAddHabit = {},
+            navigateToEditHabit = {},
             navigateToSettings = {},
             homeUiState = HomeUiState(
                 listOf(

@@ -21,6 +21,7 @@ import com.willbsp.habits.ui.theme.Typography
 fun HabitCard(
     habitUiState: HomeHabitUiState,
     completedOnClick: (Int) -> Unit,
+    navigateToEditHabit: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
 
@@ -85,7 +86,7 @@ fun HabitCard(
 
                         IconButton(
                             modifier = Modifier,
-                            onClick = {}
+                            onClick = { navigateToEditHabit(habitUiState.id) }
                         ) {
                             Icon(
                                 imageVector = Icons.Default.Edit,
@@ -178,6 +179,7 @@ fun HabitCardPreview() {
             name = "Reading",
             completed = true
         ),
-        completedOnClick = {}
+        completedOnClick = {},
+        navigateToEditHabit = {}
     )
 }
