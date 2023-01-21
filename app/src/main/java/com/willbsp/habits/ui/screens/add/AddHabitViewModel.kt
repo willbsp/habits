@@ -5,25 +5,20 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.willbsp.habits.data.model.Habit
-import com.willbsp.habits.data.model.HabitFrequency
 import com.willbsp.habits.data.repo.HabitRepository
+import com.willbsp.habits.ui.screens.common.ModifyHabitUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
-
-data class AddHabitUiState(
-    val name: String = "",
-    val frequency: HabitFrequency = HabitFrequency.DAILY
-)
 
 @HiltViewModel
 class AddHabitViewModel @Inject constructor(
     private val habitsRepository: HabitRepository
 ) : ViewModel() {
 
-    var habitUiState by mutableStateOf(AddHabitUiState())
+    var habitUiState by mutableStateOf(ModifyHabitUiState())
         private set
 
-    fun updateUiState(newHabitsUiState: AddHabitUiState) {
+    fun updateUiState(newHabitsUiState: ModifyHabitUiState) {
         habitUiState = newHabitsUiState.copy()
     }
 
