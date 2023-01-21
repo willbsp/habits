@@ -75,7 +75,7 @@ fun HabitCard(
 
                     Row(
                         modifier = Modifier
-                            .height(90.dp)
+                            .height(100.dp)
                             .fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
@@ -140,7 +140,7 @@ fun HabitCardDay(
             textAlign = TextAlign.Center
         )
 
-        Spacer(modifier = Modifier.height(2.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
         HabitToggleButton(
             onCheckedChange = {},
