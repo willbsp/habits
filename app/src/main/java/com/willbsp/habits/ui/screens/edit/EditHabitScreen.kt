@@ -38,9 +38,9 @@ fun EditHabitScreen(
         navigateUp = navigateUp,
         onSaveClick = {
             coroutineScope.launch {
-                navigateBack()
                 viewModel.updateHabit()
             }
+            navigateBack()
         },
         onValueChange = {
             viewModel.updateUiState(it)
