@@ -4,9 +4,8 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -15,6 +14,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.willbsp.habits.R
 import com.willbsp.habits.ui.HabitsAppTopBar
+import com.willbsp.habits.ui.screens.common.HabitsFloatingAction
 import com.willbsp.habits.ui.theme.HabitsTheme
 import com.willbsp.habits.ui.theme.Typography
 import kotlinx.coroutines.launch
@@ -46,7 +46,6 @@ fun HomeScreen(
 
 }
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun Home(
@@ -68,18 +67,11 @@ private fun Home(
             )
         },
         floatingActionButton = {
-            FloatingActionButton(
+            HabitsFloatingAction(
                 onClick = navigateToAddHabit,
-                shape = CircleShape,
-                modifier = Modifier
-                    .navigationBarsPadding()
-                    .padding(10.dp)
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Add,
-                    contentDescription = stringResource(R.string.home_screen_add_habit)
-                )
-            }
+                icon = Icons.Default.Done,
+                contentDescription = stringResource(R.string.home_screen_add_habit)
+            )
         }
     ) { innerPadding -> // TODO
 

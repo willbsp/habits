@@ -1,7 +1,6 @@
 package com.willbsp.habits.ui.screens.add
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.*
@@ -12,6 +11,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.willbsp.habits.R
 import com.willbsp.habits.ui.HabitsAppTopBar
+import com.willbsp.habits.ui.screens.common.HabitsFloatingAction
 import com.willbsp.habits.ui.screens.common.ModifyHabitForm
 import com.willbsp.habits.ui.screens.common.ModifyHabitUiState
 import com.willbsp.habits.ui.theme.HabitsTheme
@@ -63,18 +63,11 @@ private fun AddHabit(
             )
         },
         floatingActionButton = {
-            FloatingActionButton( // TODO create composable
+            HabitsFloatingAction(
                 onClick = onSaveClick,
-                shape = CircleShape,
-                modifier = Modifier
-                    .navigationBarsPadding()
-                    .padding(10.dp)
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Done,
-                    contentDescription = stringResource(R.string.add_habit_add_habit)
-                )
-            }
+                icon = Icons.Default.Done,
+                contentDescription = stringResource(R.string.add_habit_add_habit)
+            )
         }
     ) { innerPadding ->
 
