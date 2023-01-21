@@ -82,7 +82,7 @@ class HabitsNavigationTest {
     @Test
     fun navHost_verifyAddHabitNavigatesBackToHome() {
         navigateToAddHabitScreen()
-        val nameText = composeTestRule.activity.getString(R.string.add_habit_name)
+        val nameText = composeTestRule.activity.getString(R.string.modify_habit_name)
         composeTestRule.onNodeWithText(nameText).performClick().performTextInput("Swimming")
         val doneText = composeTestRule.activity.getString(R.string.add_habit_add_habit)
         composeTestRule.onNodeWithContentDescription(doneText).performClick()
