@@ -11,8 +11,8 @@
     <!--add habit screen start-->
     <string name="add_habit_title">Add Habit</string>
     <string name="add_habit_add_habit">Add item</string>
-    <string name="add_habit_name">Name</string>
-    <string name="add_habit_frequency">Frequency</string>
+    <string name="modify_habit_name">Name</string>
+    <string name="modify_habit_frequency">Frequency</string>
     <!--add habit screen end-->
 
     <!--home screen start-->
