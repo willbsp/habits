@@ -1,11 +1,12 @@
 package com.willbsp.habits.ui.navigation
 
+import androidx.compose.animation.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
+import com.google.accompanist.navigation.animation.AnimatedNavHost
+import com.google.accompanist.navigation.animation.composable
 import com.willbsp.habits.ui.screens.add.AddHabitScreen
 import com.willbsp.habits.ui.screens.add.AddHabitViewModel
 import com.willbsp.habits.ui.screens.home.HomeScreen
@@ -18,17 +19,26 @@ enum class HabitsNavigationDestination(val route: String) {
     SETTINGS(route = "settings")
 }
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun HabitsNavigationGraph(
     navController: NavHostController,
     modifier: Modifier = Modifier,
 ) {
-    NavHost(
+    AnimatedNavHost(
         navController = navController,
         startDestination = HabitsNavigationDestination.HOME.route,
         modifier = modifier
     ) {
-        composable(route = HabitsNavigationDestination.HOME.route) {
+        composable(
+            route = HabitsNavigationDestination.HOME.route,
+            enterTransition = {
+                slideIntoContainer(AnimatedContentScope.SlideDirection.Right)
+            },
+            exitTransition = {
+                slideOutOfContainer(AnimatedContentScope.SlideDirection.Left)
+            }
+        ) {
             val viewModel = hiltViewModel<HomeScreenViewModel>()
             HomeScreen(
                 viewModel = viewModel,
@@ -40,7 +50,15 @@ fun HabitsNavigationGraph(
                 }
             )
         }
-        composable(route = HabitsNavigationDestination.ADD.route) {
+        composable(
+            route = HabitsNavigationDestination.ADD.route,
+            enterTransition = {
+                slideIntoContainer(AnimatedContentScope.SlideDirection.Left)
+            },
+            exitTransition = {
+                slideOutOfContainer(AnimatedContentScope.SlideDirection.Right)
+            }
+        ) {
             val viewModel = hiltViewModel<AddHabitViewModel>()
             AddHabitScreen(
                 viewModel = viewModel,
@@ -52,7 +70,15 @@ fun HabitsNavigationGraph(
                 }
             )
         }
-        composable(route = HabitsNavigationDestination.SETTINGS.route) {
+        composable(
+            route = HabitsNavigationDestination.SETTINGS.route,
+            enterTransition = {
+                slideIntoContainer(AnimatedContentScope.SlideDirection.Left)
+            },
+            exitTransition = {
+                slideOutOfContainer(AnimatedContentScope.SlideDirection.Right)
+            }
+        ) {
             SettingsScreen(
                 navigateUp = {
                     navController.navigateUp()
