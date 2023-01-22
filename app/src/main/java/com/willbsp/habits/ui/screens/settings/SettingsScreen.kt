@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.willbsp.habits.R
-import com.willbsp.habits.ui.HabitsAppTopBar
+import com.willbsp.habits.ui.screens.common.DefaultHabitsAppTopBar
 import com.willbsp.habits.ui.theme.HabitsTheme
 
 @Composable
@@ -34,7 +34,7 @@ private fun Settings(
 
     Scaffold(
         topBar = {
-            HabitsAppTopBar(
+            DefaultHabitsAppTopBar(
                 title = stringResource(R.string.settings_title),
                 canNavigateBack = true,
                 navigateUp = navigateUp

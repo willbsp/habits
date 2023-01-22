@@ -13,7 +13,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.willbsp.habits.R
-import com.willbsp.habits.ui.HabitsAppTopBar
+import com.willbsp.habits.ui.screens.common.DefaultHabitsAppTopBar
 import com.willbsp.habits.ui.screens.common.HabitsFloatingAction
 import com.willbsp.habits.ui.screens.common.ModifyHabitForm
 import com.willbsp.habits.ui.screens.common.ModifyHabitUiState
@@ -59,7 +59,7 @@ private fun EditHabit(
 
     Scaffold(
         topBar = {
-            HabitsAppTopBar(
+            DefaultHabitsAppTopBar(
                 title = stringResource(R.string.edit_habit_title),
                 canNavigateBack = true,
                 navigateUp = navigateUp

@@ -5,15 +5,17 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Done
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.willbsp.habits.R
-import com.willbsp.habits.ui.HabitsAppTopBar
 import com.willbsp.habits.ui.screens.common.HabitsFloatingAction
 import com.willbsp.habits.ui.theme.HabitsTheme
 import com.willbsp.habits.ui.theme.Typography
@@ -57,13 +59,32 @@ private fun Home(
     homeUiState: HomeUiState
 ) {
 
-
     Scaffold(
         topBar = {
-            HabitsAppTopBar(
-                title = stringResource(R.string.app_name),
-                canNavigateBack = false,
-                navigateToSettings = navigateToSettings
+            CenterAlignedTopAppBar(
+                title = {
+                    Text(
+                        text = stringResource(id = R.string.app_name),
+                        fontWeight = FontWeight.Bold
+                    )
+                },
+                modifier = modifier,
+                navigationIcon = {
+                    IconButton(onClick = {/* TODO */ }) {
+                        Icon(
+                            imageVector = Icons.Filled.DateRange,
+                            contentDescription = ""
+                        )
+                    }
+                },
+                actions = {
+                    IconButton(onClick = navigateToSettings) {
+                        Icon(
+                            imageVector = Icons.Filled.Settings,
+                            contentDescription = stringResource(R.string.settings)
+                        )
+                    }
+                }
             )
         },
         floatingActionButton = {
