@@ -5,9 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.material.icons.filled.Done
-import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -90,7 +88,7 @@ private fun Home(
         floatingActionButton = {
             HabitsFloatingAction(
                 onClick = navigateToAddHabit,
-                icon = Icons.Default.Done,
+                icon = Icons.Default.Add,
                 contentDescription = stringResource(R.string.home_screen_add_habit)
             )
         }
