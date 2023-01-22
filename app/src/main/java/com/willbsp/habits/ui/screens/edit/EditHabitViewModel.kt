@@ -29,13 +29,18 @@ class EditHabitViewModel @Inject constructor(
         }
     }
 
-    suspend fun loadHabit() {
-        val habit = habitsRepository.getHabitById(habitId)
-        habitUiState = ModifyHabitUiState(habit.name, habit.frequency)
-    }
-
     fun updateUiState(newHabitsUiState: ModifyHabitUiState) {
         habitUiState = newHabitsUiState.copy()
+    }
+
+    suspend fun deleteHabit() {
+        val habit = habitsRepository.getHabitById(habitId)
+        habitsRepository.deleteHabit(habit)
+    }
+
+    private suspend fun loadHabit() {
+        val habit = habitsRepository.getHabitById(habitId)
+        habitUiState = ModifyHabitUiState(habit.name, habit.frequency)
     }
 
     suspend fun updateHabit() { // TODO validation needed

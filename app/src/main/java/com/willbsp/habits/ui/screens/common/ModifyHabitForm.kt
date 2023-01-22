@@ -2,7 +2,6 @@ package com.willbsp.habits.ui.screens.common
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
@@ -24,7 +23,7 @@ fun ModifyHabitForm(
 ) {
 
     Column(
-        modifier = modifier.fillMaxSize(), // TODO padding somewhere higher level
+        modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
