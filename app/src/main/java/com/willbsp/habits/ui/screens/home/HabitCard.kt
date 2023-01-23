@@ -16,11 +16,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.willbsp.habits.R
 import com.willbsp.habits.ui.theme.Typography
+import java.time.LocalDate
+import java.time.format.TextStyle
+import java.util.*
 
 @Composable
 fun HabitCard(
     habitUiState: HomeHabitUiState,
-    completedOnClick: (Int) -> Unit,
+    completedOnClick: (Int, String) -> Unit,
     navigateToEditHabit: (Int) -> Unit,
     modifier: Modifier = Modifier,
     expandedInitialValue: Boolean = false
@@ -63,9 +66,12 @@ fun HabitCard(
 
                     HabitToggleButton(
                         onCheckedChange = {
-                            completedOnClick(habitUiState.id)
+                            completedOnClick(
+                                habitUiState.id,
+                                habitUiState.completedDates.first().date // TODO more robust way?
+                            )
                         },
-                        checked = habitUiState.completed
+                        checked = habitUiState.completedDates.first().completed
                     )
 
                 }
@@ -81,7 +87,10 @@ fun HabitCard(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
 
-                        HabitCardDaysRow()
+                        HabitCardDaysRow(
+                            habitUiState = habitUiState,
+                            completedOnClick = completedOnClick
+                        )
 
                         Spacer(modifier = Modifier.weight(1f))
 
@@ -106,6 +115,8 @@ fun HabitCard(
 
 @Composable
 fun HabitCardDaysRow(
+    habitUiState: HomeHabitUiState,
+    completedOnClick: (Int, String) -> Unit,
     modifier: Modifier = Modifier
 ) {
 
@@ -114,11 +125,15 @@ fun HabitCardDaysRow(
         horizontalArrangement = Arrangement.spacedBy(15.dp)
     ) {
 
-        HabitCardDay(weekday = "Mon\n21")
-        HabitCardDay(weekday = "Sun\n20")
-        HabitCardDay(weekday = "Sat\n19")
-        HabitCardDay(weekday = "Fri\n18")
-        HabitCardDay(weekday = "Thu\n17")
+        habitUiState.completedDates.drop(1).forEach { completedState ->
+            HabitCardDay(
+                date = completedState.date,
+                checked = completedState.completed,
+                onCheckedChange = {
+                    completedOnClick(habitUiState.id, completedState.date)
+                }
+            ) // curr date -1
+        }
 
     }
 
@@ -127,16 +142,25 @@ fun HabitCardDaysRow(
 @Composable
 fun HabitCardDay(
     modifier: Modifier = Modifier,
-    weekday: String
+    date: String,
+    checked: Boolean,
+    onCheckedChange: (Boolean) -> Unit,
 ) {
 
+    val weekday = LocalDate.parse(date).dayOfWeek.getDisplayName(
+        TextStyle.SHORT,
+        Locale.ENGLISH
+    ) // TODO get other locales
+    val dayOfMonth = LocalDate.parse(date).dayOfMonth.toString()
+
     Column(
-        modifier = modifier,
+        modifier = modifier.width(45.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
         Text(
-            text = weekday,
+            modifier = Modifier.height(45.dp),
+            text = (weekday + "\n" + dayOfMonth),
             style = Typography.bodyLarge,
             textAlign = TextAlign.Center
         )
@@ -144,8 +168,8 @@ fun HabitCardDay(
         Spacer(modifier = Modifier.height(8.dp))
 
         HabitToggleButton(
-            onCheckedChange = {},
-            checked = true
+            onCheckedChange = onCheckedChange,
+            checked = checked
         )
 
     }
@@ -178,9 +202,9 @@ fun HabitCardPreview() {
         habitUiState = HomeHabitUiState(
             id = 1,
             name = "Reading",
-            completed = true
+            completedDates = listOf()
         ),
-        completedOnClick = {},
+        completedOnClick = { _, _ -> },
         navigateToEditHabit = {},
         expandedInitialValue = false
     )
@@ -193,9 +217,9 @@ fun HabitCardExpandedPreview() {
         habitUiState = HomeHabitUiState(
             id = 1,
             name = "Walking",
-            completed = true
+            completedDates = listOf()
         ),
-        completedOnClick = {},
+        completedOnClick = { _, _ -> },
         navigateToEditHabit = {},
         expandedInitialValue = true
     )

@@ -36,9 +36,9 @@ fun HomeScreen(
         navigateToAddHabit = navigateToAddHabit,
         navigateToEditHabit = navigateToEditHabit,
         navigateToSettings = navigateToSettings,
-        buttonOnClick = { id ->
+        completedOnClick = { id, date ->
             coroutineScope.launch {
-                viewModel.toggleEntry(id)
+                viewModel.toggleEntry(id, date)
             }
         },
         homeUiState = homeUiState
@@ -50,7 +50,7 @@ fun HomeScreen(
 @Composable
 private fun Home(
     modifier: Modifier = Modifier,
-    buttonOnClick: (Int) -> Unit,
+    completedOnClick: (Int, String) -> Unit,
     navigateToAddHabit: () -> Unit,
     navigateToEditHabit: (Int) -> Unit,
     navigateToSettings: () -> Unit,
@@ -111,8 +111,8 @@ private fun Home(
             Spacer(modifier = Modifier.height(10.dp))
 
             HabitsList(
-                habitUiStateList = homeUiState.state,
-                buttonOnClick = buttonOnClick,
+                habitUiStateList = homeUiState.todayState,
+                completedOnClick = completedOnClick,
                 navigateToEditHabit = navigateToEditHabit,
                 modifier = Modifier
             )
@@ -127,7 +127,7 @@ private fun Home(
 @Composable
 private fun HabitsList(
     habitUiStateList: List<HomeHabitUiState>,
-    buttonOnClick: (Int) -> Unit,
+    completedOnClick: (Int, String) -> Unit,
     navigateToEditHabit: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -136,7 +136,7 @@ private fun HabitsList(
         items(items = habitUiStateList, key = { it.id }) { habit ->
             HabitCard(
                 habitUiState = habit,
-                completedOnClick = buttonOnClick,
+                completedOnClick = completedOnClick,
                 navigateToEditHabit = navigateToEditHabit
             )
         }
@@ -161,26 +161,28 @@ private fun HomeScreenPreview() {
                     HomeHabitUiState(
                         id = 0,
                         name = "Running",
-                        completed = false
+                        completedDates = listOf()
                     ),
                     HomeHabitUiState(
                         id = 1,
                         name = "Swimming",
-                        completed = true
+                        completedDates = listOf()
                     ),
                     HomeHabitUiState(
                         id = 2,
                         name = "Reading",
-                        completed = false
+                        completedDates = listOf()
                     ),
                     HomeHabitUiState(
                         id = 3,
                         name = "Piano Practice",
-                        completed = true
+                        completedDates = listOf()
                     ),
                 )
             ),
-            buttonOnClick = {}
+            completedOnClick = { id, hi ->
+
+            }
         )
     }
 }
