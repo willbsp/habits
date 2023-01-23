@@ -2,22 +2,26 @@ package com.willbsp.habits.fake
 
 import com.willbsp.habits.data.model.Entry
 import com.willbsp.habits.data.model.Habit
-import com.willbsp.habits.data.model.HabitEntry
 import com.willbsp.habits.data.repo.HabitRepository
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flow
 
 class FakeHabitRepository : HabitRepository {
 
     val habits = mutableListOf<Habit>()
     val entries = mutableListOf<Entry>()
 
-    private var observableHabitEntries = MutableStateFlow<List<HabitEntry>>(listOf())
+    //private var observableHabitEntries = MutableStateFlow<List<HabitEntry>>(listOf())
     private var entryStreamDate = ""
 
-    override fun getHabitEntriesForDateStream(date: String): Flow<List<HabitEntry>> {
+    override fun getHabitsCompletedForDateStream(date: String): Flow<List<Pair<Habit, Boolean>>> {
         entryStreamDate = date
-        return observableHabitEntries
+        //return observableHabitEntries
+        return flow {}
+    }
+
+    override fun getHabitsCompletedForDatesStream(dates: List<String>): Flow<List<Pair<Habit, List<Pair<String, Boolean>>>>> {
+        TODO("Not yet implemented")
     }
 
     override suspend fun getHabitById(id: Int): Habit {
@@ -58,21 +62,22 @@ class FakeHabitRepository : HabitRepository {
      * Call after every change to the data to imitate flows emitting when database is changed
      */
     private suspend fun emit() {
-        observableHabitEntries.emit(getHabitEntriesForDate(entryStreamDate))
+        //observableHabitEntries.emit(getHabitEntriesForDate(entryStreamDate))
     }
 
     /**
      * Map the list of habits and list of entries to habit entries
      */
-    private fun getHabitEntriesForDate(date: String): List<HabitEntry> {
-        return habits.map { habit ->
+    private fun getHabitEntriesForDate(date: String): List<Habit> {
+        habits.map { habit ->
             var completed = false
             entries.forEach { entry ->
                 if (entry.habitId == habit.id && entry.date == date)
                     completed = true
             }
-            HabitEntry(habit.id, habit.name, completed)
+            //HabitEntry(habit.id, habit.name, completed)
         }
+        return listOf()
     }
 
 }
