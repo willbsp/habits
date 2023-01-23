@@ -2,6 +2,7 @@ package com.willbsp.habits.data.database
 
 import androidx.room.*
 import com.willbsp.habits.data.model.Habit
+import com.willbsp.habits.data.model.HabitWithEntries
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -9,6 +10,10 @@ interface HabitDao {
 
     @Query("SELECT * FROM habit")
     fun getAllHabits(): Flow<List<Habit>>
+
+    @Transaction
+    @Query("SELECT * FROM habit")
+    fun getAllHabitsWithEntries(): Flow<List<HabitWithEntries>>
 
     @Query("SELECT * FROM habit WHERE id = :id")
     suspend fun getHabitById(id: Int): Habit

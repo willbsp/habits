@@ -2,12 +2,13 @@ package com.willbsp.habits.data.repo
 
 import com.willbsp.habits.data.model.Entry
 import com.willbsp.habits.data.model.Habit
-import com.willbsp.habits.data.model.HabitEntry
 import kotlinx.coroutines.flow.Flow
 
 interface HabitRepository {
 
-    fun getHabitEntriesForDateStream(date: String): Flow<List<HabitEntry>>
+    fun getHabitsCompletedForDateStream(date: String): Flow<List<Pair<Habit, Boolean>>>
+
+    fun getHabitsCompletedForDatesStream(dates: List<String>): Flow<List<Pair<Habit, List<Pair<String, Boolean>>>>>
 
     suspend fun getHabitById(id: Int): Habit
 
