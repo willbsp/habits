@@ -4,8 +4,8 @@ Android app for tracking and helping to maintain good habits built in Jetpack Co
 
 ## Screenshots
 
-<img alt="screenshot-1" height="600" src="screenshots/screenshot-1.gif" width="270"/>
-<img alt="screenshot-2" height="600" src="screenshots/screenshot-2.gif" width="270"/>
+![Adding a habit](screenshots/screenshot-1.gif)
+![Editing a habit](screenshots/screenshot-2.gif)
 
 ## Features
 
