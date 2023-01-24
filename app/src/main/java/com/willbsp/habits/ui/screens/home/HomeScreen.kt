@@ -23,6 +23,7 @@ import kotlinx.coroutines.launch
 fun HomeScreen(
     modifier: Modifier = Modifier,
     viewModel: HomeScreenViewModel,
+    navigateToLogbook: () -> Unit,
     navigateToAddHabit: () -> Unit,
     navigateToEditHabit: (Int) -> Unit,
     navigateToSettings: () -> Unit
@@ -33,6 +34,7 @@ fun HomeScreen(
 
     Home(
         modifier = modifier,
+        navigateToLogbook = navigateToLogbook,
         navigateToAddHabit = navigateToAddHabit,
         navigateToEditHabit = navigateToEditHabit,
         navigateToSettings = navigateToSettings,
@@ -51,6 +53,7 @@ fun HomeScreen(
 private fun Home(
     modifier: Modifier = Modifier,
     completedOnClick: (Int, String) -> Unit,
+    navigateToLogbook: () -> Unit,
     navigateToAddHabit: () -> Unit,
     navigateToEditHabit: (Int) -> Unit,
     navigateToSettings: () -> Unit,
@@ -68,7 +71,7 @@ private fun Home(
                 },
                 modifier = modifier,
                 navigationIcon = {
-                    IconButton(onClick = {/* TODO */ }) {
+                    IconButton(onClick = navigateToLogbook) {
                         Icon(
                             imageVector = Icons.Filled.DateRange,
                             contentDescription = ""
@@ -156,6 +159,7 @@ private fun HomeScreenPreview() {
             navigateToAddHabit = {},
             navigateToEditHabit = {},
             navigateToSettings = {},
+            navigateToLogbook = {},
             homeUiState = HomeUiState(
                 listOf(
                     HomeHabitUiState(
@@ -180,7 +184,7 @@ private fun HomeScreenPreview() {
                     ),
                 )
             ),
-            completedOnClick = { id, hi ->
+            completedOnClick = { _, _ ->
 
             }
         )

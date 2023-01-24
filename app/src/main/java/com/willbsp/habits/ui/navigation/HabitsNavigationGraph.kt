@@ -15,12 +15,14 @@ import com.willbsp.habits.ui.screens.edit.EditHabitScreen
 import com.willbsp.habits.ui.screens.edit.EditHabitViewModel
 import com.willbsp.habits.ui.screens.home.HomeScreen
 import com.willbsp.habits.ui.screens.home.HomeScreenViewModel
+import com.willbsp.habits.ui.screens.logbook.LogbookScreen
 import com.willbsp.habits.ui.screens.settings.SettingsScreen
 
 enum class HabitsNavigationDestination(val route: String) {
     HOME(route = "home"),
     ADD(route = "add"),
     EDIT(route = "edit/"),
+    LOGBOOK(route = "logbook"),
     SETTINGS(route = "settings")
 }
 
@@ -46,6 +48,9 @@ fun HabitsNavigationGraph(
 
             HomeScreen(
                 viewModel = viewModel,
+                navigateToLogbook = {
+                    navController.navigate(HabitsNavigationDestination.LOGBOOK.route)
+                },
                 navigateToAddHabit = {
                     navController.navigate(HabitsNavigationDestination.ADD.route)
                 },
@@ -95,6 +100,21 @@ fun HabitsNavigationGraph(
                 },
                 navigateBack = {
                     navController.popBackStack()
+                }
+            )
+
+        }
+
+        composable(
+            route = HabitsNavigationDestination.LOGBOOK.route,
+        ) {
+
+            LogbookScreen(
+                navigateToSettings = {
+                    navController.navigate(HabitsNavigationDestination.SETTINGS.route)
+                },
+                navigateToHome = {
+                    navController.navigate(HabitsNavigationDestination.HOME.route)
                 }
             )
 

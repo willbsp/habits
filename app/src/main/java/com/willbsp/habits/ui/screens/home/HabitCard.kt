@@ -202,7 +202,14 @@ fun HabitCardPreview() {
         habitUiState = HomeHabitUiState(
             id = 1,
             name = "Reading",
-            completedDates = listOf()
+            completedDates = listOf(
+                HomeCompletedUiState("2023-04-12", false),
+                HomeCompletedUiState("2023-04-11", true),
+                HomeCompletedUiState("2023-04-10", false),
+                HomeCompletedUiState("2023-04-09", true),
+                HomeCompletedUiState("2023-04-08", false),
+                HomeCompletedUiState("2023-04-07", true),
+            )
         ),
         completedOnClick = { _, _ -> },
         navigateToEditHabit = {},
@@ -217,7 +224,14 @@ fun HabitCardExpandedPreview() {
         habitUiState = HomeHabitUiState(
             id = 1,
             name = "Walking",
-            completedDates = listOf()
+            completedDates = listOf(
+                HomeCompletedUiState("2023-04-12", true),
+                HomeCompletedUiState("2023-04-11", true),
+                HomeCompletedUiState("2023-04-10", false),
+                HomeCompletedUiState("2023-04-09", true),
+                HomeCompletedUiState("2023-04-08", false),
+                HomeCompletedUiState("2023-04-07", false),
+            )
         ),
         completedOnClick = { _, _ -> },
         navigateToEditHabit = {},
