@@ -45,13 +45,11 @@ class EntryDaoTest {
 
     @Test
     @Throws(Exception::class)
-    fun daoEntryExistsForDate_returnsIfEntryExists() = runBlocking {
-        addTwoHabitsToDb()
-        addTwoEntriesToDb()
-        val actualEntry1 = entryDao.getEntryForDate(entry1.date, entry1.habitId)
-        val actualEntry2 = entryDao.getEntryForDate(entry2.date, entry2.habitId)
-        assertEquals(entry1, actualEntry1)
-        assertEquals(entry2, actualEntry2)
+    fun daoGetEntryForDate_returnsNull() = runBlocking {
+        addOneHabitToDb()
+        addOneEntryToDb()
+        val actualEntry = entryDao.getEntryForDate(entry2.date, entry2.habitId)
+        assertEquals(null, actualEntry)
     }
 
     @Test
@@ -59,8 +57,8 @@ class EntryDaoTest {
     fun daoGetEntryForDate_returnsEntryForDate() = runBlocking {
         addTwoHabitsToDb()
         addTwoEntriesToDb()
-        val entry = entryDao.getEntryForDate(entry2.date, entry2.habitId)
-        assertEquals(entry, entry2)
+        val actualEntry = entryDao.getEntryForDate(entry2.date, entry2.habitId)
+        assertEquals(actualEntry, entry2)
     }
 
     @Test

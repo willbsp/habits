@@ -4,8 +4,11 @@ import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.willbsp.habits.TestData.entry1
+import com.willbsp.habits.TestData.entry2
 import com.willbsp.habits.TestData.habit1
 import com.willbsp.habits.TestData.habit2
+import com.willbsp.habits.data.database.EntryDao
 import com.willbsp.habits.data.database.HabitDao
 import com.willbsp.habits.data.database.HabitDatabase
 import com.willbsp.habits.data.model.HabitFrequency
@@ -23,6 +26,7 @@ import java.io.IOException
 class HabitDaoTest {
 
     private lateinit var habitDao: HabitDao
+    private lateinit var entryDao: EntryDao
     private lateinit var habitDatabase: HabitDatabase
 
     @Before
@@ -32,6 +36,7 @@ class HabitDaoTest {
             .allowMainThreadQueries()
             .build()
         habitDao = habitDatabase.habitDao()
+        entryDao = habitDatabase.entryDao()
     }
 
     @After
@@ -47,6 +52,18 @@ class HabitDaoTest {
         val habits = habitDao.getAllHabits().first()
         assertEquals(habits[0], habit1)
         assertEquals(habits[1], habit2)
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun daoGetHabitsWithEntries_returnsHabitsWithEntries() = runBlocking {
+        addTwoHabitsToDb()
+        addTwoEntriesToDb()
+        val habitsWithEntries = habitDao.getAllHabitsWithEntries().first()
+        assertEquals(habitsWithEntries[0].habit, habit1)
+        assertEquals(habitsWithEntries[1].habit, habit2)
+        assertEquals(habitsWithEntries[0].entries.first(), entry1)
+        assertEquals(habitsWithEntries[1].entries.first(), entry2)
     }
 
     @Test
@@ -78,6 +95,15 @@ class HabitDaoTest {
         val habits = habitDao.getAllHabits().first()
         assertEquals(habits[0], updateHabit1)
         assertEquals(habits[1], updateHabit2)
+    }
+
+    private suspend fun addOneEntryToDb() {
+        entryDao.insert(entry1)
+    }
+
+    private suspend fun addTwoEntriesToDb() {
+        entryDao.insert(entry1)
+        entryDao.insert(entry2)
     }
 
     private suspend fun addOneHabitToDb() {
