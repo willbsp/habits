@@ -165,22 +165,50 @@ private fun HomeScreenPreview() {
                     HomeHabitUiState(
                         id = 0,
                         name = "Running",
-                        completedDates = listOf()
+                        completedDates = listOf(
+                            HomeCompletedUiState("2023-04-12", false),
+                            HomeCompletedUiState("2023-04-11", true),
+                            HomeCompletedUiState("2023-04-10", false),
+                            HomeCompletedUiState("2023-04-09", true),
+                            HomeCompletedUiState("2023-04-08", false),
+                            HomeCompletedUiState("2023-04-07", true),
+                        )
                     ),
                     HomeHabitUiState(
                         id = 1,
                         name = "Swimming",
-                        completedDates = listOf()
+                        completedDates = listOf(
+                            HomeCompletedUiState("2023-04-12", true),
+                            HomeCompletedUiState("2023-04-11", true),
+                            HomeCompletedUiState("2023-04-10", false),
+                            HomeCompletedUiState("2023-04-09", true),
+                            HomeCompletedUiState("2023-04-08", false),
+                            HomeCompletedUiState("2023-04-07", true),
+                        )
                     ),
                     HomeHabitUiState(
                         id = 2,
                         name = "Reading",
-                        completedDates = listOf()
+                        completedDates = listOf(
+                            HomeCompletedUiState("2023-04-12", false),
+                            HomeCompletedUiState("2023-04-11", true),
+                            HomeCompletedUiState("2023-04-10", false),
+                            HomeCompletedUiState("2023-04-09", true),
+                            HomeCompletedUiState("2023-04-08", false),
+                            HomeCompletedUiState("2023-04-07", true),
+                        )
                     ),
                     HomeHabitUiState(
                         id = 3,
                         name = "Piano Practice",
-                        completedDates = listOf()
+                        completedDates = listOf(
+                            HomeCompletedUiState("2023-04-12", false),
+                            HomeCompletedUiState("2023-04-11", true),
+                            HomeCompletedUiState("2023-04-10", false),
+                            HomeCompletedUiState("2023-04-09", true),
+                            HomeCompletedUiState("2023-04-08", false),
+                            HomeCompletedUiState("2023-04-07", true),
+                        )
                     ),
                 )
             ),
