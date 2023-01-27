@@ -1,5 +1,7 @@
 package com.willbsp.habits.ui.screens.home
 
+import java.time.LocalDate
+
 data class HomeUiState(
     val todayState: List<HomeHabitUiState> = listOf()
 )
@@ -11,6 +13,6 @@ data class HomeHabitUiState(
 )
 
 data class HomeCompletedUiState(
-    val date: String,
+    val date: LocalDate,
     val completed: Boolean
 )

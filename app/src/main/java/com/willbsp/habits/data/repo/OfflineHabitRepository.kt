@@ -14,25 +14,25 @@ class OfflineHabitRepository @Inject constructor(
     private val entryDao: EntryDao
 ) : HabitRepository {
 
-    override fun getHabitsCompletedForDateStream(date: String): Flow<List<Pair<Habit, Boolean>>> {
+    override fun getHabitsCompletedForDateStream(date: LocalDate): Flow<List<Pair<Habit, Boolean>>> {
 
         return habitDao.getAllHabitsWithEntries().map { list ->
             list.map {
                 val habit = it.habit
-                val completed = it.entries.any { entry -> entry.date == date }
+                val completed = it.entries.any { entry -> entry.date == date.toString() }
                 Pair(habit, completed)
             }
         }
 
     }
 
-    override fun getHabitsCompletedForDatesStream(dates: List<String>): Flow<List<Pair<Habit, List<Pair<String, Boolean>>>>> {
+    override fun getHabitsCompletedForDatesStream(dates: List<LocalDate>): Flow<List<Pair<Habit, List<Pair<LocalDate, Boolean>>>>> {
 
         return habitDao.getAllHabitsWithEntries().map { list ->
             list.map {
                 val habit = it.habit
                 val completed = dates.map { date ->
-                    Pair(date, it.entries.any { entry -> entry.date == date })
+                    Pair(date, it.entries.any { entry -> entry.date == date.toString() })
                 }
                 Pair(habit, completed)
             }
@@ -44,8 +44,8 @@ class OfflineHabitRepository @Inject constructor(
         return habitDao.getHabitById(id)
     }
 
-    override suspend fun getEntryForDate(date: String, habitId: Int): Entry? {
-        return entryDao.getEntryForDate(date, habitId)
+    override suspend fun getEntryForDate(date: LocalDate, habitId: Int): Entry? {
+        return entryDao.getEntryForDate(date.toString(), habitId)
     }
 
     override suspend fun addHabit(habit: Habit) {
@@ -58,10 +58,10 @@ class OfflineHabitRepository @Inject constructor(
 
     override suspend fun toggleEntry(
         habitId: Int,
-        date: String
+        date: LocalDate
     ) { // TODO create exception if habit does not exist
-        val entry: Entry? = entryDao.getEntryForDate(date, habitId)
-        if (entry == null) entryDao.insert(Entry(habitId = habitId, date = date))
+        val entry: Entry? = entryDao.getEntryForDate(date.toString(), habitId)
+        if (entry == null) entryDao.insert(Entry(habitId = habitId, date = date.toString()))
         else entryDao.delete(entry)
     }
 

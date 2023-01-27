@@ -1,6 +1,7 @@
 package com.willbsp.habits.common
 
 import java.time.Clock
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -11,14 +12,13 @@ fun Clock.getCurrentFormattedDate(): String {
 
 }
 
-fun Clock.getPreviousDaysFormattedDate(days: Int): List<String> {
+fun Clock.getPreviousDatesList(days: Int): List<LocalDate> {
 
-    val formatter = DateTimeFormatter.ofPattern(DATE_FORMAT)
     val clock = this
 
     return buildList {
         repeat(days) { index ->
-            this.add(LocalDateTime.now(clock).minusDays(index.toLong()).format(formatter))
+            this.add(LocalDate.now(clock).minusDays(index.toLong()))
         }
     }
 

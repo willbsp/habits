@@ -23,7 +23,7 @@ import java.util.*
 @Composable
 fun HabitCard(
     habitUiState: HomeHabitUiState,
-    completedOnClick: (Int, String) -> Unit,
+    completedOnClick: (Int, LocalDate) -> Unit,
     navigateToEditHabit: (Int) -> Unit,
     modifier: Modifier = Modifier,
     expandedInitialValue: Boolean = false
@@ -116,7 +116,7 @@ fun HabitCard(
 @Composable
 fun HabitCardDaysRow(
     habitUiState: HomeHabitUiState,
-    completedOnClick: (Int, String) -> Unit,
+    completedOnClick: (Int, LocalDate) -> Unit,
     modifier: Modifier = Modifier
 ) {
 
@@ -142,16 +142,16 @@ fun HabitCardDaysRow(
 @Composable
 fun HabitCardDay(
     modifier: Modifier = Modifier,
-    date: String,
+    date: LocalDate,
     checked: Boolean,
     onCheckedChange: (Boolean) -> Unit,
 ) {
 
-    val weekday = LocalDate.parse(date).dayOfWeek.getDisplayName(
+    val weekday = date.dayOfWeek.getDisplayName(
         TextStyle.SHORT,
         Locale.ENGLISH
     ) // TODO get other locales
-    val dayOfMonth = LocalDate.parse(date).dayOfMonth.toString()
+    val dayOfMonth = date.dayOfMonth.toString()
 
     Column(
         modifier = modifier.width(45.dp),
@@ -203,12 +203,12 @@ fun HabitCardPreview() {
             id = 1,
             name = "Reading",
             completedDates = listOf(
-                HomeCompletedUiState("2023-04-12", false),
-                HomeCompletedUiState("2023-04-11", true),
-                HomeCompletedUiState("2023-04-10", false),
-                HomeCompletedUiState("2023-04-09", true),
-                HomeCompletedUiState("2023-04-08", false),
-                HomeCompletedUiState("2023-04-07", true),
+                HomeCompletedUiState(LocalDate.parse("2023-04-12"), false),
+                HomeCompletedUiState(LocalDate.parse("2023-04-11"), true),
+                HomeCompletedUiState(LocalDate.parse("2023-04-10"), false),
+                HomeCompletedUiState(LocalDate.parse("2023-04-09"), true),
+                HomeCompletedUiState(LocalDate.parse("2023-04-08"), false),
+                HomeCompletedUiState(LocalDate.parse("2023-04-07"), true),
             )
         ),
         completedOnClick = { _, _ -> },
@@ -225,12 +225,12 @@ fun HabitCardExpandedPreview() {
             id = 1,
             name = "Walking",
             completedDates = listOf(
-                HomeCompletedUiState("2023-04-12", true),
-                HomeCompletedUiState("2023-04-11", true),
-                HomeCompletedUiState("2023-04-10", false),
-                HomeCompletedUiState("2023-04-09", true),
-                HomeCompletedUiState("2023-04-08", false),
-                HomeCompletedUiState("2023-04-07", false),
+                HomeCompletedUiState(LocalDate.parse("2023-04-12"), true),
+                HomeCompletedUiState(LocalDate.parse("2023-04-11"), true),
+                HomeCompletedUiState(LocalDate.parse("2023-04-10"), false),
+                HomeCompletedUiState(LocalDate.parse("2023-04-09"), true),
+                HomeCompletedUiState(LocalDate.parse("2023-04-08"), false),
+                HomeCompletedUiState(LocalDate.parse("2023-04-07"), false),
             )
         ),
         completedOnClick = { _, _ -> },

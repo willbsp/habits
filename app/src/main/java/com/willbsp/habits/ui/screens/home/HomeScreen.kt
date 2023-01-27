@@ -18,6 +18,7 @@ import com.willbsp.habits.ui.screens.common.HabitsFloatingAction
 import com.willbsp.habits.ui.theme.HabitsTheme
 import com.willbsp.habits.ui.theme.Typography
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 
 @Composable
 fun HomeScreen(
@@ -52,7 +53,7 @@ fun HomeScreen(
 @Composable
 private fun Home(
     modifier: Modifier = Modifier,
-    completedOnClick: (Int, String) -> Unit,
+    completedOnClick: (Int, LocalDate) -> Unit,
     navigateToLogbook: () -> Unit,
     navigateToAddHabit: () -> Unit,
     navigateToEditHabit: (Int) -> Unit,
@@ -130,7 +131,7 @@ private fun Home(
 @Composable
 private fun HabitsList(
     habitUiStateList: List<HomeHabitUiState>,
-    completedOnClick: (Int, String) -> Unit,
+    completedOnClick: (Int, LocalDate) -> Unit,
     navigateToEditHabit: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -166,48 +167,48 @@ private fun HomeScreenPreview() {
                         id = 0,
                         name = "Running",
                         completedDates = listOf(
-                            HomeCompletedUiState("2023-04-12", false),
-                            HomeCompletedUiState("2023-04-11", true),
-                            HomeCompletedUiState("2023-04-10", false),
-                            HomeCompletedUiState("2023-04-09", true),
-                            HomeCompletedUiState("2023-04-08", false),
-                            HomeCompletedUiState("2023-04-07", true),
+                            HomeCompletedUiState(LocalDate.parse("2023-04-12"), false),
+                            HomeCompletedUiState(LocalDate.parse("2023-04-11"), true),
+                            HomeCompletedUiState(LocalDate.parse("2023-04-10"), false),
+                            HomeCompletedUiState(LocalDate.parse("2023-04-09"), true),
+                            HomeCompletedUiState(LocalDate.parse("2023-04-08"), false),
+                            HomeCompletedUiState(LocalDate.parse("2023-04-07"), true),
                         )
                     ),
                     HomeHabitUiState(
                         id = 1,
                         name = "Swimming",
                         completedDates = listOf(
-                            HomeCompletedUiState("2023-04-12", true),
-                            HomeCompletedUiState("2023-04-11", true),
-                            HomeCompletedUiState("2023-04-10", false),
-                            HomeCompletedUiState("2023-04-09", true),
-                            HomeCompletedUiState("2023-04-08", false),
-                            HomeCompletedUiState("2023-04-07", true),
+                            HomeCompletedUiState(LocalDate.parse("2023-04-12"), true),
+                            HomeCompletedUiState(LocalDate.parse("2023-04-11"), true),
+                            HomeCompletedUiState(LocalDate.parse("2023-04-10"), false),
+                            HomeCompletedUiState(LocalDate.parse("2023-04-09"), true),
+                            HomeCompletedUiState(LocalDate.parse("2023-04-08"), false),
+                            HomeCompletedUiState(LocalDate.parse("2023-04-07"), true),
                         )
                     ),
                     HomeHabitUiState(
                         id = 2,
                         name = "Reading",
                         completedDates = listOf(
-                            HomeCompletedUiState("2023-04-12", false),
-                            HomeCompletedUiState("2023-04-11", true),
-                            HomeCompletedUiState("2023-04-10", false),
-                            HomeCompletedUiState("2023-04-09", true),
-                            HomeCompletedUiState("2023-04-08", false),
-                            HomeCompletedUiState("2023-04-07", true),
+                            HomeCompletedUiState(LocalDate.parse("2023-04-12"), false),
+                            HomeCompletedUiState(LocalDate.parse("2023-04-11"), true),
+                            HomeCompletedUiState(LocalDate.parse("2023-04-10"), false),
+                            HomeCompletedUiState(LocalDate.parse("2023-04-09"), true),
+                            HomeCompletedUiState(LocalDate.parse("2023-04-08"), false),
+                            HomeCompletedUiState(LocalDate.parse("2023-04-07"), true),
                         )
                     ),
                     HomeHabitUiState(
                         id = 3,
                         name = "Piano Practice",
                         completedDates = listOf(
-                            HomeCompletedUiState("2023-04-12", false),
-                            HomeCompletedUiState("2023-04-11", true),
-                            HomeCompletedUiState("2023-04-10", false),
-                            HomeCompletedUiState("2023-04-09", true),
-                            HomeCompletedUiState("2023-04-08", false),
-                            HomeCompletedUiState("2023-04-07", true),
+                            HomeCompletedUiState(LocalDate.parse("2023-04-12"), false),
+                            HomeCompletedUiState(LocalDate.parse("2023-04-11"), true),
+                            HomeCompletedUiState(LocalDate.parse("2023-04-10"), false),
+                            HomeCompletedUiState(LocalDate.parse("2023-04-09"), true),
+                            HomeCompletedUiState(LocalDate.parse("2023-04-08"), false),
+                            HomeCompletedUiState(LocalDate.parse("2023-04-07"), true),
                         )
                     ),
                 )
