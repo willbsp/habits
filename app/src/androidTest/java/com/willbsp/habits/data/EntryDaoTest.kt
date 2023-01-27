@@ -8,9 +8,9 @@ import com.willbsp.habits.TestData.entry1
 import com.willbsp.habits.TestData.entry2
 import com.willbsp.habits.TestData.habit1
 import com.willbsp.habits.TestData.habit2
-import com.willbsp.habits.data.database.EntryDao
-import com.willbsp.habits.data.database.HabitDao
 import com.willbsp.habits.data.database.HabitDatabase
+import com.willbsp.habits.data.database.dao.EntryDao
+import com.willbsp.habits.data.database.dao.HabitDao
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert.*

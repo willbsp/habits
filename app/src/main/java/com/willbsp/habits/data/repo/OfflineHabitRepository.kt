@@ -1,11 +1,12 @@
 package com.willbsp.habits.data.repo
 
-import com.willbsp.habits.data.database.EntryDao
-import com.willbsp.habits.data.database.HabitDao
+import com.willbsp.habits.data.database.dao.EntryDao
+import com.willbsp.habits.data.database.dao.HabitDao
 import com.willbsp.habits.data.model.Entry
 import com.willbsp.habits.data.model.Habit
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import java.time.LocalDate
 import javax.inject.Inject
 
 class OfflineHabitRepository @Inject constructor(
