@@ -13,7 +13,7 @@ import java.time.Clock
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeScreenViewModel @Inject constructor(
+class HomeViewModel @Inject constructor(
     private val habitsRepository: HabitRepository,
     private val clock: Clock
 ) : ViewModel() {

@@ -44,7 +44,7 @@ fun HabitsNavigationGraph(
             exitTransition = { slideOutOfContainer(AnimatedContentScope.SlideDirection.Left) }
         ) {
 
-            val viewModel = hiltViewModel<HomeScreenViewModel>()
+            val viewModel = hiltViewModel<HomeViewModel>()
 
             HomeScreen(
                 viewModel = viewModel,

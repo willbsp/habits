@@ -5,8 +5,8 @@ import com.willbsp.habits.TestData.habit2
 import com.willbsp.habits.fake.FakeHabitRepository
 import com.willbsp.habits.rules.TestDispatcherRule
 import com.willbsp.habits.ui.screens.home.HomeHabitUiState
-import com.willbsp.habits.ui.screens.home.HomeScreenViewModel
 import com.willbsp.habits.ui.screens.home.HomeUiState
+import com.willbsp.habits.ui.screens.home.HomeViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -19,7 +19,7 @@ import org.junit.Test
 import java.time.Clock
 import java.time.Instant
 
-class HomeScreenViewModelTest {
+class HomeViewModelTest {
 
     @get:Rule
     val testDispatcher = TestDispatcherRule()
@@ -28,12 +28,12 @@ class HomeScreenViewModelTest {
     private val time = "T10:30:45Z"
 
     private lateinit var fakeRepository: FakeHabitRepository
-    private lateinit var homeViewModel: HomeScreenViewModel
+    private lateinit var homeViewModel: HomeViewModel
 
     @Before
     fun createViewModel() {
         fakeRepository = FakeHabitRepository()
-        homeViewModel = HomeScreenViewModel(
+        homeViewModel = HomeViewModel(
             habitsRepository = fakeRepository,
             clock = Clock.fixed(Instant.parse(date + time), Clock.systemDefaultZone().zone)
         )

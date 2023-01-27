@@ -22,7 +22,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
-    viewModel: HomeScreenViewModel,
+    viewModel: HomeViewModel,
     navigateToLogbook: () -> Unit,
     navigateToAddHabit: () -> Unit,
     navigateToEditHabit: (Int) -> Unit,
