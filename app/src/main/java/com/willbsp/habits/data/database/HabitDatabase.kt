@@ -2,6 +2,8 @@ package com.willbsp.habits.data.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import com.willbsp.habits.data.database.dao.EntryDao
+import com.willbsp.habits.data.database.dao.HabitDao
 import com.willbsp.habits.data.model.Entry
 import com.willbsp.habits.data.model.Habit
 

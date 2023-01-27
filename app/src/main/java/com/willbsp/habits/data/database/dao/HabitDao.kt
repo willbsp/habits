@@ -1,4 +1,4 @@
-package com.willbsp.habits.data.database
+package com.willbsp.habits.data.database.dao
 
 import androidx.room.*
 import com.willbsp.habits.data.model.Habit
