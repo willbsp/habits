@@ -17,6 +17,7 @@ import com.willbsp.habits.ui.theme.Typography
 @Composable
 fun LogbookScreen(
     modifier: Modifier = Modifier,
+    viewModel: LogbookViewModel,
     navigateToHome: () -> Unit,
     navigateToSettings: () -> Unit
 ) {

@@ -14,8 +14,9 @@ import com.willbsp.habits.ui.screens.add.AddHabitViewModel
 import com.willbsp.habits.ui.screens.edit.EditHabitScreen
 import com.willbsp.habits.ui.screens.edit.EditHabitViewModel
 import com.willbsp.habits.ui.screens.home.HomeScreen
-import com.willbsp.habits.ui.screens.home.HomeScreenViewModel
+import com.willbsp.habits.ui.screens.home.HomeViewModel
 import com.willbsp.habits.ui.screens.logbook.LogbookScreen
+import com.willbsp.habits.ui.screens.logbook.LogbookViewModel
 import com.willbsp.habits.ui.screens.settings.SettingsScreen
 
 enum class HabitsNavigationDestination(val route: String) {
@@ -109,7 +110,10 @@ fun HabitsNavigationGraph(
             route = HabitsNavigationDestination.LOGBOOK.route,
         ) {
 
+            val viewModel = hiltViewModel<LogbookViewModel>()
+
             LogbookScreen(
+                viewModel = viewModel,
                 navigateToSettings = {
                     navController.navigate(HabitsNavigationDestination.SETTINGS.route)
                 },
