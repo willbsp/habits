@@ -21,7 +21,7 @@ class EditHabitViewModel @Inject constructor(
     var habitUiState by mutableStateOf(ModifyHabitUiState())
         private set
 
-    private var habitId: Int = checkNotNull(savedStateHandle["habitId"])
+    private var habitId: Int = checkNotNull(savedStateHandle[HABIT_ID_SAVED_STATE_KEY])
 
     init {
         runBlocking {
@@ -51,6 +51,10 @@ class EditHabitViewModel @Inject constructor(
                 frequency = habitUiState.frequency
             )
         )
+    }
+
+    companion object {
+        private const val HABIT_ID_SAVED_STATE_KEY = "habitId"
     }
 
 }
