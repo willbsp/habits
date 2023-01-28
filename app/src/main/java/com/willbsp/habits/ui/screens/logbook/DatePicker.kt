@@ -12,7 +12,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.rememberPagerState
 import com.willbsp.habits.ui.theme.Typography
+import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.format.TextStyle
 import java.util.*
@@ -22,34 +24,43 @@ import java.util.*
 fun DatePickerCard(
     modifier: Modifier = Modifier,
     today: LocalDate = LocalDate.now(),
-    selectedDate: LocalDate,
     onSelectedDateChange: (LocalDate) -> (Unit)
 ) {
 
-    Card(modifier = modifier) {
-        HorizontalPager(modifier = Modifier.fillMaxSize(), count = Integer.MAX_VALUE) {
+    var selectedDate by remember { mutableStateOf(today) }
 
-            //val startDate = today.minusYears(10)
-            val startDate = today
+    Card(modifier = modifier) {
+
+        HorizontalPager(
+            modifier = Modifier.fillMaxSize(),
+            state = rememberPagerState(Integer.MAX_VALUE / 2), // TODO constant
+            count = Integer.MAX_VALUE
+        ) {
+
+            val startDate =
+                today.minusWeeks((Integer.MAX_VALUE / 2).toLong())
+                    .with(DayOfWeek.MONDAY) // TODO look into locales for this
             val date = startDate.plusDays(it.toLong() * 7)
 
             Row(
                 horizontalArrangement = Arrangement.spacedBy(5.dp)
             ) {
-                repeat(7) { weekday ->
-                    var checked = false
-                    if (date.plusDays(weekday.toLong()) == selectedDate)
-                        checked = true
+
+                repeat(7) { day ->
+
                     DateIconButton(
                         modifier = Modifier
                             .size(50.dp),
-                        date = date.plusDays(weekday.toLong()),
-                        checked = checked,
+                        date = date.plusDays(day.toLong()),
+                        checked = date.plusDays(day.toLong()) == selectedDate,
                         onCheckedChange = { date ->
+                            selectedDate = date
                             onSelectedDateChange(date)
                         }
                     )
+
                 }
+
             }
 
         }
@@ -99,6 +110,5 @@ fun DatePickerPreview() {
             .fillMaxWidth()
             .height(70.dp),
         onSelectedDateChange = {},
-        selectedDate = LocalDate.now()
     )
 }

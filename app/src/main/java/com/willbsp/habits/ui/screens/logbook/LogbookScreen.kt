@@ -91,7 +91,6 @@ private fun Logbook(
                 modifier = Modifier
                     .height(70.dp)
                     .fillMaxWidth(),
-                selectedDate = LocalDate.now(),
                 onSelectedDateChange = onSelectedDateChange
             )
 
