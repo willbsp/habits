@@ -2,7 +2,6 @@ package com.willbsp.habits.ui.screens.logbook
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.willbsp.habits.data.model.Habit
 import com.willbsp.habits.data.repo.HabitRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -11,15 +10,6 @@ import kotlinx.coroutines.launch
 import java.time.Clock
 import java.time.LocalDate
 import javax.inject.Inject
-
-data class LogbookUiState(
-    val habits: List<LogbookHabitUiState> = listOf()
-)
-
-data class LogbookHabitUiState(
-    val habit: Habit,
-    val completed: Boolean
-)
 
 @HiltViewModel
 class LogbookViewModel @Inject constructor(
