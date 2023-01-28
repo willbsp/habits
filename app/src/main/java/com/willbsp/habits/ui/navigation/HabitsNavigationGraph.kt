@@ -41,8 +41,22 @@ fun HabitsNavigationGraph(
 
         composable(
             route = HabitsNavigationDestination.HOME.route,
-            enterTransition = { slideIntoContainer(AnimatedContentScope.SlideDirection.Right) },
-            exitTransition = { slideOutOfContainer(AnimatedContentScope.SlideDirection.Left) }
+            enterTransition = {
+                when (initialState.destination.route) {
+                    HabitsNavigationDestination.LOGBOOK.route ->
+                        fadeIn()
+                    else ->
+                        slideIntoContainer(AnimatedContentScope.SlideDirection.Right)
+                }
+            },
+            exitTransition = {
+                when (targetState.destination.route) {
+                    HabitsNavigationDestination.LOGBOOK.route ->
+                        fadeOut()
+                    else ->
+                        slideOutOfContainer(AnimatedContentScope.SlideDirection.Left)
+                }
+            }
         ) {
 
             val viewModel = hiltViewModel<HomeViewModel>()
