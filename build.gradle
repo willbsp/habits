@@ -4,7 +4,8 @@ buildscript {
         material3_version = '1.0.1'
         room_version = '2.4.3'
     }
-}// Top-level build file where you can add configuration options common to all sub-projects/modules.
+}
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {
     id 'com.android.application' version '7.4.0' apply false
     id 'com.android.library' version '7.4.0' apply false
