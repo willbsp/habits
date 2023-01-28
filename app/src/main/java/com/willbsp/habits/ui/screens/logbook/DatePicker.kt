@@ -8,6 +8,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -31,9 +32,18 @@ fun DatePickerCard(
 
     Card(modifier = modifier) {
 
+        Spacer(Modifier.height(10.dp))
+
+        Text(
+            text = selectedDate.month.getDisplayName(TextStyle.FULL, Locale.ENGLISH),
+            style = Typography.titleLarge,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.fillMaxWidth()
+        )
+
         HorizontalPager(
             modifier = Modifier.fillMaxSize(),
-            state = rememberPagerState(Integer.MAX_VALUE / 2), // TODO constant
+            state = rememberPagerState(Integer.MAX_VALUE / 2),
             count = Integer.MAX_VALUE
         ) {
 
@@ -50,7 +60,7 @@ fun DatePickerCard(
 
                     DateIconButton(
                         modifier = Modifier
-                            .size(50.dp),
+                            .size(45.dp),
                         date = date.plusDays(day.toLong()),
                         checked = date.plusDays(day.toLong()) == selectedDate,
                         onCheckedChange = { date ->
@@ -108,7 +118,7 @@ fun DatePickerPreview() {
     DatePickerCard(
         modifier = Modifier
             .fillMaxWidth()
-            .height(70.dp),
+            .height(110.dp),
         onSelectedDateChange = {},
     )
 }

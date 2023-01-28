@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
@@ -62,7 +63,7 @@ private fun Logbook(
                 navigationIcon = {
                     IconButton(onClick = navigateToHome) {
                         Icon(
-                            imageVector = Icons.Filled.Done,
+                            imageVector = Icons.Filled.DateRange,
                             contentDescription = ""
                         )
                     }
@@ -89,11 +90,11 @@ private fun Logbook(
 
             DatePickerCard(
                 modifier = Modifier
-                    .height(70.dp)
+                    .padding(8.dp)
+                    .height(110.dp)
                     .fillMaxWidth(),
                 onSelectedDateChange = onSelectedDateChange
             )
-
 
             LazyColumn(
                 modifier = Modifier.fillMaxSize()
