@@ -5,10 +5,9 @@ import androidx.lifecycle.viewModelScope
 import com.willbsp.habits.data.model.Habit
 import com.willbsp.habits.data.repo.HabitRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import java.time.Clock
 import java.time.LocalDate
 import javax.inject.Inject
@@ -28,28 +27,25 @@ class LogbookViewModel @Inject constructor(
     private val clock: Clock
 ) : ViewModel() {
 
-    private var selectedDate = LocalDate.now(clock)
 
-    val logbookUiState: StateFlow<LogbookUiState> =
-        habitRepository.getHabitsCompletedForDateStream(selectedDate)
-            .map {
-                LogbookUiState(
+    private val _logbookUiState = MutableStateFlow(LogbookUiState())
+    val logbookUiState: StateFlow<LogbookUiState> = _logbookUiState
+
+    init {
+        setSelectedDate(LocalDate.now(clock))
+    }
+
+    fun setSelectedDate(date: LocalDate) {
+        viewModelScope.launch {
+            habitRepository.getHabitsCompletedForDateStream(date).collect {
+                _logbookUiState.value = LogbookUiState(
                     it.map { habitWithCompleted ->
                         LogbookHabitUiState(habitWithCompleted.first, habitWithCompleted.second)
                     }
                 )
-            }.stateIn(
-                scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
-                initialValue = LogbookUiState()
-            )
+            }
+        }
 
-    fun setSelectedDate(date: LocalDate) {
-        selectedDate = date
-    }
-
-    companion object {
-        const val TIMEOUT_MILLIS = 5_000L
     }
 
 }
