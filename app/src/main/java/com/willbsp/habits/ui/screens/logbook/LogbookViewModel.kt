@@ -42,4 +42,8 @@ class LogbookViewModel @Inject constructor(
 
     }
 
+    suspend fun toggleEntry(habitId: Int, date: LocalDate) {
+        habitRepository.toggleEntry(habitId, date)
+    }
+
 }
