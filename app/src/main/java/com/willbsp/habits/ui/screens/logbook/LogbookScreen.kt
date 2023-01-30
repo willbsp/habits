@@ -7,9 +7,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -17,6 +15,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.willbsp.habits.R
+import com.willbsp.habits.ui.common.HabitToggleButton
+import com.willbsp.habits.ui.theme.Typography
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 
 @Composable
@@ -28,13 +29,19 @@ fun LogbookScreen(
 ) {
 
     val logbookUiState by viewModel.logbookUiState.collectAsState(LogbookUiState())
+    val coroutineScope = rememberCoroutineScope()
 
     Logbook(
         modifier = modifier,
         navigateToHome = navigateToHome,
         navigateToSettings = navigateToSettings,
         logbookUiState = logbookUiState,
-        onSelectedDateChange = { viewModel.setSelectedDate(it) }
+        onSelectedDateChange = { viewModel.setSelectedDate(it) },
+        completedOnClick = { habitId, date ->
+            coroutineScope.launch {
+                viewModel.toggleEntry(habitId, date)
+            }
+        }
     )
 
 }
@@ -46,7 +53,8 @@ private fun Logbook(
     navigateToHome: () -> Unit,
     navigateToSettings: () -> Unit,
     logbookUiState: LogbookUiState,
-    onSelectedDateChange: (LocalDate) -> Unit
+    onSelectedDateChange: (LocalDate) -> Unit,
+    completedOnClick: (Int, LocalDate) -> Unit
 ) {
 
     Scaffold(
@@ -82,26 +90,42 @@ private fun Logbook(
         Column(
             modifier = modifier
                 .fillMaxSize()
-                .padding(innerPadding),
+                .padding(innerPadding)
+                .padding(8.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+
+            var selectedDate by remember { mutableStateOf(LocalDate.now()) }
 
 
             DatePickerCard(
                 modifier = Modifier
-                    .padding(8.dp)
+                    //.padding(8.dp)
                     .height(110.dp)
                     .fillMaxWidth(),
-                onSelectedDateChange = onSelectedDateChange
+                onSelectedDateChange = {
+                    selectedDate = it
+                    onSelectedDateChange(it)
+                },
+                selectedDate = selectedDate
             )
 
+            Spacer(modifier = Modifier.height(10.dp))
+
             LazyColumn(
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
 
-                items(items = logbookUiState.habits, key = { it.habit.id }) { habit ->
+                items(items = logbookUiState.habits, key = { it.id }) { habitUiState ->
 
-                    Text(habit.habit.name + " " + habit.completed.toString())
+                    LogbookHabitCard(
+                        modifier = Modifier.fillMaxWidth(),
+                        logbookHabitUiState = habitUiState,
+                        completedOnClick = {
+                            completedOnClick(it, selectedDate)
+                        }
+                    )
 
                 }
 
@@ -112,13 +136,55 @@ private fun Logbook(
     }
 }
 
+@Composable
+fun LogbookHabitCard(
+    modifier: Modifier,
+    logbookHabitUiState: LogbookHabitUiState,
+    completedOnClick: (Int) -> Unit,
+) {
+
+    ElevatedCard(modifier) {
+
+        Row(
+            modifier = Modifier
+                .height(60.dp)
+                .padding(10.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+
+            Text(
+                text = logbookHabitUiState.name,
+                style = Typography.titleLarge
+            )
+
+            Spacer(Modifier.weight(1f))
+
+            HabitToggleButton(
+                onCheckedChange = {
+                    completedOnClick(logbookHabitUiState.id)
+                },
+                checked = logbookHabitUiState.completed
+            )
+
+        }
+
+    }
+
+}
+
 @Preview
 @Composable
 fun LogbookPreview() {
     Logbook(
         navigateToSettings = {},
         navigateToHome = {},
-        logbookUiState = LogbookUiState(),
-        onSelectedDateChange = {}
+        logbookUiState = LogbookUiState(
+            listOf(
+                LogbookHabitUiState(0, "Running", true),
+                LogbookHabitUiState(1, "Flashcards", false),
+            )
+        ),
+        onSelectedDateChange = {},
+        completedOnClick = { _, _ -> }
     )
 }

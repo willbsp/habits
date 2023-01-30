@@ -24,11 +24,15 @@ import java.util.*
 @Composable
 fun DatePickerCard(
     modifier: Modifier = Modifier,
-    today: LocalDate = LocalDate.now(),
-    onSelectedDateChange: (LocalDate) -> (Unit)
+    selectedDate: LocalDate,
+    onSelectedDateChange: (LocalDate) -> (Unit),
 ) {
 
-    var selectedDate by remember { mutableStateOf(today) }
+    val startDate by remember {
+        mutableStateOf(
+            selectedDate.minusWeeks((Integer.MAX_VALUE / 2).toLong()).with(DayOfWeek.MONDAY)
+        ) // TODO look into locales
+    }
 
     Card(modifier = modifier) {
 
@@ -47,9 +51,6 @@ fun DatePickerCard(
             count = Integer.MAX_VALUE
         ) {
 
-            val startDate =
-                today.minusWeeks((Integer.MAX_VALUE / 2).toLong())
-                    .with(DayOfWeek.MONDAY) // TODO look into locales for this
             val date = startDate.plusDays(it.toLong() * 7)
 
             Row(
@@ -60,11 +61,11 @@ fun DatePickerCard(
 
                     DateIconButton(
                         modifier = Modifier
-                            .size(45.dp),
+                            .size(50.dp),
                         date = date.plusDays(day.toLong()),
                         checked = date.plusDays(day.toLong()) == selectedDate,
                         onCheckedChange = { date ->
-                            selectedDate = date
+                            //selectedDate = date
                             onSelectedDateChange(date)
                         }
                     )
@@ -120,5 +121,6 @@ fun DatePickerPreview() {
             .fillMaxWidth()
             .height(110.dp),
         onSelectedDateChange = {},
+        selectedDate = LocalDate.now()
     )
 }
