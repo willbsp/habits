@@ -4,7 +4,6 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -15,6 +14,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.willbsp.habits.R
+import com.willbsp.habits.ui.common.HabitToggleButton
 import com.willbsp.habits.ui.theme.Typography
 import java.time.LocalDate
 import java.time.format.TextStyle
@@ -64,7 +64,7 @@ fun HomeHabitCard(
 
                     Spacer(modifier = Modifier.weight(1f))
 
-                    HomeHabitToggleButton(
+                    HabitToggleButton(
                         onCheckedChange = {
                             completedOnClick(
                                 habitUiState.id,
@@ -167,7 +167,7 @@ private fun HomeHabitCardDay(
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        HomeHabitToggleButton(
+        HabitToggleButton(
             onCheckedChange = onCheckedChange,
             checked = checked
         )
@@ -176,24 +176,6 @@ private fun HomeHabitCardDay(
 
 }
 
-@Composable
-private fun HomeHabitToggleButton(
-    modifier: Modifier = Modifier,
-    onCheckedChange: (Boolean) -> (Unit),
-    checked: Boolean
-) {
-    IconToggleButton(
-        modifier = modifier.size(40.dp),
-        onCheckedChange = onCheckedChange,
-        checked = checked,
-        colors = IconButtonDefaults.filledIconToggleButtonColors()
-    ) {
-        Icon(
-            imageVector = Icons.Default.Done,
-            contentDescription = stringResource(id = R.string.home_screen_completed)
-        )
-    }
-}
 
 @Preview
 @Composable
