@@ -13,9 +13,9 @@ import javax.inject.Singleton
 @Module
 @TestInstallIn(
     components = [SingletonComponent::class],
-    replaces = [DatabaseModule::class]
+    replaces = [HabitDatabaseModule::class]
 )
-class InMemoryDatabaseModule {
+class InMemoryHabitDatabaseModule {
 
     @Singleton
     @Provides
