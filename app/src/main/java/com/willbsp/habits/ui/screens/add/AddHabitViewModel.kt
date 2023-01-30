@@ -6,7 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.willbsp.habits.data.model.Habit
 import com.willbsp.habits.data.repo.HabitRepository
-import com.willbsp.habits.ui.screens.common.ModifyHabitUiState
+import com.willbsp.habits.ui.common.ModifyHabitUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

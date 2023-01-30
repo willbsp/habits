@@ -7,7 +7,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.willbsp.habits.data.model.Habit
 import com.willbsp.habits.data.repo.HabitRepository
-import com.willbsp.habits.ui.screens.common.ModifyHabitUiState
+import com.willbsp.habits.ui.common.ModifyHabitUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
@@ -54,6 +54,7 @@ class EditHabitViewModel @Inject constructor(
     }
 
     companion object {
+
         private const val HABIT_ID_SAVED_STATE_KEY = "habitId"
     }
 

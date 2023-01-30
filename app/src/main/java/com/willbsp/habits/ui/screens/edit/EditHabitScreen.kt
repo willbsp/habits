@@ -14,10 +14,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.willbsp.habits.R
-import com.willbsp.habits.ui.screens.common.DefaultHabitsAppTopBar
-import com.willbsp.habits.ui.screens.common.HabitsFloatingAction
-import com.willbsp.habits.ui.screens.common.ModifyHabitForm
-import com.willbsp.habits.ui.screens.common.ModifyHabitUiState
+import com.willbsp.habits.ui.common.DefaultHabitsAppTopBar
+import com.willbsp.habits.ui.common.HabitsFloatingAction
+import com.willbsp.habits.ui.common.ModifyHabitForm
+import com.willbsp.habits.ui.common.ModifyHabitUiState
 import com.willbsp.habits.ui.theme.HabitsTheme
 import kotlinx.coroutines.launch
 

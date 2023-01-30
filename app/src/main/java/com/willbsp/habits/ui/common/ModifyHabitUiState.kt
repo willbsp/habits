@@ -1,4 +1,4 @@
-package com.willbsp.habits.ui.screens.common
+package com.willbsp.habits.ui.common
 
 import com.willbsp.habits.data.model.HabitFrequency
 

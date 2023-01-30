@@ -1,4 +1,4 @@
-package com.willbsp.habits.ui.screens.common
+package com.willbsp.habits.ui.common
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
