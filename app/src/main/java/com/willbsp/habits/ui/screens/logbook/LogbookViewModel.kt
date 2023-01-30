@@ -30,7 +30,11 @@ class LogbookViewModel @Inject constructor(
             habitRepository.getHabitsCompletedForDateStream(date).collect {
                 _logbookUiState.value = LogbookUiState(
                     it.map { habitWithCompleted ->
-                        LogbookHabitUiState(habitWithCompleted.first, habitWithCompleted.second)
+                        LogbookHabitUiState(
+                            habitWithCompleted.first.id,
+                            habitWithCompleted.first.name,
+                            habitWithCompleted.second
+                        )
                     }
                 )
             }
