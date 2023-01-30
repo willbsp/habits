@@ -21,7 +21,7 @@ import java.time.format.TextStyle
 import java.util.*
 
 @Composable
-fun HabitCard(
+fun HomeHabitCard(
     habitUiState: HomeHabitUiState,
     completedOnClick: (Int, LocalDate) -> Unit,
     navigateToEditHabit: (Int) -> Unit,
@@ -64,7 +64,7 @@ fun HabitCard(
 
                     Spacer(modifier = Modifier.weight(1f))
 
-                    HabitToggleButton(
+                    HomeHabitToggleButton(
                         onCheckedChange = {
                             completedOnClick(
                                 habitUiState.id,
@@ -87,7 +87,7 @@ fun HabitCard(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
 
-                        HabitCardDaysRow(
+                        HomeHabitCardDayRow(
                             habitUiState = habitUiState,
                             completedOnClick = completedOnClick
                         )
@@ -114,7 +114,7 @@ fun HabitCard(
 }
 
 @Composable
-fun HabitCardDaysRow(
+private fun HomeHabitCardDayRow(
     habitUiState: HomeHabitUiState,
     completedOnClick: (Int, LocalDate) -> Unit,
     modifier: Modifier = Modifier
@@ -126,7 +126,7 @@ fun HabitCardDaysRow(
     ) {
 
         habitUiState.completedDates.drop(1).forEach { completedState ->
-            HabitCardDay(
+            HomeHabitCardDay(
                 date = completedState.date,
                 checked = completedState.completed,
                 onCheckedChange = {
@@ -140,7 +140,7 @@ fun HabitCardDaysRow(
 }
 
 @Composable
-fun HabitCardDay(
+private fun HomeHabitCardDay(
     modifier: Modifier = Modifier,
     date: LocalDate,
     checked: Boolean,
@@ -167,7 +167,7 @@ fun HabitCardDay(
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        HabitToggleButton(
+        HomeHabitToggleButton(
             onCheckedChange = onCheckedChange,
             checked = checked
         )
@@ -177,7 +177,7 @@ fun HabitCardDay(
 }
 
 @Composable
-fun HabitToggleButton(
+private fun HomeHabitToggleButton(
     modifier: Modifier = Modifier,
     onCheckedChange: (Boolean) -> (Unit),
     checked: Boolean
@@ -197,8 +197,8 @@ fun HabitToggleButton(
 
 @Preview
 @Composable
-fun HabitCardPreview() {
-    HabitCard(
+private fun HomeHabitCardPreview() {
+    HomeHabitCard(
         habitUiState = HomeHabitUiState(
             id = 1,
             name = "Reading",
@@ -219,8 +219,8 @@ fun HabitCardPreview() {
 
 @Preview
 @Composable
-fun HabitCardExpandedPreview() {
-    HabitCard(
+private fun HomeHabitCardExpandedPreview() {
+    HomeHabitCard(
         habitUiState = HomeHabitUiState(
             id = 1,
             name = "Walking",

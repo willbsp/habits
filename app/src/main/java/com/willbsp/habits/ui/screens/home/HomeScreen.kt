@@ -138,7 +138,7 @@ private fun HabitsList(
 
     LazyColumn(modifier = modifier, verticalArrangement = Arrangement.spacedBy(10.dp)) {
         items(items = habitUiStateList, key = { it.id }) { habit ->
-            HabitCard(
+            HomeHabitCard(
                 habitUiState = habit,
                 completedOnClick = completedOnClick,
                 navigateToEditHabit = navigateToEditHabit
