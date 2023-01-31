@@ -4,8 +4,8 @@ import com.willbsp.habits.data.database.dao.EntryDao
 import com.willbsp.habits.data.database.dao.HabitDao
 import com.willbsp.habits.data.model.Entry
 import com.willbsp.habits.data.model.Habit
+import com.willbsp.habits.data.model.HabitWithEntries
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 import java.time.LocalDate
 import javax.inject.Inject
 
@@ -14,34 +14,13 @@ class OfflineHabitRepository @Inject constructor(
     private val entryDao: EntryDao
 ) : HabitRepository {
 
-    override fun getHabitsCompletedForDateStream(date: LocalDate): Flow<List<Pair<Habit, Boolean>>> {
-
-        return habitDao.getAllHabitsWithEntries().map { list ->
-            list.map {
-                val habit = it.habit
-                val completed = it.entries.any { entry -> entry.date == date.toString() }
-                Pair(habit, completed)
-            }
-        }
-
+    override fun getAllHabitsWithEntries(dates: List<LocalDate>): Flow<List<HabitWithEntries>> {
+        return habitDao.getAllHabitsWithEntries()
     }
 
-    override fun getHabitsCompletedForDatesStream(dates: List<LocalDate>): Flow<List<Pair<Habit, List<Pair<LocalDate, Boolean>>>>> {
-
-        return habitDao.getAllHabitsWithEntries().map { list ->
-            list.map {
-                val habit = it.habit
-                val completed = dates.map { date ->
-                    Pair(date, it.entries.any { entry -> entry.date == date.toString() })
-                }
-                Pair(habit, completed)
-            }
-        }
-
-    }
-
-    override suspend fun getHabitById(id: Int): Habit {
-        return habitDao.getHabitById(id)
+    override suspend fun getHabitById(habitId: Int): Habit {
+        val habit = habitDao.getHabitById(habitId)
+        return Habit(habit.id, habit.name, habit.frequency)
     }
 
     override suspend fun getEntryForDate(date: LocalDate, habitId: Int): Entry? {
@@ -49,11 +28,11 @@ class OfflineHabitRepository @Inject constructor(
     }
 
     override suspend fun addHabit(habit: Habit) {
-        habitDao.insert(habit)
+        habitDao.insert(Habit(habit.id, habit.name, habit.frequency))
     }
 
     override suspend fun updateHabit(habit: Habit) {
-        habitDao.update(habit)
+        habitDao.update(Habit(habit.id, habit.name, habit.frequency))
     }
 
     override suspend fun toggleEntry(
@@ -70,6 +49,7 @@ class OfflineHabitRepository @Inject constructor(
             )
         )
         else entryDao.delete(entry)
+
     }
 
     override suspend fun deleteHabit(habitId: Int) {

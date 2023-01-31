@@ -2,6 +2,7 @@ package com.willbsp.habits.ui.screens.logbook
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.willbsp.habits.data.model.HabitWithEntries
 import com.willbsp.habits.data.repo.HabitRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -27,19 +28,18 @@ class LogbookViewModel @Inject constructor(
 
     fun setSelectedDate(date: LocalDate) {
         viewModelScope.launch {
-            habitRepository.getHabitsCompletedForDateStream(date).collect {
+            habitRepository.getAllHabitsWithEntries(listOf(date)).collect {
                 _logbookUiState.value = LogbookUiState(
-                    it.map { habitWithCompleted ->
-                        LogbookHabitUiState(
-                            habitWithCompleted.first.id,
-                            habitWithCompleted.first.name,
-                            habitWithCompleted.second
-                        )
-                    }
+                    it.map { habitWithEntries -> habitWithEntries.toLogbookHabitUiState(date) }
                 )
             }
         }
+    }
 
+    private fun HabitWithEntries.toLogbookHabitUiState(date: LocalDate): LogbookHabitUiState {
+        val habit = this.habit
+        val completed = this.entries.any { it.date == date.toString() }
+        return LogbookHabitUiState(habit.id, habit.name, completed)
     }
 
     suspend fun toggleEntry(habitId: Int, date: LocalDate) {

@@ -3,6 +3,7 @@ package com.willbsp.habits.ui.screens.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.willbsp.habits.common.getPreviousDatesList
+import com.willbsp.habits.data.model.HabitWithEntries
 import com.willbsp.habits.data.repo.HabitRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
@@ -20,18 +21,9 @@ class HomeViewModel @Inject constructor(
 ) : ViewModel() {
 
     val homeUiState: StateFlow<HomeUiState> =
-        habitsRepository.getHabitsCompletedForDatesStream(clock.getPreviousDatesList(6))
-            .map {
-                HomeUiState(
-                    it.map { habitWithCompletedList ->
-                        HomeHabitUiState(
-                            habitWithCompletedList.first.id,
-                            habitWithCompletedList.first.name,
-                            habitWithCompletedList.second.map { completed ->
-                                HomeCompletedUiState(completed.first, completed.second)
-                            })
-                    }
-                )
+        habitsRepository.getAllHabitsWithEntries(clock.getPreviousDatesList(6))
+            .map { habitWithEntriesList ->
+                HomeUiState(habitWithEntriesList.map { it.toHomeHabitUiState() })
             }.stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
@@ -42,7 +34,22 @@ class HomeViewModel @Inject constructor(
         habitsRepository.toggleEntry(habitId, date)
     }
 
+    private fun HabitWithEntries.toHomeHabitUiState(): HomeHabitUiState {
+
+        val habit = this.habit
+        val entries = this.entries
+
+        val dates = clock.getPreviousDatesList(6)
+        val completedDates = dates.map { date ->
+            HomeCompletedUiState(date, entries.any { entry -> entry.date == date.toString() })
+        }
+
+        return HomeHabitUiState(habit.id, habit.name, completedDates)
+
+    }
+
     companion object {
+
         const val TIMEOUT_MILLIS = 5_000L
     }
 

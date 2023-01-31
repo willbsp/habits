@@ -8,9 +8,6 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface HabitDao {
 
-    @Query("SELECT * FROM habit")
-    fun getAllHabits(): Flow<List<Habit>>
-
     @Transaction
     @Query("SELECT * FROM habit")
     fun getAllHabitsWithEntries(): Flow<List<HabitWithEntries>>
