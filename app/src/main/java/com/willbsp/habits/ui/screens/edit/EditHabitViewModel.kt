@@ -34,8 +34,7 @@ class EditHabitViewModel @Inject constructor(
     }
 
     suspend fun deleteHabit() {
-        val habit = habitsRepository.getHabitById(habitId)
-        habitsRepository.deleteHabit(habit)
+        habitsRepository.deleteHabit(habitId)
     }
 
     private suspend fun loadHabit() {

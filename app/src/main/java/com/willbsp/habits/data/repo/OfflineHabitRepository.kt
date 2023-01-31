@@ -60,13 +60,20 @@ class OfflineHabitRepository @Inject constructor(
         habitId: Int,
         date: LocalDate
     ) { // TODO create exception if habit does not exist
-        val entry: Entry? = entryDao.getEntryForDate(date.toString(), habitId)
-        if (entry == null) entryDao.insert(Entry(habitId = habitId, date = date.toString()))
+
+        val entry: Entry? =
+            entryDao.getEntryForDate(date.toString(), habitId)
+        if (entry == null) entryDao.insert(
+            Entry(
+                habitId = habitId,
+                date = date.toString()
+            )
+        )
         else entryDao.delete(entry)
     }
 
-    override suspend fun deleteHabit(habit: Habit) {
-        habitDao.delete(habit)
+    override suspend fun deleteHabit(habitId: Int) {
+        habitDao.delete(habitDao.getHabitById(habitId))
     }
 
 }

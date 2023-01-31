@@ -21,6 +21,6 @@ interface HabitRepository {
 
     suspend fun toggleEntry(habitId: Int, date: LocalDate)
 
-    suspend fun deleteHabit(habit: Habit)
+    suspend fun deleteHabit(habitId: Int)
 
 }
