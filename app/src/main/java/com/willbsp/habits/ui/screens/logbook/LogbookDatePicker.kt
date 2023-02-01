@@ -2,8 +2,7 @@ package com.willbsp.habits.ui.screens.logbook
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Card
-import androidx.compose.material3.IconButtonDefaults
-import androidx.compose.material3.IconToggleButton
+import androidx.compose.material3.FilledIconToggleButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -22,7 +21,7 @@ import java.util.*
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun DatePickerCard(
+fun LogbookDatePicker(
     modifier: Modifier = Modifier,
     selectedDate: LocalDate,
     onSelectedDateChange: (LocalDate) -> (Unit),
@@ -65,7 +64,6 @@ fun DatePickerCard(
                         date = date.plusDays(day.toLong()),
                         checked = date.plusDays(day.toLong()) == selectedDate,
                         onCheckedChange = { date ->
-                            //selectedDate = date
                             onSelectedDateChange(date)
                         }
                     )
@@ -115,7 +113,7 @@ private fun DateIconButton(
 @Preview
 @Composable
 fun DatePickerPreview() {
-    DatePickerCard(
+    LogbookDatePicker(
         modifier = Modifier
             .fillMaxWidth()
             .height(110.dp),

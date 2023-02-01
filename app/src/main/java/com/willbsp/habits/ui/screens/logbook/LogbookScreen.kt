@@ -98,7 +98,7 @@ private fun Logbook(
             var selectedDate by remember { mutableStateOf(LocalDate.now()) }
 
 
-            DatePickerCard(
+            LogbookDatePicker(
                 modifier = Modifier
                     //.padding(8.dp)
                     .height(110.dp)
