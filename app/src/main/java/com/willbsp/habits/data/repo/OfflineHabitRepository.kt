@@ -24,7 +24,7 @@ class OfflineHabitRepository @Inject constructor(
     }
 
     override suspend fun getEntryForDate(date: LocalDate, habitId: Int): Entry? {
-        return entryDao.getEntryForDate(date.toString(), habitId)
+        return entryDao.getEntryForDate(date, habitId)
     }
 
     override suspend fun addHabit(habit: Habit) {
@@ -41,11 +41,11 @@ class OfflineHabitRepository @Inject constructor(
     ) { // TODO create exception if habit does not exist
 
         val entry: Entry? =
-            entryDao.getEntryForDate(date.toString(), habitId)
+            entryDao.getEntryForDate(date, habitId)
         if (entry == null) entryDao.insert(
             Entry(
                 habitId = habitId,
-                date = date.toString()
+                date = date
             )
         )
         else entryDao.delete(entry)

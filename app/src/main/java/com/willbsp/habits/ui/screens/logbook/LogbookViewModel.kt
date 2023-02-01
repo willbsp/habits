@@ -38,7 +38,7 @@ class LogbookViewModel @Inject constructor(
 
     private fun HabitWithEntries.toLogbookHabitUiState(date: LocalDate): LogbookHabitUiState {
         val habit = this.habit
-        val completed = this.entries.any { it.date == date.toString() }
+        val completed = this.entries.any { it.date == date }
         return LogbookHabitUiState(habit.id, habit.name, completed)
     }
 
