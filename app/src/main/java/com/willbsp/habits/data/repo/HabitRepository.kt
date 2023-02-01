@@ -8,7 +8,7 @@ import java.time.LocalDate
 
 interface HabitRepository {
 
-    fun getAllHabitsWithEntries(dates: List<LocalDate>): Flow<List<HabitWithEntries>>
+    fun getAllHabitsWithEntriesForDates(dates: List<LocalDate>): Flow<List<HabitWithEntries>>
 
     suspend fun getHabitById(habitId: Int): Habit
 

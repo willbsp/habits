@@ -28,7 +28,7 @@ class LogbookViewModel @Inject constructor(
 
     fun setSelectedDate(date: LocalDate) {
         viewModelScope.launch {
-            habitRepository.getAllHabitsWithEntries(listOf(date)).collect {
+            habitRepository.getAllHabitsWithEntriesForDates(listOf(date)).collect {
                 _logbookUiState.value = LogbookUiState(
                     it.map { habitWithEntries -> habitWithEntries.toLogbookHabitUiState(date) }
                 )

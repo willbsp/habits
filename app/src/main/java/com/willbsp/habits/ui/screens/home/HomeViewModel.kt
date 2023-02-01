@@ -21,17 +21,20 @@ class HomeViewModel @Inject constructor(
 ) : ViewModel() {
 
     val homeUiState: StateFlow<HomeUiState> =
-        habitsRepository.getAllHabitsWithEntries(clock.getPreviousDatesList(6))
-            .map { habitWithEntriesList ->
-                HomeUiState(habitWithEntriesList.map {
-                    it.calculateStreak()
-                    it.toHomeHabitUiState()
-                })
-            }.stateIn(
-                scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
-                initialValue = HomeUiState()
+        habitsRepository.getAllHabitsWithEntriesForDates(
+            clock.getPreviousDatesList(
+                HABIT_CARD_NUMBER_OF_DAYS
             )
+        ).map { habitWithEntriesList ->
+            HomeUiState(habitWithEntriesList.map { habitWithEntries ->
+                habitWithEntries.calculateStreak()
+                habitWithEntries.toHomeHabitUiState()
+            })
+        }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
+            initialValue = HomeUiState()
+        )
 
     suspend fun toggleEntry(habitId: Int, date: LocalDate) {
         habitsRepository.toggleEntry(habitId, date)
@@ -42,7 +45,7 @@ class HomeViewModel @Inject constructor(
         val habit = this.habit
         val entries = this.entries
 
-        val dates = clock.getPreviousDatesList(6)
+        val dates = clock.getPreviousDatesList(HABIT_CARD_NUMBER_OF_DAYS)
         val completedDates = dates.map { date ->
             HomeCompletedUiState(date, entries.any { entry -> entry.date == date })
         }
@@ -74,6 +77,7 @@ class HomeViewModel @Inject constructor(
 
     companion object {
         const val TIMEOUT_MILLIS = 5_000L
+        const val HABIT_CARD_NUMBER_OF_DAYS = 6
     }
 
 }

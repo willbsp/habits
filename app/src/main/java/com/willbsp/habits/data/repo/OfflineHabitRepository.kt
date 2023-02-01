@@ -14,7 +14,7 @@ class OfflineHabitRepository @Inject constructor(
     private val entryDao: EntryDao
 ) : HabitRepository {
 
-    override fun getAllHabitsWithEntries(dates: List<LocalDate>): Flow<List<HabitWithEntries>> {
+    override fun getAllHabitsWithEntriesForDates(dates: List<LocalDate>): Flow<List<HabitWithEntries>> {
         return habitDao.getAllHabitsWithEntries()
     }
 
