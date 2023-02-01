@@ -64,6 +64,13 @@ fun HomeHabitCard(
 
                     Spacer(modifier = Modifier.weight(1f))
 
+                    Text(
+                        text = habitUiState.streak.toString(),
+                        style = Typography.titleLarge
+                    )
+
+                    Spacer(modifier = Modifier.width(10.dp))
+
                     HabitToggleButton(
                         onCheckedChange = {
                             completedOnClick(
@@ -184,6 +191,7 @@ private fun HomeHabitCardPreview() {
         habitUiState = HomeHabitUiState(
             id = 1,
             name = "Reading",
+            streak = 4,
             completedDates = listOf(
                 HomeCompletedUiState(LocalDate.parse("2023-04-12"), false),
                 HomeCompletedUiState(LocalDate.parse("2023-04-11"), true),
@@ -206,6 +214,7 @@ private fun HomeHabitCardExpandedPreview() {
         habitUiState = HomeHabitUiState(
             id = 1,
             name = "Walking",
+            streak = 2,
             completedDates = listOf(
                 HomeCompletedUiState(LocalDate.parse("2023-04-12"), true),
                 HomeCompletedUiState(LocalDate.parse("2023-04-11"), true),

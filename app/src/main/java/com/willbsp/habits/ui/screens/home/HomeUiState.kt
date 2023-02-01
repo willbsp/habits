@@ -9,6 +9,7 @@ data class HomeUiState(
 data class HomeHabitUiState(
     val id: Int,
     val name: String,
+    val streak: Int,
     val completedDates: List<HomeCompletedUiState>
 )
 

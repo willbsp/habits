@@ -166,6 +166,7 @@ private fun HomeScreenPreview() {
                     HomeHabitUiState(
                         id = 0,
                         name = "Running",
+                        streak = 2,
                         completedDates = listOf(
                             HomeCompletedUiState(LocalDate.parse("2023-04-12"), false),
                             HomeCompletedUiState(LocalDate.parse("2023-04-11"), true),
@@ -178,6 +179,7 @@ private fun HomeScreenPreview() {
                     HomeHabitUiState(
                         id = 1,
                         name = "Swimming",
+                        streak = 4,
                         completedDates = listOf(
                             HomeCompletedUiState(LocalDate.parse("2023-04-12"), true),
                             HomeCompletedUiState(LocalDate.parse("2023-04-11"), true),
@@ -190,6 +192,7 @@ private fun HomeScreenPreview() {
                     HomeHabitUiState(
                         id = 2,
                         name = "Reading",
+                        streak = 5,
                         completedDates = listOf(
                             HomeCompletedUiState(LocalDate.parse("2023-04-12"), false),
                             HomeCompletedUiState(LocalDate.parse("2023-04-11"), true),
@@ -202,6 +205,7 @@ private fun HomeScreenPreview() {
                     HomeHabitUiState(
                         id = 3,
                         name = "Piano Practice",
+                        streak = 0,
                         completedDates = listOf(
                             HomeCompletedUiState(LocalDate.parse("2023-04-12"), false),
                             HomeCompletedUiState(LocalDate.parse("2023-04-11"), true),
