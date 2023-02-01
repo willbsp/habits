@@ -93,13 +93,12 @@ private fun DateIconButton(
     ) // TODO get other locales
     val dayOfMonth = date.dayOfMonth.toString()
 
-    IconToggleButton(
+    FilledIconToggleButton(
         modifier = modifier,
         checked = checked,
         onCheckedChange = {
             onCheckedChange(date)
-        },
-        colors = IconButtonDefaults.filledIconToggleButtonColors()
+        }
     ) {
         Column(
             modifier = Modifier,
