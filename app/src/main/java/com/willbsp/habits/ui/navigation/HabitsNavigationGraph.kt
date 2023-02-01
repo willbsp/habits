@@ -18,6 +18,7 @@ import com.willbsp.habits.ui.screens.home.HomeViewModel
 import com.willbsp.habits.ui.screens.logbook.LogbookScreen
 import com.willbsp.habits.ui.screens.logbook.LogbookViewModel
 import com.willbsp.habits.ui.screens.settings.SettingsScreen
+import com.willbsp.habits.ui.screens.settings.SettingsViewModel
 
 enum class HabitsNavigationDestination(val route: String) {
     HOME(route = "home"),
@@ -148,7 +149,10 @@ fun HabitsNavigationGraph(
             }
         ) {
 
+            val viewModel = hiltViewModel<SettingsViewModel>()
+
             SettingsScreen(
+                viewModel = viewModel,
                 navigateUp = {
                     navController.navigateUp()
                 }
