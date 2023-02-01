@@ -91,6 +91,9 @@ dependencies {
     implementation "androidx.room:room-ktx:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
 
+    // Datastore
+    implementation "androidx.datastore:datastore-preferences:1.0.0"
+
     // Dagger Hilt
     kapt "com.google.dagger:hilt-compiler:$hilt_version"
     kaptAndroidTest "com.google.dagger:hilt-compiler:$hilt_version"
