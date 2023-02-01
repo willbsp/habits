@@ -65,7 +65,7 @@ fun HomeHabitCard(
                     Spacer(modifier = Modifier.weight(1f))
 
                     Text(
-                        text = habitUiState.streak.toString(),
+                        text = (habitUiState.streak ?: " ").toString(),
                         style = Typography.titleLarge
                     )
 

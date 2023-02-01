@@ -23,7 +23,10 @@ class HomeViewModel @Inject constructor(
     val homeUiState: StateFlow<HomeUiState> =
         habitsRepository.getAllHabitsWithEntries(clock.getPreviousDatesList(6))
             .map { habitWithEntriesList ->
-                HomeUiState(habitWithEntriesList.map { it.toHomeHabitUiState() })
+                HomeUiState(habitWithEntriesList.map {
+                    it.calculateStreak()
+                    it.toHomeHabitUiState()
+                })
             }.stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
@@ -41,15 +44,35 @@ class HomeViewModel @Inject constructor(
 
         val dates = clock.getPreviousDatesList(6)
         val completedDates = dates.map { date ->
-            HomeCompletedUiState(date, entries.any { entry -> entry.date == date.toString() })
+            HomeCompletedUiState(date, entries.any { entry -> entry.date == date })
         }
 
-        return HomeHabitUiState(habit.id, habit.name, completedDates)
+        return HomeHabitUiState(habit.id, habit.name, this.calculateStreak(), completedDates)
+
+    }
+
+    private fun HabitWithEntries.calculateStreak(): Int? {
+
+        val date = LocalDate.now(clock)
+        val yesterday = date.minusDays(1)
+        val entries = this.entries.sortedByDescending { it.date }
+
+        var streak = 0
+        if (entries.isNotEmpty()) entries.forEach { entry ->
+            if (entry.date == yesterday.minusDays(streak.toLong())) streak++
+            else return@forEach
+        } else {
+            return null
+        }
+
+        if (entries.first().date == date) streak++
+
+        return if (streak > 1) streak
+        else null
 
     }
 
     companion object {
-
         const val TIMEOUT_MILLIS = 5_000L
     }
 
