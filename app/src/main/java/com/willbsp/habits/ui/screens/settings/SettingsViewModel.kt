@@ -16,7 +16,7 @@ data class SettingsUiState(
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
-    settingsRepository: SettingsRepository
+    private val settingsRepository: SettingsRepository
 ) : ViewModel() {
 
     val settingsUiState: StateFlow<SettingsUiState> = settingsRepository.showStreaksOnHome.map {
@@ -26,6 +26,10 @@ class SettingsViewModel @Inject constructor(
         started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
         initialValue = SettingsUiState()
     )
+
+    suspend fun updateSetting(setting: Boolean) {
+        settingsRepository.saveStreaksPreference(setting)
+    }
 
     companion object {
         const val TIMEOUT_MILLIS = 5_000L
