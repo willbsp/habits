@@ -1,7 +1,7 @@
 package com.willbsp.habits.di
 
 import com.willbsp.habits.data.repo.HabitRepository
-import com.willbsp.habits.data.repo.OfflineHabitRepository
+import com.willbsp.habits.data.repo.LocalHabitRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -15,7 +15,7 @@ abstract class HabitsRepositoryModule {
     @Binds
     @ViewModelScoped
     abstract fun bindHabitRepository(
-        offlineHabitRepository: OfflineHabitRepository
+        localHabitRepository: LocalHabitRepository
     ): HabitRepository
 
 }

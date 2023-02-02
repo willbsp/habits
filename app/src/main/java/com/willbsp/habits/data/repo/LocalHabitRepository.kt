@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 import java.time.LocalDate
 import javax.inject.Inject
 
-class OfflineHabitRepository @Inject constructor(
+class LocalHabitRepository @Inject constructor(
     private val habitDao: HabitDao,
     private val entryDao: EntryDao
 ) : HabitRepository {
