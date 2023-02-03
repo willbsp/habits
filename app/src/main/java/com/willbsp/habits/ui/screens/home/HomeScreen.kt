@@ -31,6 +31,7 @@ fun HomeScreen(
 ) {
 
     val homeUiState by viewModel.homeUiState.collectAsState(HomeUiState())
+    val preferencesState by viewModel.preferencesState.collectAsState(true)
     val coroutineScope = rememberCoroutineScope()
 
     Home(
@@ -44,7 +45,8 @@ fun HomeScreen(
                 viewModel.toggleEntry(id, date)
             }
         },
-        homeUiState = homeUiState
+        homeUiState = homeUiState,
+        showStreaksOnHome = preferencesState
     )
 
 }
@@ -58,6 +60,7 @@ private fun Home(
     navigateToAddHabit: () -> Unit,
     navigateToEditHabit: (Int) -> Unit,
     navigateToSettings: () -> Unit,
+    showStreaksOnHome: Boolean,
     homeUiState: HomeUiState
 ) {
 
@@ -118,6 +121,7 @@ private fun Home(
                 habitUiStateList = homeUiState.todayState,
                 completedOnClick = completedOnClick,
                 navigateToEditHabit = navigateToEditHabit,
+                showStreaksOnHome = showStreaksOnHome,
                 modifier = Modifier
             )
 
@@ -133,6 +137,7 @@ private fun HabitsList(
     habitUiStateList: List<HomeHabitUiState>,
     completedOnClick: (Int, LocalDate) -> Unit,
     navigateToEditHabit: (Int) -> Unit,
+    showStreaksOnHome: Boolean,
     modifier: Modifier = Modifier
 ) {
 
@@ -141,7 +146,8 @@ private fun HabitsList(
             HomeHabitCard(
                 habitUiState = homeHabitUiState,
                 completedOnClick = completedOnClick,
-                navigateToEditHabit = navigateToEditHabit
+                navigateToEditHabit = navigateToEditHabit,
+                showStreaks = showStreaksOnHome
             )
         }
         // Spacer at the bottom ensures that FAB does not obscure habits at the bottom of the list
@@ -219,7 +225,8 @@ private fun HomeScreenPreview() {
             ),
             completedOnClick = { _, _ ->
 
-            }
+            },
+            showStreaksOnHome = true
         )
     }
 }

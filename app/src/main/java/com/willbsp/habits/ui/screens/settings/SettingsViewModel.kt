@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 data class SettingsUiState(
-    val showStreaksOnHome: Boolean = false
+    val showStreaksOnHome: Boolean = true
 )
 
 @HiltViewModel

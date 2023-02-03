@@ -3,7 +3,8 @@ package com.willbsp.habits.ui.screens.home
 import java.time.LocalDate
 
 data class HomeUiState(
-    val todayState: List<HomeHabitUiState> = listOf()
+    val todayState: List<HomeHabitUiState> = listOf(),
+    val displayStreaks: Boolean = true
 )
 
 data class HomeHabitUiState(

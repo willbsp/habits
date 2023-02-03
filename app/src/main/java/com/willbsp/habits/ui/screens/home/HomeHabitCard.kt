@@ -26,6 +26,7 @@ fun HomeHabitCard(
     completedOnClick: (Int, LocalDate) -> Unit,
     navigateToEditHabit: (Int) -> Unit,
     modifier: Modifier = Modifier,
+    showStreaks: Boolean,
     expandedInitialValue: Boolean = false
 ) {
 
@@ -64,10 +65,12 @@ fun HomeHabitCard(
 
                     Spacer(modifier = Modifier.weight(1f))
 
-                    Text(
-                        text = (habitUiState.streak ?: " ").toString(),
-                        style = Typography.titleLarge
-                    )
+                    if (showStreaks) {
+                        Text(
+                            text = (habitUiState.streak ?: " ").toString(),
+                            style = Typography.titleLarge
+                        )
+                    }
 
                     Spacer(modifier = Modifier.width(10.dp))
 
@@ -203,7 +206,8 @@ private fun HomeHabitCardPreview() {
         ),
         completedOnClick = { _, _ -> },
         navigateToEditHabit = {},
-        expandedInitialValue = false
+        expandedInitialValue = false,
+        showStreaks = true
     )
 }
 
@@ -226,6 +230,7 @@ private fun HomeHabitCardExpandedPreview() {
         ),
         completedOnClick = { _, _ -> },
         navigateToEditHabit = {},
-        expandedInitialValue = true
+        expandedInitialValue = true,
+        showStreaks = true
     )
 }
