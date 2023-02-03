@@ -43,20 +43,10 @@ fun HabitsNavigationGraph(
         composable(
             route = HabitsNavigationDestination.HOME.route,
             enterTransition = {
-                when (initialState.destination.route) {
-                    HabitsNavigationDestination.LOGBOOK.route ->
-                        fadeIn()
-                    else ->
-                        slideIntoContainer(AnimatedContentScope.SlideDirection.Right)
-                }
+                slideIntoContainer(AnimatedContentScope.SlideDirection.Right)
             },
             exitTransition = {
-                when (targetState.destination.route) {
-                    HabitsNavigationDestination.LOGBOOK.route ->
-                        fadeOut()
-                    else ->
-                        slideOutOfContainer(AnimatedContentScope.SlideDirection.Left)
-                }
+                slideOutOfContainer(AnimatedContentScope.SlideDirection.Left)
             }
         ) {
 
@@ -123,17 +113,16 @@ fun HabitsNavigationGraph(
 
         composable(
             route = HabitsNavigationDestination.LOGBOOK.route,
+            enterTransition = { slideIntoContainer(AnimatedContentScope.SlideDirection.Left) },
+            exitTransition = { slideOutOfContainer(AnimatedContentScope.SlideDirection.Right) }
         ) {
 
             val viewModel = hiltViewModel<LogbookViewModel>()
 
             LogbookScreen(
                 viewModel = viewModel,
-                navigateToSettings = {
-                    navController.navigate(HabitsNavigationDestination.SETTINGS.route)
-                },
-                navigateToHome = {
-                    navController.navigate(HabitsNavigationDestination.HOME.route)
+                navigateUp = {
+                    navController.navigateUp()
                 }
             )
 
