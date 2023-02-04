@@ -28,10 +28,13 @@ class HomeViewModel @Inject constructor(
                 HABIT_CARD_NUMBER_OF_DAYS
             )
         ).map { habitWithEntriesList ->
-            HomeUiState(habitWithEntriesList.map { habitWithEntries ->
-                habitWithEntries.calculateStreak()
-                habitWithEntries.toHomeHabitUiState()
-            })
+            HomeUiState(
+                habitWithEntriesList.map { habitWithEntries ->
+                    habitWithEntries.calculateStreak()
+                    habitWithEntries.toHomeHabitUiState()
+                },
+                allCompleted = habitWithEntriesList.allCompleted()
+            )
         }.stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
@@ -61,6 +64,14 @@ class HomeViewModel @Inject constructor(
 
         return HomeHabitUiState(habit.id, habit.name, this.calculateStreak(), completedDates)
 
+    }
+
+    private fun List<HabitWithEntries>.allCompleted(): Boolean {
+        this.forEach { habitWithEntries ->
+            if (!habitWithEntries.entries.any { it.date == LocalDate.now(clock) })
+                return false
+        }
+        return true
     }
 
     private fun HabitWithEntries.calculateStreak(): Int? {
