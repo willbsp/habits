@@ -33,7 +33,8 @@ class HomeViewModel @Inject constructor(
                     habitWithEntries.calculateStreak()
                     habitWithEntries.toHomeHabitUiState()
                 },
-                allCompleted = habitWithEntriesList.allCompleted()
+                allCompleted = habitWithEntriesList.allCompleted(),
+                completedCount = habitWithEntriesList.completedCount()
             )
         }.stateIn(
             scope = viewModelScope,
@@ -64,6 +65,15 @@ class HomeViewModel @Inject constructor(
 
         return HomeHabitUiState(habit.id, habit.name, this.calculateStreak(), completedDates)
 
+    }
+
+    private fun List<HabitWithEntries>.completedCount(): Int {
+        var count = 0
+        this.forEach { habitWithEntries ->
+            if (habitWithEntries.entries.any { it.date == LocalDate.now(clock) })
+                count++
+        }
+        return count
     }
 
     private fun List<HabitWithEntries>.allCompleted(): Boolean {
