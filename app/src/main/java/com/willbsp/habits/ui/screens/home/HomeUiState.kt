@@ -4,6 +4,7 @@ import java.time.LocalDate
 
 data class HomeUiState(
     val todayState: List<HomeHabitUiState> = listOf(),
+    val completedCount: Int = 0,
     val allCompleted: Boolean = false
 )
 
