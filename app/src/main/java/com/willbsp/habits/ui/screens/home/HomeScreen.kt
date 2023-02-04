@@ -141,14 +141,25 @@ private fun HabitsList(
     modifier: Modifier = Modifier
 ) {
 
-    LazyColumn(modifier = modifier, verticalArrangement = Arrangement.spacedBy(10.dp)) {
+    LazyColumn(modifier = modifier) {
         items(items = habitUiStateList, key = { it.id }) { homeHabitUiState ->
-            HomeHabitCard(
-                habitUiState = homeHabitUiState,
-                completedOnClick = completedOnClick,
-                navigateToEditHabit = navigateToEditHabit,
-                showStreaks = showStreaksOnHome
-            )
+            AnimatedVisibility(
+                visible = !homeHabitUiState.completedDates.first().completed,
+                exit = shrinkVertically(),
+                enter = expandVertically()
+            ) {
+
+                HomeHabitCard(
+                    modifier = Modifier
+                        .animateItemPlacement(tween())
+                        .padding(bottom = 10.dp),
+                    habitUiState = homeHabitUiState,
+                    completedOnClick = completedOnClick,
+                    navigateToEditHabit = navigateToEditHabit,
+                    showStreaks = showStreaksOnHome
+                )
+
+            }
         }
         // Spacer at the bottom ensures that FAB does not obscure habits at the bottom of the list
         this.stickyHeader { Spacer(modifier.height(100.dp)) }
