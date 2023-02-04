@@ -30,6 +30,7 @@
     <string name="logbook_title">Logbook</string>
     <string name="home_screen_all_completed">All completed for today!</string>
     <string name="home_screen_all_completed_tick">All completed</string>
+    <string name="home_screen_habit_list_subtitle">"%d habits completed today…"</string>
     <!--settings screen end-->
 
 </resources>

@@ -127,7 +127,7 @@ private fun Home(
                 Spacer(modifier = Modifier.height(10.dp))
 
                 HabitsList(
-                    habitUiStateList = homeUiState.todayState,
+                    homeUiState = homeUiState,
                     completedOnClick = completedOnClick,
                     navigateToEditHabit = navigateToEditHabit,
                     showStreaksOnHome = showStreaksOnHome,
@@ -176,12 +176,14 @@ private fun Home(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun HabitsList(
-    habitUiStateList: List<HomeHabitUiState>,
+    homeUiState: HomeUiState,
     completedOnClick: (Int, LocalDate) -> Unit,
     navigateToEditHabit: (Int) -> Unit,
     showStreaksOnHome: Boolean,
     modifier: Modifier = Modifier
 ) {
+
+    val habitUiStateList = homeUiState.todayState
 
     LazyColumn(modifier = modifier) {
         items(items = habitUiStateList, key = { it.id }) { homeHabitUiState ->
@@ -204,7 +206,24 @@ private fun HabitsList(
             }
         }
         // Spacer at the bottom ensures that FAB does not obscure habits at the bottom of the list
-        this.stickyHeader { Spacer(modifier.height(100.dp)) }
+        this.stickyHeader {
+            AnimatedVisibility(
+                visible = homeUiState.completedCount > 0,
+                enter = fadeIn(),
+                exit = fadeOut()
+            ) {
+                Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                    Text(
+                        text = stringResource(
+                            R.string.home_screen_habit_list_subtitle,
+                            homeUiState.completedCount
+                        ),
+                        style = Typography.labelLarge
+                    )
+                }
+            }
+            Spacer(modifier.height(100.dp))
+        }
     }
 
     Spacer(modifier = Modifier.height(50.dp))
@@ -274,7 +293,8 @@ private fun HomeScreenPreview() {
                             HomeCompletedUiState(LocalDate.parse("2023-04-07"), true),
                         )
                     ),
-                )
+                ),
+                //allCompleted = true
             ),
             completedOnClick = { _, _ ->
 
