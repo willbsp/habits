@@ -28,6 +28,8 @@
     <string name="edit_habit_update_habit">Update habit</string>
     <string name="edit_habit_delete">Delete</string>
     <string name="logbook_title">Logbook</string>
+    <string name="home_screen_all_completed">All completed for today!</string>
+    <string name="home_screen_all_completed_tick">All completed</string>
     <!--settings screen end-->
 
 </resources>

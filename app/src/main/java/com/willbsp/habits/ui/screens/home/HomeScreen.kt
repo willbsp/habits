@@ -1,5 +1,7 @@
 package com.willbsp.habits.ui.screens.home
 
+import androidx.compose.animation.*
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -8,6 +10,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -101,30 +104,69 @@ private fun Home(
         }
     ) { innerPadding -> // TODO
 
-
-        Column(
-            modifier = modifier
-                .padding(innerPadding)
-                .padding(horizontal = 20.dp)
-                .fillMaxSize()
+        AnimatedVisibility(
+            visible = !homeUiState.allCompleted,
+            enter = fadeIn(),
+            exit = fadeOut()
         ) {
 
-            Text( // TODO could have title area change colour when list is scrolled, e.g timers in google clock
-                text = stringResource(R.string.home_screen_today),
-                style = Typography.titleLarge,
-                modifier = Modifier.padding(horizontal = 10.dp) // keep inline with habit titles
-            )
+            Column(
+                modifier = modifier
+                    .padding(innerPadding)
+                    .padding(horizontal = 20.dp)
+                    .fillMaxSize()
+            ) {
 
-            Spacer(modifier = Modifier.height(10.dp))
 
-            HabitsList(
-                habitUiStateList = homeUiState.todayState,
-                completedOnClick = completedOnClick,
-                navigateToEditHabit = navigateToEditHabit,
-                showStreaksOnHome = showStreaksOnHome,
-                modifier = Modifier
-            )
+                Text( // TODO could have title area change colour when list is scrolled, e.g timers in google clock
+                    text = stringResource(R.string.home_screen_today),
+                    style = Typography.titleLarge,
+                    modifier = Modifier.padding(horizontal = 10.dp) // keep inline with habit titles
+                )
 
+                Spacer(modifier = Modifier.height(10.dp))
+
+                HabitsList(
+                    habitUiStateList = homeUiState.todayState,
+                    completedOnClick = completedOnClick,
+                    navigateToEditHabit = navigateToEditHabit,
+                    showStreaksOnHome = showStreaksOnHome,
+                    modifier = Modifier
+                )
+
+            }
+
+        }
+
+
+
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            AnimatedVisibility(
+                visible = homeUiState.allCompleted,
+                enter = expandVertically(),
+                exit = fadeOut()
+            ) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+
+                    Icon(
+                        modifier = Modifier.size(100.dp),
+                        imageVector = Icons.Default.Done,
+                        contentDescription = stringResource(R.string.home_screen_all_completed_tick)
+                    )
+
+                    Spacer(Modifier.height(10.dp))
+
+                    Text(
+                        text = stringResource(R.string.home_screen_all_completed),
+                        style = Typography.titleLarge
+                    )
+
+                }
+
+            }
         }
 
 
