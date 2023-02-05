@@ -193,6 +193,8 @@ private fun HabitsList(
                 enter = expandVertically()
             ) {
 
+                var expanded by remember { mutableStateOf(false) }
+
                 HomeHabitCard(
                     modifier = Modifier
                         .animateItemPlacement(tween())
@@ -200,7 +202,11 @@ private fun HabitsList(
                     habitUiState = homeHabitUiState,
                     completedOnClick = completedOnClick,
                     navigateToEditHabit = navigateToEditHabit,
-                    showStreaks = showStreaksOnHome
+                    showStreaks = showStreaksOnHome,
+                    expanded = expanded,
+                    cardOnClick = {
+                        expanded = !expanded
+                    }
                 )
 
             }

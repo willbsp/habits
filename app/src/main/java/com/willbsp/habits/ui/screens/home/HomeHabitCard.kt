@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -27,10 +27,9 @@ fun HomeHabitCard(
     navigateToEditHabit: (Int) -> Unit,
     modifier: Modifier = Modifier,
     showStreaks: Boolean,
-    expandedInitialValue: Boolean = false
+    cardOnClick: () -> Unit = {},
+    expanded: Boolean = false
 ) {
-
-    var expanded by remember { mutableStateOf(expandedInitialValue) }
 
     ElevatedCard(
         modifier = modifier.wrapContentHeight(),
@@ -39,7 +38,7 @@ fun HomeHabitCard(
 
         Box(
             modifier = Modifier.clickable {
-                expanded = !expanded
+                cardOnClick()
             },
         ) {
 
@@ -206,8 +205,8 @@ private fun HomeHabitCardPreview() {
         ),
         completedOnClick = { _, _ -> },
         navigateToEditHabit = {},
-        expandedInitialValue = false,
-        showStreaks = true
+        expanded = false,
+        showStreaks = true,
     )
 }
 
@@ -230,7 +229,7 @@ private fun HomeHabitCardExpandedPreview() {
         ),
         completedOnClick = { _, _ -> },
         navigateToEditHabit = {},
-        expandedInitialValue = true,
+        expanded = true,
         showStreaks = true
     )
 }
