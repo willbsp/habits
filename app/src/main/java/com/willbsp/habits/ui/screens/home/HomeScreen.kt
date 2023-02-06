@@ -1,6 +1,7 @@
 package com.willbsp.habits.ui.screens.home
 
 import androidx.compose.animation.*
+import androidx.compose.animation.core.TweenSpec
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
@@ -189,7 +190,11 @@ private fun HabitsList(
         items(items = habitUiStateList, key = { it.id }) { homeHabitUiState ->
             AnimatedVisibility(
                 visible = !homeHabitUiState.completedDates.first().completed,
-                exit = shrinkVertically(),
+                exit = shrinkVertically(
+                    animationSpec = TweenSpec(
+                        delay = 500
+                    ),
+                ),
                 enter = expandVertically()
             ) {
 
@@ -209,7 +214,11 @@ private fun HabitsList(
         this.stickyHeader {
             AnimatedVisibility(
                 visible = homeUiState.completedCount > 0,
-                enter = fadeIn(),
+                enter = fadeIn(
+                    animationSpec = TweenSpec(
+                        delay = 1000
+                    )
+                ),
                 exit = fadeOut()
             ) {
                 Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
