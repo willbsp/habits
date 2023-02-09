@@ -10,6 +10,7 @@ interface SettingsRepository {
 
     object SettingsKey {
         val SHOW_STREAKS_ON_HOME = booleanPreferencesKey("show_streaks_on_home")
+        val SHOW_COMPLETED_SUBTITLE = booleanPreferencesKey("show_completed_subtitle")
     }
 
 }
