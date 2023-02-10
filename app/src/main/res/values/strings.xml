@@ -31,6 +31,8 @@
     <string name="home_screen_all_completed">All completed for today!</string>
     <string name="home_screen_all_completed_tick">All completed</string>
     <string name="home_screen_habit_list_subtitle">"%d habits completed today…"</string>
+    <string name="settings_display_streaks">Display Streaks</string>
+    <string name="settings_display_streaks_subtitle">Display streaks on home screen</string>
     <!--settings screen end-->
 
 </resources>

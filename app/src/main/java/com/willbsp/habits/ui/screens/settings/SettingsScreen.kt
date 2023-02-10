@@ -1,5 +1,6 @@
 package com.willbsp.habits.ui.screens.settings
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -28,7 +29,7 @@ fun SettingsScreen(
     Settings(
         modifier = modifier,
         navigateUp = navigateUp,
-        onDisplayStreaksPressed = {
+        onShowStreaksOnHomePressed = {
             coroutineScope.launch { viewModel.updateSetting(it) }
         },
         settingsUiState = settingsUiState
@@ -41,7 +42,7 @@ fun SettingsScreen(
 private fun Settings(
     modifier: Modifier = Modifier,
     navigateUp: () -> Unit,
-    onDisplayStreaksPressed: (Boolean) -> Unit,
+    onShowStreaksOnHomePressed: (Boolean) -> Unit,
     settingsUiState: SettingsUiState
 ) {
 
@@ -61,30 +62,49 @@ private fun Settings(
                 .fillMaxSize()
         ) {
 
-            ListItem(
+            SettingItem(
                 modifier = Modifier.fillMaxWidth(),
-                headlineText = {
-                    Text(
-                        text = "Display Streaks",
-                        style = Typography.titleLarge
-                    )
-                },
-                supportingText = {
-                    Text(
-                        text = "Display streaks on home screen",
-                        style = Typography.bodyMedium
-                    )
-                },
-                trailingContent = {
-                    Switch(
-                        checked = settingsUiState.showStreaksOnHome,
-                        onCheckedChange = { onDisplayStreaksPressed(it) })
-                }
+                checked = settingsUiState.showStreaksOnHome,
+                onCheckedChange = { onShowStreaksOnHomePressed(it) },
+                title = R.string.settings_display_streaks,
+                subtitle = R.string.settings_display_streaks_subtitle
             )
 
         }
 
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun SettingItem(
+    modifier: Modifier = Modifier,
+    checked: Boolean,
+    onCheckedChange: (Boolean) -> Unit,
+    @StringRes title: Int,
+    @StringRes subtitle: Int
+) {
+    ListItem(
+        modifier = modifier,
+        headlineText = {
+            Text(
+                text = stringResource(title),
+                style = Typography.titleLarge
+            )
+        },
+        supportingText = {
+            Text(
+                text = stringResource(subtitle),
+                style = Typography.bodyMedium
+            )
+        },
+        trailingContent = {
+            Switch(
+                checked = checked,
+                onCheckedChange = onCheckedChange
+            )
+        }
+    )
 }
 
 @Preview(showBackground = true, showSystemUi = true)
