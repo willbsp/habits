@@ -19,6 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.willbsp.habits.R
 import com.willbsp.habits.ui.common.HabitsFloatingAction
+import com.willbsp.habits.ui.common.PreferencesUiState
 import com.willbsp.habits.ui.theme.HabitsTheme
 import com.willbsp.habits.ui.theme.Typography
 import kotlinx.coroutines.launch
@@ -35,7 +36,7 @@ fun HomeScreen(
 ) {
 
     val homeUiState by viewModel.homeUiState.collectAsState(HomeUiState())
-    val preferencesState by viewModel.preferencesState.collectAsState(true)
+    val preferencesState by viewModel.preferencesUiState.collectAsState()
     val coroutineScope = rememberCoroutineScope()
 
     Home(
@@ -50,7 +51,7 @@ fun HomeScreen(
             }
         },
         homeUiState = homeUiState,
-        showStreaksOnHome = preferencesState
+        preferencesUiState = preferencesState
     )
 
 }
@@ -64,7 +65,7 @@ private fun Home(
     navigateToAddHabit: () -> Unit,
     navigateToEditHabit: (Int) -> Unit,
     navigateToSettings: () -> Unit,
-    showStreaksOnHome: Boolean,
+    preferencesUiState: PreferencesUiState,
     homeUiState: HomeUiState
 ) {
 
@@ -131,15 +132,13 @@ private fun Home(
                     homeUiState = homeUiState,
                     completedOnClick = completedOnClick,
                     navigateToEditHabit = navigateToEditHabit,
-                    showStreaksOnHome = showStreaksOnHome,
-                    modifier = Modifier
+                    showStreaks = preferencesUiState.showStreaks,
+                    showSubtitle = preferencesUiState.showCompletedSubtitle
                 )
 
             }
 
         }
-
-
 
         Box(
             modifier = Modifier.fillMaxSize(),
@@ -180,7 +179,8 @@ private fun HabitsList(
     homeUiState: HomeUiState,
     completedOnClick: (Int, LocalDate) -> Unit,
     navigateToEditHabit: (Int) -> Unit,
-    showStreaksOnHome: Boolean,
+    showStreaks: Boolean,
+    showSubtitle: Boolean,
     modifier: Modifier = Modifier
 ) {
 
@@ -205,32 +205,34 @@ private fun HabitsList(
                     habitUiState = homeHabitUiState,
                     completedOnClick = completedOnClick,
                     navigateToEditHabit = navigateToEditHabit,
-                    showStreaks = showStreaksOnHome
+                    showStreaks = showStreaks
                 )
 
             }
         }
-        // Spacer at the bottom ensures that FAB does not obscure habits at the bottom of the list
         this.stickyHeader {
-            AnimatedVisibility(
-                visible = homeUiState.completedCount > 0,
-                enter = fadeIn(
-                    animationSpec = TweenSpec(
-                        delay = 1000
-                    )
-                ),
-                exit = fadeOut()
-            ) {
-                Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                    Text(
-                        text = stringResource(
-                            R.string.home_screen_habit_list_subtitle,
-                            homeUiState.completedCount
-                        ),
-                        style = Typography.labelLarge
-                    )
+            if (showSubtitle) {
+                AnimatedVisibility(
+                    visible = homeUiState.completedCount > 0,
+                    enter = fadeIn(
+                        animationSpec = TweenSpec(
+                            delay = 1000
+                        )
+                    ),
+                    exit = fadeOut()
+                ) {
+                    Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                        Text(
+                            text = stringResource(
+                                R.string.home_screen_habit_list_subtitle,
+                                homeUiState.completedCount
+                            ),
+                            style = Typography.labelLarge
+                        )
+                    }
                 }
             }
+            // Spacer at the bottom ensures that FAB does not obscure habits at the bottom of the list
             Spacer(modifier.height(100.dp))
         }
     }
@@ -308,7 +310,7 @@ private fun HomeScreenPreview() {
             completedOnClick = { _, _ ->
 
             },
-            showStreaksOnHome = true
+            preferencesUiState = PreferencesUiState()
         )
     }
 }
