@@ -1,12 +1,14 @@
 package com.willbsp.habits.data.repo
 
+import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import kotlinx.coroutines.flow.Flow
 
 interface SettingsRepository {
 
+    val preferences: Flow<Map<Preferences.Key<*>, Any>>
     suspend fun saveStreaksPreference(showStreaksOnHome: Boolean)
-    val showStreaksOnHome: Flow<Boolean>
+    suspend fun saveSubtitlePreference(showCompletedSubtitle: Boolean)
 
     object SettingsKey {
         val SHOW_STREAKS_ON_HOME = booleanPreferencesKey("show_streaks_on_home")
