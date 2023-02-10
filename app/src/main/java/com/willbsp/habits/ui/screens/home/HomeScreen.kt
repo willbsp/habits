@@ -17,6 +17,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.willbsp.habits.R
 import com.willbsp.habits.ui.common.HabitsFloatingAction
 import com.willbsp.habits.ui.common.PreferencesUiState
@@ -25,6 +27,7 @@ import com.willbsp.habits.ui.theme.Typography
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
+@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
@@ -35,7 +38,7 @@ fun HomeScreen(
     navigateToSettings: () -> Unit
 ) {
 
-    val homeUiState by viewModel.homeUiState.collectAsState(HomeUiState())
+    val homeUiState by viewModel.homeUiState.collectAsStateWithLifecycle(HomeUiState())
     val preferencesState by viewModel.preferencesUiState.collectAsState()
     val coroutineScope = rememberCoroutineScope()
 
