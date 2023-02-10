@@ -6,6 +6,7 @@ import com.willbsp.habits.common.getPreviousDatesList
 import com.willbsp.habits.data.model.HabitWithEntries
 import com.willbsp.habits.data.repo.HabitRepository
 import com.willbsp.habits.data.repo.SettingsRepository
+import com.willbsp.habits.ui.common.PreferencesUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -42,12 +43,16 @@ class HomeViewModel @Inject constructor(
             initialValue = HomeUiState()
         )
 
-    val preferencesState: StateFlow<Boolean> = settingsRepository.showStreaksOnHome
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
-            initialValue = true
+    val preferencesUiState: StateFlow<PreferencesUiState> = settingsRepository.preferences.map {
+        PreferencesUiState(
+            showStreaks = it[SettingsRepository.SettingsKey.SHOW_STREAKS_ON_HOME] as Boolean,
+            showCompletedSubtitle = it[SettingsRepository.SettingsKey.SHOW_COMPLETED_SUBTITLE] as Boolean
         )
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
+        initialValue = PreferencesUiState()
+    )
 
     suspend fun toggleEntry(habitId: Int, date: LocalDate) {
         habitsRepository.toggleEntry(habitId, date)
