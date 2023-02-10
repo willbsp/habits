@@ -12,6 +12,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.willbsp.habits.R
 import com.willbsp.habits.ui.common.DefaultHabitsAppTopBar
+import com.willbsp.habits.ui.common.PreferencesUiState
 import com.willbsp.habits.ui.theme.HabitsTheme
 import com.willbsp.habits.ui.theme.Typography
 import kotlinx.coroutines.launch
@@ -23,16 +24,19 @@ fun SettingsScreen(
     navigateUp: () -> Unit
 ) {
 
-    val settingsUiState by viewModel.settingsUiState.collectAsState(SettingsUiState())
+    val preferencesUiState by viewModel.preferencesUiState.collectAsState(PreferencesUiState())
     val coroutineScope = rememberCoroutineScope()
 
     Settings(
         modifier = modifier,
         navigateUp = navigateUp,
-        onShowStreaksOnHomePressed = {
-            coroutineScope.launch { viewModel.updateSetting(it) }
+        onShowStreaksPressed = {
+            coroutineScope.launch { viewModel.saveStreaksPreference(it) }
         },
-        settingsUiState = settingsUiState
+        onShowSubtitlePressed = {
+            coroutineScope.launch { viewModel.saveSubtitlePreference(it) }
+        },
+        preferencesUiState = preferencesUiState
     )
 
 }
@@ -42,8 +46,9 @@ fun SettingsScreen(
 private fun Settings(
     modifier: Modifier = Modifier,
     navigateUp: () -> Unit,
-    onShowStreaksOnHomePressed: (Boolean) -> Unit,
-    settingsUiState: SettingsUiState
+    onShowStreaksPressed: (Boolean) -> Unit,
+    onShowSubtitlePressed: (Boolean) -> Unit,
+    preferencesUiState: PreferencesUiState
 ) {
 
     Scaffold(
@@ -63,11 +68,17 @@ private fun Settings(
         ) {
 
             SettingItem(
-                modifier = Modifier.fillMaxWidth(),
-                checked = settingsUiState.showStreaksOnHome,
-                onCheckedChange = { onShowStreaksOnHomePressed(it) },
+                checked = preferencesUiState.showStreaks,
+                onCheckedChange = onShowStreaksPressed,
                 title = R.string.settings_display_streaks,
                 subtitle = R.string.settings_display_streaks_subtitle
+            )
+
+            SettingItem(
+                checked = preferencesUiState.showCompletedSubtitle,
+                onCheckedChange = onShowSubtitlePressed,
+                title = R.string.settings_completed_subtitle,
+                subtitle = R.string.settings_completed_subtitle_desc
             )
 
         }
@@ -85,7 +96,7 @@ private fun SettingItem(
     @StringRes subtitle: Int
 ) {
     ListItem(
-        modifier = modifier,
+        modifier = modifier.fillMaxWidth(),
         headlineText = {
             Text(
                 text = stringResource(title),

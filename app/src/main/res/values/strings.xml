@@ -33,6 +33,8 @@
     <string name="home_screen_habit_list_subtitle">"%d habits completed today…"</string>
     <string name="settings_display_streaks">Display Streaks</string>
     <string name="settings_display_streaks_subtitle">Display streaks on home screen</string>
+    <string name="settings_completed_subtitle">Show completed subtitle</string>
+    <string name="settings_completed_subtitle_desc">Show completed habit count in today view</string>
     <!--settings screen end-->
 
 </resources>
