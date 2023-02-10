@@ -16,16 +16,23 @@ class SettingsViewModel @Inject constructor(
     private val settingsRepository: SettingsRepository
 ) : ViewModel() {
 
-    val settingsUiState: StateFlow<SettingsUiState> = settingsRepository.showStreaksOnHome.map {
-        SettingsUiState(it)
+    val preferencesUiState: StateFlow<PreferencesUiState> = settingsRepository.preferences.map {
+        PreferencesUiState(
+            it[SettingsRepository.SettingsKey.SHOW_STREAKS_ON_HOME] as Boolean,
+            it[SettingsRepository.SettingsKey.SHOW_COMPLETED_SUBTITLE] as Boolean
+        )
     }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
-        initialValue = SettingsUiState()
+        initialValue = PreferencesUiState()
     )
 
-    suspend fun updateSetting(setting: Boolean) {
-        settingsRepository.saveStreaksPreference(setting)
+    suspend fun saveStreaksPreference(value: Boolean) {
+        settingsRepository.saveStreaksPreference(value)
+    }
+
+    suspend fun saveSubtitlePreference(value: Boolean) {
+        settingsRepository.saveSubtitlePreference(value)
     }
 
     companion object {
