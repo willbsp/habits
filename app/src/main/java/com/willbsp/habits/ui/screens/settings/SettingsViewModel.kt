@@ -3,16 +3,13 @@ package com.willbsp.habits.ui.screens.settings
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.willbsp.habits.data.repo.SettingsRepository
+import com.willbsp.habits.ui.common.PreferencesUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
-
-data class SettingsUiState(
-    val showStreaksOnHome: Boolean = true
-)
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
