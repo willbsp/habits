@@ -8,33 +8,36 @@
     <string name="frequency_weekly">Weekly</string>
     <!--end habit frequency-->
 
-    <!--add habit screen start-->
+    <!--modify habit screen start-->
     <string name="add_habit_title">Add Habit</string>
     <string name="add_habit_add_habit">Add item</string>
+    <string name="edit_habit_title">Edit Habit</string>
+    <string name="edit_habit_update_habit">Update habit</string>
+    <string name="edit_habit_delete">Delete</string>
     <string name="modify_habit_name">Name</string>
     <string name="modify_habit_frequency">Frequency</string>
-    <!--add habit screen end-->
+    <!--modify habit screen end-->
 
     <!--home screen start-->
     <string name="home_screen_add_habit">Add Habit</string>
     <string name="home_screen_completed">Completed</string>
     <string name="home_screen_uncompleted">Uncompleted</string>
     <string name="home_screen_today">Today</string>
+    <string name="home_screen_all_completed">All completed for today!</string>
+    <string name="home_screen_all_completed_tick">All completed</string>
+    <string name="home_screen_habit_list_subtitle">"%d habits completed today…"</string>
     <!--home screen end-->
 
     <!--settings screen start-->
     <string name="settings_title">Settings</string>
-    <string name="edit_habit_title">Edit Habit</string>
-    <string name="edit_habit_update_habit">Update habit</string>
-    <string name="edit_habit_delete">Delete</string>
-    <string name="logbook_title">Logbook</string>
-    <string name="home_screen_all_completed">All completed for today!</string>
-    <string name="home_screen_all_completed_tick">All completed</string>
-    <string name="home_screen_habit_list_subtitle">"%d habits completed today…"</string>
     <string name="settings_display_streaks">Display Streaks</string>
     <string name="settings_display_streaks_subtitle">Display streaks on home screen</string>
     <string name="settings_completed_subtitle">Show completed subtitle</string>
     <string name="settings_completed_subtitle_desc">Show completed habit count in today view</string>
     <!--settings screen end-->
+
+    <!--logbook screen start-->
+    <string name="logbook_title">Logbook</string>
+    <!--logbook screen end-->
 
 </resources>
