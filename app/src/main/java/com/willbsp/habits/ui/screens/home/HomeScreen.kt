@@ -112,7 +112,9 @@ private fun Home(
         AnimatedVisibility(
             visible = !homeUiState.allCompleted,
             enter = fadeIn(),
-            exit = fadeOut()
+            exit = fadeOut(
+                tween(durationMillis = 500)
+            )
         ) {
 
             Column(
@@ -149,7 +151,9 @@ private fun Home(
         ) {
             AnimatedVisibility(
                 visible = homeUiState.allCompleted,
-                enter = expandVertically(),
+                enter = expandVertically(
+                    tween(delayMillis = 1000)
+                ),
                 exit = fadeOut()
             ) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
