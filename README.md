@@ -4,8 +4,9 @@ Android app for tracking and helping to maintain good habits built in Jetpack Co
 
 ## Screenshots
 
-![Adding a habit](screenshots/screenshot-1.gif)
-![Editing a habit](screenshots/screenshot-2.gif)
+![Editing habits](screenshots/screenshot-3.gif)
+![Completing habits](screenshots/screenshot-1.gif)
+![Logbook](screenshots/screenshot-2.gif)
 
 ## Features
 
@@ -18,6 +19,7 @@ Android app for tracking and helping to maintain good habits built in Jetpack Co
   connection, your information is never sent to anyone and is always kept on your device.
 
 ## Licence
+
 ```
 MIT License
 
