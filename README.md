@@ -10,6 +10,10 @@ Android app for tracking and helping to maintain good habits built in Jetpack Co
 
 ## Features
 
+- **Build habits that last** - Completing habits is easy, whenever one is due simply tick it from
+  the today view to complete it
+- **Fluent animations** - Built with the latest Android technologies, every action in Habits is
+  beautifully animated to provide satisfying feedback
 - **Supports material you** - Habits follows the
   latest [Material Design guidelines](https://m3.material.io/) and supports dynamic colour theming
   out of the box.
