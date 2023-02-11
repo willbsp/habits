@@ -18,8 +18,8 @@ class SettingsViewModel @Inject constructor(
 
     val preferencesUiState: StateFlow<PreferencesUiState> = settingsRepository.preferences.map {
         PreferencesUiState(
-            it[SettingsRepository.SettingsKey.SHOW_STREAKS_ON_HOME] as Boolean,
-            it[SettingsRepository.SettingsKey.SHOW_COMPLETED_SUBTITLE] as Boolean
+            it[SettingsRepository.SettingsKey.SHOW_STREAKS_ON_HOME] as Boolean? ?: true,
+            it[SettingsRepository.SettingsKey.SHOW_COMPLETED_SUBTITLE] as Boolean? ?: true
         )
     }.stateIn(
         scope = viewModelScope,

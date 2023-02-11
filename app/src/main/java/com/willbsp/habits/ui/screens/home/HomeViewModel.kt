@@ -43,16 +43,19 @@ class HomeViewModel @Inject constructor(
             initialValue = HomeUiState()
         )
 
-    val preferencesUiState: StateFlow<PreferencesUiState> = settingsRepository.preferences.map {
-        PreferencesUiState(
-            showStreaks = it[SettingsRepository.SettingsKey.SHOW_STREAKS_ON_HOME] as Boolean,
-            showCompletedSubtitle = it[SettingsRepository.SettingsKey.SHOW_COMPLETED_SUBTITLE] as Boolean
+    val preferencesUiState: StateFlow<PreferencesUiState> =
+        settingsRepository.preferences.map { // TODO make available in domain layer?
+            PreferencesUiState(
+                showStreaks = it[SettingsRepository.SettingsKey.SHOW_STREAKS_ON_HOME] as Boolean?
+                    ?: true,
+                showCompletedSubtitle = it[SettingsRepository.SettingsKey.SHOW_COMPLETED_SUBTITLE] as Boolean?
+                    ?: true
+            )
+        }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
+            initialValue = PreferencesUiState()
         )
-    }.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
-        initialValue = PreferencesUiState()
-    )
 
     suspend fun toggleEntry(habitId: Int, date: LocalDate) {
         habitsRepository.toggleEntry(habitId, date)
