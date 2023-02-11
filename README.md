@@ -1,6 +1,7 @@
 # Habits ✅
 
-Android app for tracking and helping to maintain good habits built in Jetpack Compose
+Habits is an app for tracking and helping to maintain good habits.
+It is currently in development, with plans to release on Google Play and F-Droid.
 
 ## Screenshots
 
