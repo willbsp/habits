@@ -38,7 +38,7 @@ class LocalHabitRepository @Inject constructor(
     override suspend fun toggleEntry(
         habitId: Int,
         date: LocalDate
-    ) { // TODO create exception if habit does not exist
+    ) { // TODO check if habit exists first!
 
         val entry: Entry? =
             entryDao.getEntryForDate(date, habitId)
