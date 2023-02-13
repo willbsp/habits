@@ -1,5 +1,7 @@
 package com.willbsp.habits.ui.screens.logbook
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -17,6 +19,7 @@ import com.willbsp.habits.ui.theme.Typography
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
+@RequiresApi(Build.VERSION_CODES.S)
 @Composable
 fun LogbookScreen(
     modifier: Modifier = Modifier,
@@ -41,6 +44,7 @@ fun LogbookScreen(
 
 }
 
+@RequiresApi(Build.VERSION_CODES.S)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun Logbook(
@@ -110,6 +114,7 @@ private fun Logbook(
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.S)
 @Composable
 fun LogbookHabitCard(
     modifier: Modifier,
@@ -146,6 +151,7 @@ fun LogbookHabitCard(
 
 }
 
+@RequiresApi(Build.VERSION_CODES.S)
 @Preview
 @Composable
 fun LogbookPreview() {
