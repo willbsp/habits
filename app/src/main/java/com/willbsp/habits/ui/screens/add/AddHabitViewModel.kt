@@ -19,6 +19,7 @@ class AddHabitViewModel @Inject constructor(
         private set
 
     fun updateUiState(newHabitsUiState: ModifyHabitUiState) {
+        // TODO check for valid here
         habitUiState = newHabitsUiState.copy()
     }
 
