@@ -1,5 +1,6 @@
 package com.willbsp.habits.ui.common
 
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
@@ -14,6 +15,7 @@ fun DefaultHabitsAppTopBar(
     title: String,
     canNavigateBack: Boolean,
     modifier: Modifier = Modifier,
+    actions: @Composable RowScope.() -> Unit = {},
     navigateUp: () -> Unit = {}
 ) {
 
@@ -30,6 +32,7 @@ fun DefaultHabitsAppTopBar(
                 }
             }
         },
+        actions = actions
     )
 
 }
