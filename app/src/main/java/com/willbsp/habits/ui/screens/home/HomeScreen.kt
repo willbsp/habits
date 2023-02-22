@@ -72,6 +72,8 @@ private fun Home(
     homeUiState: HomeUiState
 ) {
 
+    var showCompleted by remember { mutableStateOf(true) }
+
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -91,6 +93,14 @@ private fun Home(
                     }
                 },
                 actions = {
+                    IconButton(onClick = {
+                        showCompleted = !showCompleted
+                    }) { // TODO tooltip for show completed
+                        Icon(
+                            imageVector = if (showCompleted) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
+                            contentDescription = null // TODO
+                        )
+                    }
                     IconButton(onClick = navigateToSettings) {
                         Icon(
                             imageVector = Icons.Filled.Settings,
@@ -138,7 +148,8 @@ private fun Home(
                     completedOnClick = completedOnClick,
                     navigateToEditHabit = navigateToEditHabit,
                     showStreaks = preferencesUiState.showStreaks,
-                    showSubtitle = preferencesUiState.showCompletedSubtitle
+                    showSubtitle = preferencesUiState.showCompletedSubtitle,
+                    showCompleted = showCompleted
                 )
 
             }
@@ -188,6 +199,7 @@ private fun HabitsList(
     navigateToEditHabit: (Int) -> Unit,
     showStreaks: Boolean,
     showSubtitle: Boolean,
+    showCompleted: Boolean,
     modifier: Modifier = Modifier
 ) {
 
@@ -196,7 +208,7 @@ private fun HabitsList(
     LazyColumn(modifier = modifier) {
         items(items = habitUiStateList, key = { it.id }) { homeHabitUiState ->
             AnimatedVisibility(
-                visible = !homeHabitUiState.completedDates.first().completed,
+                visible = !homeHabitUiState.completedDates.first().completed || showCompleted,
                 exit = shrinkVertically(
                     animationSpec = TweenSpec(
                         delay = 500
@@ -220,7 +232,7 @@ private fun HabitsList(
         this.stickyHeader {
             if (showSubtitle) {
                 AnimatedVisibility(
-                    visible = homeUiState.completedCount > 0,
+                    visible = homeUiState.completedCount > 0 && !showCompleted,
                     enter = fadeIn(
                         animationSpec = TweenSpec(
                             delay = 1000
