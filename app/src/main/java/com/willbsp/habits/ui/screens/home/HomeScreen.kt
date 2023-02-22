@@ -83,7 +83,6 @@ private fun Home(
                         fontWeight = FontWeight.Bold
                     )
                 },
-                modifier = modifier,
                 navigationIcon = {
                     IconButton(onClick = navigateToLogbook) {
                         Icon(
