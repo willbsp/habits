@@ -2,38 +2,39 @@ package com.willbsp.habits.fake
 
 import com.willbsp.habits.data.model.Entry
 import com.willbsp.habits.data.model.Habit
+import com.willbsp.habits.data.model.HabitWithEntries
 import com.willbsp.habits.data.repo.HabitRepository
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import java.time.LocalDate
 
 class FakeHabitRepository : HabitRepository {
 
     val habits = mutableListOf<Habit>()
-    val entries = mutableListOf<Entry>()
+    private val entries = mutableListOf<Entry>()
 
-    //private var observableHabitEntries = MutableStateFlow<List<HabitEntry>>(listOf())
-    private var entryStreamDate = ""
+    private var observableHabitEntries = MutableStateFlow<List<HabitWithEntries>>(listOf())
+    private var dates: List<LocalDate> = listOf()
 
-    override fun getHabitsCompletedForDateStream(date: String): Flow<List<Pair<Habit, Boolean>>> {
-        entryStreamDate = date
-        //return observableHabitEntries
-        return flow {}
+    override fun getAllHabitsWithEntriesForDates(dates: List<LocalDate>): Flow<List<HabitWithEntries>> {
+        this.dates = dates
+        return observableHabitEntries
     }
 
-    override fun getHabitsCompletedForDatesStream(dates: List<String>): Flow<List<Pair<Habit, List<Pair<String, Boolean>>>>> {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun getHabitById(id: Int): Habit {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun getEntryForDate(date: String, habitId: Int): Entry? {
-        entries.forEach {
-            if (it.habitId == habitId && it.date == date)
-                return it
+    override suspend fun getHabitById(habitId: Int): Habit {
+        return habits.first {
+            it.id == habitId
         }
-        return null
+    }
+
+    override suspend fun getEntryForDate(date: LocalDate, habitId: Int): Entry? {
+        return try {
+            entries.first {
+                it.habitId == habitId && it.date == date
+            }
+        } catch (e: NoSuchElementException) {
+            null
+        }
     }
 
     override suspend fun addHabit(habit: Habit) {
@@ -45,7 +46,7 @@ class FakeHabitRepository : HabitRepository {
         TODO("Not yet implemented")
     }
 
-    override suspend fun toggleEntry(habitId: Int, date: String) {
+    override suspend fun toggleEntry(habitId: Int, date: LocalDate) {
         val entry: Entry? = getEntryForDate(habitId = habitId, date = date)
         val index = entries.lastIndex
         if (entry == null) entries.add(Entry(id = index, habitId = habitId, date = date))
@@ -53,8 +54,8 @@ class FakeHabitRepository : HabitRepository {
         emit()
     }
 
-    override suspend fun deleteHabit(habit: Habit) {
-        habits.remove(habit)
+    override suspend fun deleteHabit(habitId: Int) {
+        habits.remove(getHabitById(habitId))
         emit()
     }
 
@@ -62,22 +63,19 @@ class FakeHabitRepository : HabitRepository {
      * Call after every change to the data to imitate flows emitting when database is changed
      */
     private suspend fun emit() {
-        //observableHabitEntries.emit(getHabitEntriesForDate(entryStreamDate))
+        observableHabitEntries.emit(getHabitEntriesForDates(dates))
     }
 
     /**
      * Map the list of habits and list of entries to habit entries
      */
-    private fun getHabitEntriesForDate(date: String): List<Habit> {
-        habits.map { habit ->
-            var completed = false
-            entries.forEach { entry ->
-                if (entry.habitId == habit.id && entry.date == date)
-                    completed = true
+    private fun getHabitEntriesForDates(dates: List<LocalDate>): List<HabitWithEntries> {
+        return habits.map { habit ->
+            val entriesForHabit = entries.filter { entry ->
+                entry.habitId == habit.id && dates.any { entry.date == it }
             }
-            //HabitEntry(habit.id, habit.name, completed)
+            HabitWithEntries(habit, entriesForHabit.requireNoNulls())
         }
-        return listOf()
     }
 
 }

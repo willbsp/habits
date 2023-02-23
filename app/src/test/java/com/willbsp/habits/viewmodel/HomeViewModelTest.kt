@@ -4,6 +4,7 @@ import com.willbsp.habits.TestData.habit1
 import com.willbsp.habits.TestData.habit2
 import com.willbsp.habits.fake.FakeHabitRepository
 import com.willbsp.habits.rules.TestDispatcherRule
+import com.willbsp.habits.ui.screens.home.HomeCompletedUiState
 import com.willbsp.habits.ui.screens.home.HomeHabitUiState
 import com.willbsp.habits.ui.screens.home.HomeUiState
 import com.willbsp.habits.ui.screens.home.HomeViewModel
@@ -18,13 +19,14 @@ import org.junit.Rule
 import org.junit.Test
 import java.time.Clock
 import java.time.Instant
+import java.time.LocalDate
 
 class HomeViewModelTest {
 
     @get:Rule
     val testDispatcher = TestDispatcherRule()
 
-    private val date = "2023-04-15"
+    private val date = LocalDate.parse("2023-04-15")
     private val time = "T10:30:45Z"
 
     private lateinit var fakeRepository: FakeHabitRepository
@@ -35,7 +37,10 @@ class HomeViewModelTest {
         fakeRepository = FakeHabitRepository()
         homeViewModel = HomeViewModel(
             habitsRepository = fakeRepository,
-            clock = Clock.fixed(Instant.parse(date + time), Clock.systemDefaultZone().zone)
+            clock = Clock.fixed(
+                Instant.parse(date.toString() + time),
+                Clock.systemDefaultZone().zone
+            )
         )
     }
 
@@ -60,8 +65,13 @@ class HomeViewModelTest {
 
         val expectedHomeUiState = HomeUiState(
             listOf(
-                HomeHabitUiState(habit1.id, habit1.name, true),
-                HomeHabitUiState(habit2.id, habit2.name, false)
+                HomeHabitUiState(
+                    habit1.id,
+                    habit1.name,
+                    null,
+                    listOf(HomeCompletedUiState(date, true))
+                ),
+                HomeHabitUiState(habit2.id, habit2.name, null, listOf())
             )
         )
 
@@ -84,7 +94,7 @@ class HomeViewModelTest {
 
         val expectedHomeUiState = HomeUiState(
             listOf(
-                HomeHabitUiState(habit1.id, habit1.name, false)
+                HomeHabitUiState(habit1.id, habit1.name, null, listOf())
             )
         )
 
@@ -105,8 +115,13 @@ class HomeViewModelTest {
 
         val expectedHomeUiState = HomeUiState(
             listOf(
-                HomeHabitUiState(habit1.id, habit1.name, false),
-                HomeHabitUiState(habit2.id, habit2.name, true)
+                HomeHabitUiState(habit1.id, habit1.name, null, listOf()),
+                HomeHabitUiState(
+                    habit2.id,
+                    habit2.name,
+                    null,
+                    listOf(HomeCompletedUiState(date, true))
+                )
             )
         )
 
@@ -115,7 +130,7 @@ class HomeViewModelTest {
         }
 
         addTwoHabit()
-        homeViewModel.toggleEntry(habit2.id)
+        homeViewModel.toggleEntry(habit2.id, date)
         assertEquals(expectedHomeUiState, homeViewModel.homeUiState.value)
 
         job.cancel()
@@ -131,7 +146,7 @@ class HomeViewModelTest {
 
         val expectedHomeUiState = HomeUiState(
             listOf(
-                HomeHabitUiState(habit1.id, habit1.name, false)
+                HomeHabitUiState(habit1.id, habit1.name, null, listOf())
             )
         )
 
@@ -139,7 +154,7 @@ class HomeViewModelTest {
             homeViewModel.homeUiState.collect()
         }
 
-        homeViewModel.toggleEntry(habit1.id)
+        homeViewModel.toggleEntry(habit1.id, date)
         assertEquals(expectedHomeUiState, homeViewModel.homeUiState.value)
 
         job.cancel()
