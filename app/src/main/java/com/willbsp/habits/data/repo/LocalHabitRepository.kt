@@ -2,17 +2,15 @@ package com.willbsp.habits.data.repo
 
 import com.willbsp.habits.data.database.dao.HabitDao
 import com.willbsp.habits.data.model.Habit
-import com.willbsp.habits.data.model.HabitWithEntries
 import kotlinx.coroutines.flow.Flow
-import java.time.LocalDate
 import javax.inject.Inject
 
 class LocalHabitRepository @Inject constructor(
     private val habitDao: HabitDao
 ) : HabitRepository {
 
-    override fun getAllHabitsWithEntriesForDates(dates: List<LocalDate>): Flow<List<HabitWithEntries>> {
-        return habitDao.getAllHabitsWithEntries()
+    override fun getAllHabits(): Flow<List<Habit>> {
+        return habitDao.getAllHabits()
     }
 
     override suspend fun getHabitById(habitId: Int): Habit {
