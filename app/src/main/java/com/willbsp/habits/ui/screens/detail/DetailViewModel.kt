@@ -8,4 +8,8 @@ import javax.inject.Inject
 @HiltViewModel
 class DetailViewModel @Inject constructor(
     private val habitsRepository: HabitRepository
-) : ViewModel()
+) : ViewModel() {
+
+    val detailUiState: DetailUiState = DetailUiState("hi", 5, 65)
+
+}

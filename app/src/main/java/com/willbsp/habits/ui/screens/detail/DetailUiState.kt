@@ -1,6 +1,6 @@
 package com.willbsp.habits.ui.screens.detail
 
-data class DetailScreenUiState(
+data class DetailUiState(
     val habitName: String,
     val streak: Int,
     val Score: Int,
