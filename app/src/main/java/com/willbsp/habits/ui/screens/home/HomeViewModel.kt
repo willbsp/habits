@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.willbsp.habits.common.getPreviousDatesList
 import com.willbsp.habits.data.model.HabitWithEntries
+import com.willbsp.habits.data.repo.EntryRepository
 import com.willbsp.habits.data.repo.HabitRepository
 import com.willbsp.habits.data.repo.SettingsRepository
 import com.willbsp.habits.domain.CalculateStreakUseCase
@@ -20,8 +21,9 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val habitsRepository: HabitRepository,
+    private val entryRepository: EntryRepository,
     private val settingsRepository: SettingsRepository,
-    private val calculateStreakUseCase: CalculateStreakUseCase,
+    private val calculateStreak: CalculateStreakUseCase,
     private val clock: Clock
 ) : ViewModel() {
 
@@ -59,7 +61,7 @@ class HomeViewModel @Inject constructor(
         )
 
     suspend fun toggleEntry(habitId: Int, date: LocalDate) {
-        habitsRepository.toggleEntry(habitId, date)
+        entryRepository.toggleEntry(habitId, date)
     }
 
     private fun HabitWithEntries.toHomeHabitUiState(): HomeHabitUiState {
@@ -75,10 +77,7 @@ class HomeViewModel @Inject constructor(
         return HomeHabitUiState(
             habit.id,
             habit.name,
-            calculateStreakUseCase(
-                this,
-                LocalDate.now(clock)
-            ), // habit.calculate streak could fetch entries?
+            calculateStreak(this), // habit.calculate streak could fetch entries?
             completedDates
         )
 

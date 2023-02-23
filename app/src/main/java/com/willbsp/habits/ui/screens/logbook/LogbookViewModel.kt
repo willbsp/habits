@@ -3,6 +3,7 @@ package com.willbsp.habits.ui.screens.logbook
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.willbsp.habits.data.model.HabitWithEntries
+import com.willbsp.habits.data.repo.EntryRepository
 import com.willbsp.habits.data.repo.HabitRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,6 +16,7 @@ import javax.inject.Inject
 @HiltViewModel
 class LogbookViewModel @Inject constructor(
     private val habitRepository: HabitRepository,
+    private val entryRepository: EntryRepository,
     private val clock: Clock
 ) : ViewModel() {
 
@@ -43,7 +45,7 @@ class LogbookViewModel @Inject constructor(
     }
 
     suspend fun toggleEntry(habitId: Int, date: LocalDate) {
-        habitRepository.toggleEntry(habitId, date)
+        entryRepository.toggleEntry(habitId, date)
     }
 
 }
