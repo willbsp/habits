@@ -6,6 +6,7 @@ import com.willbsp.habits.common.getPreviousDatesList
 import com.willbsp.habits.data.model.HabitWithEntries
 import com.willbsp.habits.data.repo.HabitRepository
 import com.willbsp.habits.data.repo.SettingsRepository
+import com.willbsp.habits.domain.CalculateStreakUseCase
 import com.willbsp.habits.ui.common.PreferencesUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
@@ -20,6 +21,7 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val habitsRepository: HabitRepository,
     private val settingsRepository: SettingsRepository,
+    private val calculateStreakUseCase: CalculateStreakUseCase,
     private val clock: Clock
 ) : ViewModel() {
 
@@ -30,8 +32,7 @@ class HomeViewModel @Inject constructor(
             )
         ).map { habitWithEntriesList ->
             HomeUiState(
-                habitWithEntriesList.map { habitWithEntries ->
-                    habitWithEntries.calculateStreak()
+                todayState = habitWithEntriesList.map { habitWithEntries ->
                     habitWithEntries.toHomeHabitUiState()
                 },
                 allCompleted = habitWithEntriesList.allCompleted(),
@@ -71,7 +72,15 @@ class HomeViewModel @Inject constructor(
             HomeCompletedUiState(date, entries.any { entry -> entry.date == date })
         }
 
-        return HomeHabitUiState(habit.id, habit.name, this.calculateStreak(), completedDates)
+        return HomeHabitUiState(
+            habit.id,
+            habit.name,
+            calculateStreakUseCase(
+                this,
+                LocalDate.now(clock)
+            ), // habit.calculate streak could fetch entries?
+            completedDates
+        )
 
     }
 
@@ -92,26 +101,6 @@ class HomeViewModel @Inject constructor(
         return true
     }
 
-    private fun HabitWithEntries.calculateStreak(): Int? {
-
-        val date = LocalDate.now(clock)
-        val yesterday = date.minusDays(1)
-        val entries = this.entries.sortedByDescending { it.date }
-
-        var streak = 0
-        if (entries.isNotEmpty()) entries.forEach { entry ->
-            if (entry.date == yesterday.minusDays(streak.toLong())) streak++
-            else return@forEach
-        } else {
-            return null
-        }
-
-        if (entries.first().date == date) streak++
-
-        return if (streak > 1) streak
-        else null
-
-    }
 
     companion object {
         const val TIMEOUT_MILLIS = 5_000L
