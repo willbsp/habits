@@ -135,12 +135,11 @@ private fun HomeHabitCardDayRow(
         horizontalArrangement = Arrangement.spacedBy(15.dp)
     ) {
 
-        habitUiState.completedDates.drop(1).forEach { completedState ->
+        habitUiState.completedDates.drop(1).forEach { completedUiState ->
             HomeHabitCardDay(
-                date = completedState.date,
-                checked = completedState.completed,
+                completedUiState = completedUiState,
                 onCheckedChange = {
-                    completedOnClick(habitUiState.id, completedState.date)
+                    completedOnClick(habitUiState.id, completedUiState.date)
                 }
             ) // curr date -1
         }
@@ -152,16 +151,15 @@ private fun HomeHabitCardDayRow(
 @Composable
 private fun HomeHabitCardDay(
     modifier: Modifier = Modifier,
-    date: LocalDate,
-    checked: Boolean,
+    completedUiState: HomeCompletedUiState,
     onCheckedChange: (Boolean) -> Unit,
 ) {
 
-    val weekday = date.dayOfWeek.getDisplayName(
+    val weekday = completedUiState.date.dayOfWeek.getDisplayName(
         TextStyle.SHORT,
         Locale.ENGLISH
     ) // TODO get other locales
-    val dayOfMonth = date.dayOfMonth.toString()
+    val dayOfMonth = completedUiState.date.dayOfMonth.toString()
 
     Column(
         modifier = modifier.width(45.dp),
@@ -179,7 +177,7 @@ private fun HomeHabitCardDay(
 
         HabitToggleButton(
             onCheckedChange = onCheckedChange,
-            checked = checked
+            checked = completedUiState.completed
         )
 
     }

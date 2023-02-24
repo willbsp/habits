@@ -16,7 +16,6 @@ import com.willbsp.habits.R
 import com.willbsp.habits.ui.common.DefaultHabitsAppTopBar
 import com.willbsp.habits.ui.common.HabitToggleButton
 import com.willbsp.habits.ui.theme.Typography
-import kotlinx.coroutines.launch
 import java.time.LocalDate
 
 @RequiresApi(Build.VERSION_CODES.S)
@@ -28,17 +27,12 @@ fun LogbookScreen(
 ) {
 
     val logbookUiState by viewModel.logbookUiState.collectAsState(LogbookUiState())
-    val coroutineScope = rememberCoroutineScope()
 
     Logbook(
         modifier = modifier,
         logbookUiState = logbookUiState,
         onSelectedDateChange = { viewModel.setSelectedDate(it) },
-        completedOnClick = { habitId, date ->
-            coroutineScope.launch {
-                viewModel.toggleEntry(habitId, date)
-            }
-        },
+        completedOnClick = { habitId, date -> viewModel.toggleEntry(habitId, date) },
         navigateUp = navigateUp
     )
 

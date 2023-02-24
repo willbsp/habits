@@ -24,7 +24,6 @@ import com.willbsp.habits.ui.common.HabitsFloatingAction
 import com.willbsp.habits.ui.common.PreferencesUiState
 import com.willbsp.habits.ui.theme.HabitsTheme
 import com.willbsp.habits.ui.theme.Typography
-import kotlinx.coroutines.launch
 import java.time.LocalDate
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
@@ -39,8 +38,7 @@ fun HomeScreen(
 ) {
 
     val homeUiState by viewModel.homeUiState.collectAsStateWithLifecycle(HomeUiState())
-    val preferencesState by viewModel.preferencesUiState.collectAsState()
-    val coroutineScope = rememberCoroutineScope()
+    val preferencesState by viewModel.preferencesUiState.collectAsStateWithLifecycle()
 
     Home(
         modifier = modifier,
@@ -48,11 +46,7 @@ fun HomeScreen(
         navigateToAddHabit = navigateToAddHabit,
         navigateToEditHabit = navigateToEditHabit,
         navigateToSettings = navigateToSettings,
-        completedOnClick = { id, date ->
-            coroutineScope.launch {
-                viewModel.toggleEntry(id, date)
-            }
-        },
+        completedOnClick = { id, date -> viewModel.toggleEntry(id, date) },
         homeUiState = homeUiState,
         preferencesUiState = preferencesState
     )
@@ -119,7 +113,7 @@ private fun Home(
     ) { innerPadding -> // TODO
 
         AnimatedVisibility(
-            visible = !homeUiState.allCompleted,
+            visible = !homeUiState.allCompleted || showCompleted,
             enter = fadeIn(),
             exit = fadeOut(
                 tween(durationMillis = 500)
@@ -160,7 +154,7 @@ private fun Home(
             contentAlignment = Alignment.Center
         ) {
             AnimatedVisibility(
-                visible = homeUiState.allCompleted,
+                visible = homeUiState.allCompleted && !showCompleted,
                 enter = expandVertically(
                     tween(delayMillis = 1000)
                 ),

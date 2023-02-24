@@ -2,18 +2,16 @@ package com.willbsp.habits.data.database.dao
 
 import androidx.room.*
 import com.willbsp.habits.data.model.Habit
-import com.willbsp.habits.data.model.HabitWithEntries
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface HabitDao {
 
-    @Transaction
     @Query("SELECT * FROM habit")
-    fun getAllHabitsWithEntries(): Flow<List<HabitWithEntries>>
+    fun getAllHabits(): Flow<List<Habit>>
 
     @Query("SELECT * FROM habit WHERE id = :id")
-    suspend fun getHabitById(id: Int): Habit
+    suspend fun getHabitById(id: Int): Habit // TODO could be null?
 
     @Insert(onConflict = OnConflictStrategy.IGNORE) // TODO will need to change this
     suspend fun insert(habit: Habit)
