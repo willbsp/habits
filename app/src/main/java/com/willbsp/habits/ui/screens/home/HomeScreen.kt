@@ -39,8 +39,7 @@ fun HomeScreen(
 ) {
 
     val homeUiState by viewModel.homeUiState.collectAsStateWithLifecycle(HomeUiState())
-    val preferencesState by viewModel.preferencesUiState.collectAsState()
-    val coroutineScope = rememberCoroutineScope()
+    val preferencesState by viewModel.preferencesUiState.collectAsStateWithLifecycle()
 
     Home(
         modifier = modifier,
@@ -48,11 +47,7 @@ fun HomeScreen(
         navigateToAddHabit = navigateToAddHabit,
         navigateToEditHabit = navigateToEditHabit,
         navigateToSettings = navigateToSettings,
-        completedOnClick = { id, date ->
-            coroutineScope.launch {
-                viewModel.toggleEntry(id, date)
-            }
-        },
+        completedOnClick = { id, date -> viewModel.toggleEntry(id, date) },
         homeUiState = homeUiState,
         preferencesUiState = preferencesState
     )

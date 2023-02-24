@@ -45,7 +45,7 @@ class LogbookViewModel @Inject constructor(
         return LogbookHabitUiState(habit.id, habit.name, completed)
     }
 
-    suspend fun toggleEntry(habitId: Int, date: LocalDate) {
+    fun toggleEntry(habitId: Int, date: LocalDate) {
         viewModelScope.launch(Dispatchers.IO) {
             entryRepository.toggleEntry(habitId, date)
         }
