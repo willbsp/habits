@@ -63,7 +63,7 @@ class HomeViewModel @Inject constructor(
 
     private suspend fun HabitWithEntries.toHomeHabitUiState(): HomeHabitUiState {
 
-        val dates = clock.getPreviousDatesList(HABIT_CARD_NUMBER_OF_DAYS)
+        val dates = clock.getPreviousDates(HABIT_CARD_NUMBER_OF_DAYS)
         val completedDates = dates.map { date ->
             HomeCompletedUiState(date, entries.any { entry -> entry.date == date })
         }

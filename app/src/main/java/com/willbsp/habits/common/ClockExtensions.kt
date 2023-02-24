@@ -12,7 +12,7 @@ fun Clock.getCurrentFormattedDate(): String {
 
 }
 
-fun Clock.getPreviousDatesList(days: Int): List<LocalDate> {
+fun Clock.getPreviousDates(days: Int): List<LocalDate> {
 
     val clock = this
 
