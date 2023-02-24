@@ -22,6 +22,10 @@ class LocalEntryRepository @Inject constructor(
         return entryDao.getEntryForDate(habitId, date)
     }
 
+    override suspend fun getOldestEntry(habitId: Int): Entry? {
+        return entryDao.getOldestEntry(habitId)
+    }
+
     override suspend fun toggleEntry(
         habitId: Int,
         date: LocalDate
