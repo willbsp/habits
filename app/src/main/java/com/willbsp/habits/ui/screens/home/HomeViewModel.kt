@@ -29,7 +29,6 @@ class HomeViewModel @Inject constructor(
     private val clock: Clock
 ) : ViewModel() {
 
-    // get all habits up here leaving default values for ui state then have a load function for init which can call use cases for habits!!!!!!!!
     val homeUiState: StateFlow<HomeUiState> = getHabitsWithEntries().map { list ->
         HomeUiState(
             list.map { it.toHomeHabitUiState() },
