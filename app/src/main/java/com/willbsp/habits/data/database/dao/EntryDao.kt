@@ -8,11 +8,14 @@ import java.time.LocalDate
 @Dao
 interface EntryDao {
 
-    @Query("SELECT * FROM entries WHERE habit_id = :habitId")
+    @Query("SELECT * FROM entries ORDER BY date DESC")
+    fun getAllEntries(): Flow<List<Entry>>
+
+    @Query("SELECT * FROM entries WHERE habit_id = :habitId ORDER BY date DESC")
     fun getEntriesForHabit(habitId: Int): Flow<List<Entry>>
 
     @Query("SELECT * FROM entries WHERE date = :date AND habit_id = :habitId")
-    suspend fun getEntryForDate(habitId: Int, date: LocalDate): Entry?
+    fun getEntryForDate(habitId: Int, date: LocalDate): Entry?
 
     @Insert(onConflict = OnConflictStrategy.IGNORE) // TODO will need to change this
     suspend fun insert(entry: Entry)
