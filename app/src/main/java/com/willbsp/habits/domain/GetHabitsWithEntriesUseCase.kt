@@ -2,6 +2,7 @@ package com.willbsp.habits.domain
 
 import com.willbsp.habits.data.repo.EntryRepository
 import com.willbsp.habits.data.repo.HabitRepository
+import com.willbsp.habits.domain.model.HabitWithEntries
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import java.time.LocalDate

@@ -7,7 +7,7 @@ import com.willbsp.habits.data.repo.EntryRepository
 import com.willbsp.habits.data.repo.SettingsRepository
 import com.willbsp.habits.domain.CalculateStreakUseCase
 import com.willbsp.habits.domain.GetHabitsWithEntriesUseCase
-import com.willbsp.habits.domain.HabitWithEntries
+import com.willbsp.habits.domain.model.HabitWithEntries
 import com.willbsp.habits.ui.common.PreferencesUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
