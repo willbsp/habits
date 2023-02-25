@@ -3,11 +3,11 @@ package com.willbsp.habits.ui.screens.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.willbsp.habits.common.getPreviousDates
+import com.willbsp.habits.data.model.HabitWithEntries
 import com.willbsp.habits.data.repo.EntryRepository
 import com.willbsp.habits.data.repo.SettingsRepository
 import com.willbsp.habits.domain.CalculateStreakUseCase
 import com.willbsp.habits.domain.GetHabitsWithEntriesUseCase
-import com.willbsp.habits.domain.model.HabitWithEntries
 import com.willbsp.habits.ui.common.PreferencesUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
