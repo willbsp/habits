@@ -30,7 +30,7 @@ class CalculateScoreUseCase @Inject constructor(
 
             var date: LocalDate = startDate
             repeat(period.days) {
-                if (entryRepository.getEntryForDate(date, habitId) != null) this.add(1)
+                if (entryRepository.getEntries(date, habitId) != null) this.add(1)
                 else this.add(0)
                 date = date.plusDays(1)
             }

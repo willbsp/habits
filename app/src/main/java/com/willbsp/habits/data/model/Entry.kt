@@ -15,8 +15,8 @@ import java.time.LocalDate
     )]
 )
 data class Entry(
-    @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
     @ColumnInfo(name = "habit_id", index = true) val habitId: Int,
+    /*@ColumnInfo(name = "date", index = true)*/ // TODO remove comments
     val date: LocalDate,
 )

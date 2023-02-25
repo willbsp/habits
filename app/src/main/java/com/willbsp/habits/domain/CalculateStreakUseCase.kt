@@ -17,7 +17,7 @@ class CalculateStreakUseCase @Inject constructor(
     private val defaultDispatcher: CoroutineDispatcher = Dispatchers.IO
 
     suspend operator fun invoke(habitId: Int): Int? = withContext(defaultDispatcher) {
-        val entries = entryRepository.getEntriesForHabit(habitId)
+        val entries = entryRepository.getEntries(habitId)
             .first().sortedByDescending { it.date }
         val date = LocalDate.now(clock)
         val yesterday = date.minusDays(1)

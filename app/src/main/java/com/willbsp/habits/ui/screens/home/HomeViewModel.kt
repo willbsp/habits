@@ -3,11 +3,11 @@ package com.willbsp.habits.ui.screens.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.willbsp.habits.common.getPreviousDates
+import com.willbsp.habits.data.model.HabitWithEntries
 import com.willbsp.habits.data.repo.EntryRepository
+import com.willbsp.habits.data.repo.HabitWithEntriesRepository
 import com.willbsp.habits.data.repo.SettingsRepository
 import com.willbsp.habits.domain.CalculateStreakUseCase
-import com.willbsp.habits.domain.GetHabitsWithEntriesUseCase
-import com.willbsp.habits.domain.model.HabitWithEntries
 import com.willbsp.habits.ui.common.PreferencesUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -22,14 +22,14 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
+    private val habitRepository: HabitWithEntriesRepository,
     private val entryRepository: EntryRepository,
     private val settingsRepository: SettingsRepository,
-    private val getHabitsWithEntries: GetHabitsWithEntriesUseCase,
     private val calculateStreak: CalculateStreakUseCase,
     private val clock: Clock
 ) : ViewModel() {
 
-    val homeUiState: StateFlow<HomeUiState> = getHabitsWithEntries().map { list ->
+    val homeUiState: StateFlow<HomeUiState> = habitRepository.getHabitsWithEntries().map { list ->
         HomeUiState(
             list.map { it.toHomeHabitUiState() },
             list.completedCount(),

@@ -31,4 +31,8 @@ class HabitDatabaseModule {
     @Provides
     fun provideEntryDao(db: HabitDatabase) = db.entryDao()
 
+    @Singleton
+    @Provides
+    fun provideHabitEntryDao(db: HabitDatabase) = db.habitWithEntriesDao()
+
 }

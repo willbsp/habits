@@ -2,9 +2,9 @@ package com.willbsp.habits.ui.screens.logbook
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.willbsp.habits.data.model.HabitWithEntries
 import com.willbsp.habits.data.repo.EntryRepository
-import com.willbsp.habits.domain.GetHabitsWithEntriesUseCase
-import com.willbsp.habits.domain.model.HabitWithEntries
+import com.willbsp.habits.data.repo.HabitWithEntriesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,8 +16,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LogbookViewModel @Inject constructor(
+    private val habitRepository: HabitWithEntriesRepository,
     private val entryRepository: EntryRepository,
-    private val getHabitsWithEntriesUseCase: GetHabitsWithEntriesUseCase,
     private val clock: Clock
 ) : ViewModel() {
 
@@ -31,7 +31,7 @@ class LogbookViewModel @Inject constructor(
 
     fun setSelectedDate(date: LocalDate) {
         viewModelScope.launch {
-            getHabitsWithEntriesUseCase(date).collect { list ->
+            habitRepository.getHabitsWithEntries().collect { list ->
                 _logbookUiState.value = LogbookUiState(
                     list.map { habitWithEntries -> habitWithEntries.toLogbookHabitUiState(date) }
                 )

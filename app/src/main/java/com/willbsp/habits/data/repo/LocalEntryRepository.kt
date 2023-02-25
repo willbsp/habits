@@ -10,15 +10,15 @@ class LocalEntryRepository @Inject constructor(
     private val entryDao: EntryDao
 ) : EntryRepository {
 
-    override fun getAllEntries(): Flow<List<Entry>> {
+    override fun getEntries(): Flow<List<Entry>> {
         return entryDao.getAllEntries()
     }
 
-    override fun getEntriesForHabit(habitId: Int): Flow<List<Entry>> {
+    override fun getEntries(habitId: Int): Flow<List<Entry>> {
         return entryDao.getEntriesForHabit(habitId)
     }
 
-    override suspend fun getEntryForDate(date: LocalDate, habitId: Int): Entry? {
+    override suspend fun getEntries(date: LocalDate, habitId: Int): Entry? {
         return entryDao.getEntryForDate(habitId, date)
     }
 

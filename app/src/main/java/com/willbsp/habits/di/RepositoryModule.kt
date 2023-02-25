@@ -1,9 +1,6 @@
 package com.willbsp.habits.di
 
-import com.willbsp.habits.data.repo.EntryRepository
-import com.willbsp.habits.data.repo.HabitRepository
-import com.willbsp.habits.data.repo.LocalEntryRepository
-import com.willbsp.habits.data.repo.LocalHabitRepository
+import com.willbsp.habits.data.repo.*
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -25,5 +22,11 @@ abstract class RepositoryModule {
     abstract fun bindEntryRepository(
         localEntryRepository: LocalEntryRepository
     ): EntryRepository
+
+    @Binds
+    @ViewModelScoped
+    abstract fun bindHabitWithEntriesRepository(
+        localHabitWithEntriesRepository: LocalHabitWithEntriesRepository
+    ): HabitWithEntriesRepository
 
 }
