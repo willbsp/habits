@@ -2,7 +2,7 @@ package com.willbsp.habits.ui.screens.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.willbsp.habits.common.getPreviousDatesList
+import com.willbsp.habits.common.getPreviousDates
 import com.willbsp.habits.data.repo.EntryRepository
 import com.willbsp.habits.data.repo.SettingsRepository
 import com.willbsp.habits.domain.CalculateStreakUseCase
