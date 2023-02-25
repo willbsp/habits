@@ -9,7 +9,7 @@ class LocalHabitRepository @Inject constructor(
     private val habitDao: HabitDao
 ) : HabitRepository {
 
-    override fun getAllHabits(): Flow<List<Habit>> {
+    override fun getHabits(): Flow<List<Habit>> {
         return habitDao.getAllHabits()
     }
 
