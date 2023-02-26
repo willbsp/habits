@@ -28,17 +28,18 @@ class DetailViewModel @Inject constructor(
             .combine(calculateScoreUseCase(habitId)) { streak, score ->
                 if (streak != null && score != null) {
                     DetailUiState(
+                        habitId,
                         habitRepository.getHabitById(habitId).name,
                         streak,
                         (score * 100).toInt()
                     )
                 } else {
-                    DetailUiState(habitRepository.getHabitById(habitId).name)
+                    DetailUiState(habitId, habitRepository.getHabitById(habitId).name)
                 }
             }.stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
-                initialValue = DetailUiState("")
+                initialValue = DetailUiState(habitId, "")
             )
 
     companion object {
