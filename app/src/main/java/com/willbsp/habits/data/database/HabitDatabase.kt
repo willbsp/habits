@@ -6,6 +6,7 @@ import androidx.room.TypeConverters
 import com.willbsp.habits.data.database.dao.EntryDao
 import com.willbsp.habits.data.database.dao.HabitDao
 import com.willbsp.habits.data.database.dao.HabitWithEntriesDao
+import com.willbsp.habits.data.database.util.Converters
 import com.willbsp.habits.data.model.Entry
 import com.willbsp.habits.data.model.Habit
 

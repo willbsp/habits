@@ -1,4 +1,4 @@
-package com.willbsp.habits.data.database
+package com.willbsp.habits.data.database.util
 
 import androidx.room.TypeConverter
 import java.time.LocalDate
