@@ -13,7 +13,7 @@ class CalculateScoreUseCase @Inject constructor(
     val clock: Clock
 ) {
 
-    suspend operator fun invoke(habitId: Int): Flow<Float?> {
+    operator fun invoke(habitId: Int): Flow<Float?> {
 
         return entryRepository.getEntries(habitId).map { list ->
 
