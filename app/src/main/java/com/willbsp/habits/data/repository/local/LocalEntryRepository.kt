@@ -19,7 +19,7 @@ class LocalEntryRepository @Inject constructor(
         return entryDao.getEntriesForHabit(habitId)
     }
 
-    override suspend fun getEntries(date: LocalDate, habitId: Int): Entry? {
+    override suspend fun getEntry(date: LocalDate, habitId: Int): Entry? {
         return entryDao.getEntryForDate(habitId, date)
     }
 
