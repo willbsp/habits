@@ -11,10 +11,7 @@ import com.willbsp.habits.domain.CalculateStreakUseCase
 import com.willbsp.habits.ui.common.PreferencesUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import java.time.Clock
 import java.time.LocalDate
@@ -67,7 +64,7 @@ class HomeViewModel @Inject constructor(
         val completedDates = dates.map { date ->
             HomeCompletedUiState(date, entries.any { entry -> entry.date == date })
         }
-        val streak = calculateStreak(habit.id)
+        val streak = calculateStreak(habit.id).first()
 
         return HomeHabitUiState(
             habit.id,
