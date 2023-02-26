@@ -1,6 +1,8 @@
 package com.willbsp.habits.domain
 
 import com.willbsp.habits.data.repository.EntryRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import java.time.Clock
 import java.time.LocalDate
 import java.time.Period
@@ -11,43 +13,30 @@ class CalculateScoreUseCase @Inject constructor(
     val clock: Clock
 ) {
 
-    suspend operator fun invoke(habitId: Int): Float? {
+    suspend operator fun invoke(habitId: Int): Flow<Float?> {
 
-        val oldestEntry = entryRepository.getOldestEntry(habitId) ?: return null
-        val series = buildSeries(oldestEntry.date, habitId)
-        return calculateScore(series)
+        return entryRepository.getEntries(habitId).map { list ->
 
-    }
+            if (list.isEmpty())
+                return@map null
 
-    private suspend fun buildSeries(
-        startDate: LocalDate,
-        habitId: Int
-    ): List<Int> {
+            val entries = list.sortedByDescending { it.date }
+            val startDate = entries.last().date
+            val period = Period.between(startDate, LocalDate.now(clock).plusDays(1))
 
-        val period = Period.between(startDate, LocalDate.now(clock).plusDays(1))
-
-        return buildList {
-
-            var date: LocalDate = startDate
-            repeat(period.days) {
-                if (entryRepository.getEntries(date, habitId) != null) this.add(1)
-                else this.add(0)
-                date = date.plusDays(1)
+            var date = startDate
+            var previous = 0f
+            repeat(period.days) { i ->
+                previous = if (entryRepository.getEntry(date, habitId) != null) {
+                    singleExponentialSmoothing(1f, previous)
+                } else {
+                    singleExponentialSmoothing(0f, previous)
+                }
+                date = startDate.plusDays(i.toLong())
             }
+            return@map previous
 
         }
-
-    }
-
-    private fun calculateScore(
-        series: List<Int>
-    ): Float {
-
-        var previous = 0f
-        series.forEach { current ->
-            previous = singleExponentialSmoothing(current.toFloat(), previous)
-        }
-        return previous
 
     }
 
