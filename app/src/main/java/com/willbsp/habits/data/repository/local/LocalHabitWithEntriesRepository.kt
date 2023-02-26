@@ -1,7 +1,8 @@
-package com.willbsp.habits.data.repo
+package com.willbsp.habits.data.repository.local
 
 import com.willbsp.habits.data.database.dao.HabitWithEntriesDao
 import com.willbsp.habits.data.model.HabitWithEntries
+import com.willbsp.habits.data.repository.HabitWithEntriesRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 

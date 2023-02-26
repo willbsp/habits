@@ -1,4 +1,4 @@
-package com.willbsp.habits.data.repo
+package com.willbsp.habits.data.repository
 
 import com.willbsp.habits.data.model.Entry
 import kotlinx.coroutines.flow.Flow

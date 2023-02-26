@@ -3,8 +3,8 @@ package com.willbsp.habits.ui.screens.logbook
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.willbsp.habits.data.model.HabitWithEntries
-import com.willbsp.habits.data.repo.EntryRepository
-import com.willbsp.habits.data.repo.HabitWithEntriesRepository
+import com.willbsp.habits.data.repository.EntryRepository
+import com.willbsp.habits.data.repository.HabitWithEntriesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow

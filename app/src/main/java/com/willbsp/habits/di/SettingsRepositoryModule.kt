@@ -1,7 +1,7 @@
 package com.willbsp.habits.di
 
-import com.willbsp.habits.data.repo.LocalSettingsRepository
-import com.willbsp.habits.data.repo.SettingsRepository
+import com.willbsp.habits.data.repository.SettingsRepository
+import com.willbsp.habits.data.repository.local.LocalSettingsRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

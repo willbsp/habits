@@ -3,7 +3,7 @@ package com.willbsp.habits.fake
 import com.willbsp.habits.data.model.Entry
 import com.willbsp.habits.data.model.Habit
 import com.willbsp.habits.data.model.HabitWithEntries
-import com.willbsp.habits.data.repo.HabitRepository
+import com.willbsp.habits.data.repository.HabitRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.time.LocalDate

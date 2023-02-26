@@ -2,7 +2,7 @@ package com.willbsp.habits.ui.screens.settings
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.willbsp.habits.data.repo.SettingsRepository
+import com.willbsp.habits.data.repository.SettingsRepository
 import com.willbsp.habits.ui.common.PreferencesUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted

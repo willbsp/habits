@@ -1,4 +1,4 @@
-package com.willbsp.habits.data.repo
+package com.willbsp.habits.data.repository
 
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey

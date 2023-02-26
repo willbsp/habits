@@ -1,6 +1,6 @@
 package com.willbsp.habits.domain
 
-import com.willbsp.habits.data.repo.EntryRepository
+import com.willbsp.habits.data.repository.EntryRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first

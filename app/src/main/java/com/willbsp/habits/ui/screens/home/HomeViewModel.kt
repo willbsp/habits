@@ -4,9 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.willbsp.habits.common.getPreviousDates
 import com.willbsp.habits.data.model.HabitWithEntries
-import com.willbsp.habits.data.repo.EntryRepository
-import com.willbsp.habits.data.repo.HabitWithEntriesRepository
-import com.willbsp.habits.data.repo.SettingsRepository
+import com.willbsp.habits.data.repository.EntryRepository
+import com.willbsp.habits.data.repository.HabitWithEntriesRepository
+import com.willbsp.habits.data.repository.SettingsRepository
 import com.willbsp.habits.domain.CalculateStreakUseCase
 import com.willbsp.habits.ui.common.PreferencesUiState
 import dagger.hilt.android.lifecycle.HiltViewModel

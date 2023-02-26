@@ -1,6 +1,6 @@
 package com.willbsp.habits.domain
 
-import com.willbsp.habits.data.repo.EntryRepository
+import com.willbsp.habits.data.repository.EntryRepository
 import java.time.Clock
 import java.time.LocalDate
 import java.time.Period
