@@ -14,8 +14,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class EditHabitViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle,
-    private val habitsRepository: HabitRepository
+    private val habitsRepository: HabitRepository,
+    savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
     var habitUiState by mutableStateOf(ModifyHabitUiState())

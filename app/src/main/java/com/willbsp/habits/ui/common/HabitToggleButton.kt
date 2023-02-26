@@ -37,11 +37,11 @@ fun HabitToggleButton(
     AnimatedContent(targetState = checked) {
         FilledIconToggleButton(
             modifier = modifier.size(40.dp),
-            onCheckedChange = {
+            onCheckedChange = { value ->
                 vibrator.vibrate(
                     VibrationEffect.createPredefined(VibrationEffect.EFFECT_HEAVY_CLICK)
                 )
-                onCheckedChange(it)
+                onCheckedChange(value)
             },
             checked = it
         ) {

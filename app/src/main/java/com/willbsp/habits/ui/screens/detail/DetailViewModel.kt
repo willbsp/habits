@@ -15,10 +15,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DetailViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle,
     private val habitRepository: HabitRepository,
-    private val calculateScoreUseCase: CalculateScoreUseCase,
-    private val calculateStreakUseCase: CalculateStreakUseCase
+    savedStateHandle: SavedStateHandle,
+    calculateScoreUseCase: CalculateScoreUseCase,
+    calculateStreakUseCase: CalculateStreakUseCase
 ) : ViewModel() {
 
     private var habitId: Int = checkNotNull(savedStateHandle[HABIT_ID_SAVED_STATE_KEY])

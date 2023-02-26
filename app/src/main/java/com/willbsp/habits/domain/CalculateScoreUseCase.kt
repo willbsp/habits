@@ -9,8 +9,8 @@ import java.time.Period
 import javax.inject.Inject
 
 class CalculateScoreUseCase @Inject constructor(
-    val entryRepository: EntryRepository,
-    val clock: Clock
+    private val entryRepository: EntryRepository,
+    private val clock: Clock
 ) {
 
     operator fun invoke(habitId: Int): Flow<Float?> {

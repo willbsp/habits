@@ -18,7 +18,7 @@ import javax.inject.Inject
 class LogbookViewModel @Inject constructor(
     private val habitRepository: HabitWithEntriesRepository,
     private val entryRepository: EntryRepository,
-    private val clock: Clock
+    clock: Clock
 ) : ViewModel() {
 
 

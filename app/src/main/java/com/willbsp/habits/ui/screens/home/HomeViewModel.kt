@@ -19,11 +19,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val habitRepository: HabitWithEntriesRepository,
     private val entryRepository: EntryRepository,
-    private val settingsRepository: SettingsRepository,
     private val calculateStreak: CalculateStreakUseCase,
-    private val clock: Clock
+    private val clock: Clock,
+    habitRepository: HabitWithEntriesRepository,
+    settingsRepository: SettingsRepository,
 ) : ViewModel() {
 
     val homeUiState: StateFlow<HomeUiState> = habitRepository.getHabitsWithEntries().map { list ->
@@ -85,11 +85,9 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun List<HabitWithEntries>.allCompleted(): Boolean {
-        this.forEach { habitWithEntries ->
-            if (!habitWithEntries.entries.any { it.date == LocalDate.now(clock) })
-                return false
-        }
-        return true
+        return this.map { habit ->
+            return@map habit.entries.any { it.date == LocalDate.now(clock) }
+        }.all { it }
     }
 
     companion object {
