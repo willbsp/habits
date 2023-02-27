@@ -11,6 +11,8 @@ import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.willbsp.habits.ui.screens.add.AddHabitScreen
 import com.willbsp.habits.ui.screens.add.AddHabitViewModel
+import com.willbsp.habits.ui.screens.detail.DetailScreen
+import com.willbsp.habits.ui.screens.detail.DetailViewModel
 import com.willbsp.habits.ui.screens.edit.EditHabitScreen
 import com.willbsp.habits.ui.screens.edit.EditHabitViewModel
 import com.willbsp.habits.ui.screens.home.HomeScreen
@@ -34,12 +36,6 @@ fun HabitsNavigationGraph(
 
         composable(
             route = HabitsNavigationDestination.HOME.route,
-            enterTransition = {
-                slideIntoContainer(AnimatedContentScope.SlideDirection.Right)
-            },
-            exitTransition = {
-                slideOutOfContainer(AnimatedContentScope.SlideDirection.Left)
-            }
         ) {
 
             val viewModel = hiltViewModel<HomeViewModel>()
@@ -52,8 +48,8 @@ fun HabitsNavigationGraph(
                 navigateToAddHabit = {
                     navController.navigate(HabitsNavigationDestination.ADD.route)
                 },
-                navigateToEditHabit = { habitId ->
-                    navController.navigate(HabitsNavigationDestination.EDIT.route + habitId)
+                navigateToDetail = { habitId ->
+                    navController.navigate(HabitsNavigationDestination.DETAIL.route + habitId)
                 },
                 navigateToSettings = {
                     navController.navigate(HabitsNavigationDestination.SETTINGS.route)
@@ -64,8 +60,6 @@ fun HabitsNavigationGraph(
 
         composable(
             route = HabitsNavigationDestination.ADD.route,
-            enterTransition = { slideIntoContainer(AnimatedContentScope.SlideDirection.Left) },
-            exitTransition = { slideOutOfContainer(AnimatedContentScope.SlideDirection.Right) }
         ) {
 
             val viewModel = hiltViewModel<AddHabitViewModel>()
@@ -83,10 +77,25 @@ fun HabitsNavigationGraph(
         }
 
         composable(
+            route = HabitsNavigationDestination.DETAIL.route + "{habitId}",
+            arguments = listOf(navArgument("habitId") { type = NavType.IntType })
+        ) {
+
+            val viewModel = hiltViewModel<DetailViewModel>()
+
+            DetailScreen(
+                viewModel = viewModel,
+                navigateUp = { navController.navigateUp() },
+                navigateToEditHabit = { habitId ->
+                    navController.navigate(HabitsNavigationDestination.EDIT.route + habitId)
+                }
+            )
+
+        }
+
+        composable(
             route = HabitsNavigationDestination.EDIT.route + "{habitId}",
             arguments = listOf(navArgument("habitId") { type = NavType.IntType }),
-            enterTransition = { slideIntoContainer(AnimatedContentScope.SlideDirection.Left) },
-            exitTransition = { slideOutOfContainer(AnimatedContentScope.SlideDirection.Right) }
         ) {
 
             val viewModel = hiltViewModel<EditHabitViewModel>()
@@ -105,8 +114,6 @@ fun HabitsNavigationGraph(
 
         composable(
             route = HabitsNavigationDestination.LOGBOOK.route,
-            enterTransition = { slideIntoContainer(AnimatedContentScope.SlideDirection.Left) },
-            exitTransition = { slideOutOfContainer(AnimatedContentScope.SlideDirection.Right) }
         ) {
 
             val viewModel = hiltViewModel<LogbookViewModel>()
@@ -122,12 +129,6 @@ fun HabitsNavigationGraph(
 
         composable(
             route = HabitsNavigationDestination.SETTINGS.route,
-            enterTransition = {
-                slideIntoContainer(AnimatedContentScope.SlideDirection.Left)
-            },
-            exitTransition = {
-                slideOutOfContainer(AnimatedContentScope.SlideDirection.Right)
-            }
         ) {
 
             val viewModel = hiltViewModel<SettingsViewModel>()
@@ -140,8 +141,6 @@ fun HabitsNavigationGraph(
             )
 
         }
-
-        // TODO when it comes to adding edit screen can use composable(arguments = x) for habit
 
     }
 }
