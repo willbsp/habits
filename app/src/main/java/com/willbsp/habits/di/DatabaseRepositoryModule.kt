@@ -12,7 +12,7 @@ import dagger.hilt.android.scopes.ViewModelScoped
 
 @Module
 @InstallIn(ViewModelComponent::class)
-abstract class RepositoryModule {
+abstract class DatabaseRepositoryModule {
 
     @Binds
     @ViewModelScoped

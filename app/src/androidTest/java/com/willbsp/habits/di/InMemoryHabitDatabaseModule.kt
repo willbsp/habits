@@ -13,7 +13,7 @@ import javax.inject.Singleton
 @Module
 @TestInstallIn(
     components = [SingletonComponent::class],
-    replaces = [HabitDatabaseModule::class]
+    replaces = [DatabaseModule::class]
 )
 class InMemoryHabitDatabaseModule {
 
