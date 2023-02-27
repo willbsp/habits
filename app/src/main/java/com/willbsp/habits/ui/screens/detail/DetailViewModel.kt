@@ -33,6 +33,13 @@ class DetailViewModel @Inject constructor(
                         streak,
                         (score * 100).toInt()
                     )
+                } else if (score != null) {
+                    DetailUiState(
+                        habitId,
+                        habitRepository.getHabitById(habitId).name,
+                        0,
+                        (score * 100).toInt()
+                    )
                 } else {
                     DetailUiState(habitId, habitRepository.getHabitById(habitId).name)
                 }
