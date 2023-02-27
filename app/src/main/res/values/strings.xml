@@ -38,6 +38,8 @@
 
     <!--logbook screen start-->
     <string name="logbook_title">Logbook</string>
+    <string name="detail_streak">Streak</string>
+    <string name="detail_score">Score</string>
     <!--logbook screen end-->
 
 </resources>

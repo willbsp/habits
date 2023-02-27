@@ -8,10 +8,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.willbsp.habits.R
 import com.willbsp.habits.ui.common.DefaultHabitsAppTopBar
 import com.willbsp.habits.ui.theme.HabitsTheme
 import com.willbsp.habits.ui.theme.Typography
@@ -73,7 +75,7 @@ private fun Detail(
         ) {
 
             Text(
-                text = "Streak",
+                text = stringResource(R.string.detail_streak),
                 style = Typography.displaySmall
             )
             Text(
@@ -84,7 +86,7 @@ private fun Detail(
             Spacer(modifier.height(30.dp))
 
             Text(
-                text = "Score",
+                text = stringResource(R.string.detail_score),
                 style = Typography.displaySmall
             )
             Text(
