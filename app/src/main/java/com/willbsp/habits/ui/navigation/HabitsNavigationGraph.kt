@@ -20,14 +20,6 @@ import com.willbsp.habits.ui.screens.logbook.LogbookViewModel
 import com.willbsp.habits.ui.screens.settings.SettingsScreen
 import com.willbsp.habits.ui.screens.settings.SettingsViewModel
 
-enum class HabitsNavigationDestination(val route: String) {
-    HOME(route = "home"),
-    ADD(route = "add"),
-    EDIT(route = "edit/"),
-    LOGBOOK(route = "logbook"),
-    SETTINGS(route = "settings")
-}
-
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun HabitsNavigationGraph(
