@@ -24,7 +24,7 @@ import java.util.*
 fun HomeHabitCard(
     habitUiState: HomeHabitUiState,
     completedOnClick: (Int, LocalDate) -> Unit,
-    navigateToEditHabit: (Int) -> Unit,
+    navigateToDetail: (Int) -> Unit,
     modifier: Modifier = Modifier,
     showStreaks: Boolean,
     expandedInitialValue: Boolean = false
@@ -106,7 +106,7 @@ fun HomeHabitCard(
 
                         IconButton(
                             modifier = Modifier,
-                            onClick = { navigateToEditHabit(habitUiState.id) }
+                            onClick = { navigateToDetail(habitUiState.id) }
                         ) {
                             Icon(
                                 imageVector = Icons.Outlined.MoreHoriz,
@@ -203,7 +203,7 @@ private fun HomeHabitCardPreview() {
             )
         ),
         completedOnClick = { _, _ -> },
-        navigateToEditHabit = {},
+        navigateToDetail = {},
         expandedInitialValue = false,
         showStreaks = true
     )
@@ -227,7 +227,7 @@ private fun HomeHabitCardExpandedPreview() {
             )
         ),
         completedOnClick = { _, _ -> },
-        navigateToEditHabit = {},
+        navigateToDetail = {},
         expandedInitialValue = true,
         showStreaks = true
     )

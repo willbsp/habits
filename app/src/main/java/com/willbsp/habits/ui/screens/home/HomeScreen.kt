@@ -33,7 +33,7 @@ fun HomeScreen(
     viewModel: HomeViewModel,
     navigateToLogbook: () -> Unit,
     navigateToAddHabit: () -> Unit,
-    navigateToEditHabit: (Int) -> Unit,
+    navigateToDetail: (Int) -> Unit,
     navigateToSettings: () -> Unit
 ) {
 
@@ -44,7 +44,7 @@ fun HomeScreen(
         modifier = modifier,
         navigateToLogbook = navigateToLogbook,
         navigateToAddHabit = navigateToAddHabit,
-        navigateToEditHabit = navigateToEditHabit,
+        navigateToDetail = navigateToDetail,
         navigateToSettings = navigateToSettings,
         completedOnClick = { id, date -> viewModel.toggleEntry(id, date) },
         homeUiState = homeUiState,
@@ -60,7 +60,7 @@ private fun Home(
     completedOnClick: (Int, LocalDate) -> Unit,
     navigateToLogbook: () -> Unit,
     navigateToAddHabit: () -> Unit,
-    navigateToEditHabit: (Int) -> Unit,
+    navigateToDetail: (Int) -> Unit,
     navigateToSettings: () -> Unit,
     preferencesUiState: PreferencesUiState,
     homeUiState: HomeUiState
@@ -139,7 +139,7 @@ private fun Home(
                 HabitsList(
                     homeUiState = homeUiState,
                     completedOnClick = completedOnClick,
-                    navigateToEditHabit = navigateToEditHabit,
+                    navigateToDetail = navigateToDetail,
                     showStreaks = preferencesUiState.showStreaks,
                     showSubtitle = preferencesUiState.showCompletedSubtitle,
                     showCompleted = showCompleted
@@ -189,7 +189,7 @@ private fun Home(
 private fun HabitsList(
     homeUiState: HomeUiState,
     completedOnClick: (Int, LocalDate) -> Unit,
-    navigateToEditHabit: (Int) -> Unit,
+    navigateToDetail: (Int) -> Unit,
     showStreaks: Boolean,
     showSubtitle: Boolean,
     showCompleted: Boolean,
@@ -216,7 +216,7 @@ private fun HabitsList(
                         .padding(bottom = 10.dp),
                     habitUiState = homeHabitUiState,
                     completedOnClick = completedOnClick,
-                    navigateToEditHabit = navigateToEditHabit,
+                    navigateToDetail = navigateToDetail,
                     showStreaks = showStreaks
                 )
 
@@ -259,7 +259,7 @@ private fun HomeScreenPreview() {
     HabitsTheme {
         Home(
             navigateToAddHabit = {},
-            navigateToEditHabit = {},
+            navigateToDetail = {},
             navigateToSettings = {},
             navigateToLogbook = {},
             homeUiState = HomeUiState(
