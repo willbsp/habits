@@ -27,7 +27,6 @@ class DetailViewModel @Inject constructor(
         calculateStreakUseCase(habitId)
             .combine(calculateScoreUseCase(habitId)) { streak, score ->
                 val habitName = habitRepository.getHabitById(habitId)?.name ?: ""
-
                 if (streak != null && score != null) {
                     DetailUiState(
                         habitId,
@@ -48,7 +47,7 @@ class DetailViewModel @Inject constructor(
             }.stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
-                initialValue = DetailUiState(habitId, "")
+                initialValue = DetailUiState(habitId)
             )
 
     companion object {
