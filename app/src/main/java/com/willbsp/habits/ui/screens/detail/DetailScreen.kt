@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.willbsp.habits.R
@@ -77,14 +78,18 @@ private fun Detail(
         ) {
 
             DetailScoreCard(
-                modifier = modifier,
+                modifier = modifier
+                    .width(200.dp)
+                    .height(150.dp),
                 title = R.string.detail_streak,
                 value = detailUiState.streak,
                 percentage = false
             )
 
             DetailScoreCard(
-                modifier = modifier,
+                modifier = modifier
+                    .width(200.dp)
+                    .height(150.dp),
                 title = R.string.detail_score,
                 value = detailUiState.score,
                 percentage = true
@@ -108,7 +113,9 @@ fun DetailScoreCard(
         modifier = modifier,
     ) {
         Text(
-            modifier = Modifier,
+            modifier = Modifier
+                .fillMaxSize()
+                .wrapContentHeight(),
             text = "${stringResource(id = title)}\n" +
                     if (percentage) "${value}%" else "$value",
             style = Typography.displayMedium,
