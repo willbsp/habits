@@ -39,7 +39,9 @@ class EditHabitViewModel @Inject constructor(
 
     private suspend fun loadHabit() {
         val habit = habitsRepository.getHabitById(habitId)
-        habitUiState = ModifyHabitUiState(habit.name, habit.frequency)
+        if (habit != null) {
+            habitUiState = ModifyHabitUiState(habit.name, habit.frequency)
+        }
     }
 
     suspend fun updateHabit() { // TODO validation needed

@@ -14,7 +14,7 @@ class LocalHabitRepository @Inject constructor(
         return habitDao.getAllHabits()
     }
 
-    override suspend fun getHabitById(habitId: Int): Habit {
+    override suspend fun getHabitById(habitId: Int): Habit? {
         return habitDao.getHabitById(habitId)
     }
 
@@ -27,7 +27,10 @@ class LocalHabitRepository @Inject constructor(
     }
 
     override suspend fun deleteHabit(habitId: Int) {
-        habitDao.delete(habitDao.getHabitById(habitId))
+        val habit = habitDao.getHabitById(habitId)
+        if (habit != null) {
+            habitDao.delete(habit)
+        }
     }
 
 }

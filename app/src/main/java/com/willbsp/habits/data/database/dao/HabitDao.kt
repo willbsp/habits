@@ -11,7 +11,7 @@ interface HabitDao {
     fun getAllHabits(): Flow<List<Habit>>
 
     @Query("SELECT * FROM habit WHERE id = :id")
-    suspend fun getHabitById(id: Int): Habit // TODO could be null?
+    suspend fun getHabitById(id: Int): Habit?
 
     @Insert(onConflict = OnConflictStrategy.IGNORE) // TODO will need to change this
     suspend fun insert(habit: Habit)

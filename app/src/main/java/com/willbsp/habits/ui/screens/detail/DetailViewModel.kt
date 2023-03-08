@@ -26,22 +26,24 @@ class DetailViewModel @Inject constructor(
     val detailUiState: StateFlow<DetailUiState> =
         calculateStreakUseCase(habitId)
             .combine(calculateScoreUseCase(habitId)) { streak, score ->
+                val habitName = habitRepository.getHabitById(habitId)?.name ?: ""
+
                 if (streak != null && score != null) {
                     DetailUiState(
                         habitId,
-                        habitRepository.getHabitById(habitId).name,
+                        habitName,
                         streak,
                         (score * 100).toInt()
                     )
                 } else if (score != null) {
                     DetailUiState(
                         habitId,
-                        habitRepository.getHabitById(habitId).name,
+                        habitName,
                         0,
                         (score * 100).toInt()
                     )
                 } else {
-                    DetailUiState(habitId, habitRepository.getHabitById(habitId).name)
+                    DetailUiState(habitId, habitName)
                 }
             }.stateIn(
                 scope = viewModelScope,
