@@ -107,6 +107,9 @@ fun HabitsNavigationGraph(
                 },
                 navigateBack = {
                     navController.popBackStack()
+                },
+                navigateToHome = {
+                    navController.popBackStack(HabitsNavigationDestination.HOME.route, false)
                 }
             )
 

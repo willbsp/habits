@@ -26,7 +26,8 @@ fun EditHabitScreen(
     modifier: Modifier = Modifier,
     viewModel: EditHabitViewModel,
     navigateUp: () -> Unit,
-    navigateBack: () -> Unit
+    navigateBack: () -> Unit,
+    navigateToHome: () -> Unit
 ) {
 
     val coroutineScope = rememberCoroutineScope()
@@ -44,7 +45,7 @@ fun EditHabitScreen(
             coroutineScope.launch {
                 viewModel.deleteHabit()
             }
-            navigateBack()
+            navigateToHome()
         },
         onValueChange = {
             viewModel.updateUiState(it)
