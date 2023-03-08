@@ -5,7 +5,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import java.time.Clock
 import java.time.LocalDate
-import java.time.Period
 import javax.inject.Inject
 
 class CalculateScoreUseCase @Inject constructor(
@@ -22,18 +21,18 @@ class CalculateScoreUseCase @Inject constructor(
 
             val entries = list.sortedByDescending { it.date }
             val startDate = entries.last().date
-            val period = Period.between(startDate, LocalDate.now(clock).plusDays(1))
 
             var date = startDate
             var previous = 0f
-            repeat(period.days) { i ->
+            while (date != LocalDate.now(clock)) {
                 previous = if (entryRepository.getEntry(date, habitId) != null) {
                     singleExponentialSmoothing(1f, previous)
                 } else {
                     singleExponentialSmoothing(0f, previous)
                 }
-                date = startDate.plusDays(i.toLong())
+                date = date.plusDays(1f.toLong())
             }
+
             return@map previous
 
         }
@@ -44,7 +43,7 @@ class CalculateScoreUseCase @Inject constructor(
         current: Float,
         previous: Float
     ): Float {
-        return ALPHA * current + (1 - ALPHA) * previous
+        return (ALPHA * current) + ((1 - ALPHA) * previous)
     }
 
     companion object {
