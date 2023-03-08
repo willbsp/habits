@@ -1,6 +1,7 @@
 package com.willbsp.habits.ui.navigation
 
 import androidx.compose.animation.*
+import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -36,6 +37,8 @@ fun HabitsNavigationGraph(
 
         composable(
             route = HabitsNavigationDestination.HOME.route,
+            enterTransition = { fadeIn() },
+            exitTransition = { fadeOut() }
         ) {
 
             val viewModel = hiltViewModel<HomeViewModel>()
@@ -60,6 +63,18 @@ fun HabitsNavigationGraph(
 
         composable(
             route = HabitsNavigationDestination.ADD.route,
+            enterTransition = {
+                slideIntoContainer(
+                    AnimatedContentScope.SlideDirection.Left,
+                    animationSpec = tween(300)
+                )
+            },
+            exitTransition = {
+                slideOutOfContainer(
+                    AnimatedContentScope.SlideDirection.Right,
+                    animationSpec = tween(300)
+                )
+            }
         ) {
 
             val viewModel = hiltViewModel<AddHabitViewModel>()
@@ -78,7 +93,19 @@ fun HabitsNavigationGraph(
 
         composable(
             route = HabitsNavigationDestination.DETAIL.route + "{habitId}",
-            arguments = listOf(navArgument("habitId") { type = NavType.IntType })
+            arguments = listOf(navArgument("habitId") { type = NavType.IntType }),
+            enterTransition = {
+                slideIntoContainer(
+                    AnimatedContentScope.SlideDirection.Left,
+                    animationSpec = tween(300)
+                )
+            },
+            exitTransition = {
+                slideOutOfContainer(
+                    AnimatedContentScope.SlideDirection.Right,
+                    animationSpec = tween(300)
+                )
+            }
         ) {
 
             val viewModel = hiltViewModel<DetailViewModel>()
@@ -96,6 +123,19 @@ fun HabitsNavigationGraph(
         composable(
             route = HabitsNavigationDestination.EDIT.route + "{habitId}",
             arguments = listOf(navArgument("habitId") { type = NavType.IntType }),
+            enterTransition = {
+                slideIntoContainer(
+                    AnimatedContentScope.SlideDirection.Left,
+                    animationSpec = tween(300)
+                )
+            },
+            exitTransition = {
+                slideOutOfContainer(
+                    AnimatedContentScope.SlideDirection.Right,
+                    animationSpec = tween(300)
+                )
+            }
+
         ) {
 
             val viewModel = hiltViewModel<EditHabitViewModel>()
@@ -117,6 +157,18 @@ fun HabitsNavigationGraph(
 
         composable(
             route = HabitsNavigationDestination.LOGBOOK.route,
+            enterTransition = {
+                slideIntoContainer(
+                    AnimatedContentScope.SlideDirection.Left,
+                    animationSpec = tween(300)
+                )
+            },
+            exitTransition = {
+                slideOutOfContainer(
+                    AnimatedContentScope.SlideDirection.Right,
+                    animationSpec = tween(300)
+                )
+            }
         ) {
 
             val viewModel = hiltViewModel<LogbookViewModel>()
@@ -132,6 +184,18 @@ fun HabitsNavigationGraph(
 
         composable(
             route = HabitsNavigationDestination.SETTINGS.route,
+            enterTransition = {
+                slideIntoContainer(
+                    AnimatedContentScope.SlideDirection.Left,
+                    animationSpec = tween(300)
+                )
+            },
+            exitTransition = {
+                slideOutOfContainer(
+                    AnimatedContentScope.SlideDirection.Right,
+                    animationSpec = tween(300)
+                )
+            }
         ) {
 
             val viewModel = hiltViewModel<SettingsViewModel>()
