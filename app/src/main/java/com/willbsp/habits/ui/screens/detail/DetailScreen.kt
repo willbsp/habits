@@ -1,5 +1,6 @@
 package com.willbsp.habits.ui.screens.detail
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
@@ -9,8 +10,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.willbsp.habits.R
@@ -71,31 +72,48 @@ private fun Detail(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(it),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.SpaceEvenly
         ) {
 
-            Text(
-                text = stringResource(R.string.detail_streak),
-                style = Typography.displaySmall
-            )
-            Text(
-                text = detailUiState.streak.toString(),
-                style = Typography.displayLarge
+            DetailScoreCard(
+                modifier = modifier,
+                title = R.string.detail_streak,
+                value = detailUiState.streak,
+                percentage = false
             )
 
-            Spacer(modifier.height(30.dp))
-
-            Text(
-                text = stringResource(R.string.detail_score),
-                style = Typography.displaySmall
-            )
-            Text(
-                text = "${detailUiState.score}%",
-                style = Typography.displayLarge
+            DetailScoreCard(
+                modifier = modifier,
+                title = R.string.detail_score,
+                value = detailUiState.score,
+                percentage = true
             )
 
         }
 
+    }
+
+}
+
+@Composable
+fun DetailScoreCard(
+    modifier: Modifier = Modifier,
+    @StringRes title: Int,
+    value: Int,
+    percentage: Boolean
+) {
+
+    ElevatedCard(
+        modifier = modifier,
+    ) {
+        Text(
+            modifier = Modifier,
+            text = "${stringResource(id = title)}\n" +
+                    if (percentage) "${value}%" else "$value",
+            style = Typography.displayMedium,
+            textAlign = TextAlign.Center
+        )
     }
 
 }
