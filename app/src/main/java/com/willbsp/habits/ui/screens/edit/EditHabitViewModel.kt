@@ -38,7 +38,7 @@ class EditHabitViewModel @Inject constructor(
     }
 
     private suspend fun loadHabit() {
-        val habit = habitsRepository.getHabitById(habitId)
+        val habit = habitsRepository.getHabit(habitId)
         if (habit != null) {
             habitUiState = ModifyHabitUiState(habit.name, habit.frequency)
         }
@@ -55,7 +55,6 @@ class EditHabitViewModel @Inject constructor(
     }
 
     companion object {
-
         private const val HABIT_ID_SAVED_STATE_KEY = "habitId"
     }
 

@@ -49,7 +49,7 @@ class HabitDaoTest {
     @Throws(Exception::class)
     fun daoGetAllHabits_returnsAllHabitsFromDB() = runBlocking {
         addTwoHabitsToDb()
-        val habits = habitDao.getAllHabits().first()
+        val habits = habitDao.getAllHabitsStream().first()
         assertEquals(habits[0], habit1)
         assertEquals(habits[1], habit2)
     }
@@ -70,7 +70,7 @@ class HabitDaoTest {
     @Throws(Exception::class)
     fun daoInsertHabit_insertsHabitIntoDb() = runBlocking {
         addOneHabitToDb()
-        val habits = habitDao.getAllHabits().first()
+        val habits = habitDao.getAllHabitsStream().first()
         assertEquals(habits[0], habit1)
     }
 
@@ -80,7 +80,7 @@ class HabitDaoTest {
         addTwoHabitsToDb()
         habitDao.delete(habit1)
         habitDao.delete(habit2)
-        val habits = habitDao.getAllHabits().first()
+        val habits = habitDao.getAllHabitsStream().first()
         assertTrue(habits.isEmpty())
     }
 
@@ -92,7 +92,7 @@ class HabitDaoTest {
         val updateHabit2 = habit2.copy(name = "Reading books")
         habitDao.update(updateHabit1)
         habitDao.update(updateHabit2)
-        val habits = habitDao.getAllHabits().first()
+        val habits = habitDao.getAllHabitsStream().first()
         assertEquals(habits[0], updateHabit1)
         assertEquals(habits[1], updateHabit2)
     }

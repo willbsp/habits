@@ -8,10 +8,13 @@ import kotlinx.coroutines.flow.Flow
 interface HabitDao {
 
     @Query("SELECT * FROM habit")
-    fun getAllHabits(): Flow<List<Habit>>
+    fun getAllHabitsStream(): Flow<List<Habit>>
 
     @Query("SELECT * FROM habit WHERE id = :id")
-    suspend fun getHabitById(id: Int): Habit?
+    fun getHabitStream(id: Int): Flow<Habit?>
+
+    @Query("SELECT * FROM habit WHERE id = :id")
+    suspend fun getHabit(id: Int): Habit?
 
     @Insert(onConflict = OnConflictStrategy.IGNORE) // TODO will need to change this
     suspend fun insert(habit: Habit)
