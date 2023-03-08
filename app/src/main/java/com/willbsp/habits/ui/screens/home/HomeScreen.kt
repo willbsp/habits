@@ -199,12 +199,13 @@ private fun HabitsList(
     val habitUiStateList = homeUiState.todayState
 
     LazyColumn(modifier = modifier) {
+
         items(items = habitUiStateList, key = { it.id }) { homeHabitUiState ->
             AnimatedVisibility(
                 visible = !homeHabitUiState.completedDates.first().completed || showCompleted,
                 exit = shrinkVertically(
                     animationSpec = TweenSpec(
-                        delay = 500
+                        delay = 200
                     ),
                 ),
                 enter = expandVertically()
