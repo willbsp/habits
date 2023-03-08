@@ -66,7 +66,7 @@ private fun Home(
     homeUiState: HomeUiState
 ) {
 
-    var showCompleted by remember { mutableStateOf(true) }
+    var showCompleted by remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
