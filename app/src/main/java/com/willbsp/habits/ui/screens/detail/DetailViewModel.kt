@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DetailViewModel @Inject constructor(
-    private val habitRepository: HabitRepository,
+    habitRepository: HabitRepository,
     savedStateHandle: SavedStateHandle,
     calculateScoreUseCase: CalculateScoreUseCase,
     calculateStreakUseCase: CalculateStreakUseCase
@@ -24,31 +24,34 @@ class DetailViewModel @Inject constructor(
     private var habitId: Int = checkNotNull(savedStateHandle[HABIT_ID_SAVED_STATE_KEY])
 
     val detailUiState: StateFlow<DetailUiState> =
-        calculateStreakUseCase(habitId)
-            .combine(calculateScoreUseCase(habitId)) { streak, score ->
-                val habitName = habitRepository.getHabitById(habitId)?.name ?: ""
-                if (streak != null && score != null) {
-                    DetailUiState(
-                        habitId,
-                        habitName,
-                        streak,
-                        (score * 100).toInt()
-                    )
-                } else if (score != null) {
-                    DetailUiState(
-                        habitId,
-                        habitName,
-                        0,
-                        (score * 100).toInt()
-                    )
-                } else {
-                    DetailUiState(habitId, habitName)
-                }
-            }.stateIn(
-                scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
-                initialValue = DetailUiState(habitId)
-            )
+        combine(
+            calculateScoreUseCase(habitId),
+            calculateStreakUseCase(habitId),
+            habitRepository.getHabitStream(habitId)
+        ) { score, streak, habit ->
+            val habitName = habit?.name ?: ""
+            if (streak != null && score != null) {
+                DetailUiState(
+                    habitId,
+                    habitName,
+                    streak,
+                    (score * 100).toInt()
+                )
+            } else if (score != null) {
+                DetailUiState(
+                    habitId,
+                    habitName,
+                    0,
+                    (score * 100).toInt()
+                )
+            } else {
+                DetailUiState(habitId, habitName)
+            }
+        }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
+            initialValue = DetailUiState(habitId)
+        )
 
     companion object {
         const val TIMEOUT_MILLIS = 5_000L
