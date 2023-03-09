@@ -95,16 +95,22 @@ fun HabitsNavigationGraph(
             route = HabitsNavigationDestination.DETAIL.route + "{habitId}",
             arguments = listOf(navArgument("habitId") { type = NavType.IntType }),
             enterTransition = {
-                slideIntoContainer(
-                    AnimatedContentScope.SlideDirection.Left,
-                    animationSpec = tween(300)
-                )
+                when (initialState.destination.route) {
+                    HabitsNavigationDestination.EDIT.route + "{habitId}" -> fadeIn()
+                    else -> slideIntoContainer(
+                        AnimatedContentScope.SlideDirection.Left,
+                        animationSpec = tween(300)
+                    )
+                }
             },
             exitTransition = {
-                slideOutOfContainer(
-                    AnimatedContentScope.SlideDirection.Right,
-                    animationSpec = tween(300)
-                )
+                when (targetState.destination.route) {
+                    HabitsNavigationDestination.EDIT.route + "{habitId}" -> fadeOut()
+                    else -> slideOutOfContainer(
+                        AnimatedContentScope.SlideDirection.Right,
+                        animationSpec = tween(300)
+                    )
+                }
             }
         ) {
 
