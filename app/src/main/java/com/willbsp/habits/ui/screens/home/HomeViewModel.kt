@@ -2,7 +2,6 @@ package com.willbsp.habits.ui.screens.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.willbsp.habits.common.getPreviousDates
 import com.willbsp.habits.data.model.HabitWithEntries
 import com.willbsp.habits.data.repository.EntryRepository
 import com.willbsp.habits.data.repository.HabitWithEntriesRepository
@@ -61,16 +60,17 @@ class HomeViewModel @Inject constructor(
 
     private suspend fun HabitWithEntries.toHomeHabitUiState(): HomeHabitUiState {
 
-        val dates = clock.getPreviousDates(HABIT_CARD_NUMBER_OF_DAYS)
-        val completedDates = dates.map { date ->
+        val completedDates = (0..HABIT_CARD_PREVIOUS_DAYS).map {
+            val date = LocalDate.now(clock).minusDays(it.toLong())
             HomeCompletedUiState(date, entries.any { entry -> entry.date == date })
         }
+
         val streak = calculateStreak(habit.id).first()
 
         return HomeHabitUiState(
             habit.id,
             habit.name,
-            streak, // habit.calculate streak could fetch entries?
+            streak,
             completedDates
         )
 
@@ -100,7 +100,7 @@ class HomeViewModel @Inject constructor(
 
     companion object {
         const val TIMEOUT_MILLIS = 5_000L
-        const val HABIT_CARD_NUMBER_OF_DAYS = 6
+        const val HABIT_CARD_PREVIOUS_DAYS: Int = 5
     }
 
 }
