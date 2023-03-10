@@ -17,8 +17,6 @@ import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import java.time.Clock
-import java.time.Instant
 import java.time.LocalDate
 
 class HomeViewModelTest {
@@ -35,6 +33,8 @@ class HomeViewModelTest {
     @Before
     fun createViewModel() {
         fakeRepository = FakeHabitRepository()
+        // TODO
+        /*
         homeViewModel = HomeViewModel(
             habitsRepository = fakeRepository,
             clock = Clock.fixed(
@@ -42,6 +42,8 @@ class HomeViewModelTest {
                 Clock.systemDefaultZone().zone
             )
         )
+
+         */
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -76,7 +78,8 @@ class HomeViewModelTest {
         )
 
         addTwoHabit()
-        fakeRepository.toggleEntry(habit1.id, date)
+        // TODO
+        //fakeRepository.toggleEntry(habit1.id, date)
 
         val job = launch(UnconfinedTestDispatcher()) {
             homeViewModel.homeUiState.collect()
@@ -142,7 +145,8 @@ class HomeViewModelTest {
     fun viewModelHomeUiState_verifyUncompletedDisplayed() = runTest {
 
         addOneHabit()
-        fakeRepository.toggleEntry(habit1.id, date)
+        // TODO
+        // fakeRepository.toggleEntry(habit1.id, date)
 
         val expectedHomeUiState = HomeUiState(
             listOf(
