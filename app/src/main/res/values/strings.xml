@@ -40,6 +40,7 @@
     <string name="logbook_title">Logbook</string>
     <string name="detail_streak">Streak</string>
     <string name="detail_score">Score</string>
+    <string name="home_no_habits">You have not created any habits!</string>
     <!--logbook screen end-->
 
 </resources>

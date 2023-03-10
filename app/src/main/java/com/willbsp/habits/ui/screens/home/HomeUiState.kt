@@ -2,10 +2,16 @@ package com.willbsp.habits.ui.screens.home
 
 import java.time.LocalDate
 
+enum class HabitState {
+    SHOW_HABITS,
+    ALL_COMPLETED,
+    NO_HABITS
+}
+
 data class HomeUiState(
     val todayState: List<HomeHabitUiState> = listOf(),
     val completedCount: Int = 0,
-    val allCompleted: Boolean = false
+    val habitState: HabitState = HabitState.NO_HABITS
 )
 
 data class HomeHabitUiState(

@@ -27,10 +27,11 @@ class HomeViewModel @Inject constructor(
 ) : ViewModel() {
 
     val homeUiState: StateFlow<HomeUiState> = habitRepository.getHabitsWithEntries().map { list ->
+        val habitState = list.getHabitState()
         HomeUiState(
             list.map { it.toHomeHabitUiState() },
             list.completedCount(),
-            list.allCompleted()
+            habitState
         )
     }.stateIn(
         scope = viewModelScope,
@@ -84,10 +85,17 @@ class HomeViewModel @Inject constructor(
         return count
     }
 
-    private fun List<HabitWithEntries>.allCompleted(): Boolean {
-        return this.map { habit ->
+    private fun List<HabitWithEntries>.getHabitState(): HabitState {
+
+        if (!this.any()) return HabitState.NO_HABITS
+
+        val allCompleted = this.map { habit ->
             return@map habit.entries.any { it.date == LocalDate.now(clock) }
         }.all { it }
+
+        return if (allCompleted) HabitState.ALL_COMPLETED
+        else HabitState.SHOW_HABITS
+
     }
 
     companion object {

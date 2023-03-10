@@ -1,5 +1,6 @@
 package com.willbsp.habits.ui.screens.home
 
+import androidx.annotation.StringRes
 import androidx.compose.animation.*
 import androidx.compose.animation.core.TweenSpec
 import androidx.compose.animation.core.tween
@@ -14,6 +15,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -54,7 +56,7 @@ fun HomeScreen(
 
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
 @Composable
 private fun Home(
     modifier: Modifier = Modifier,
@@ -113,12 +115,33 @@ private fun Home(
         }
     ) { innerPadding -> // TODO
 
+        // for tooltip
         AnimatedVisibility(
-            visible = !homeUiState.allCompleted || showCompleted,
+            visible = homeUiState.habitState == HabitState.NO_HABITS || homeUiState.habitState == HabitState.ALL_COMPLETED && !showCompleted,
+            enter = scaleIn(),
+            exit = scaleOut()
+        ) {
+            if (homeUiState.habitState == HabitState.NO_HABITS) {
+                HabitsTooltip(
+                    modifier = Modifier.fillMaxSize(),
+                    icon = Icons.Default.AddCircle,
+                    iconContentDescription = R.string.home_screen_all_completed_tick, // TODO
+                    text = R.string.home_no_habits
+                )
+            } else if (homeUiState.habitState == HabitState.ALL_COMPLETED && !showCompleted) { // TODO create composable for this and no habits below
+                HabitsTooltip(
+                    modifier = Modifier.fillMaxSize(),
+                    icon = Icons.Default.Done,
+                    iconContentDescription = R.string.home_screen_all_completed_tick,
+                    text = R.string.home_screen_all_completed
+                )
+            }
+        }
+
+        AnimatedVisibility(
+            visible = homeUiState.habitState == HabitState.SHOW_HABITS || homeUiState.habitState == HabitState.ALL_COMPLETED && showCompleted,
             enter = fadeIn(),
-            exit = fadeOut(
-                tween(durationMillis = 500)
-            )
+            exit = fadeOut()
         ) {
 
             Column(
@@ -127,16 +150,12 @@ private fun Home(
                     .padding(horizontal = 20.dp)
                     .fillMaxSize()
             ) {
-
-
                 Text( // TODO could have title area change colour when list is scrolled, e.g timers in google clock
                     text = stringResource(R.string.home_screen_today),
                     style = Typography.titleLarge,
                     modifier = Modifier.padding(horizontal = 10.dp) // keep inline with habit titles
                 )
-
                 Spacer(modifier = Modifier.height(10.dp))
-
                 HabitsList(
                     homeUiState = homeUiState,
                     completedOnClick = completedOnClick,
@@ -145,45 +164,38 @@ private fun Home(
                     showSubtitle = preferencesUiState.showCompletedSubtitle,
                     showCompleted = showCompleted
                 )
-
             }
 
         }
-
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
-            AnimatedVisibility(
-                visible = homeUiState.allCompleted && !showCompleted,
-                enter = expandVertically(
-                    tween(delayMillis = 1000)
-                ),
-                exit = fadeOut()
-            ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-
-                    Icon(
-                        modifier = Modifier.size(100.dp),
-                        imageVector = Icons.Default.Done,
-                        contentDescription = stringResource(R.string.home_screen_all_completed_tick)
-                    )
-
-                    Spacer(Modifier.height(10.dp))
-
-                    Text(
-                        text = stringResource(R.string.home_screen_all_completed),
-                        style = Typography.titleLarge
-                    )
-
-                }
-
-            }
-        }
-
 
     }
+
+
 }
+
+@Composable
+private fun HabitsTooltip(
+    modifier: Modifier = Modifier,
+    icon: ImageVector,
+    @StringRes iconContentDescription: Int,
+    @StringRes text: Int
+) {
+    Box(modifier = modifier, contentAlignment = Alignment.Center) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Icon(
+                modifier = Modifier.size(100.dp),
+                imageVector = icon,
+                contentDescription = stringResource(iconContentDescription)
+            )
+            Spacer(Modifier.height(10.dp))
+            Text(
+                text = stringResource(text),
+                style = Typography.titleLarge
+            )
+        }
+    }
+}
+
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -230,7 +242,7 @@ private fun HabitsList(
                     visible = homeUiState.completedCount > 0 && !showCompleted,
                     enter = fadeIn(
                         animationSpec = TweenSpec(
-                            delay = 1000
+                            delay = 500
                         )
                     ),
                     exit = fadeOut()
