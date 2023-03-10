@@ -1,5 +1,6 @@
 package com.willbsp.habits.fake
 
+import com.willbsp.habits.TestData
 import com.willbsp.habits.data.model.Entry
 import com.willbsp.habits.data.repository.EntryRepository
 import kotlinx.coroutines.flow.Flow
@@ -12,6 +13,9 @@ class FakeEntryRepository : EntryRepository {
     private val entries = mutableListOf<Entry>()
     private var observableEntries = MutableStateFlow<List<Entry>>(listOf())
     private suspend fun emit() = observableEntries.emit(entries)
+    suspend fun populate() {
+        entries.addAll(TestData.entryList); emit()
+    }
 
     override fun getEntries(): Flow<List<Entry>> {
         return observableEntries
