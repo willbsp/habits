@@ -165,13 +165,13 @@ fun HabitsNavigationGraph(
             route = HabitsNavigationDestination.LOGBOOK.route,
             enterTransition = {
                 slideIntoContainer(
-                    AnimatedContentScope.SlideDirection.Left,
+                    AnimatedContentScope.SlideDirection.Right,
                     animationSpec = tween(300)
                 )
             },
             exitTransition = {
                 slideOutOfContainer(
-                    AnimatedContentScope.SlideDirection.Right,
+                    AnimatedContentScope.SlideDirection.Left,
                     animationSpec = tween(300)
                 )
             }
