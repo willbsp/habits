@@ -6,8 +6,8 @@ import java.time.LocalDate
 
 interface EntryRepository {
 
-    fun getEntries(): Flow<List<Entry>>
-    fun getEntries(habitId: Int): Flow<List<Entry>>
+    fun getAllEntriesStream(): Flow<List<Entry>>
+    fun getAllEntriesStream(habitId: Int): Flow<List<Entry>>
     suspend fun getEntry(date: LocalDate, habitId: Int): Entry?
     suspend fun getOldestEntry(habitId: Int): Entry?
     suspend fun toggleEntry(habitId: Int, date: LocalDate)

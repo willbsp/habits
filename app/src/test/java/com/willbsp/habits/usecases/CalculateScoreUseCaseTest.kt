@@ -36,7 +36,7 @@ class CalculateScoreUseCaseTest {
         fakeEntryRepository.populate()
         val score = calculateScoreUseCase(habitId).first()?.times(100)?.toInt()
 
-        println(fakeEntryRepository.getEntries(3).first().toString())
+        println(fakeEntryRepository.getAllEntriesStream(3).first().toString())
         println(fakeEntryRepository.getEntry(LocalDate.parse("2023-02-13"), 3))
 
         assertEquals(correctScore, score)

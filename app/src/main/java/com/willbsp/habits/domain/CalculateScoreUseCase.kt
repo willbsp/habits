@@ -14,7 +14,7 @@ class CalculateScoreUseCase @Inject constructor(
 
     operator fun invoke(habitId: Int): Flow<Float?> {
 
-        return entryRepository.getEntries(habitId).map { list ->
+        return entryRepository.getAllEntriesStream(habitId).map { list ->
 
             if (list.isEmpty())
                 return@map null

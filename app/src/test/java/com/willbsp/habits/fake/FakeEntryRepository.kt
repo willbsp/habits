@@ -17,11 +17,11 @@ class FakeEntryRepository : EntryRepository {
         entries.addAll(TestData.entryList); emit()
     }
 
-    override fun getEntries(): Flow<List<Entry>> {
+    override fun getAllEntriesStream(): Flow<List<Entry>> {
         return observableEntries
     }
 
-    override fun getEntries(habitId: Int): Flow<List<Entry>> {
+    override fun getAllEntriesStream(habitId: Int): Flow<List<Entry>> {
         return observableEntries.map { entry -> entry.filter { it.habitId == habitId } }
     }
 
