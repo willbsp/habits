@@ -25,18 +25,13 @@ class HomeViewModel @Inject constructor(
     settingsRepository: SettingsRepository,
 ) : ViewModel() {
 
-    val homeUiState: StateFlow<HomeUiState> = habitRepository.getHabitsWithEntries().map { list ->
-        val habitState = list.getHabitState()
-        HomeUiState(
-            list.map { it.toHomeHabitUiState() },
-            list.completedCount(),
-            habitState
+    val homeUiState: StateFlow<HomeUiState> = habitRepository.getHabitsWithEntries()
+        .map { it.toHomeUiState() }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
+            initialValue = HomeUiState()
         )
-    }.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
-        initialValue = HomeUiState()
-    )
 
     val preferencesUiState: StateFlow<PreferencesUiState> =
         settingsRepository.preferences.map { // TODO make available in domain layer?
@@ -58,21 +53,22 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    private suspend fun List<HabitWithEntries>.toHomeUiState(): HomeUiState =
+        HomeUiState(
+            this.map { it.toHomeHabitUiState() },
+            this.completedCount(),
+            this.getHabitState()
+        )
+
     private suspend fun HabitWithEntries.toHomeHabitUiState(): HomeHabitUiState {
 
+        val streak = calculateStreak(habit.id).first()
         val completedDates = (0..HABIT_CARD_PREVIOUS_DAYS).map {
             val date = LocalDate.now(clock).minusDays(it.toLong())
             HomeCompletedUiState(date, entries.any { entry -> entry.date == date })
         }
 
-        val streak = calculateStreak(habit.id).first()
-
-        return HomeHabitUiState(
-            habit.id,
-            habit.name,
-            streak,
-            completedDates
-        )
+        return HomeHabitUiState(habit.id, habit.name, streak, completedDates)
 
     }
 
