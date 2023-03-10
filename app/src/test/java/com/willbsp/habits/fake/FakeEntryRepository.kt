@@ -10,11 +10,8 @@ import java.time.LocalDate
 class FakeEntryRepository : EntryRepository {
 
     private val entries = mutableListOf<Entry>()
-
     private var observableEntries = MutableStateFlow<List<Entry>>(listOf())
-    private suspend fun emit() {
-        observableEntries.emit(entries)
-    }
+    private suspend fun emit() = observableEntries.emit(entries)
 
     override fun getEntries(): Flow<List<Entry>> {
         return observableEntries
