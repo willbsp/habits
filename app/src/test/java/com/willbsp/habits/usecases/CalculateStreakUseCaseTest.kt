@@ -14,7 +14,7 @@ import java.time.ZoneOffset
 
 class CalculateStreakUseCaseTest {
 
-    private val date = "2023-07-20T12:00:00Z"
+    private val date = "2023-03-10T12:00:00Z"
     private lateinit var fakeEntryRepository: FakeEntryRepository
     private lateinit var calculateStreakUseCase: CalculateStreakUseCase
 
@@ -30,7 +30,7 @@ class CalculateStreakUseCaseTest {
     fun calculateStreak_verifyCalculation() = runTest {
 
         val correctStreak = 5
-        val habitId = 2
+        val habitId = 3
 
         fakeEntryRepository.populate()
         val streak = calculateStreakUseCase(habitId).first()
