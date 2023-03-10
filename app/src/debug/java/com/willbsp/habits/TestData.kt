@@ -17,11 +17,11 @@ object TestData {
     // streak (from 07-20): 5
     // score: ~37%
     val entryList: List<Entry> = listOf(
-        Entry(8, 3, LocalDate.parse("2023-02-11")),
-        Entry(9, 3, LocalDate.parse("2023-02-13")),
-        Entry(10, 3, LocalDate.parse("2023-02-23")),
-        Entry(11, 3, LocalDate.parse("2023-02-27")),
-        Entry(12, 3, LocalDate.parse("2023-03-01")),
+        Entry(7, 3, LocalDate.parse("2023-02-11")),
+        Entry(8, 3, LocalDate.parse("2023-02-13")),
+        Entry(9, 3, LocalDate.parse("2023-02-23")),
+        Entry(10, 3, LocalDate.parse("2023-02-27")),
+        Entry(11, 3, LocalDate.parse("2023-03-01")),
         Entry(12, 3, LocalDate.parse("2023-03-03")),
         Entry(13, 3, LocalDate.parse("2023-03-05")),
         Entry(14, 3, LocalDate.parse("2023-03-06")),
