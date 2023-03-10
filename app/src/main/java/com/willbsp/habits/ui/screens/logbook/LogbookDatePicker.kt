@@ -50,7 +50,7 @@ fun LogbookDatePicker(
             count = Integer.MAX_VALUE
         ) {
 
-            val date = startDate.plusDays(it.toLong() * 7)
+            val weekStart = startDate.plusDays(it.toLong() * 7)
 
             Row(
                 horizontalArrangement = Arrangement.spacedBy(5.dp)
@@ -58,11 +58,14 @@ fun LogbookDatePicker(
 
                 repeat(7) { day ->
 
+                    val date = weekStart.plusDays(day.toLong())
+
                     DateIconButton(
                         modifier = Modifier
                             .size(50.dp),
-                        date = date.plusDays(day.toLong()),
-                        checked = date.plusDays(day.toLong()) == selectedDate,
+                        date = date,
+                        checked = date == selectedDate,
+                        enabled = !date.isAfter(LocalDate.now()), // TODO
                         onCheckedChange = { date ->
                             onSelectedDateChange(date)
                         }
@@ -82,6 +85,7 @@ private fun DateIconButton(
     modifier: Modifier = Modifier,
     date: LocalDate,
     checked: Boolean,
+    enabled: Boolean,
     onCheckedChange: (LocalDate) -> (Unit)
 ) {
 
@@ -94,6 +98,7 @@ private fun DateIconButton(
     FilledIconToggleButton(
         modifier = modifier,
         checked = checked,
+        enabled = enabled,
         onCheckedChange = {
             onCheckedChange(date)
         }
