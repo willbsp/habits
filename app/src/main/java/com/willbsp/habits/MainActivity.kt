@@ -3,6 +3,8 @@ package com.willbsp.habits
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import com.willbsp.habits.ui.HabitsApp
 import com.willbsp.habits.ui.theme.HabitsTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -13,7 +15,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             HabitsTheme {
-                HabitsApp()
+                Surface(color = MaterialTheme.colorScheme.background) {
+                    HabitsApp()
+                }
             }
         }
 
