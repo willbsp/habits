@@ -32,7 +32,7 @@ class HomeViewModelTest {
     @get:Rule
     val testDispatcher = TestDispatcherRule()
 
-    private val date = "2023-03-10"
+    private val date = LocalDate.parse("2023-03-10")
     private val time = "T12:00:00Z"
     private val entryRepository = FakeEntryRepository()
     private val habitRepository = FakeHabitRepository()
@@ -41,7 +41,7 @@ class HomeViewModelTest {
     @Before
     fun setup() {
 
-        val clock = Clock.fixed(Instant.parse(date + time), ZoneOffset.UTC)
+        val clock = Clock.fixed(Instant.parse(date.toString() + time), ZoneOffset.UTC)
         val calculateStreakUseCase = CalculateStreakUseCase(entryRepository, clock)
         val fakeHabitWithEntriesRepository =
             FakeHabitWithEntriesRepository(habitRepository, entryRepository)
@@ -59,7 +59,9 @@ class HomeViewModelTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun uiState_whenInitialised_thenEmpty() = runTest {
+        val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
         assertEquals(HomeUiState(), viewModel.uiState.value)
+        collectJob.cancel()
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -75,18 +77,19 @@ class HomeViewModelTest {
     @Test
     fun uiState_whenDateToggled_thenShowCompleted() = runTest {
         val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
-        val expectedCompleted = HomeCompletedUiState(LocalDate.parse(date), true)
-        val expectedUncompleted = HomeCompletedUiState(LocalDate.parse(date), false)
+        val expectedCompleted = HomeCompletedUiState(date, true)
+        val expectedUncompleted = HomeCompletedUiState(date, false)
         habitRepository.addHabit(habit1)
-        entryRepository.toggleEntry(habit1.id, LocalDate.parse(date))
+        entryRepository.toggleEntry(habit1.id, date)
         assertEquals(expectedCompleted,
             viewModel.uiState.value.habits
                 .find { it.name == habit1.name }
                 ?.completedDates
                 ?.find { it.date == expectedCompleted.date }
         )
-        entryRepository.toggleEntry(habit1.id, LocalDate.parse(date))
-        assertEquals(expectedUncompleted,
+        entryRepository.toggleEntry(habit1.id, date)
+        assertEquals(
+            expectedUncompleted,
             viewModel.uiState.value.habits
                 .find { it.name == habit1.name }
                 ?.completedDates
@@ -102,8 +105,8 @@ class HomeViewModelTest {
         val expected = 2
         habitRepository.addHabit(habit1)
         habitRepository.addHabit(habit2)
-        viewModel.toggleEntry(habit1.id, LocalDate.parse(date))
-        viewModel.toggleEntry(habit2.id, LocalDate.parse(date))
+        viewModel.toggleEntry(habit1.id, date)
+        viewModel.toggleEntry(habit2.id, date)
         assertEquals(expected, viewModel.uiState.value.completedCount)
         collectJob.cancel()
     }
@@ -140,20 +143,29 @@ class HomeViewModelTest {
         habitRepository.addHabit(habit1)
         habitRepository.addHabit(habit2)
         assertEquals(HabitState.SHOW_HABITS, viewModel.uiState.value.habitState)
-        entryRepository.toggleEntry(habit1.id, LocalDate.parse(date))
-        entryRepository.toggleEntry(habit2.id, LocalDate.parse(date))
+        entryRepository.toggleEntry(habit1.id, date)
+        entryRepository.toggleEntry(habit2.id, date)
         assertEquals(HabitState.ALL_COMPLETED, viewModel.uiState.value.habitState)
         collectJob.cancel()
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun toggleEntry_whenDateToggled_thenModifyEntry() = runTest {
+    fun toggleEntry_whenDateToggled_thenModifyState() = runTest {
         val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
-        viewModel.toggleEntry(habit1.id, LocalDate.parse(date))
-        assertNotNull(entryRepository.getEntry(LocalDate.parse(date), habit1.id))
-        viewModel.toggleEntry(habit1.id, LocalDate.parse(date))
-        assertNull(entryRepository.getEntry(LocalDate.parse(date), habit1.id))
+        habitRepository.addHabit(habit1)
+        viewModel.toggleEntry(habit1.id, date)
+        assertTrue(
+            viewModel.uiState.value.habits
+                .find { it.name == habit1.name }?.completedDates
+                ?.find { it.date == date }?.completed ?: false
+        )
+        viewModel.toggleEntry(habit1.id, date)
+        assertFalse(
+            viewModel.uiState.value.habits
+                .find { it.name == habit1.name }?.completedDates
+                ?.find { it.date == date }?.completed ?: true
+        )
         collectJob.cancel()
     }
 
