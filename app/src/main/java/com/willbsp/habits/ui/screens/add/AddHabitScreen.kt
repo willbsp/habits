@@ -39,7 +39,7 @@ fun AddHabitScreen(
         onValueChange = {
             viewModel.updateUiState(it)
         },
-        habitUiState = viewModel.habitUiState
+        habitUiState = viewModel.uiState
     )
 
 }

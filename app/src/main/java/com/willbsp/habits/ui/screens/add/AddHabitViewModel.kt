@@ -15,19 +15,19 @@ class AddHabitViewModel @Inject constructor(
     private val habitsRepository: HabitRepository
 ) : ViewModel() {
 
-    var habitUiState by mutableStateOf(ModifyHabitUiState())
+    var uiState by mutableStateOf(ModifyHabitUiState())
         private set
 
     fun updateUiState(newHabitsUiState: ModifyHabitUiState) {
         // TODO check for valid here
-        habitUiState = newHabitsUiState.copy()
+        uiState = newHabitsUiState.copy()
     }
 
     suspend fun saveHabit() { // TODO validation needed
         habitsRepository.addHabit(
             Habit(
-                name = habitUiState.name,
-                frequency = habitUiState.frequency
+                name = uiState.name,
+                frequency = uiState.frequency
             )
         )
     }
