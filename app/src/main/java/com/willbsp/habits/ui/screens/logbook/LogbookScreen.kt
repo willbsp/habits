@@ -25,7 +25,7 @@ fun LogbookScreen(
     navigateUp: () -> Unit,
 ) {
 
-    val logbookUiState by viewModel.logbookUiState.collectAsState(LogbookUiState())
+    val logbookUiState by viewModel.uiState.collectAsState(LogbookUiState())
 
     Logbook(
         modifier = modifier,

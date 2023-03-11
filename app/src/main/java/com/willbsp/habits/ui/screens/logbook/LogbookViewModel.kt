@@ -21,8 +21,8 @@ class LogbookViewModel @Inject constructor(
 ) : ViewModel() {
 
 
-    private val _logbookUiState = MutableStateFlow(LogbookUiState())
-    val logbookUiState: StateFlow<LogbookUiState> = _logbookUiState
+    private val _uiState = MutableStateFlow(LogbookUiState())
+    val uiState: StateFlow<LogbookUiState> = _uiState
 
     init {
         setSelectedDate(LocalDate.now(clock))
@@ -31,7 +31,7 @@ class LogbookViewModel @Inject constructor(
     fun setSelectedDate(date: LocalDate) {
         viewModelScope.launch {
             habitRepository.getHabitsWithEntries().collect { list ->
-                _logbookUiState.value = LogbookUiState(
+                _uiState.value = LogbookUiState(
                     list.map { habitWithEntries -> habitWithEntries.toLogbookHabitUiState(date) }
                 )
             }
