@@ -29,24 +29,17 @@ class DetailViewModel @Inject constructor(
             calculateStreakUseCase(habitId),
             habitRepository.getHabitStream(habitId)
         ) { score, streak, habit ->
+
             val habitName = habit?.name ?: ""
+
             if (streak != null && score != null) {
-                DetailUiState(
-                    habitId,
-                    habitName,
-                    streak,
-                    (score * 100).toInt()
-                )
+                DetailUiState(habitId, habitName, streak, (score * 100).toInt())
             } else if (score != null) {
-                DetailUiState(
-                    habitId,
-                    habitName,
-                    0,
-                    (score * 100).toInt()
-                )
+                DetailUiState(habitId, habitName, 0, (score * 100).toInt())
             } else {
                 DetailUiState(habitId, habitName)
             }
+
         }.stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
