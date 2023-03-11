@@ -150,7 +150,6 @@ class HomeViewModelTest {
     @Test
     fun toggleEntry_whenDateToggled_thenModifyEntry() = runTest {
         val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
-        habitRepository.addHabit(habit1)
         viewModel.toggleEntry(habit1.id, LocalDate.parse(date))
         assertNotNull(entryRepository.getEntry(LocalDate.parse(date), habit1.id))
         viewModel.toggleEntry(habit1.id, LocalDate.parse(date))

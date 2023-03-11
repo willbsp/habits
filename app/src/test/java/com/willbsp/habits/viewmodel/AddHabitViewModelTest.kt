@@ -2,6 +2,7 @@ package com.willbsp.habits.viewmodel
 
 import com.willbsp.habits.data.model.HabitFrequency
 import com.willbsp.habits.fake.FakeHabitRepository
+import com.willbsp.habits.ui.common.ModifyHabitUiState
 import com.willbsp.habits.ui.screens.add.AddHabitViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -12,49 +13,43 @@ import org.junit.Test
 
 class AddHabitViewModelTest {
 
-    private lateinit var fakeRepository: FakeHabitRepository
-    private lateinit var addHabitViewModel: AddHabitViewModel
+    private val habitRepository = FakeHabitRepository()
+    private lateinit var viewModel: AddHabitViewModel
 
     @Before
-    fun createViewModel() {
-        fakeRepository = FakeHabitRepository()
-        addHabitViewModel = AddHabitViewModel(
-            habitsRepository = fakeRepository
-        )
+    fun setup() {
+        viewModel = AddHabitViewModel(habitRepository)
     }
 
     @Test
-    fun viewModelInitialValue_defaultsSet() {
-        assertEquals("", addHabitViewModel.habitUiState.name)
-        assertEquals(HabitFrequency.DAILY, addHabitViewModel.habitUiState.frequency)
+    fun uiState_whenInitialised_defaultsSet() {
+        assertEquals("", viewModel.uiState.name)
+        assertEquals(HabitFrequency.DAILY, viewModel.uiState.frequency)
     }
 
     @Test
-    fun viewModelUpdateUiState_updatedName() {
-        val updatedUiState = addHabitViewModel.habitUiState.copy(name = "Reading")
-        addHabitViewModel.updateUiState(updatedUiState)
-        assertEquals("Reading", addHabitViewModel.habitUiState.name)
+    fun uiState_whenUpdated_newStateSet() {
+        val expected = ModifyHabitUiState("Reading", HabitFrequency.WEEKLY)
+        val updatedUiState =
+            viewModel.uiState.copy(name = "Reading", frequency = HabitFrequency.WEEKLY)
+        viewModel.updateUiState(updatedUiState)
+        assertEquals(expected, viewModel.uiState)
     }
 
     @Test
-    fun viewModelUpdateUiState_updatedFrequency() {
-        val updatedUiState = addHabitViewModel.habitUiState.copy(frequency = HabitFrequency.WEEKLY)
-        addHabitViewModel.updateUiState(updatedUiState)
-        assertEquals(HabitFrequency.WEEKLY, addHabitViewModel.habitUiState.frequency)
+    fun uiState_whenFrequencyUpdated_frequencySet() {
+        val updatedUiState = viewModel.uiState.copy(frequency = HabitFrequency.WEEKLY)
+        viewModel.updateUiState(updatedUiState)
+        assertEquals(HabitFrequency.WEEKLY, viewModel.uiState.frequency)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun viewModelSaveHabit_savedHabit() = runTest {
-        val updatedUiState = addHabitViewModel.habitUiState.copy(name = "Reading")
-        addHabitViewModel.updateUiState(updatedUiState)
-        addHabitViewModel.saveHabit()
-        var found = false
-        fakeRepository.habits.forEach {
-            if (it.name == "Reading")
-                found = true
-        }
-        assertTrue(found)
+    fun saveHabit_whenStateSaved_saved() = runTest {
+        val updatedUiState = viewModel.uiState.copy(name = "Reading")
+        viewModel.updateUiState(updatedUiState)
+        viewModel.saveHabit()
+        assertTrue(habitRepository.habits.any { it.name == "Reading" })
     }
 
 }
