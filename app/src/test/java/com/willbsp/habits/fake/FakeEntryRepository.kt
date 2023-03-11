@@ -18,21 +18,16 @@ class FakeEntryRepository : EntryRepository {
         emit()
     }
 
-    override fun getAllEntriesStream(): Flow<List<Entry>> {
-        return observableEntries
-    }
+    override fun getAllEntriesStream(): Flow<List<Entry>> = observableEntries
 
-    override fun getAllEntriesStream(habitId: Int): Flow<List<Entry>> {
-        return observableEntries.map { entry -> entry.filter { it.habitId == habitId } }
-    }
+    override fun getAllEntriesStream(habitId: Int): Flow<List<Entry>> =
+        observableEntries.map { entry -> entry.filter { it.habitId == habitId } }
 
-    override suspend fun getEntry(date: LocalDate, habitId: Int): Entry? {
-        return entries.find { it.date == date && it.habitId == habitId }
-    }
+    override suspend fun getEntry(date: LocalDate, habitId: Int): Entry? =
+        entries.find { it.date == date && it.habitId == habitId }
 
-    override suspend fun getOldestEntry(habitId: Int): Entry? {
-        return entries.filter { it.habitId == habitId }.sortedBy { it.date }.findLast { true }
-    }
+    override suspend fun getOldestEntry(habitId: Int): Entry? =
+        entries.filter { it.habitId == habitId }.minByOrNull { it.date }
 
     override suspend fun toggleEntry(habitId: Int, date: LocalDate) {
         val entry = entries.find { it.habitId == habitId && it.date == date }

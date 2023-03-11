@@ -14,16 +14,13 @@ class FakeHabitRepository : HabitRepository {
 
     override fun getAllHabitsStream(): Flow<List<Habit>> = observableHabits
 
-    override fun getHabitStream(habitId: Int): Flow<Habit?> {
-        return observableHabits.map { it.find { habit -> habit.id == habitId } }
-    }
+    override fun getHabitStream(habitId: Int): Flow<Habit?> =
+        observableHabits.map { it.find { habit -> habit.id == habitId } }
 
-    override suspend fun getHabit(habitId: Int): Habit? {
-        return habits.find { it.id == habitId }
-    }
+    override suspend fun getHabit(habitId: Int): Habit? = habits.find { it.id == habitId }
 
     override suspend fun addHabit(habit: Habit) {
-        habits.add(Habit(id = habit.id, name = habit.name, frequency = habit.frequency))
+        habits.add(habit)
         emit()
     }
 
