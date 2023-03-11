@@ -19,8 +19,7 @@ class CalculateScoreUseCase @Inject constructor(
             if (list.isEmpty())
                 return@map null
 
-            val entries = list.sortedByDescending { it.date }
-            val startDate = entries.last().date
+            val startDate: LocalDate = entryRepository.getOldestEntry(habitId)?.date!!
 
             var date = startDate
             var previous = 0f

@@ -18,17 +18,20 @@ class CalculateStreakUseCase @Inject constructor(
         val yesterday = date.minusDays(1)
 
         return entryRepository.getAllEntriesStream(habitId).map { list ->
+
             val entries = list.sortedByDescending { it.date }
             var streak = 0
+
             if (entries.isNotEmpty()) entries.forEach { entry ->
                 if (entry.date == yesterday.minusDays(streak.toLong())) streak++
                 else return@forEach
-            } else {
-                return@map null
-            }
+            } else return@map null
+
             if (entries.first().date == date) streak++
+
             return@map if (streak > 1) streak
             else null
+
         }
 
 
