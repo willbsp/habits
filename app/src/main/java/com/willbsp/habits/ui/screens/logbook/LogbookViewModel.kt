@@ -6,7 +6,6 @@ import com.willbsp.habits.data.model.HabitWithEntries
 import com.willbsp.habits.data.repository.EntryRepository
 import com.willbsp.habits.data.repository.HabitWithEntriesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -39,16 +38,13 @@ class LogbookViewModel @Inject constructor(
         }
     }
 
-    private fun HabitWithEntries.toLogbookHabitUiState(date: LocalDate): LogbookHabitUiState {
-        val habit = this.habit
-        val completed = this.entries.any { it.date == date }
-        return LogbookHabitUiState(habit.id, habit.name, completed)
-    }
-
     fun toggleEntry(habitId: Int, date: LocalDate) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             entryRepository.toggleEntry(habitId, date)
         }
     }
+
+    private fun HabitWithEntries.toLogbookHabitUiState(date: LocalDate): LogbookHabitUiState =
+        LogbookHabitUiState(habit.id, habit.name, entries.any { it.date == date })
 
 }
