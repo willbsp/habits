@@ -18,7 +18,6 @@ import com.willbsp.habits.ui.common.HabitToggleButton
 import com.willbsp.habits.ui.theme.Typography
 import java.time.LocalDate
 
-@RequiresApi(Build.VERSION_CODES.S)
 @Composable
 fun LogbookScreen(
     modifier: Modifier = Modifier,
@@ -38,7 +37,6 @@ fun LogbookScreen(
 
 }
 
-@RequiresApi(Build.VERSION_CODES.S)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun Logbook(
@@ -108,7 +106,6 @@ private fun Logbook(
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.S)
 @Composable
 fun LogbookHabitCard(
     modifier: Modifier,

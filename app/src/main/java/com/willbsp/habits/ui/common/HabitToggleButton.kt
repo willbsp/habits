@@ -21,7 +21,6 @@ import androidx.compose.ui.unit.dp
 import com.willbsp.habits.R
 
 // TODO fix requiresapi for lower apis, different way of getting vibrator?
-@RequiresApi(Build.VERSION_CODES.S)
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun HabitToggleButton(
@@ -30,17 +29,17 @@ fun HabitToggleButton(
     checked: Boolean
 ) {
 
-    val v: VibratorManager =
+    /*val v: VibratorManager =
         LocalContext.current.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
-    val vibrator: Vibrator = v.defaultVibrator
+    val vibrator: Vibrator = v.defaultVibrator*/
 
     AnimatedContent(targetState = checked) {
         FilledIconToggleButton(
             modifier = modifier.size(40.dp),
             onCheckedChange = { value ->
-                vibrator.vibrate(
+                /*vibrator.vibrate(
                     VibrationEffect.createPredefined(VibrationEffect.EFFECT_HEAVY_CLICK)
-                )
+                )*/
                 onCheckedChange(value)
             },
             checked = it
