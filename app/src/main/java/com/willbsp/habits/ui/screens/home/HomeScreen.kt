@@ -40,7 +40,7 @@ fun HomeScreen(
     navigateToSettings: () -> Unit
 ) {
 
-    val homeUiState by viewModel.homeUiState.collectAsStateWithLifecycle(HomeUiState())
+    val homeUiState by viewModel.uiState.collectAsStateWithLifecycle(HomeUiState())
     val preferencesState by viewModel.preferencesUiState.collectAsStateWithLifecycle()
 
     Home(
@@ -209,7 +209,7 @@ private fun HabitsList(
     modifier: Modifier = Modifier
 ) {
 
-    val habitUiStateList = homeUiState.todayState
+    val habitUiStateList = homeUiState.habits
 
     LazyColumn(modifier = modifier) {
 

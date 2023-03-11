@@ -9,9 +9,9 @@ enum class HabitState {
 }
 
 data class HomeUiState(
-    val todayState: List<HomeHabitUiState> = listOf(),
+    val habits: List<HomeHabitUiState> = listOf(),
+    val habitState: HabitState = HabitState.NO_HABITS,
     val completedCount: Int = 0,
-    val habitState: HabitState = HabitState.NO_HABITS
 )
 
 data class HomeHabitUiState(

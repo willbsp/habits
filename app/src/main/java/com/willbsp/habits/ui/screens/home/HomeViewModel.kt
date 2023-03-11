@@ -25,7 +25,7 @@ class HomeViewModel @Inject constructor(
     settingsRepository: SettingsRepository,
 ) : ViewModel() {
 
-    val homeUiState: StateFlow<HomeUiState> = habitRepository.getHabitsWithEntries()
+    val uiState: StateFlow<HomeUiState> = habitRepository.getHabitsWithEntries()
         .map { it.toHomeUiState() }
         .stateIn(
             scope = viewModelScope,
