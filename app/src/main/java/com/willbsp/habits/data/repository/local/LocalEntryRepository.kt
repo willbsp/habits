@@ -22,7 +22,7 @@ class LocalEntryRepository @Inject constructor(
     }
 
     override suspend fun getEntry(date: LocalDate, habitId: Int): Entry? =
-        withContext(Dispatchers.IO) {
+        withContext(Dispatchers.IO) { // TODO inject dispatcher for testing
             return@withContext entryDao.getEntryForDate(habitId, date)
         }
 
@@ -33,7 +33,7 @@ class LocalEntryRepository @Inject constructor(
     override suspend fun toggleEntry(
         habitId: Int,
         date: LocalDate
-    ) { // TODO check if habit exists first!
+    ) = withContext(Dispatchers.IO) { // TODO check if habit exists first!
         val entry: Entry? = entryDao.getEntryForDate(habitId, date)
         if (entry == null) entryDao.insert(Entry(habitId = habitId, date = date))
         else entryDao.delete(entry)

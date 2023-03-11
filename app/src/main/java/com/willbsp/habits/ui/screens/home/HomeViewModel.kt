@@ -9,7 +9,6 @@ import com.willbsp.habits.data.repository.SettingsRepository
 import com.willbsp.habits.domain.CalculateStreakUseCase
 import com.willbsp.habits.ui.common.PreferencesUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import java.time.Clock
@@ -48,7 +47,7 @@ class HomeViewModel @Inject constructor(
         )
 
     fun toggleEntry(habitId: Int, date: LocalDate) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             entryRepository.toggleEntry(habitId, date)
         }
     }
