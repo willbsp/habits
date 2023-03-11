@@ -56,8 +56,8 @@ class HomeViewModel @Inject constructor(
     private suspend fun List<HabitWithEntries>.toHomeUiState(): HomeUiState =
         HomeUiState(
             this.map { it.toHomeHabitUiState() },
+            this.getHabitState(),
             this.completedCount(),
-            this.getHabitState()
         )
 
     private suspend fun HabitWithEntries.toHomeHabitUiState(): HomeHabitUiState {
