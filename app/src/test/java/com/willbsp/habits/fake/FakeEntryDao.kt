@@ -23,10 +23,10 @@ class FakeEntryDao : EntryDao {
     override fun getEntriesForHabit(habitId: Int): Flow<List<Entry>> =
         observableEntries.map { entry -> entry.filter { it.habitId == habitId } }
 
-    override fun getEntryForDate(habitId: Int, date: LocalDate): Entry? =
+    override suspend fun getEntryForDate(habitId: Int, date: LocalDate): Entry? =
         entries.find { it.date == date && it.habitId == habitId }
 
-    override fun getOldestEntry(habitId: Int): Entry? =
+    override suspend fun getOldestEntry(habitId: Int): Entry? =
         entries.filter { it.habitId == habitId }.minByOrNull { it.date }
 
     override suspend fun insert(entry: Entry) {
