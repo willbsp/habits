@@ -30,7 +30,7 @@ class CalculateStreakUseCaseTest {
     fun calculateStreak_verifyCalculation() = runTest {
 
         val correctStreak = 5
-        val habitId = 3
+        val habitId = 2
 
         fakeEntryRepository.populate()
         val streak = calculateStreakUseCase(habitId).first()

@@ -31,7 +31,7 @@ class CalculateScoreUseCaseTest {
     fun calculateScore_verifyCalculation() = runTest {
 
         val correctScore = 37
-        val habitId = 3
+        val habitId = 2
 
         fakeEntryRepository.populate()
         val score = calculateScoreUseCase(habitId).first()?.times(100)?.toInt()

@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.map
 
 class FakeHabitRepository : HabitRepository {
 
-    private val habits = mutableListOf<Habit>()
+    val habits = mutableListOf<Habit>()
     private val observableHabits = MutableStateFlow<List<Habit>>(listOf())
     private suspend fun emit() = observableHabits.emit(habits.toList())
 
