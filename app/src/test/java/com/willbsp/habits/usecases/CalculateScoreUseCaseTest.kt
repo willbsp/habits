@@ -28,7 +28,7 @@ class CalculateScoreUseCaseTest {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun calculateScore_verifyCalculation() = runTest {
+    fun calculateScore_onCalculate_calculationCorrect() = runTest {
 
         val correctScore = 37
         val habitId = 2

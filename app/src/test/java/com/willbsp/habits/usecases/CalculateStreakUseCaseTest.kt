@@ -27,7 +27,7 @@ class CalculateStreakUseCaseTest {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun calculateStreak_verifyCalculation() = runTest {
+    fun calculateStreak_onCalculation_calculationCorrect() = runTest {
 
         val correctStreak = 5
         val habitId = 2
