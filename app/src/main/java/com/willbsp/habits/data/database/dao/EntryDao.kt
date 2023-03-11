@@ -15,10 +15,10 @@ interface EntryDao {
     fun getEntriesForHabit(habitId: Int): Flow<List<Entry>>
 
     @Query("SELECT * FROM entries WHERE date = :date AND habit_id = :habitId")
-    fun getEntryForDate(habitId: Int, date: LocalDate): Entry?
+    suspend fun getEntryForDate(habitId: Int, date: LocalDate): Entry?
 
     @Query("SELECT * FROM entries WHERE habit_id = :habitId ORDER BY date ASC LIMIT 1")
-    fun getOldestEntry(habitId: Int): Entry?
+    suspend fun getOldestEntry(habitId: Int): Entry?
 
     @Insert(onConflict = OnConflictStrategy.IGNORE) // TODO will need to change this
     suspend fun insert(entry: Entry)
