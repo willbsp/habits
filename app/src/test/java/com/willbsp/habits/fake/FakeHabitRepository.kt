@@ -9,12 +9,10 @@ import kotlinx.coroutines.flow.map
 class FakeHabitRepository : HabitRepository {
 
     private val habits = mutableListOf<Habit>()
-    private var observableHabits = MutableStateFlow<List<Habit>>(listOf())
-    private suspend fun emit() = observableHabits.emit(habits)
+    private val observableHabits = MutableStateFlow<List<Habit>>(listOf())
+    private suspend fun emit() = observableHabits.emit(habits.toList())
 
-    override fun getAllHabitsStream(): Flow<List<Habit>> {
-        return observableHabits
-    }
+    override fun getAllHabitsStream(): Flow<List<Habit>> = observableHabits
 
     override fun getHabitStream(habitId: Int): Flow<Habit?> {
         return observableHabits.map { it.find { habit -> habit.id == habitId } }
@@ -25,7 +23,7 @@ class FakeHabitRepository : HabitRepository {
     }
 
     override suspend fun addHabit(habit: Habit) {
-        habits.add(Habit(id = habits.lastIndex + 1, name = habit.name, frequency = habit.frequency))
+        habits.add(Habit(id = habit.id, name = habit.name, frequency = habit.frequency))
         emit()
     }
 

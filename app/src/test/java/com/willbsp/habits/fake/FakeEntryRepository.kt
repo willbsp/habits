@@ -12,9 +12,10 @@ class FakeEntryRepository : EntryRepository {
 
     private val entries = mutableListOf<Entry>()
     private var observableEntries = MutableStateFlow<List<Entry>>(listOf())
-    private suspend fun emit() = observableEntries.emit(entries)
+    private suspend fun emit() = observableEntries.emit(entries.toList())
     suspend fun populate() {
-        entries.addAll(TestData.entryList); emit()
+        entries.addAll(TestData.entryList)
+        emit()
     }
 
     override fun getAllEntriesStream(): Flow<List<Entry>> {
