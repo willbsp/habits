@@ -10,25 +10,17 @@ class LocalHabitRepository @Inject constructor(
     private val habitDao: HabitDao
 ) : HabitRepository {
 
-    override fun getAllHabitsStream(): Flow<List<Habit>> {
-        return habitDao.getAllHabitsStream()
-    }
+    override fun getAllHabitsStream(): Flow<List<Habit>> = habitDao.getAllHabitsStream()
 
-    override fun getHabitStream(habitId: Int): Flow<Habit?> {
-        return habitDao.getHabitStream(habitId)
-    }
+    override fun getHabitStream(habitId: Int): Flow<Habit?> = habitDao.getHabitStream(habitId)
 
-    override suspend fun getHabit(habitId: Int): Habit? {
-        return habitDao.getHabit(habitId)
-    }
+    override suspend fun getHabit(habitId: Int): Habit? = habitDao.getHabit(habitId)
 
-    override suspend fun addHabit(habit: Habit) {
-        habitDao.insert(Habit(habit.id, habit.name, habit.frequency))
-    }
+    override suspend fun addHabit(habit: Habit) =
+        habitDao.insert(habit)
 
-    override suspend fun updateHabit(habit: Habit) {
-        habitDao.update(Habit(habit.id, habit.name, habit.frequency))
-    }
+    override suspend fun updateHabit(habit: Habit) =
+        habitDao.update(habit)
 
     override suspend fun deleteHabit(habitId: Int) {
         val habit = habitDao.getHabit(habitId)
