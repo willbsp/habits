@@ -1,4 +1,4 @@
-package com.willbsp.habits.fake
+package com.willbsp.habits.fake.repository
 
 import androidx.datastore.preferences.core.Preferences
 import com.willbsp.habits.data.repository.SettingsRepository

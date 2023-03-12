@@ -1,7 +1,7 @@
 package com.willbsp.habits.viewmodel
 
 import com.willbsp.habits.data.model.HabitFrequency
-import com.willbsp.habits.fake.FakeHabitRepository
+import com.willbsp.habits.fake.repository.FakeHabitRepository
 import com.willbsp.habits.ui.common.ModifyHabitUiState
 import com.willbsp.habits.ui.screens.add.AddHabitViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi

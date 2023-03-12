@@ -1,6 +1,5 @@
-package com.willbsp.habits.fake
+package com.willbsp.habits.fake.dao
 
-import com.willbsp.habits.TestData
 import com.willbsp.habits.data.database.dao.EntryDao
 import com.willbsp.habits.data.model.Entry
 import kotlinx.coroutines.flow.Flow
@@ -13,10 +12,6 @@ class FakeEntryDao : EntryDao {
     val entries = mutableListOf<Entry>()
     private var observableEntries = MutableStateFlow<List<Entry>>(listOf())
     private suspend fun emit() = observableEntries.emit(entries.toList())
-    suspend fun populate() {
-        entries.addAll(TestData.entryList)
-        emit()
-    }
 
     override fun getAllEntries(): Flow<List<Entry>> = observableEntries
 

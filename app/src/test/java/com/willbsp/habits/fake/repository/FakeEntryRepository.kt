@@ -1,4 +1,4 @@
-package com.willbsp.habits.fake
+package com.willbsp.habits.fake.repository
 
 import com.willbsp.habits.TestData
 import com.willbsp.habits.data.model.Entry

@@ -3,9 +3,9 @@ package com.willbsp.habits.viewmodel
 import com.willbsp.habits.TestData.habit1
 import com.willbsp.habits.TestData.habit2
 import com.willbsp.habits.TestData.habit3
-import com.willbsp.habits.fake.FakeEntryRepository
-import com.willbsp.habits.fake.FakeHabitRepository
-import com.willbsp.habits.fake.FakeHabitWithEntriesRepository
+import com.willbsp.habits.fake.repository.FakeEntryRepository
+import com.willbsp.habits.fake.repository.FakeHabitRepository
+import com.willbsp.habits.fake.repository.FakeHabitWithEntriesRepository
 import com.willbsp.habits.rules.TestDispatcherRule
 import com.willbsp.habits.ui.screens.logbook.LogbookViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi

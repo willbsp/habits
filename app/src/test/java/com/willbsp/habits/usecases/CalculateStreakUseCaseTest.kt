@@ -1,7 +1,7 @@
 package com.willbsp.habits.usecases
 
 import com.willbsp.habits.domain.CalculateStreakUseCase
-import com.willbsp.habits.fake.FakeEntryRepository
+import com.willbsp.habits.fake.repository.FakeEntryRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest

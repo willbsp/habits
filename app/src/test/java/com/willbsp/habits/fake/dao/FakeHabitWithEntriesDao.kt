@@ -1,4 +1,4 @@
-package com.willbsp.habits.fake
+package com.willbsp.habits.fake.dao
 
 import com.willbsp.habits.data.database.dao.EntryDao
 import com.willbsp.habits.data.database.dao.HabitDao

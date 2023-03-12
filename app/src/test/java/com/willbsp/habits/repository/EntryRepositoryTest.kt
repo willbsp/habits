@@ -5,8 +5,8 @@ import com.willbsp.habits.TestData.habit2
 import com.willbsp.habits.data.model.Entry
 import com.willbsp.habits.data.repository.EntryRepository
 import com.willbsp.habits.data.repository.local.LocalEntryRepository
-import com.willbsp.habits.fake.FakeEntryDao
-import com.willbsp.habits.fake.FakeEntryRepository
+import com.willbsp.habits.fake.dao.FakeEntryDao
+import com.willbsp.habits.fake.repository.FakeEntryRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest

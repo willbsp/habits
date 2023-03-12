@@ -6,8 +6,8 @@ import com.willbsp.habits.data.model.Habit
 import com.willbsp.habits.data.model.HabitFrequency
 import com.willbsp.habits.data.repository.HabitRepository
 import com.willbsp.habits.data.repository.local.LocalHabitRepository
-import com.willbsp.habits.fake.FakeHabitDao
-import com.willbsp.habits.fake.FakeHabitRepository
+import com.willbsp.habits.fake.dao.FakeHabitDao
+import com.willbsp.habits.fake.repository.FakeHabitRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
