@@ -5,7 +5,7 @@ import com.willbsp.habits.fake.FakeEntryRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.assertEquals
+import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import java.time.Clock
@@ -15,13 +15,14 @@ import java.time.ZoneOffset
 
 class CalculateScoreUseCaseTest {
 
-    private val date = "2023-03-10T12:00:00Z"
+    private val date = LocalDate.parse("2023-03-10")
+    private val time = "T12:00:00Z"
     private lateinit var fakeEntryRepository: FakeEntryRepository
     private lateinit var calculateScoreUseCase: CalculateScoreUseCase
 
     @Before
     fun setup() {
-        val clock = Clock.fixed(Instant.parse(date), ZoneOffset.UTC)
+        val clock = Clock.fixed(Instant.parse(date.toString() + time), ZoneOffset.UTC)
         fakeEntryRepository = FakeEntryRepository()
         calculateScoreUseCase = CalculateScoreUseCase(fakeEntryRepository, clock)
     }
@@ -41,6 +42,12 @@ class CalculateScoreUseCaseTest {
 
         assertEquals(correctScore, score)
 
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun calculateScore_whenNoEntries_returnNull() = runTest {
+        assertNull(calculateScoreUseCase(2).first())
     }
 
 }
