@@ -8,13 +8,11 @@ import com.willbsp.habits.data.repository.HabitRepository
 import com.willbsp.habits.data.repository.local.LocalHabitRepository
 import com.willbsp.habits.fake.FakeHabitDao
 import com.willbsp.habits.fake.FakeHabitRepository
-import com.willbsp.habits.rules.TestDispatcherRule
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.*
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
@@ -28,7 +26,7 @@ class HabitRepositoryTest(
     companion object {
         @JvmStatic
         @Parameterized.Parameters
-        fun data(): List<KClass<out HabitRepository>> {
+        fun classes(): List<KClass<out HabitRepository>> {
             return listOf(
                 LocalHabitRepository::class,
                 FakeHabitRepository::class
@@ -36,8 +34,6 @@ class HabitRepositoryTest(
         }
     }
 
-    @get:Rule
-    val testDispatcher = TestDispatcherRule()
     private lateinit var repository: HabitRepository
 
     @Before
