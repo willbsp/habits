@@ -40,7 +40,7 @@ fun HomeScreen(
     navigateToSettings: () -> Unit
 ) {
 
-    val homeUiState by viewModel.uiState.collectAsStateWithLifecycle(HomeUiState())
+    val homeUiState by viewModel.uiState.collectAsStateWithLifecycle()
     val preferencesState by viewModel.preferencesUiState.collectAsStateWithLifecycle()
 
     Home(
@@ -91,7 +91,7 @@ private fun Home(
                 actions = {
                     IconButton(onClick = {
                         showCompleted = !showCompleted
-                    }) { // TODO tooltip for show completed
+                    }) {
                         Icon(
                             imageVector = if (showCompleted) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
                             contentDescription = null // TODO
@@ -115,62 +115,66 @@ private fun Home(
         }
     ) { innerPadding -> // TODO
 
-        // for tooltip
-        AnimatedVisibility(
-            visible = homeUiState.habitState == HabitState.NO_HABITS || homeUiState.habitState == HabitState.ALL_COMPLETED && !showCompleted,
-            enter = scaleIn(),
-            exit = scaleOut()
-        ) {
-            if (homeUiState.habitState == HabitState.NO_HABITS) {
+        when (homeUiState) {
+            is HomeUiState.Empty -> {
                 HabitsTooltip(
                     modifier = Modifier.fillMaxSize(),
                     icon = Icons.Default.AddCircle,
                     iconContentDescription = R.string.home_screen_all_completed_tick, // TODO
                     text = R.string.home_no_habits
                 )
-            } else if (homeUiState.habitState == HabitState.ALL_COMPLETED && !showCompleted) { // TODO create composable for this and no habits below
-                HabitsTooltip(
-                    modifier = Modifier.fillMaxSize(),
-                    icon = Icons.Default.Done,
-                    iconContentDescription = R.string.home_screen_all_completed_tick,
-                    text = R.string.home_screen_all_completed
-                )
+            }
+            is HomeUiState.Habits -> {
+
+                val allCompleted = remember(homeUiState) {
+                    homeUiState.habits.all { it.dates.firstOrNull() == LocalDate.now() }
+                }
+                val showHabits = !showCompleted && allCompleted
+
+                AnimatedVisibility(
+                    visible = showHabits,
+                    enter = scaleIn(TweenSpec(delay = 400)), // TODO make all delays and animation times constants
+                    exit = scaleOut()
+                ) {
+                    HabitsTooltip(
+                        modifier = Modifier.fillMaxSize(),
+                        icon = Icons.Default.Done,
+                        iconContentDescription = R.string.home_screen_all_completed_tick,
+                        text = R.string.home_screen_all_completed
+                    )
+                }
+
+                AnimatedVisibility(
+                    visible = !showHabits,
+                    enter = fadeIn(),
+                    exit = fadeOut(TweenSpec(delay = 200))
+                ) {
+                    Column(
+                        modifier = modifier
+                            .padding(innerPadding)
+                            .padding(horizontal = 20.dp)
+                            .fillMaxSize()
+                    ) {
+                        Text( // TODO could have title area change colour when list is scrolled, e.g timers in google clock
+                            text = stringResource(R.string.home_screen_today),
+                            style = Typography.titleLarge,
+                            modifier = Modifier.padding(horizontal = 10.dp) // keep inline with habit titles
+                        )
+                        Spacer(modifier = Modifier.height(10.dp))
+                        HabitsList(
+                            homeUiState = homeUiState,
+                            completedOnClick = completedOnClick,
+                            navigateToDetail = navigateToDetail,
+                            showStreaks = preferencesUiState.showStreaks,
+                            showSubtitle = preferencesUiState.showCompletedSubtitle,
+                            showCompleted = showCompleted
+                        )
+                    }
+                }
+
             }
         }
-
-        AnimatedVisibility(
-            visible = homeUiState.habitState == HabitState.SHOW_HABITS || homeUiState.habitState == HabitState.ALL_COMPLETED && showCompleted,
-            enter = fadeIn(),
-            exit = fadeOut()
-        ) {
-
-            Column(
-                modifier = modifier
-                    .padding(innerPadding)
-                    .padding(horizontal = 20.dp)
-                    .fillMaxSize()
-            ) {
-                Text( // TODO could have title area change colour when list is scrolled, e.g timers in google clock
-                    text = stringResource(R.string.home_screen_today),
-                    style = Typography.titleLarge,
-                    modifier = Modifier.padding(horizontal = 10.dp) // keep inline with habit titles
-                )
-                Spacer(modifier = Modifier.height(10.dp))
-                HabitsList(
-                    homeUiState = homeUiState,
-                    completedOnClick = completedOnClick,
-                    navigateToDetail = navigateToDetail,
-                    showStreaks = preferencesUiState.showStreaks,
-                    showSubtitle = preferencesUiState.showCompletedSubtitle,
-                    showCompleted = showCompleted
-                )
-            }
-
-        }
-
     }
-
-
 }
 
 @Composable
@@ -200,7 +204,7 @@ private fun HabitsTooltip(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun HabitsList(
-    homeUiState: HomeUiState,
+    homeUiState: HomeUiState.Habits,
     completedOnClick: (Int, LocalDate) -> Unit,
     navigateToDetail: (Int) -> Unit,
     showStreaks: Boolean,
@@ -209,18 +213,14 @@ private fun HabitsList(
     modifier: Modifier = Modifier
 ) {
 
-    val habitUiStateList = homeUiState.habits
+    val habitsList = homeUiState.habits
 
     LazyColumn(modifier = modifier) {
 
-        items(items = habitUiStateList, key = { it.id }) { homeHabitUiState ->
+        items(items = habitsList, key = { it.id }) { habit ->
             AnimatedVisibility(
-                visible = !homeHabitUiState.completedDates.first().completed || showCompleted,
-                exit = shrinkVertically(
-                    animationSpec = TweenSpec(
-                        delay = 200
-                    ),
-                ),
+                visible = !habit.dates.any { it == LocalDate.now() } || showCompleted,
+                exit = shrinkVertically(animationSpec = TweenSpec(delay = 200)),
                 enter = expandVertically()
             ) {
 
@@ -228,7 +228,7 @@ private fun HabitsList(
                     modifier = Modifier
                         .animateItemPlacement(tween())
                         .padding(bottom = 10.dp),
-                    habitUiState = homeHabitUiState,
+                    habitUiState = habit,
                     completedOnClick = completedOnClick,
                     navigateToDetail = navigateToDetail,
                     showStreaks = showStreaks
@@ -237,9 +237,11 @@ private fun HabitsList(
             }
         }
         this.stickyHeader {
+            val completedCount =
+                habitsList.count { habit -> habit.dates.any { it == LocalDate.now() } }
             if (showSubtitle) {
                 AnimatedVisibility(
-                    visible = homeUiState.completedCount > 0 && !showCompleted,
+                    visible = completedCount > 0 && !showCompleted,
                     enter = fadeIn(
                         animationSpec = TweenSpec(
                             delay = 500
@@ -251,7 +253,7 @@ private fun HabitsList(
                         Text(
                             text = stringResource(
                                 R.string.home_screen_habit_list_subtitle,
-                                homeUiState.completedCount
+                                completedCount
                             ),
                             style = Typography.labelLarge
                         )
@@ -276,66 +278,8 @@ private fun HomeScreenPreview() {
             navigateToDetail = {},
             navigateToSettings = {},
             navigateToLogbook = {},
-            homeUiState = HomeUiState(
-                listOf(
-                    HomeHabitUiState(
-                        id = 0,
-                        name = "Running",
-                        streak = 2,
-                        completedDates = listOf(
-                            HomeCompletedUiState(LocalDate.parse("2023-04-12"), false),
-                            HomeCompletedUiState(LocalDate.parse("2023-04-11"), true),
-                            HomeCompletedUiState(LocalDate.parse("2023-04-10"), false),
-                            HomeCompletedUiState(LocalDate.parse("2023-04-09"), true),
-                            HomeCompletedUiState(LocalDate.parse("2023-04-08"), false),
-                            HomeCompletedUiState(LocalDate.parse("2023-04-07"), true),
-                        )
-                    ),
-                    HomeHabitUiState(
-                        id = 1,
-                        name = "Swimming",
-                        streak = 4,
-                        completedDates = listOf(
-                            HomeCompletedUiState(LocalDate.parse("2023-04-12"), true),
-                            HomeCompletedUiState(LocalDate.parse("2023-04-11"), true),
-                            HomeCompletedUiState(LocalDate.parse("2023-04-10"), false),
-                            HomeCompletedUiState(LocalDate.parse("2023-04-09"), true),
-                            HomeCompletedUiState(LocalDate.parse("2023-04-08"), false),
-                            HomeCompletedUiState(LocalDate.parse("2023-04-07"), true),
-                        )
-                    ),
-                    HomeHabitUiState(
-                        id = 2,
-                        name = "Reading",
-                        streak = 5,
-                        completedDates = listOf(
-                            HomeCompletedUiState(LocalDate.parse("2023-04-12"), false),
-                            HomeCompletedUiState(LocalDate.parse("2023-04-11"), true),
-                            HomeCompletedUiState(LocalDate.parse("2023-04-10"), false),
-                            HomeCompletedUiState(LocalDate.parse("2023-04-09"), true),
-                            HomeCompletedUiState(LocalDate.parse("2023-04-08"), false),
-                            HomeCompletedUiState(LocalDate.parse("2023-04-07"), true),
-                        )
-                    ),
-                    HomeHabitUiState(
-                        id = 3,
-                        name = "Piano Practice",
-                        streak = 0,
-                        completedDates = listOf(
-                            HomeCompletedUiState(LocalDate.parse("2023-04-12"), false),
-                            HomeCompletedUiState(LocalDate.parse("2023-04-11"), true),
-                            HomeCompletedUiState(LocalDate.parse("2023-04-10"), false),
-                            HomeCompletedUiState(LocalDate.parse("2023-04-09"), true),
-                            HomeCompletedUiState(LocalDate.parse("2023-04-08"), false),
-                            HomeCompletedUiState(LocalDate.parse("2023-04-07"), true),
-                        )
-                    ),
-                ),
-                //allCompleted = true
-            ),
-            completedOnClick = { _, _ ->
-
-            },
+            homeUiState = HomeUiState.Empty,
+            completedOnClick = { _, _ -> },
             preferencesUiState = PreferencesUiState()
         )
     }

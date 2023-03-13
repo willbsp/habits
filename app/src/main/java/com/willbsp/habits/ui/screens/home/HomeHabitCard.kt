@@ -15,7 +15,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.willbsp.habits.R
 import com.willbsp.habits.ui.common.HabitToggleButton
@@ -42,9 +41,7 @@ fun HomeHabitCard(
     ) {
 
         Box(
-            modifier = Modifier.clickable {
-                expanded = !expanded
-            },
+            modifier = Modifier.clickable { expanded = !expanded },
         ) {
 
             Column(
@@ -54,7 +51,6 @@ fun HomeHabitCard(
                     .animateContentSize()
             ) {
 
-
                 Row(
                     modifier = Modifier
                         .height(50.dp)
@@ -62,30 +58,18 @@ fun HomeHabitCard(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
 
-                    Text(
-                        text = habitUiState.name,
-                        style = Typography.titleLarge,
-                    )
-
+                    Text(text = habitUiState.name, style = Typography.titleLarge)
                     Spacer(modifier = Modifier.weight(1f))
-
                     if (showStreaks) {
                         Text(
                             text = (habitUiState.streak ?: " ").toString(),
                             style = Typography.titleLarge
                         )
                     }
-
                     Spacer(modifier = Modifier.width(10.dp))
-
                     HabitToggleButton(
-                        onCheckedChange = {
-                            completedOnClick(
-                                habitUiState.id,
-                                habitUiState.completedDates.first().date // TODO more robust way?
-                            )
-                        },
-                        checked = habitUiState.completedDates.first().completed
+                        onCheckedChange = { completedOnClick(habitUiState.id, LocalDate.now()) },
+                        checked = habitUiState.dates.firstOrNull() == LocalDate.now()
                     )
 
                 }
@@ -105,9 +89,7 @@ fun HomeHabitCard(
                             habitUiState = habitUiState,
                             completedOnClick = completedOnClick
                         )
-
                         Spacer(modifier = Modifier.weight(1f))
-
                         IconButton(
                             modifier = Modifier,
                             onClick = { navigateToDetail(habitUiState.id) }
@@ -139,13 +121,13 @@ private fun HomeHabitCardDayRow(
         horizontalArrangement = Arrangement.spacedBy(15.dp)
     ) {
 
-        habitUiState.completedDates.drop(1).forEach { completedUiState ->
+        (1..5).forEach { i ->
+            val date = LocalDate.now().minusDays(i.toLong())
             HomeHabitCardDay(
-                completedUiState = completedUiState,
-                onCheckedChange = {
-                    completedOnClick(habitUiState.id, completedUiState.date)
-                }
-            ) // curr date -1
+                onCheckedChange = { completedOnClick(habitUiState.id, date) },
+                completed = habitUiState.dates.any { it == date },
+                date = date
+            )
         }
 
     }
@@ -155,15 +137,14 @@ private fun HomeHabitCardDayRow(
 @Composable
 private fun HomeHabitCardDay(
     modifier: Modifier = Modifier,
-    completedUiState: HomeCompletedUiState,
     onCheckedChange: (Boolean) -> Unit,
+    completed: Boolean,
+    date: LocalDate
 ) {
 
-    val weekday = completedUiState.date.dayOfWeek.getDisplayName(
-        TextStyle.SHORT,
-        Locale.ENGLISH
-    ) // TODO get other locales
-    val dayOfMonth = completedUiState.date.dayOfMonth.toString()
+    // TODO other locales
+    val weekday = date.dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.ENGLISH)
+    val dayOfMonth = date.dayOfMonth.toString()
 
     Column(
         modifier = modifier.width(45.dp),
@@ -181,7 +162,7 @@ private fun HomeHabitCardDay(
 
         HabitToggleButton(
             onCheckedChange = onCheckedChange,
-            checked = completedUiState.completed
+            checked = completed
         )
 
     }
@@ -189,7 +170,7 @@ private fun HomeHabitCardDay(
 }
 
 
-@Preview
+/*@Preview
 @Composable
 private fun HomeHabitCardPreview() {
     HomeHabitCard(
@@ -235,4 +216,4 @@ private fun HomeHabitCardExpandedPreview() {
         expandedInitialValue = true,
         showStreaks = true
     )
-}
+}*/
