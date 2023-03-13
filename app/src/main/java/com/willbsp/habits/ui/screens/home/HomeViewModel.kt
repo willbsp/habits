@@ -11,7 +11,6 @@ import com.willbsp.habits.ui.common.PreferencesUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import java.time.Clock
 import java.time.LocalDate
 import javax.inject.Inject
 
@@ -19,7 +18,6 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val entryRepository: EntryRepository,
     private val calculateStreak: CalculateStreakUseCase,
-    private val clock: Clock,
     habitRepository: HabitWithEntriesRepository,
     settingsRepository: SettingsRepository,
 ) : ViewModel() {
@@ -29,7 +27,7 @@ class HomeViewModel @Inject constructor(
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
-            initialValue = HomeUiState()
+            initialValue = HomeUiState.Empty
         )
 
     val preferencesUiState: StateFlow<PreferencesUiState> =
@@ -52,50 +50,19 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private suspend fun List<HabitWithEntries>.toHomeUiState(): HomeUiState =
-        HomeUiState(
-            this.map { it.toHomeHabitUiState() },
-            this.getHabitState(),
-            this.completedCount(),
-        )
+    private suspend fun List<HabitWithEntries>.toHomeUiState(): HomeUiState {
+        return if (this.isEmpty()) HomeUiState.Empty
+        else HomeUiState.Habits(this.map { it.toHomeHabitUiState() })
+    }
 
     private suspend fun HabitWithEntries.toHomeHabitUiState(): HomeHabitUiState {
-
         val streak = calculateStreak(habit.id).first()
-        val completedDates = (0..HABIT_CARD_PREVIOUS_DAYS).map {
-            val date = LocalDate.now(clock).minusDays(it.toLong())
-            HomeCompletedUiState(date, entries.any { entry -> entry.date == date })
-        }
-
-        return HomeHabitUiState(habit.id, habit.name, streak, completedDates)
-
-    }
-
-    private fun List<HabitWithEntries>.completedCount(): Int {
-        var count = 0
-        this.forEach { habitWithEntries ->
-            if (habitWithEntries.entries.any { it.date == LocalDate.now(clock) })
-                count++
-        }
-        return count
-    }
-
-    private fun List<HabitWithEntries>.getHabitState(): HabitState {
-
-        if (!this.any()) return HabitState.NO_HABITS
-
-        val allCompleted = this.map { habit ->
-            return@map habit.entries.any { it.date == LocalDate.now(clock) }
-        }.all { it }
-
-        return if (allCompleted) HabitState.ALL_COMPLETED
-        else HabitState.SHOW_HABITS
-
+        val dates = entries.map { it.date }.sortedDescending()
+        return HomeHabitUiState(habit.id, habit.name, streak, dates)
     }
 
     companion object {
         const val TIMEOUT_MILLIS = 5_000L
-        const val HABIT_CARD_PREVIOUS_DAYS: Int = 5
     }
 
 }
