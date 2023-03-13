@@ -14,9 +14,11 @@ It is currently in development, with plans to release on Google Play and F-Droid
 ## Features
 
 - **Build habits that last** - Completing habits is easy, whenever one is due simply tick it from
-  the today view to complete it
+  the today view to complete it.
+- **Learn about your habits** - Habits will calculate a score for each of your habits, so you can
+  see if you are on track to achieving your goals.
 - **Fluent animations** - Built with the latest Android technologies, every action in Habits is
-  beautifully animated to provide satisfying feedback
+  beautifully animated to provide satisfying feedback.
 - **Supports material you** - Habits follows the
   latest [Material Design guidelines](https://m3.material.io/) and supports dynamic colour theming
   out of the box.
