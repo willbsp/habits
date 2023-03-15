@@ -1,80 +1,89 @@
 package com.willbsp.habits.ui.screens.logbook
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.Card
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.material3.FilledIconToggleButton
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.pager.rememberPagerState
 import com.willbsp.habits.ui.theme.Typography
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.format.TextStyle
 import java.util.*
 
-@OptIn(ExperimentalPagerApi::class)
 @Composable
 fun LogbookDatePicker(
     modifier: Modifier = Modifier,
     selectedDate: LocalDate,
-    onSelectedDateChange: (LocalDate) -> (Unit),
+    selectedHabitId: Int,
+    dateOnClick: (Int, LocalDate) -> Unit
 ) {
 
-    val startDate by remember {
-        mutableStateOf(
-            selectedDate.minusWeeks((Integer.MAX_VALUE / 2).toLong()).with(DayOfWeek.MONDAY)
-        ) // TODO look into locales
+    LazyColumn(
+        state = LazyListState(Integer.MAX_VALUE),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+
+        items(count = Integer.MAX_VALUE) {
+            val date = LocalDate.now().minusMonths(Integer.MAX_VALUE - it.toLong() - 1)
+            LogbookMonth(
+                modifier = modifier.fillMaxWidth(),
+                date = date,
+                checkedDates = listOf()
+            )
+            //Spacer(Modifier.height(20.dp))
+        }
+
     }
 
-    Card(modifier = modifier) {
+}
 
-        Spacer(Modifier.height(10.dp))
+// TODO could these be animated to fade in when the user scrolls to them
+@Composable
+fun LogbookMonth(
+    modifier: Modifier = Modifier,
+    date: LocalDate,
+    checkedDates: List<LocalDate>
+) {
+
+    val startDate = date.withDayOfMonth(1).with(DayOfWeek.MONDAY)
+
+    Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
 
         Text(
-            text = selectedDate.month.getDisplayName(TextStyle.FULL, Locale.ENGLISH),
-            style = Typography.titleLarge,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.fillMaxWidth()
+            date.month.getDisplayName(TextStyle.FULL, Locale.ENGLISH),
+            style = Typography.headlineLarge
         )
 
-        HorizontalPager(
-            modifier = Modifier.fillMaxSize(),
-            state = rememberPagerState(Integer.MAX_VALUE / 2),
-            count = Integer.MAX_VALUE
+        Spacer(modifier = Modifier.height(30.dp))
+
+        Row(
+            modifier = Modifier,
+            horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-
-            val weekStart = startDate.plusDays(it.toLong() * 7)
-
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(5.dp)
-            ) {
-
-                repeat(7) { day ->
-
-                    val date = weekStart.plusDays(day.toLong())
-
-                    DateIconButton(
-                        modifier = Modifier
-                            .size(50.dp),
-                        date = date,
-                        checked = date == selectedDate,
-                        enabled = !date.isAfter(LocalDate.now()), // TODO
-                        onCheckedChange = { date ->
-                            onSelectedDateChange(date)
+            repeat(7) { row ->
+                Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                    repeat(5) { col ->
+                        val currentDate = startDate.plusWeeks(col.toLong()).plusDays(row.toLong())
+                        if (currentDate.month == date.month) {
+                            DateIconButton(
+                                modifier = Modifier.size(40.dp),
+                                date = currentDate,
+                                checked = checkedDates.contains(currentDate),
+                                enabled = !date.isAfter(date),
+                                onCheckedChange = { }
+                            )
+                        } else {
+                            Box(Modifier.size(40.dp))
                         }
-                    )
-
+                    }
                 }
-
             }
-
         }
     }
 
@@ -88,11 +97,6 @@ private fun DateIconButton(
     enabled: Boolean,
     onCheckedChange: (LocalDate) -> (Unit)
 ) {
-
-    val weekday = date.dayOfWeek.getDisplayName(
-        TextStyle.SHORT,
-        Locale.ENGLISH
-    ) // TODO get other locales
     val dayOfMonth = date.dayOfMonth.toString()
 
     FilledIconToggleButton(
@@ -103,26 +107,23 @@ private fun DateIconButton(
             onCheckedChange(date)
         }
     ) {
-        Column(
+        Box(
             modifier = Modifier,
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
+            contentAlignment = Alignment.Center
         ) {
-            Text(weekday, style = Typography.bodyLarge)
             Text(dayOfMonth, style = Typography.bodyLarge)
         }
     }
 
 }
 
-@Preview
+@Preview(showSystemUi = true, showBackground = true)
 @Composable
-fun DatePickerPreview() {
+private fun NewLogbookDatePickerPreview() {
     LogbookDatePicker(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(110.dp),
-        onSelectedDateChange = {},
-        selectedDate = LocalDate.now()
+        modifier = Modifier.fillMaxSize(),
+        selectedDate = LocalDate.now(),
+        selectedHabitId = 3,
+        dateOnClick = { _, _ -> }
     )
 }

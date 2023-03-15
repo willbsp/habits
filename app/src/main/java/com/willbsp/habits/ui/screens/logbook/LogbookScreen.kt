@@ -3,8 +3,6 @@ package com.willbsp.habits.ui.screens.logbook
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -57,51 +55,49 @@ private fun Logbook(
         },
     ) { innerPadding ->
 
-        Column(
+        /*Column(
             modifier = modifier
                 .fillMaxSize()
                 .padding(innerPadding)
                 .padding(8.dp),
             horizontalAlignment = Alignment.CenterHorizontally
+        ) {*/
+
+        var selectedDate by remember { mutableStateOf(LocalDate.now()) }
+
+
+        LogbookDatePicker(
+            modifier = Modifier
+                .padding(innerPadding)
+                //.height(110.dp)
+                .fillMaxSize(),
+            selectedDate = selectedDate,
+            selectedHabitId = 3,
+            dateOnClick = { _, _ -> }
+        )
+
+        /*Spacer(modifier = Modifier.height(10.dp))
+
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
 
-            var selectedDate by remember { mutableStateOf(LocalDate.now()) }
+            items(items = logbookUiState.habits, key = { it.id }) { habitUiState ->
 
-
-            LogbookDatePicker(
-                modifier = Modifier
-                    //.padding(8.dp)
-                    .height(110.dp)
-                    .fillMaxWidth(),
-                onSelectedDateChange = {
-                    selectedDate = it
-                    onSelectedDateChange(it)
-                },
-                selectedDate = selectedDate
-            )
-
-            Spacer(modifier = Modifier.height(10.dp))
-
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-
-                items(items = logbookUiState.habits, key = { it.id }) { habitUiState ->
-
-                    LogbookHabitCard(
-                        modifier = Modifier.fillMaxWidth(),
-                        logbookHabitUiState = habitUiState,
-                        completedOnClick = {
-                            completedOnClick(it, selectedDate)
-                        }
-                    )
-
-                }
+                LogbookHabitCard(
+                    modifier = Modifier.fillMaxWidth(),
+                    logbookHabitUiState = habitUiState,
+                    completedOnClick = {
+                        completedOnClick(it, selectedDate)
+                    }
+                )
 
             }
 
-        }
+        }*/
+
+        //}
 
     }
 }
