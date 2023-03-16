@@ -2,7 +2,7 @@ package com.willbsp.habits.ui.screens.logbook
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.FilledIconToggleButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -19,24 +19,26 @@ import java.util.*
 @Composable
 fun LogbookDatePicker(
     modifier: Modifier = Modifier,
-    selectedDate: LocalDate,
+    dates: LogbookUiState.Dates,
     selectedHabitId: Int,
-    dateOnClick: (Int, LocalDate) -> Unit
+    dateOnClick: (LocalDate) -> Unit
 ) {
 
     LazyColumn(
-        state = LazyListState(Integer.MAX_VALUE),
+        modifier = modifier,
+        state = rememberLazyListState(Integer.MAX_VALUE),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        items(count = Integer.MAX_VALUE) {
+        items(count = Integer.MAX_VALUE, key = { it }) {
             val date = LocalDate.now().minusMonths(Integer.MAX_VALUE - it.toLong() - 1)
             LogbookMonth(
-                modifier = modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth(),
                 date = date,
-                checkedDates = listOf()
+                checkedDates = dates.completedDates,
+                dateOnClick = dateOnClick
             )
-            //Spacer(Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(80.dp))
         }
 
     }
@@ -48,10 +50,12 @@ fun LogbookDatePicker(
 fun LogbookMonth(
     modifier: Modifier = Modifier,
     date: LocalDate,
+    dateOnClick: (LocalDate) -> Unit,
     checkedDates: List<LocalDate>
 ) {
 
     val startDate = date.withDayOfMonth(1).with(DayOfWeek.MONDAY)
+    val today = LocalDate.now()
 
     Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
 
@@ -75,8 +79,8 @@ fun LogbookMonth(
                                 modifier = Modifier.size(40.dp),
                                 date = currentDate,
                                 checked = checkedDates.contains(currentDate),
-                                enabled = !date.isAfter(date),
-                                onCheckedChange = { }
+                                enabled = !currentDate.isAfter(today),
+                                onCheckedChange = { dateOnClick(currentDate) }
                             )
                         } else {
                             Box(Modifier.size(40.dp))
@@ -122,8 +126,8 @@ private fun DateIconButton(
 private fun NewLogbookDatePickerPreview() {
     LogbookDatePicker(
         modifier = Modifier.fillMaxSize(),
-        selectedDate = LocalDate.now(),
+        dates = LogbookUiState.Dates(listOf()),
         selectedHabitId = 3,
-        dateOnClick = { _, _ -> }
+        dateOnClick = { }
     )
 }
