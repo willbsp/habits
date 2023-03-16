@@ -17,9 +17,9 @@ class LogbookViewModel @Inject constructor(
 
     private var habitId: Int? = null
 
-    private val _uiState: MutableStateFlow<LogbookUiState> =
-        MutableStateFlow(LogbookUiState.NoSelection)
-    val uiState: StateFlow<LogbookUiState> = _uiState
+    private val _uiState: MutableStateFlow<LogbookCalendarUiState> =
+        MutableStateFlow(LogbookCalendarUiState.NoSelection)
+    val uiState: StateFlow<LogbookCalendarUiState> = _uiState
 
     init {
         setSelectedHabit(1)
@@ -29,7 +29,8 @@ class LogbookViewModel @Inject constructor(
         this.habitId = habitId
         viewModelScope.launch {
             entryRepository.getAllEntriesStream(habitId).collect { list ->
-                _uiState.value = LogbookUiState.Dates(list.map { it.date })
+                if (list.isEmpty()) _uiState.value = LogbookCalendarUiState.NoSelection
+                else _uiState.value = LogbookCalendarUiState.SelectedHabit(list.map { it.date })
             }
         }
     }

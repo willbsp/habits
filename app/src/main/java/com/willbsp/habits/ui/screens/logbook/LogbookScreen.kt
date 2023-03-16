@@ -24,7 +24,7 @@ fun LogbookScreen(
 
     Logbook(
         modifier = modifier,
-        logbookUiState = logbookUiState,
+        logbookCalendarUiState = logbookUiState,
         completedOnClick = { date -> viewModel.toggleEntry(date) },
         navigateUp = navigateUp
     )
@@ -36,7 +36,7 @@ fun LogbookScreen(
 private fun Logbook(
     modifier: Modifier = Modifier,
     navigateUp: () -> Unit,
-    logbookUiState: LogbookUiState,
+    logbookCalendarUiState: LogbookCalendarUiState,
     completedOnClick: (LocalDate) -> Unit
 ) {
 
@@ -50,15 +50,15 @@ private fun Logbook(
         },
     ) { innerPadding ->
 
-        when (logbookUiState) {
+        when (logbookCalendarUiState) {
 
-            is LogbookUiState.Dates -> {
+            is LogbookCalendarUiState.SelectedHabit -> {
 
                 LogbookDatePicker(
                     modifier = Modifier
                         .padding(innerPadding)
                         .fillMaxSize(),
-                    dates = logbookUiState,
+                    dates = logbookCalendarUiState,
                     selectedHabitId = 3,
                     dateOnClick = completedOnClick
                 )
@@ -68,6 +68,7 @@ private fun Logbook(
             else -> { // TODO
                 Text("this text should not be here!")
             }
+
         }
 
         /*Spacer(modifier = Modifier.height(10.dp))
@@ -101,7 +102,7 @@ private fun Logbook(
 fun LogbookPreview() {
     Logbook(
         navigateUp = {},
-        logbookUiState = LogbookUiState.NoSelection,
+        logbookCalendarUiState = LogbookCalendarUiState.NoSelection,
         //onSelectedHabitChange = {},
         completedOnClick = { }
     )

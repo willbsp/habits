@@ -2,14 +2,27 @@ package com.willbsp.habits.ui.screens.logbook
 
 import java.time.LocalDate
 
-sealed class LogbookUiState {
+sealed class LogbookCalendarUiState {
 
-    object Empty : LogbookUiState()
+    object NoSelection : LogbookCalendarUiState()
 
-    object NoSelection : LogbookUiState()
+    data class SelectedHabit(
+        val selectedHabitDates: List<LocalDate>
+    ) : LogbookCalendarUiState()
 
-    data class Dates(
-        val completedDates: List<LocalDate>
-    ) : LogbookUiState()
+}
+
+sealed class LogbookBottomSheetUiState {
+
+    object NoHabits : LogbookBottomSheetUiState()
+
+    data class Habits(
+        val habits: List<Habit>
+    ) : LogbookBottomSheetUiState()
+
+    data class Habit(
+        val id: Int,
+        val name: String
+    )
 
 }
