@@ -1,21 +1,18 @@
 package com.willbsp.habits.ui.screens.logbook
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.willbsp.habits.R
 import com.willbsp.habits.ui.common.DefaultHabitsAppTopBar
-import com.willbsp.habits.ui.common.HabitToggleButton
-import com.willbsp.habits.ui.theme.Typography
 import java.time.LocalDate
 
+@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 fun LogbookScreen(
     modifier: Modifier = Modifier,
@@ -23,13 +20,12 @@ fun LogbookScreen(
     navigateUp: () -> Unit,
 ) {
 
-    val logbookUiState by viewModel.uiState.collectAsState(LogbookUiState())
+    val logbookUiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     Logbook(
         modifier = modifier,
         logbookUiState = logbookUiState,
-        onSelectedDateChange = { viewModel.setSelectedDate(it) },
-        completedOnClick = { habitId, date -> viewModel.toggleEntry(habitId, date) },
+        completedOnClick = { date -> viewModel.toggleEntry(date) },
         navigateUp = navigateUp
     )
 
@@ -41,8 +37,7 @@ private fun Logbook(
     modifier: Modifier = Modifier,
     navigateUp: () -> Unit,
     logbookUiState: LogbookUiState,
-    onSelectedDateChange: (LocalDate) -> Unit,
-    completedOnClick: (Int, LocalDate) -> Unit
+    completedOnClick: (LocalDate) -> Unit
 ) {
 
     Scaffold(
@@ -55,26 +50,25 @@ private fun Logbook(
         },
     ) { innerPadding ->
 
-        /*Column(
-            modifier = modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-                .padding(8.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {*/
+        when (logbookUiState) {
 
-        var selectedDate by remember { mutableStateOf(LocalDate.now()) }
+            is LogbookUiState.Dates -> {
 
+                LogbookDatePicker(
+                    modifier = Modifier
+                        .padding(innerPadding)
+                        .fillMaxSize(),
+                    dates = logbookUiState,
+                    selectedHabitId = 3,
+                    dateOnClick = completedOnClick
+                )
 
-        LogbookDatePicker(
-            modifier = Modifier
-                .padding(innerPadding)
-                //.height(110.dp)
-                .fillMaxSize(),
-            selectedDate = selectedDate,
-            selectedHabitId = 3,
-            dateOnClick = { _, _ -> }
-        )
+            }
+
+            else -> { // TODO
+                Text("this text should not be here!")
+            }
+        }
 
         /*Spacer(modifier = Modifier.height(10.dp))
 
@@ -102,55 +96,13 @@ private fun Logbook(
     }
 }
 
-@Composable
-fun LogbookHabitCard(
-    modifier: Modifier,
-    logbookHabitUiState: LogbookHabitUiState,
-    completedOnClick: (Int) -> Unit,
-) {
-
-    ElevatedCard(modifier) {
-
-        Row(
-            modifier = Modifier
-                .height(60.dp)
-                .padding(10.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-
-            Text(
-                text = logbookHabitUiState.name,
-                style = Typography.titleLarge
-            )
-
-            Spacer(Modifier.weight(1f))
-
-            HabitToggleButton(
-                onCheckedChange = {
-                    completedOnClick(logbookHabitUiState.id)
-                },
-                checked = logbookHabitUiState.completed
-            )
-
-        }
-
-    }
-
-}
-
-@RequiresApi(Build.VERSION_CODES.S)
 @Preview
 @Composable
 fun LogbookPreview() {
     Logbook(
         navigateUp = {},
-        logbookUiState = LogbookUiState(
-            listOf(
-                LogbookHabitUiState(0, "Running", true),
-                LogbookHabitUiState(1, "Flashcards", false),
-            )
-        ),
-        onSelectedDateChange = {},
-        completedOnClick = { _, _ -> }
+        logbookUiState = LogbookUiState.NoSelection,
+        //onSelectedHabitChange = {},
+        completedOnClick = { }
     )
 }
