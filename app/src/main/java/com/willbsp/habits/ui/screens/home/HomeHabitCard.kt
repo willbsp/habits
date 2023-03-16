@@ -25,7 +25,7 @@ import java.util.*
 
 @Composable
 fun HomeHabitCard(
-    habitUiState: HomeHabitUiState,
+    habit: HomeUiState.Habit,
     completedOnClick: (Int, LocalDate) -> Unit,
     navigateToDetail: (Int) -> Unit,
     modifier: Modifier = Modifier,
@@ -58,18 +58,18 @@ fun HomeHabitCard(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
 
-                    Text(text = habitUiState.name, style = Typography.titleLarge)
+                    Text(text = habit.name, style = Typography.titleLarge)
                     Spacer(modifier = Modifier.weight(1f))
                     if (showStreaks) {
                         Text(
-                            text = (habitUiState.streak ?: " ").toString(),
+                            text = (habit.streak ?: " ").toString(),
                             style = Typography.titleLarge
                         )
                     }
                     Spacer(modifier = Modifier.width(10.dp))
                     HabitToggleButton(
-                        onCheckedChange = { completedOnClick(habitUiState.id, LocalDate.now()) },
-                        checked = habitUiState.dates.firstOrNull() == LocalDate.now()
+                        onCheckedChange = { completedOnClick(habit.id, LocalDate.now()) },
+                        checked = habit.dates.firstOrNull() == LocalDate.now()
                     )
 
                 }
@@ -86,13 +86,13 @@ fun HomeHabitCard(
                     ) {
 
                         HomeHabitCardDayRow(
-                            habitUiState = habitUiState,
+                            habit = habit,
                             completedOnClick = completedOnClick
                         )
                         Spacer(modifier = Modifier.weight(1f))
                         IconButton(
                             modifier = Modifier,
-                            onClick = { navigateToDetail(habitUiState.id) }
+                            onClick = { navigateToDetail(habit.id) }
                         ) {
                             Icon(
                                 imageVector = Icons.Outlined.MoreHoriz,
@@ -111,7 +111,7 @@ fun HomeHabitCard(
 
 @Composable
 private fun HomeHabitCardDayRow(
-    habitUiState: HomeHabitUiState,
+    habit: HomeUiState.Habit,
     completedOnClick: (Int, LocalDate) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -124,8 +124,8 @@ private fun HomeHabitCardDayRow(
         (1..5).forEach { i ->
             val date = LocalDate.now().minusDays(i.toLong())
             HomeHabitCardDay(
-                onCheckedChange = { completedOnClick(habitUiState.id, date) },
-                completed = habitUiState.dates.any { it == date },
+                onCheckedChange = { completedOnClick(habit.id, date) },
+                completed = habit.dates.any { it == date },
                 date = date
             )
         }

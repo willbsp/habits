@@ -228,7 +228,7 @@ private fun HabitsList(
                     modifier = Modifier
                         .animateItemPlacement(tween())
                         .padding(bottom = 10.dp),
-                    habitUiState = habit,
+                    habit = habit,
                     completedOnClick = completedOnClick,
                     navigateToDetail = navigateToDetail,
                     showStreaks = showStreaks

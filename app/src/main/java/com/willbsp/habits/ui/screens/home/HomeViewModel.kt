@@ -52,13 +52,13 @@ class HomeViewModel @Inject constructor(
 
     private suspend fun List<HabitWithEntries>.toHomeUiState(): HomeUiState {
         return if (this.isEmpty()) HomeUiState.Empty
-        else HomeUiState.Habits(this.map { it.toHomeHabitUiState() })
+        else HomeUiState.Habits(this.map { it.toHabit() })
     }
 
-    private suspend fun HabitWithEntries.toHomeHabitUiState(): HomeHabitUiState {
+    private suspend fun HabitWithEntries.toHabit(): HomeUiState.Habit {
         val streak = calculateStreak(habit.id).first()
         val dates = entries.map { it.date }.sortedDescending()
-        return HomeHabitUiState(habit.id, habit.name, streak, dates)
+        return HomeUiState.Habit(habit.id, habit.name, streak, dates)
     }
 
     companion object {
