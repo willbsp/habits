@@ -99,7 +99,7 @@ private fun Logbook(
 
             }
 
-            is LogbookUiState.NoSelection -> {
+            is LogbookUiState.NoHabits -> {
                 FullscreenHint(
                     modifier = modifier
                         .fillMaxSize(),
