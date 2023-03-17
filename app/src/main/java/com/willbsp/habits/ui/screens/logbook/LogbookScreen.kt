@@ -71,7 +71,6 @@ private fun Logbook(
                     LogbookDatePicker(
                         modifier = Modifier.weight(1f, false),
                         dates = logbookUiState.selectedHabitDates,
-                        selectedHabitId = 3,
                         dateOnClick = completedOnClick
                     )
 

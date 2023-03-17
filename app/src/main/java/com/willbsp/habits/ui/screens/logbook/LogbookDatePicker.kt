@@ -1,6 +1,14 @@
 package com.willbsp.habits.ui.screens.logbook
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.FilledIconToggleButton
@@ -14,13 +22,12 @@ import com.willbsp.habits.ui.theme.Typography
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.format.TextStyle
-import java.util.*
+import java.util.Locale
 
 @Composable
 fun LogbookDatePicker(
     modifier: Modifier = Modifier,
     dates: List<LocalDate>,
-    selectedHabitId: Int,
     dateOnClick: (LocalDate) -> Unit
 ) {
 
@@ -127,7 +134,6 @@ private fun NewLogbookDatePickerPreview() {
     LogbookDatePicker(
         modifier = Modifier.fillMaxSize(),
         dates = listOf(),
-        selectedHabitId = 3,
         dateOnClick = { }
     )
 }
