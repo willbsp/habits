@@ -2,10 +2,13 @@ package com.willbsp.habits.ui.screens.logbook
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.willbsp.habits.data.model.HabitWithEntries
 import com.willbsp.habits.data.repository.EntryRepository
+import com.willbsp.habits.data.repository.HabitWithEntriesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import javax.inject.Inject
@@ -23,7 +26,12 @@ class LogbookViewModel @Inject constructor(
     val uiState: StateFlow<LogbookUiState> = _uiState
 
     init {
-        setSelectedHabit(1)
+        viewModelScope.launch {
+            val habitWithEntries =
+                habitRepository.getHabitsWithEntries().firstOrNull()?.firstOrNull()
+            if (habitWithEntries != null)
+                setSelectedHabit(habitWithEntries.habit.id)
+        }
     }
 
     fun setSelectedHabit(habitId: Int) {
