@@ -19,7 +19,7 @@ import java.util.*
 @Composable
 fun LogbookDatePicker(
     modifier: Modifier = Modifier,
-    dates: LogbookCalendarUiState.SelectedHabit,
+    dates: List<LocalDate>,
     selectedHabitId: Int,
     dateOnClick: (LocalDate) -> Unit
 ) {
@@ -35,7 +35,7 @@ fun LogbookDatePicker(
             LogbookMonth(
                 modifier = Modifier.fillMaxWidth(),
                 date = date,
-                checkedDates = dates.selectedHabitDates,
+                checkedDates = dates,
                 dateOnClick = dateOnClick
             )
             Spacer(modifier = Modifier.height(80.dp))
@@ -126,7 +126,7 @@ private fun DateIconButton(
 private fun NewLogbookDatePickerPreview() {
     LogbookDatePicker(
         modifier = Modifier.fillMaxSize(),
-        dates = LogbookCalendarUiState.SelectedHabit(listOf()),
+        dates = listOf(),
         selectedHabitId = 3,
         dateOnClick = { }
     )
