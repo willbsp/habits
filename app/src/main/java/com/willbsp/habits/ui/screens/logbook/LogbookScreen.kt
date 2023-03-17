@@ -143,12 +143,14 @@ fun LogbookPreview() {
     Logbook(
         navigateUp = {},
         logbookUiState = LogbookUiState.SelectedHabit(
+            1,
+            listOf(),
             listOf(
                 LogbookUiState.Habit(id = 0, name = "Running"),
                 LogbookUiState.Habit(id = 1, name = "Flashcards"),
                 LogbookUiState.Habit(id = 2, name = "Reading"),
                 LogbookUiState.Habit(id = 3, name = "Meditation"),
-            ), 0, listOf()
+            )
         ),
         completedOnClick = { },
         habitOnClick = { }

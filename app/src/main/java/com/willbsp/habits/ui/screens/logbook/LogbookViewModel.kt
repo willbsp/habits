@@ -2,24 +2,25 @@ package com.willbsp.habits.ui.screens.logbook
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.willbsp.habits.data.model.HabitWithEntries
 import com.willbsp.habits.data.repository.EntryRepository
-import com.willbsp.habits.data.repository.HabitWithEntriesRepository
+import com.willbsp.habits.data.repository.HabitRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import javax.inject.Inject
+import kotlin.properties.Delegates
 
 @HiltViewModel
 class LogbookViewModel @Inject constructor(
-    private val habitRepository: HabitWithEntriesRepository,
+    private val habitRepository: HabitRepository,
     private val entryRepository: EntryRepository
 ) : ViewModel() {
 
-    private var selectedHabitId: Int? = null
+    private var selectedHabitId by Delegates.notNull<Int>()
 
     private val _uiState: MutableStateFlow<LogbookUiState> =
         MutableStateFlow(LogbookUiState.NoHabits)
@@ -27,35 +28,36 @@ class LogbookViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            val habitWithEntries =
-                habitRepository.getHabitsWithEntries().firstOrNull()?.firstOrNull()
-            if (habitWithEntries != null)
-                setSelectedHabit(habitWithEntries.habit.id)
+            val habit = habitRepository.getAllHabitsStream().firstOrNull()?.firstOrNull()
+            if (habit != null) setSelectedHabit(habit.id)
         }
     }
 
     fun setSelectedHabit(habitId: Int) {
-        this.selectedHabitId = habitId
+        selectedHabitId = habitId
         viewModelScope.launch {
-            habitRepository.getHabitsWithEntries().collect { list ->
-                if (list.isEmpty()) _uiState.value = LogbookUiState.NoHabits
-                else _uiState.value = list.toLogbookUiState()
+
+            combine(
+                habitRepository.getAllHabitsStream(),
+                entryRepository.getAllEntriesStream(habitId)
+            ) { habitList, entryList ->
+                if (habitList.isEmpty()) LogbookUiState.NoHabits
+                else LogbookUiState.SelectedHabit(
+                    selectedHabitId,
+                    entryList.map { it.date },
+                    habitList.map { LogbookUiState.Habit(it.id, it.name) }
+                )
+            }.collect { logbookUiState ->
+                _uiState.value = logbookUiState
             }
+
         }
     }
 
     fun toggleEntry(date: LocalDate) {
-        if (selectedHabitId != null) {
-            viewModelScope.launch {
-                entryRepository.toggleEntry(selectedHabitId!!, date)
-            }
+        viewModelScope.launch {
+            entryRepository.toggleEntry(selectedHabitId, date)
         }
-    }
-
-    private fun List<HabitWithEntries>.toLogbookUiState(): LogbookUiState.SelectedHabit {
-        val habits = map { LogbookUiState.Habit(it.habit.id, it.habit.name) }
-        val entries = find { it.habit.id == selectedHabitId }?.entries?.map { it.date } ?: listOf()
-        return LogbookUiState.SelectedHabit(habits, selectedHabitId!!, entries) // TODO !!
     }
 
 }
