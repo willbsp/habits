@@ -12,33 +12,40 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LogbookViewModel @Inject constructor(
+    private val habitRepository: HabitWithEntriesRepository,
     private val entryRepository: EntryRepository
 ) : ViewModel() {
 
-    private var habitId: Int? = null
+    private var selectedHabitId: Int? = null
 
-    private val _uiState: MutableStateFlow<LogbookCalendarUiState> =
-        MutableStateFlow(LogbookCalendarUiState.NoSelection)
-    val uiState: StateFlow<LogbookCalendarUiState> = _uiState
+    private val _uiState: MutableStateFlow<LogbookUiState> =
+        MutableStateFlow(LogbookUiState.NoSelection)
+    val uiState: StateFlow<LogbookUiState> = _uiState
 
     init {
         setSelectedHabit(1)
     }
 
     fun setSelectedHabit(habitId: Int) {
-        this.habitId = habitId
+        this.selectedHabitId = habitId
         viewModelScope.launch {
-            entryRepository.getAllEntriesStream(habitId).collect { list ->
-                if (list.isEmpty()) _uiState.value = LogbookCalendarUiState.NoSelection
-                else _uiState.value = LogbookCalendarUiState.SelectedHabit(list.map { it.date })
+            habitRepository.getHabitsWithEntries().collect { list ->
+                if (list.isEmpty()) _uiState.value = LogbookUiState.NoSelection
+                else _uiState.value = list.toLogbookUiState()
             }
         }
     }
 
+    private fun List<HabitWithEntries>.toLogbookUiState(): LogbookUiState.SelectedHabit {
+        val habits = map { LogbookUiState.Habit(it.habit.id, it.habit.name) }
+        val entries = find { it.habit.id == selectedHabitId }?.entries?.map { it.date } ?: listOf()
+        return LogbookUiState.SelectedHabit(habits, selectedHabitId!!, entries) // TODO !!
+    }
+
     fun toggleEntry(date: LocalDate) {
-        if (habitId != null) {
+        if (selectedHabitId != null) {
             viewModelScope.launch {
-                entryRepository.toggleEntry(habitId!!, date)
+                entryRepository.toggleEntry(selectedHabitId!!, date)
             }
         }
     }
