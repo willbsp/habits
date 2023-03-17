@@ -1,6 +1,5 @@
 package com.willbsp.habits.ui.screens.home
 
-import androidx.annotation.StringRes
 import androidx.compose.animation.*
 import androidx.compose.animation.core.TweenSpec
 import androidx.compose.animation.core.tween
@@ -15,7 +14,6 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -23,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.willbsp.habits.R
+import com.willbsp.habits.ui.common.FullscreenHint
 import com.willbsp.habits.ui.common.HabitsFloatingAction
 import com.willbsp.habits.ui.common.PreferencesUiState
 import com.willbsp.habits.ui.theme.HabitsTheme
@@ -117,13 +116,14 @@ private fun Home(
 
         when (homeUiState) {
             is HomeUiState.Empty -> {
-                HabitsTooltip(
+                FullscreenHint(
                     modifier = Modifier.fillMaxSize(),
                     icon = Icons.Default.AddCircle,
                     iconContentDescription = R.string.home_screen_all_completed_tick, // TODO
                     text = R.string.home_no_habits
                 )
             }
+
             is HomeUiState.Habits -> {
 
                 val allCompleted = remember(homeUiState) {
@@ -136,7 +136,7 @@ private fun Home(
                     enter = scaleIn(TweenSpec(delay = 400)), // TODO make all delays and animation times constants
                     exit = scaleOut()
                 ) {
-                    HabitsTooltip(
+                    FullscreenHint(
                         modifier = Modifier.fillMaxSize(),
                         icon = Icons.Default.Done,
                         iconContentDescription = R.string.home_screen_all_completed_tick,
@@ -173,29 +173,6 @@ private fun Home(
                 }
 
             }
-        }
-    }
-}
-
-@Composable
-private fun HabitsTooltip(
-    modifier: Modifier = Modifier,
-    icon: ImageVector,
-    @StringRes iconContentDescription: Int,
-    @StringRes text: Int
-) {
-    Box(modifier = modifier, contentAlignment = Alignment.Center) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Icon(
-                modifier = Modifier.size(100.dp),
-                imageVector = icon,
-                contentDescription = stringResource(iconContentDescription)
-            )
-            Spacer(Modifier.height(10.dp))
-            Text(
-                text = stringResource(text),
-                style = Typography.titleLarge
-            )
         }
     }
 }
