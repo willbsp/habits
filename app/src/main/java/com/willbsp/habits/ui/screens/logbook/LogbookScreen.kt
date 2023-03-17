@@ -3,6 +3,8 @@ package com.willbsp.habits.ui.screens.logbook
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.SentimentVeryDissatisfied
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -14,6 +16,7 @@ import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.willbsp.habits.R
 import com.willbsp.habits.ui.common.DefaultHabitsAppTopBar
+import com.willbsp.habits.ui.common.FullscreenHint
 import java.time.LocalDate
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
@@ -69,7 +72,7 @@ private fun Logbook(
 
 
                     LogbookDatePicker(
-                        modifier = Modifier.weight(1f, false),
+                        modifier = Modifier.weight(1f, true),
                         dates = logbookUiState.selectedHabitDates,
                         dateOnClick = completedOnClick
                     )
@@ -96,10 +99,13 @@ private fun Logbook(
 
             }
 
-            else -> { // TODO
-                Text(
-                    modifier = modifier.padding(innerPadding),
-                    text = "this text should not be here!"
+            is LogbookUiState.NoSelection -> {
+                FullscreenHint(
+                    modifier = modifier
+                        .fillMaxSize(),
+                    icon = Icons.Default.SentimentVeryDissatisfied,
+                    iconContentDescription = R.string.logbook_add_a_new_habit,
+                    text = R.string.logbook_empty_text
                 )
             }
 

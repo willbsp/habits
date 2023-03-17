@@ -118,7 +118,7 @@ private fun Home(
             is HomeUiState.Empty -> {
                 FullscreenHint(
                     modifier = Modifier.fillMaxSize(),
-                    icon = Icons.Default.AddCircle,
+                    icon = Icons.Default.Add,
                     iconContentDescription = R.string.home_screen_all_completed_tick, // TODO
                     text = R.string.home_no_habits
                 )
