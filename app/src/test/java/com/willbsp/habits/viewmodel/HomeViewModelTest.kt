@@ -67,7 +67,7 @@ class HomeViewModelTest {
     fun uiState_whenHabitsAdded_thenShowHabits() = runTest {
         val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
         val habits = viewModel.uiState.map { (it as HomeUiState.Habits).habits }
-        habitRepository.addHabit(habit1)
+        habitRepository.upsertHabit(habit1)
         assertTrue(habits.first().any { it.name == habit1.name })
         collectJob.cancel()
     }
@@ -77,7 +77,7 @@ class HomeViewModelTest {
     fun uiState_whenDateToggled_thenShowCompleted() = runTest {
         val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
         val habits = viewModel.uiState.map { (it as HomeUiState.Habits).habits }
-        habitRepository.addHabit(habit1)
+        habitRepository.upsertHabit(habit1)
         entryRepository.toggleEntry(habit1.id, date)
         assertTrue(habits.first().find { it.name == habit1.name }?.dates?.contains(date) == true)
         entryRepository.toggleEntry(habit1.id, date)
@@ -91,7 +91,7 @@ class HomeViewModelTest {
         val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
         val habits = viewModel.uiState.map { (it as HomeUiState.Habits).habits }
         val expected = 5
-        habitRepository.addHabit(habit3)
+        habitRepository.upsertHabit(habit3)
         entryRepository.populate()
         assertEquals(expected, habits.first().find { it.name == habit3.name }?.streak)
         collectJob.cancel()
@@ -101,7 +101,7 @@ class HomeViewModelTest {
     @Test
     fun uiState_whenNoHabits_thenNoHabitsState() = runTest {
         val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
-        habitRepository.addHabit(habit1)
+        habitRepository.upsertHabit(habit1)
         assertTrue(viewModel.uiState.value is HomeUiState.Habits)
         habitRepository.deleteHabit(habit1.id)
         assertTrue(viewModel.uiState.value is HomeUiState.Empty)
@@ -114,7 +114,7 @@ class HomeViewModelTest {
     fun toggleEntry_whenDateToggled_thenModifyState() = runTest {
         val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
         val habits = viewModel.uiState.map { (it as HomeUiState.Habits).habits }
-        habitRepository.addHabit(habit1)
+        habitRepository.upsertHabit(habit1)
         viewModel.toggleEntry(habit1.id, date)
         assertTrue(habits.first().find { it.name == habit1.name }?.dates?.contains(date) == true)
         viewModel.toggleEntry(habit1.id, date)

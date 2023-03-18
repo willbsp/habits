@@ -50,7 +50,7 @@ class LogbookViewModelTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun uiState_whenInitialised_getFirstHabitAndSetSelectedHabitId() = runTest {
-        habitRepository.addHabit(habit2)
+        habitRepository.upsertHabit(habit2)
         entryRepository.toggleEntry(habit2.id, date)
         viewModel = LogbookViewModel(habitWithEntriesRepository, entryRepository)
         val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
@@ -62,7 +62,7 @@ class LogbookViewModelTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun uiState_whenInitialised_getFirstHabitAndLoadEntries() = runTest {
-        habitRepository.addHabit(habit2)
+        habitRepository.upsertHabit(habit2)
         entryRepository.toggleEntry(habit2.id, date)
         entryRepository.toggleEntry(habit2.id, date.minusDays(1))
         viewModel = LogbookViewModel(habitWithEntriesRepository, entryRepository)
@@ -76,8 +76,8 @@ class LogbookViewModelTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun uiState_whenHabitSelected_thenLoadHabits() = runTest {
-        habitRepository.addHabit(habit2)
-        habitRepository.addHabit(habit3)
+        habitRepository.upsertHabit(habit2)
+        habitRepository.upsertHabit(habit3)
         val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
         viewModel.setSelectedHabit(habit2.id)
         val uiState = viewModel.uiState.map { it as LogbookUiState.SelectedHabit }
@@ -89,8 +89,8 @@ class LogbookViewModelTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun setSelectedHabit_whenSelectedHabitChanges_thenLoadNewEntries() = runTest {
-        habitRepository.addHabit(habit1)
-        habitRepository.addHabit(habit2)
+        habitRepository.upsertHabit(habit1)
+        habitRepository.upsertHabit(habit2)
         entryRepository.toggleEntry(habit1.id, date)
         entryRepository.toggleEntry(habit2.id, date.plusDays(1))
         viewModel.setSelectedHabit(habit1.id)
@@ -105,8 +105,8 @@ class LogbookViewModelTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun toggleEntry_whenDateToggled_thenModifyState() = runTest {
-        habitRepository.addHabit(habit1)
-        habitRepository.addHabit(habit2)
+        habitRepository.upsertHabit(habit1)
+        habitRepository.upsertHabit(habit2)
         val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
         viewModel.setSelectedHabit(habit1.id)
         val uiState = viewModel.uiState.map { it as LogbookUiState.SelectedHabit }

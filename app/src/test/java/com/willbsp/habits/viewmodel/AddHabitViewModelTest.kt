@@ -2,6 +2,7 @@ package com.willbsp.habits.viewmodel
 
 import com.willbsp.habits.data.model.HabitFrequency
 import com.willbsp.habits.fake.repository.FakeHabitRepository
+import com.willbsp.habits.rules.TestDispatcherRule
 import com.willbsp.habits.ui.common.ModifyHabitUiState
 import com.willbsp.habits.ui.screens.add.AddHabitViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -9,9 +10,15 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 
 class AddHabitViewModelTest {
+
+    // TODO need tests for validation
+
+    @get:Rule
+    val testDispatcher = TestDispatcherRule()
 
     private val habitRepository = FakeHabitRepository()
     private lateinit var viewModel: AddHabitViewModel
@@ -29,7 +36,7 @@ class AddHabitViewModelTest {
 
     @Test
     fun uiState_whenUpdated_newStateSet() {
-        val expected = ModifyHabitUiState("Reading", HabitFrequency.WEEKLY)
+        val expected = ModifyHabitUiState("Reading", false, HabitFrequency.WEEKLY)
         val updatedUiState =
             viewModel.uiState.copy(name = "Reading", frequency = HabitFrequency.WEEKLY)
         viewModel.updateUiState(updatedUiState)
