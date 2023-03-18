@@ -3,6 +3,7 @@ package com.willbsp.habits.ui.screens.edit
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -23,7 +24,7 @@ fun EditDeleteDialog(
         title = { Text(text = "Delete habit?") },
         text = { Text(text = "This action cannot be undone.") },
         confirmButton = {
-            TextButton(
+            Button(
                 onClick = onConfirm
             ) {
                 Text("Confirm")
