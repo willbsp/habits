@@ -5,6 +5,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.willbsp.habits.common.HABIT_NAME_MAX_CHARACTER_LIMIT
+import com.willbsp.habits.common.HABIT_NAME_MIN_CHARACTER_LIMIT
 import com.willbsp.habits.data.model.Habit
 import com.willbsp.habits.data.repository.HabitRepository
 import com.willbsp.habits.ui.common.ModifyHabitUiState
@@ -40,11 +42,6 @@ class AddHabitViewModel @Inject constructor(
             uiState = uiState.copy(nameIsInvalid = true)
             false
         }
-    }
-
-    companion object {
-        const val HABIT_NAME_MAX_CHARACTER_LIMIT = 20
-        const val HABIT_NAME_MIN_CHARACTER_LIMIT = 1
     }
 
 }
