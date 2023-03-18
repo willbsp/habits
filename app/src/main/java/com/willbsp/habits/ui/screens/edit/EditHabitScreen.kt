@@ -8,6 +8,8 @@ import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -74,6 +76,8 @@ private fun EditHabit(
         }
     ) { innerPadding ->
 
+        val deleteDialogOpen = remember { mutableStateOf(false) }
+
         Column(
             modifier = modifier
                 .padding(innerPadding)
@@ -90,13 +94,23 @@ private fun EditHabit(
 
             Spacer(Modifier.height(10.dp))
 
-            FilledTonalButton( // TODO need a confirmation dialog for delete
+            FilledTonalButton(
                 modifier = Modifier.fillMaxWidth(),
-                onClick = onDeleteClick
+                onClick = { deleteDialogOpen.value = true }
             ) {
                 Text(stringResource(R.string.edit_habit_delete))
             }
 
+        }
+
+        if (deleteDialogOpen.value) {
+            EditDeleteDialog(
+                onDismiss = { deleteDialogOpen.value = false },
+                onConfirm = {
+                    deleteDialogOpen.value = false
+                    onDeleteClick()
+                }
+            )
         }
 
     }
