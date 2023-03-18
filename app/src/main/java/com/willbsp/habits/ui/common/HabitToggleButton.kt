@@ -8,12 +8,13 @@ import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.willbsp.habits.R
 
-// TODO fix requiresapi for lower apis, different way of getting vibrator?
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun HabitToggleButton(
@@ -22,17 +23,13 @@ fun HabitToggleButton(
     checked: Boolean
 ) {
 
-    /*val v: VibratorManager =
-        LocalContext.current.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
-    val vibrator: Vibrator = v.defaultVibrator*/
+    val haptic = LocalHapticFeedback.current
 
     AnimatedContent(targetState = checked) {
         FilledIconToggleButton(
             modifier = modifier.size(40.dp),
             onCheckedChange = { value ->
-                /*vibrator.vibrate(
-                    VibrationEffect.createPredefined(VibrationEffect.EFFECT_HEAVY_CLICK)
-                )*/
+                haptic.performHapticFeedback(HapticFeedbackType.LongPress)
                 onCheckedChange(value)
             },
             checked = it
