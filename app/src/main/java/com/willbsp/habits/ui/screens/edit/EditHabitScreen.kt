@@ -8,7 +8,6 @@ import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -19,7 +18,6 @@ import com.willbsp.habits.ui.common.HabitsFloatingAction
 import com.willbsp.habits.ui.common.ModifyHabitForm
 import com.willbsp.habits.ui.common.ModifyHabitUiState
 import com.willbsp.habits.ui.theme.HabitsTheme
-import kotlinx.coroutines.launch
 
 @Composable
 fun EditHabitScreen(
@@ -30,21 +28,15 @@ fun EditHabitScreen(
     navigateToHome: () -> Unit
 ) {
 
-    val coroutineScope = rememberCoroutineScope()
-
     EditHabit(
         modifier = modifier,
         navigateUp = navigateUp,
         onSaveClick = {
-            coroutineScope.launch {
-                viewModel.updateHabit()
-            }
+            viewModel.updateHabit()
             navigateBack()
         },
         onDeleteClick = {
-            coroutineScope.launch {
-                viewModel.deleteHabit()
-            }
+            viewModel.deleteHabit()
             navigateToHome()
         },
         onValueChange = {

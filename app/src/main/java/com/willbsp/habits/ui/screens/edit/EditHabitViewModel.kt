@@ -5,10 +5,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.willbsp.habits.data.model.Habit
 import com.willbsp.habits.data.repository.HabitRepository
 import com.willbsp.habits.ui.common.ModifyHabitUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
@@ -33,25 +35,31 @@ class EditHabitViewModel @Inject constructor(
         habitUiState = newHabitsUiState.copy()
     }
 
-    suspend fun deleteHabit() {
-        habitsRepository.deleteHabit(habitId)
-    }
-
-    private suspend fun loadHabit() {
-        val habit = habitsRepository.getHabit(habitId)
-        if (habit != null) {
-            habitUiState = ModifyHabitUiState(habit.name, habit.frequency)
+    fun deleteHabit() {
+        viewModelScope.launch {
+            habitsRepository.deleteHabit(habitId)
         }
     }
 
-    suspend fun updateHabit() { // TODO validation needed
-        habitsRepository.updateHabit(
-            Habit(
-                id = habitId,
-                name = habitUiState.name,
-                frequency = habitUiState.frequency
+    private fun loadHabit() {
+        viewModelScope.launch {
+            val habit = habitsRepository.getHabit(habitId)
+            if (habit != null) {
+                habitUiState = ModifyHabitUiState(name = habit.name, frequency = habit.frequency)
+            }
+        }
+    }
+
+    fun updateHabit() { // TODO validation needed
+        viewModelScope.launch {
+            habitsRepository.upsertHabit(
+                Habit(
+                    id = habitId,
+                    name = habitUiState.name,
+                    frequency = habitUiState.frequency
+                )
             )
-        )
+        }
     }
 
     companion object {
