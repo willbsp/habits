@@ -1,6 +1,7 @@
 package com.willbsp.habits.viewmodel
 
 import com.willbsp.habits.data.model.HabitFrequency
+import com.willbsp.habits.domain.SaveHabitUseCase
 import com.willbsp.habits.fake.repository.FakeHabitRepository
 import com.willbsp.habits.rules.TestDispatcherRule
 import com.willbsp.habits.ui.common.ModifyHabitUiState
@@ -25,7 +26,7 @@ class AddHabitViewModelTest {
 
     @Before
     fun setup() {
-        viewModel = AddHabitViewModel(habitRepository)
+        viewModel = AddHabitViewModel(SaveHabitUseCase(habitRepository))
     }
 
     @Test
