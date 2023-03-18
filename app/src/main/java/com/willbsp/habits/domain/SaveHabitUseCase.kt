@@ -12,8 +12,6 @@ class SaveHabitUseCase @Inject constructor(
     private val habitRepository: HabitRepository,
 ) {
 
-    // TODO needs tests
-
     operator fun invoke(habit: Habit, coroutineScope: CoroutineScope): Boolean {
         return if (habit.name.length in (HABIT_NAME_MIN_CHARACTER_LIMIT + 1)..HABIT_NAME_MAX_CHARACTER_LIMIT) {
             coroutineScope.launch { habitRepository.upsertHabit(habit) }
