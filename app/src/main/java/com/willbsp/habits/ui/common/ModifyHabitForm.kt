@@ -30,6 +30,7 @@ fun ModifyHabitForm(
         OutlinedTextField( // TODO need to cap habit name length
             value = habitUiState.name,
             singleLine = true,
+            isError = habitUiState.nameIsInvalid,
             onValueChange = { onValueChange(habitUiState.copy(name = it)) },
             label = { Text(stringResource(R.string.modify_habit_name)) },
             modifier = Modifier.fillMaxWidth()
