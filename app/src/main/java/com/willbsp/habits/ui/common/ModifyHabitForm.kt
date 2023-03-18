@@ -27,7 +27,7 @@ fun ModifyHabitForm(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        OutlinedTextField( // TODO need to cap habit name length
+        OutlinedTextField(
             value = habitUiState.name,
             singleLine = true,
             isError = habitUiState.nameIsInvalid,

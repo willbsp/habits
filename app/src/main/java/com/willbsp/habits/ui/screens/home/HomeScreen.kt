@@ -91,7 +91,7 @@ private fun Home(
                     }) {
                         Icon(
                             imageVector = if (showCompleted) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
-                            contentDescription = null // TODO
+                            contentDescription = stringResource(R.string.home_show_completed)
                         )
                     }
                     IconButton(onClick = navigateToSettings) {
@@ -107,17 +107,17 @@ private fun Home(
             HabitsFloatingAction(
                 onClick = navigateToAddHabit,
                 icon = Icons.Default.Add,
-                contentDescription = stringResource(R.string.home_screen_add_habit)
+                contentDescription = stringResource(R.string.home_add_habit)
             )
         }
-    ) { innerPadding -> // TODO
+    ) { innerPadding ->
 
         when (homeUiState) {
             is HomeUiState.Empty -> {
                 FullscreenHint(
                     modifier = Modifier.fillMaxSize(),
                     icon = Icons.Default.Add,
-                    iconContentDescription = R.string.home_screen_all_completed_tick, // TODO
+                    iconContentDescription = R.string.home_all_completed_tick,
                     text = R.string.home_no_habits
                 )
             }
@@ -137,8 +137,8 @@ private fun Home(
                     FullscreenHint(
                         modifier = Modifier.fillMaxSize(),
                         icon = Icons.Default.Done,
-                        iconContentDescription = R.string.home_screen_all_completed_tick,
-                        text = R.string.home_screen_all_completed
+                        iconContentDescription = R.string.home_all_completed_tick,
+                        text = R.string.home_all_completed
                     )
                 }
 
@@ -154,7 +154,7 @@ private fun Home(
                             .fillMaxSize()
                     ) {
                         Text( // TODO could have title area change colour when list is scrolled, e.g timers in google clock
-                            text = stringResource(R.string.home_screen_today),
+                            text = stringResource(R.string.home_today),
                             style = Typography.titleLarge,
                             modifier = Modifier.padding(horizontal = 10.dp) // keep inline with habit titles
                         )
@@ -227,7 +227,7 @@ private fun HabitsList(
                     Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
                         Text(
                             text = stringResource(
-                                R.string.home_screen_habit_list_subtitle,
+                                R.string.home_habit_list_subtitle,
                                 completedCount
                             ),
                             style = Typography.labelLarge

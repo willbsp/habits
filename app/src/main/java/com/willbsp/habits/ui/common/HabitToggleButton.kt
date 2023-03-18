@@ -1,11 +1,5 @@
 package com.willbsp.habits.ui.common
 
-import android.content.Context
-import android.os.Build
-import android.os.VibrationEffect
-import android.os.Vibrator
-import android.os.VibratorManager
-import androidx.annotation.RequiresApi
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.size
@@ -14,7 +8,6 @@ import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -46,7 +39,7 @@ fun HabitToggleButton(
         ) {
             Icon(
                 imageVector = Icons.Default.Done,
-                contentDescription = stringResource(id = R.string.home_screen_completed)
+                contentDescription = stringResource(id = R.string.home_completed)
             )
         }
     }

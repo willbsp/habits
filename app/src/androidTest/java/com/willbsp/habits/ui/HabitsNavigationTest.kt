@@ -90,7 +90,7 @@ class HabitsNavigationTest {
     }
 
     private fun navigateToAddHabitScreen() {
-        val addText = composeTestRule.activity.getString(R.string.home_screen_add_habit)
+        val addText = composeTestRule.activity.getString(R.string.home_add_habit)
         composeTestRule.onNodeWithContentDescription(addText).performClick()
     }
 

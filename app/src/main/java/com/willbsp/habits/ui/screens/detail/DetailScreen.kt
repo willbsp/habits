@@ -58,7 +58,7 @@ private fun Detail(
                     IconButton(onClick = { navigateToEditHabit(detailUiState.habitId) }) {
                         Icon(
                             imageVector = Icons.Filled.Edit,
-                            contentDescription = null // TODO
+                            contentDescription = stringResource(R.string.detail_edit_habit)
                         )
                     }
                 }
@@ -129,7 +129,7 @@ private fun DetailScreenPreview() {
     HabitsTheme {
         Detail(
             detailUiState = DetailUiState(-1, "Flashcards", 5, 23),
-            navigateUp = { /*TODO*/ },
+            navigateUp = { },
             navigateToEditHabit = {}
         )
     }

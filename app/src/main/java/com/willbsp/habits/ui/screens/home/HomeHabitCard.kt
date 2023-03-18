@@ -2,10 +2,23 @@ package com.willbsp.habits.ui.screens.home
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.MoreHoriz
-import androidx.compose.material3.*
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -21,7 +34,7 @@ import com.willbsp.habits.ui.common.HabitToggleButton
 import com.willbsp.habits.ui.theme.Typography
 import java.time.LocalDate
 import java.time.format.TextStyle
-import java.util.*
+import java.util.Locale
 
 @Composable
 fun HomeHabitCard(
@@ -96,7 +109,7 @@ fun HomeHabitCard(
                         ) {
                             Icon(
                                 imageVector = Icons.Outlined.MoreHoriz,
-                                contentDescription = stringResource(R.string.home_screen_completed)
+                                contentDescription = stringResource(R.string.home_completed)
                             )
                         }
 
