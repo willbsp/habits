@@ -50,6 +50,7 @@ class HabitWithEntriesRepositoryTest(
         when (repositoryClass) {
             LocalHabitWithEntriesRepository::class ->
                 repository = LocalHabitWithEntriesRepository(habitWithEntriesDao)
+
             FakeHabitWithEntriesRepository::class ->
                 repository = FakeHabitWithEntriesRepository(habitWithEntriesDao)
         }
@@ -64,8 +65,8 @@ class HabitWithEntriesRepositoryTest(
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun getHabitsWithEntries_whenHabitsButNoEntries_returnHabitsAndEmptyList() = runTest {
-        habitDao.insert(habit1)
-        habitDao.insert(habit2)
+        habitDao.upsert(habit1)
+        habitDao.upsert(habit2)
         assertEquals(
             listOf(HabitWithEntries(habit1, listOf()), HabitWithEntries(habit2, listOf())),
             repository.getHabitsWithEntries().first()
@@ -76,7 +77,7 @@ class HabitWithEntriesRepositoryTest(
     @Test
     fun getHabitsWithEntries_whenHabitsAndEntries_returnHabitsAndEntries() = runTest {
         val entry = Entry(id = 0, habitId = habit1.id, date)
-        habitDao.insert(habit1)
+        habitDao.upsert(habit1)
         entryDao.insert(Entry(habitId = habit1.id, date = date))
         assertEquals(
             listOf(HabitWithEntries(habit1, listOf(entry))),

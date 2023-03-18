@@ -41,6 +41,7 @@ class HabitRepositoryTest(
         when (repositoryClass) {
             LocalHabitRepository::class ->
                 repository = LocalHabitRepository(FakeHabitDao())
+
             FakeHabitRepository::class ->
                 repository = FakeHabitRepository()
         }
@@ -50,9 +51,9 @@ class HabitRepositoryTest(
     @Test
     fun getAllHabitsStream_whenHabitsAdded_returnsHabits() = runTest {
         val habitsStream = repository.getAllHabitsStream()
-        repository.addHabit(habit1)
+        repository.upsertHabit(habit1)
         assertEquals(listOf(habit1), habitsStream.first())
-        repository.addHabit(habit2)
+        repository.upsertHabit(habit2)
         assertEquals(listOf(habit1, habit2), habitsStream.first())
     }
 
@@ -60,8 +61,8 @@ class HabitRepositoryTest(
     @Test
     fun getAllHabitsStream_whenHabitsDeleted_returnsEmptyList() = runTest {
         val habitsStream = repository.getAllHabitsStream()
-        repository.addHabit(habit1)
-        repository.addHabit(habit2)
+        repository.upsertHabit(habit1)
+        repository.upsertHabit(habit2)
         assertEquals(listOf(habit1, habit2), habitsStream.first())
         repository.deleteHabit(habit1.id)
         repository.deleteHabit(habit2.id)
@@ -72,10 +73,10 @@ class HabitRepositoryTest(
     @Test
     fun getHabitStream_whenHabitUpdated_returnUpdatedHabit() = runTest {
         val habitStream = repository.getHabitStream(habit1.id)
-        repository.addHabit(habit1)
+        repository.upsertHabit(habit1)
         assertEquals(habit1, habitStream.first())
         val newHabit = habit1.copy(frequency = HabitFrequency.WEEKLY)
-        repository.updateHabit(newHabit)
+        repository.upsertHabit(newHabit)
         assertEquals(newHabit, habitStream.first())
     }
 
@@ -83,7 +84,7 @@ class HabitRepositoryTest(
     @Test
     fun getHabitStream_whenHabitDeleted_returnNull() = runTest {
         val habitStream = repository.getHabitStream(habit1.id)
-        repository.addHabit(habit1)
+        repository.upsertHabit(habit1)
         assertEquals(habit1, habitStream.first())
         repository.deleteHabit(habit1.id)
         assertNull(habitStream.first())
@@ -92,7 +93,7 @@ class HabitRepositoryTest(
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun getHabit_whenExists_returnsHabit() = runTest {
-        repository.addHabit(habit1)
+        repository.upsertHabit(habit1)
         val habit = repository.getHabit(habit1.id)
         assertEquals(habit1, habit)
     }
@@ -101,7 +102,7 @@ class HabitRepositoryTest(
     @Test
     fun getHabit_whenNoHabit_returnsNull() = runTest {
         assertNull(repository.getHabit(habit1.id))
-        repository.addHabit(habit1)
+        repository.upsertHabit(habit1)
         repository.deleteHabit(habit1.id)
         assertNull(repository.getHabit(habit1.id))
     }
@@ -109,23 +110,23 @@ class HabitRepositoryTest(
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun addHabit_whenHabitAdded_habitExists() = runTest {
-        repository.addHabit(habit1)
+        repository.upsertHabit(habit1)
         assertEquals(habit1, repository.getHabit(habit1.id))
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun updateHabit_whenHabitUpdated_habitUpdates() = runTest {
-        repository.addHabit(habit1)
+        repository.upsertHabit(habit1)
         val newHabit = habit1.copy(name = "Walking")
-        repository.updateHabit(newHabit)
+        repository.upsertHabit(newHabit)
         assertEquals(newHabit, repository.getHabit(newHabit.id))
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun deleteHabit_whenHabitDeleted_isNull() = runTest {
-        repository.addHabit(habit1)
+        repository.upsertHabit(habit1)
         repository.deleteHabit(habit1.id)
         assertNull(repository.getHabit(habit1.id))
     }
