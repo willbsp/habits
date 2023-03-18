@@ -6,33 +6,35 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.willbsp.habits.data.model.Habit
+import com.willbsp.habits.common.HABIT_NAME_MAX_CHARACTER_LIMIT
 import com.willbsp.habits.data.repository.HabitRepository
+import com.willbsp.habits.domain.SaveHabitUseCase
 import com.willbsp.habits.ui.common.ModifyHabitUiState
+import com.willbsp.habits.ui.common.toHabit
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @HiltViewModel
 class EditHabitViewModel @Inject constructor(
     private val habitsRepository: HabitRepository,
+    private val saveHabitUseCase: SaveHabitUseCase,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    var habitUiState by mutableStateOf(ModifyHabitUiState())
+    var uiState by mutableStateOf(ModifyHabitUiState())
         private set
 
     private var habitId: Int = checkNotNull(savedStateHandle[HABIT_ID_SAVED_STATE_KEY])
 
     init {
-        runBlocking {
-            loadHabit()
-        }
+        loadHabit()
     }
 
     fun updateUiState(newHabitsUiState: ModifyHabitUiState) {
-        habitUiState = newHabitsUiState.copy()
+        uiState = if (newHabitsUiState.name.length <= HABIT_NAME_MAX_CHARACTER_LIMIT) {
+            newHabitsUiState.copy(nameIsInvalid = false)
+        } else newHabitsUiState.copy(nameIsInvalid = true)
     }
 
     fun deleteHabit() {
@@ -41,24 +43,21 @@ class EditHabitViewModel @Inject constructor(
         }
     }
 
+    fun saveHabit(): Boolean {
+        return if (saveHabitUseCase(uiState.toHabit(habitId), viewModelScope)) {
+            true
+        } else {
+            uiState = uiState.copy(nameIsInvalid = true)
+            false
+        }
+    }
+
     private fun loadHabit() {
         viewModelScope.launch {
             val habit = habitsRepository.getHabit(habitId)
             if (habit != null) {
-                habitUiState = ModifyHabitUiState(name = habit.name, frequency = habit.frequency)
+                uiState = ModifyHabitUiState(name = habit.name, frequency = habit.frequency)
             }
-        }
-    }
-
-    fun updateHabit() { // TODO validation needed
-        viewModelScope.launch {
-            habitsRepository.upsertHabit(
-                Habit(
-                    id = habitId,
-                    name = habitUiState.name,
-                    frequency = habitUiState.frequency
-                )
-            )
         }
     }
 

@@ -32,8 +32,7 @@ fun EditHabitScreen(
         modifier = modifier,
         navigateUp = navigateUp,
         onSaveClick = {
-            viewModel.updateHabit()
-            navigateBack()
+            if (viewModel.saveHabit()) navigateBack()
         },
         onDeleteClick = {
             viewModel.deleteHabit()
@@ -42,7 +41,7 @@ fun EditHabitScreen(
         onValueChange = {
             viewModel.updateUiState(it)
         },
-        habitUiState = viewModel.habitUiState
+        habitUiState = viewModel.uiState
     )
 
 }
