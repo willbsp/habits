@@ -48,6 +48,10 @@
     <string name="detail_edit_habit">Edit habit</string>
     <string name="detail_streak">Streak</string>
     <string name="detail_score">Score</string>
+    <string name="edit_confirm">Confirm</string>
+    <string name="edit_dismiss">Dismiss</string>
+    <string name="edit_delete_habit">Delete habit?</string>
+    <string name="edit_cannot_undo">This action cannot be undone.</string>
     <!--detail screen end-->
 
 </resources>

@@ -9,7 +9,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.willbsp.habits.R
 
 @Composable
 fun EditDeleteDialog(
@@ -21,20 +23,20 @@ fun EditDeleteDialog(
         modifier = modifier,
         onDismissRequest = onDismiss,
         icon = { Icon(Icons.Filled.Delete, contentDescription = null) },
-        title = { Text(text = "Delete habit?") },
-        text = { Text(text = "This action cannot be undone.") },
+        title = { Text(text = stringResource(R.string.edit_delete_habit)) },
+        text = { Text(text = stringResource(R.string.edit_cannot_undo)) },
         confirmButton = {
             Button(
                 onClick = onConfirm
             ) {
-                Text("Confirm")
+                Text(stringResource(R.string.edit_confirm))
             }
         },
         dismissButton = {
             TextButton(
                 onClick = onDismiss
             ) {
-                Text("Dismiss")
+                Text(stringResource(R.string.edit_dismiss))
             }
         }
     )
