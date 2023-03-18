@@ -16,11 +16,8 @@ interface HabitDao {
     @Query("SELECT * FROM habit WHERE id = :id")
     suspend fun getHabit(id: Int): Habit?
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insert(habit: Habit)
-
-    @Update
-    suspend fun update(habit: Habit)
+    @Upsert
+    suspend fun upsert(habit: Habit)
 
     @Delete
     suspend fun delete(habit: Habit)
