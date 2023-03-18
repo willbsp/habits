@@ -15,7 +15,6 @@ import com.willbsp.habits.ui.common.HabitsFloatingAction
 import com.willbsp.habits.ui.common.ModifyHabitForm
 import com.willbsp.habits.ui.common.ModifyHabitUiState
 import com.willbsp.habits.ui.theme.HabitsTheme
-import kotlinx.coroutines.launch
 
 @Composable
 fun AddHabitScreen(
@@ -25,16 +24,13 @@ fun AddHabitScreen(
     navigateBack: () -> Unit
 ) {
 
-    val coroutineScope = rememberCoroutineScope()
-
     AddHabit(
         modifier = modifier,
         navigateUp = navigateUp,
         onSaveClick = {
-            coroutineScope.launch {
-                viewModel.saveHabit()
+            if (viewModel.saveHabit()) {
+                navigateBack()
             }
-            navigateBack()
         },
         onValueChange = {
             viewModel.updateUiState(it)
