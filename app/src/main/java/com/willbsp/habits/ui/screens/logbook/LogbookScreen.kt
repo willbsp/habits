@@ -110,30 +110,6 @@ private fun Logbook(
             }
 
         }
-
-        /*Spacer(modifier = Modifier.height(10.dp))
-
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-
-            items(items = logbookUiState.habits, key = { it.id }) { habitUiState ->
-
-                LogbookHabitCard(
-                    modifier = Modifier.fillMaxWidth(),
-                    logbookHabitUiState = habitUiState,
-                    completedOnClick = {
-                        completedOnClick(it, selectedDate)
-                    }
-                )
-
-            }
-
-        }*/
-
-        //}
-
     }
 }
 

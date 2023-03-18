@@ -1,5 +1,7 @@
 package com.willbsp.habits.ui.screens.logbook
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -100,6 +102,7 @@ fun LogbookMonth(
 
 }
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 private fun DateIconButton(
     modifier: Modifier = Modifier,
@@ -110,19 +113,21 @@ private fun DateIconButton(
 ) {
     val dayOfMonth = date.dayOfMonth.toString()
 
-    FilledIconToggleButton(
-        modifier = modifier,
-        checked = checked,
-        enabled = enabled,
-        onCheckedChange = {
-            onCheckedChange(date)
-        }
-    ) {
-        Box(
-            modifier = Modifier,
-            contentAlignment = Alignment.Center
+    AnimatedContent(targetState = checked) {
+        FilledIconToggleButton(
+            modifier = modifier,
+            checked = checked,
+            enabled = enabled,
+            onCheckedChange = {
+                onCheckedChange(date)
+            }
         ) {
-            Text(dayOfMonth, style = Typography.bodyLarge)
+            Box(
+                modifier = Modifier,
+                contentAlignment = Alignment.Center
+            ) {
+                Text(dayOfMonth, style = Typography.bodyLarge)
+            }
         }
     }
 
