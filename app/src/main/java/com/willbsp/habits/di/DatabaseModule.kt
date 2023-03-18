@@ -19,9 +19,7 @@ class DatabaseModule {
     @Provides
     fun provideHabitDatabase(
         @ApplicationContext app: Context
-    ) = Room.databaseBuilder(app, HabitDatabase::class.java, DATABASE_NAME)
-        .fallbackToDestructiveMigration() // TODO need to change at some point
-        .build()
+    ) = Room.databaseBuilder(app, HabitDatabase::class.java, DATABASE_NAME).build()
 
     @Singleton
     @Provides

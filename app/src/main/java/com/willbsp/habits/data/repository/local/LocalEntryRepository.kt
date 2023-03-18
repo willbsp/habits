@@ -24,7 +24,7 @@ class LocalEntryRepository @Inject constructor(
     override suspend fun toggleEntry(
         habitId: Int,
         date: LocalDate
-    ) { // TODO check if habit exists first!
+    ) {
         val entry: Entry? = entryDao.getEntryForDate(habitId, date)
         if (entry == null) entryDao.insert(Entry(habitId = habitId, date = date))
         else entryDao.delete(entry)
