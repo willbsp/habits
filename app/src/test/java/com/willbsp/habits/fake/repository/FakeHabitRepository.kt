@@ -19,14 +19,10 @@ class FakeHabitRepository : HabitRepository {
 
     override suspend fun getHabit(habitId: Int): Habit? = habits.find { it.id == habitId }
 
-    override suspend fun addHabit(habit: Habit) {
-        habits.add(habit)
-        emit()
-    }
-
-    override suspend fun updateHabit(habit: Habit) {
+    override suspend fun upsertHabit(habit: Habit) {
         val index = habits.indexOfFirst { it.id == habit.id }
         if (index != -1) habits[index] = habit
+        else habits.add(habit)
         emit()
     }
 
