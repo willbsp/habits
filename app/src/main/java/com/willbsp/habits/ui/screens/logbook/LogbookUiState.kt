@@ -1,11 +1,20 @@
 package com.willbsp.habits.ui.screens.logbook
 
-data class LogbookUiState(
-    val habits: List<LogbookHabitUiState> = listOf()
-)
+import java.time.LocalDate
 
-data class LogbookHabitUiState(
-    val id: Int,
-    val name: String,
-    val completed: Boolean
-)
+sealed class LogbookUiState {
+
+    object NoHabits : LogbookUiState()
+
+    data class SelectedHabit(
+        val selectedHabitId: Int,
+        val selectedHabitDates: List<LocalDate>,
+        val habits: List<Habit>
+    ) : LogbookUiState()
+
+    data class Habit(
+        val id: Int,
+        val name: String
+    )
+
+}

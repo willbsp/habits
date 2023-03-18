@@ -11,17 +11,11 @@ import androidx.navigation.navArgument
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.willbsp.habits.ui.screens.add.AddHabitScreen
-import com.willbsp.habits.ui.screens.add.AddHabitViewModel
 import com.willbsp.habits.ui.screens.detail.DetailScreen
-import com.willbsp.habits.ui.screens.detail.DetailViewModel
 import com.willbsp.habits.ui.screens.edit.EditHabitScreen
-import com.willbsp.habits.ui.screens.edit.EditHabitViewModel
 import com.willbsp.habits.ui.screens.home.HomeScreen
-import com.willbsp.habits.ui.screens.home.HomeViewModel
 import com.willbsp.habits.ui.screens.logbook.LogbookScreen
-import com.willbsp.habits.ui.screens.logbook.LogbookViewModel
 import com.willbsp.habits.ui.screens.settings.SettingsScreen
-import com.willbsp.habits.ui.screens.settings.SettingsViewModel
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -41,10 +35,8 @@ fun HabitsNavigationGraph(
             exitTransition = { fadeOut() }
         ) {
 
-            val viewModel = hiltViewModel<HomeViewModel>()
-
             HomeScreen(
-                viewModel = viewModel,
+                viewModel = hiltViewModel(),
                 navigateToLogbook = {
                     navController.navigate(HabitsNavigationDestination.LOGBOOK.route)
                 },
@@ -77,10 +69,8 @@ fun HabitsNavigationGraph(
             }
         ) {
 
-            val viewModel = hiltViewModel<AddHabitViewModel>()
-
             AddHabitScreen(
-                viewModel = viewModel,
+                viewModel = hiltViewModel(),
                 navigateUp = {
                     navController.navigateUp()
                 },
@@ -114,10 +104,8 @@ fun HabitsNavigationGraph(
             }
         ) {
 
-            val viewModel = hiltViewModel<DetailViewModel>()
-
             DetailScreen(
-                viewModel = viewModel,
+                viewModel = hiltViewModel(),
                 navigateUp = { navController.navigateUp() },
                 navigateToEditHabit = { habitId ->
                     navController.navigate(HabitsNavigationDestination.EDIT.route + habitId)
@@ -144,10 +132,8 @@ fun HabitsNavigationGraph(
 
         ) {
 
-            val viewModel = hiltViewModel<EditHabitViewModel>()
-
             EditHabitScreen(
-                viewModel = viewModel,
+                viewModel = hiltViewModel(),
                 navigateUp = {
                     navController.navigateUp()
                 },
@@ -177,10 +163,8 @@ fun HabitsNavigationGraph(
             }
         ) {
 
-            val viewModel = hiltViewModel<LogbookViewModel>()
-
             LogbookScreen(
-                viewModel = viewModel,
+                viewModel = hiltViewModel(),
                 navigateUp = {
                     navController.navigateUp()
                 }
@@ -204,10 +188,8 @@ fun HabitsNavigationGraph(
             }
         ) {
 
-            val viewModel = hiltViewModel<SettingsViewModel>()
-
             SettingsScreen(
-                viewModel = viewModel,
+                viewModel = hiltViewModel(),
                 navigateUp = {
                     navController.navigateUp()
                 }
