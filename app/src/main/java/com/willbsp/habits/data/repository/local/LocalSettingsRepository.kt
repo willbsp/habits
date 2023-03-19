@@ -14,7 +14,13 @@ class LocalSettingsRepository @Inject constructor(
     private val dataStore: DataStore<Preferences>
 ) : SettingsRepository {
 
-    override val preferences: Flow<Map<Preferences.Key<*>, Any>> = dataStore.data.map { it.asMap() }
+    override fun getSettingsMap() = dataStore.data.map { it.asMap() }
+
+    override fun getStreakPreference(): Flow<Boolean> =
+        dataStore.data.map { it[SHOW_STREAKS_ON_HOME] ?: true }
+
+    override fun getSubtitlePreference(): Flow<Boolean> =
+        dataStore.data.map { it[SHOW_COMPLETED_SUBTITLE] ?: true }
 
     override suspend fun saveStreaksPreference(showStreaksOnHome: Boolean) {
         dataStore.edit { it[SHOW_STREAKS_ON_HOME] = showStreaksOnHome }

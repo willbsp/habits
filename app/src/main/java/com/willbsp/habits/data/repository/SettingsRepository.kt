@@ -6,7 +6,9 @@ import kotlinx.coroutines.flow.Flow
 
 interface SettingsRepository {
 
-    val preferences: Flow<Map<Preferences.Key<*>, Any>>
+    fun getSettingsMap(): Flow<Map<Preferences.Key<*>, Any>>
+    fun getStreakPreference(): Flow<Boolean>
+    fun getSubtitlePreference(): Flow<Boolean>
     suspend fun saveStreaksPreference(showStreaksOnHome: Boolean)
     suspend fun saveSubtitlePreference(showCompletedSubtitle: Boolean)
 
