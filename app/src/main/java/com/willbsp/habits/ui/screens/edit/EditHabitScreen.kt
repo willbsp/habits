@@ -16,9 +16,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.willbsp.habits.R
 import com.willbsp.habits.ui.common.DefaultHabitsAppTopBar
+import com.willbsp.habits.ui.common.HabitForm
+import com.willbsp.habits.ui.common.HabitUiState
 import com.willbsp.habits.ui.common.HabitsFloatingAction
-import com.willbsp.habits.ui.common.ModifyHabitForm
-import com.willbsp.habits.ui.common.ModifyHabitUiState
 import com.willbsp.habits.ui.theme.HabitsTheme
 
 @Composable
@@ -41,7 +41,7 @@ fun EditHabitScreen(
             navigateToHome()
         },
         onValueChange = {
-            viewModel.updateUiState(it)
+            viewModel.updateUiState(it as HabitUiState.Habit)
         },
         habitUiState = viewModel.uiState
     )
@@ -55,8 +55,8 @@ private fun EditHabit(
     navigateUp: () -> Unit,
     onSaveClick: () -> Unit,
     onDeleteClick: () -> Unit,
-    onValueChange: (ModifyHabitUiState) -> Unit,
-    habitUiState: ModifyHabitUiState
+    onValueChange: (HabitUiState) -> Unit,
+    habitUiState: HabitUiState
 ) {
 
     Scaffold(
@@ -85,20 +85,30 @@ private fun EditHabit(
                 .fillMaxSize()
         ) {
 
-            ModifyHabitForm(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                onValueChange = onValueChange,
-                habitUiState = habitUiState
-            )
+            when (habitUiState) {
 
-            Spacer(Modifier.height(10.dp))
+                is HabitUiState.Habit -> {
 
-            FilledTonalButton(
-                modifier = Modifier.fillMaxWidth(),
-                onClick = { deleteDialogOpen.value = true }
-            ) {
-                Text(stringResource(R.string.edit_habit_delete))
+                    HabitForm(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        onValueChange = onValueChange,
+                        habitUiState = habitUiState
+                    )
+
+                    Spacer(Modifier.height(10.dp))
+
+                    FilledTonalButton(
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = { deleteDialogOpen.value = true }
+                    ) {
+                        Text(stringResource(R.string.edit_habit_delete))
+                    }
+
+                }
+
+                else -> {}
+
             }
 
         }
@@ -125,7 +135,7 @@ private fun EditHabitScreenPreview() {
             onSaveClick = {},
             onDeleteClick = {},
             onValueChange = {},
-            habitUiState = ModifyHabitUiState()
+            habitUiState = HabitUiState.Loading
         )
     }
 }

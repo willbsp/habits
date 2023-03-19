@@ -15,10 +15,10 @@ import com.willbsp.habits.data.model.HabitFrequency
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ModifyHabitForm(
+fun HabitForm(
     modifier: Modifier = Modifier,
-    onValueChange: (ModifyHabitUiState) -> Unit,
-    habitUiState: ModifyHabitUiState
+    onValueChange: (HabitUiState.Habit) -> Unit,
+    habitUiState: HabitUiState.Habit
 ) {
 
     Column(
@@ -51,8 +51,8 @@ fun ModifyHabitForm(
 @Composable
 private fun HabitFrequencyDropdown(
     modifier: Modifier = Modifier,
-    uiState: ModifyHabitUiState,
-    onValueChange: (ModifyHabitUiState) -> Unit
+    uiState: HabitUiState.Habit,
+    onValueChange: (HabitUiState.Habit) -> Unit
 ) {
 
     val options = HabitFrequency.values()

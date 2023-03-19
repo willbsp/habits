@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.willbsp.habits.common.HABIT_NAME_MAX_CHARACTER_LIMIT
 import com.willbsp.habits.domain.SaveHabitUseCase
-import com.willbsp.habits.ui.common.ModifyHabitUiState
+import com.willbsp.habits.ui.common.HabitUiState
 import com.willbsp.habits.ui.common.toHabit
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -17,10 +17,10 @@ class AddHabitViewModel @Inject constructor(
     private val saveHabitUseCase: SaveHabitUseCase
 ) : ViewModel() {
 
-    var uiState by mutableStateOf(ModifyHabitUiState())
+    var uiState by mutableStateOf(HabitUiState.Habit())
         private set
 
-    fun updateUiState(newHabitsUiState: ModifyHabitUiState) {
+    fun updateUiState(newHabitsUiState: HabitUiState.Habit) {
         uiState = if (newHabitsUiState.name.length <= HABIT_NAME_MAX_CHARACTER_LIMIT) {
             newHabitsUiState.copy(nameIsInvalid = false)
         } else newHabitsUiState.copy(nameIsInvalid = true)

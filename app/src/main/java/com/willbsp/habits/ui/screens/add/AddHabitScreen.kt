@@ -11,9 +11,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.willbsp.habits.R
 import com.willbsp.habits.ui.common.DefaultHabitsAppTopBar
+import com.willbsp.habits.ui.common.HabitForm
+import com.willbsp.habits.ui.common.HabitUiState
 import com.willbsp.habits.ui.common.HabitsFloatingAction
-import com.willbsp.habits.ui.common.ModifyHabitForm
-import com.willbsp.habits.ui.common.ModifyHabitUiState
 import com.willbsp.habits.ui.theme.HabitsTheme
 
 @Composable
@@ -46,8 +46,8 @@ private fun AddHabit(
     modifier: Modifier = Modifier,
     navigateUp: () -> Unit,
     onSaveClick: () -> Unit,
-    onValueChange: (ModifyHabitUiState) -> Unit,
-    habitUiState: ModifyHabitUiState
+    onValueChange: (HabitUiState.Habit) -> Unit,
+    habitUiState: HabitUiState.Habit
 ) {
 
     Scaffold(
@@ -67,7 +67,7 @@ private fun AddHabit(
         }
     ) { innerPadding ->
 
-        ModifyHabitForm(
+        HabitForm(
             modifier = modifier
                 .padding(innerPadding)
                 .padding(horizontal = 10.dp)
@@ -87,7 +87,7 @@ private fun AddHabitScreenPreview() {
             navigateUp = {},
             onSaveClick = {},
             onValueChange = {},
-            habitUiState = ModifyHabitUiState()
+            habitUiState = HabitUiState.Habit()
         )
     }
 }
