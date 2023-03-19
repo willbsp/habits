@@ -7,12 +7,11 @@ import com.willbsp.habits.data.repository.EntryRepository
 import com.willbsp.habits.data.repository.HabitWithEntriesRepository
 import com.willbsp.habits.data.repository.SettingsRepository
 import com.willbsp.habits.domain.CalculateStreakUseCase
-import com.willbsp.habits.ui.common.PreferencesUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -26,26 +25,17 @@ class HomeViewModel @Inject constructor(
     settingsRepository: SettingsRepository,
 ) : ViewModel() {
 
-    val uiState: StateFlow<HomeUiState> = habitRepository.getHabitsWithEntries()
-        .map { it.toHomeUiState() }
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
-            initialValue = HomeUiState.Empty
-        )
-
-    val preferencesUiState: StateFlow<PreferencesUiState> =
-        settingsRepository.preferences.map { // TODO make available in domain layer?
-            PreferencesUiState(
-                showStreaks = it[SettingsRepository.SettingsKey.SHOW_STREAKS_ON_HOME] as Boolean?
-                    ?: true,
-                showCompletedSubtitle = it[SettingsRepository.SettingsKey.SHOW_COMPLETED_SUBTITLE] as Boolean?
-                    ?: true
-            )
+    val uiState: StateFlow<HomeUiState> =
+        combine(
+            habitRepository.getHabitsWithEntries(),
+            settingsRepository.getStreakPreference(),
+            settingsRepository.getSubtitlePreference()
+        ) { habitWithEntriesList, streakPref, subtitlePref ->
+            habitWithEntriesList.toHomeUiState(streakPref, subtitlePref)
         }.stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
-            initialValue = PreferencesUiState()
+            initialValue = HomeUiState.Empty
         )
 
     fun toggleEntry(habitId: Int, date: LocalDate) {
@@ -54,9 +44,12 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private suspend fun List<HabitWithEntries>.toHomeUiState(): HomeUiState {
+    private suspend fun List<HabitWithEntries>.toHomeUiState(
+        streakPref: Boolean,
+        subtitlePref: Boolean
+    ): HomeUiState {
         return if (this.isEmpty()) HomeUiState.Empty
-        else HomeUiState.Habits(this.map { it.toHabit() })
+        else HomeUiState.Habits(this.map { it.toHabit() }, streakPref, subtitlePref)
     }
 
     private suspend fun HabitWithEntries.toHabit(): HomeUiState.Habit {
