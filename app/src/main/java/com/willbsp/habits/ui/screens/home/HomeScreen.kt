@@ -22,7 +22,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.willbsp.habits.R
 import com.willbsp.habits.ui.common.FullscreenHint
 import com.willbsp.habits.ui.common.HabitsFloatingAction
-import com.willbsp.habits.ui.common.PreferencesUiState
 import com.willbsp.habits.ui.theme.HabitsTheme
 import com.willbsp.habits.ui.theme.Typography
 import java.time.LocalDate
@@ -38,7 +37,6 @@ fun HomeScreen(
 ) {
 
     val homeUiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val preferencesState by viewModel.preferencesUiState.collectAsStateWithLifecycle()
 
     Home(
         modifier = modifier,
@@ -48,7 +46,6 @@ fun HomeScreen(
         navigateToSettings = navigateToSettings,
         completedOnClick = { id, date -> viewModel.toggleEntry(id, date) },
         homeUiState = homeUiState,
-        preferencesUiState = preferencesState
     )
 
 }
@@ -62,7 +59,6 @@ private fun Home(
     navigateToAddHabit: () -> Unit,
     navigateToDetail: (Int) -> Unit,
     navigateToSettings: () -> Unit,
-    preferencesUiState: PreferencesUiState,
     homeUiState: HomeUiState
 ) {
 
@@ -163,8 +159,6 @@ private fun Home(
                             homeUiState = homeUiState,
                             completedOnClick = completedOnClick,
                             navigateToDetail = navigateToDetail,
-                            showStreaks = preferencesUiState.showStreaks,
-                            showSubtitle = preferencesUiState.showCompletedSubtitle,
                             showCompleted = showCompleted
                         )
                     }
@@ -182,8 +176,6 @@ private fun HabitsList(
     homeUiState: HomeUiState.Habits,
     completedOnClick: (Int, LocalDate) -> Unit,
     navigateToDetail: (Int) -> Unit,
-    showStreaks: Boolean,
-    showSubtitle: Boolean,
     showCompleted: Boolean,
     modifier: Modifier = Modifier
 ) {
@@ -206,7 +198,7 @@ private fun HabitsList(
                     habit = habit,
                     completedOnClick = completedOnClick,
                     navigateToDetail = navigateToDetail,
-                    showStreaks = showStreaks
+                    showStreaks = homeUiState.showStreaks
                 )
 
             }
@@ -214,7 +206,7 @@ private fun HabitsList(
         this.stickyHeader {
             val completedCount =
                 habitsList.count { habit -> habit.dates.any { it == LocalDate.now() } }
-            if (showSubtitle) {
+            if (homeUiState.showSubtitle) {
                 AnimatedVisibility(
                     visible = completedCount > 0 && !showCompleted,
                     enter = fadeIn(
@@ -255,7 +247,6 @@ private fun HomeScreenPreview() {
             navigateToLogbook = {},
             homeUiState = HomeUiState.Empty,
             completedOnClick = { _, _ -> },
-            preferencesUiState = PreferencesUiState()
         )
     }
 }

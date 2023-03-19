@@ -7,7 +7,9 @@ sealed class HomeUiState {
     object Empty : HomeUiState()
 
     data class Habits(
-        val habits: List<Habit>
+        val habits: List<Habit>,
+        val showStreaks: Boolean,
+        val showSubtitle: Boolean
     ) : HomeUiState()
 
     data class Habit(
