@@ -155,8 +155,7 @@ private fun HomeHabitCardDay(
     date: LocalDate
 ) {
 
-    // TODO other locales
-    val weekday = date.dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.ENGLISH)
+    val weekday = date.dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.getDefault())
     val dayOfMonth = date.dayOfMonth.toString()
 
     Column(

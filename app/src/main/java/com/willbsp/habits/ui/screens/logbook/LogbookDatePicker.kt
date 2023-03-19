@@ -55,6 +55,7 @@ fun LogbookDatePicker(
 }
 
 // TODO could these be animated to fade in when the user scrolls to them
+// TODO need to show weekdays
 @Composable
 fun LogbookMonth(
     modifier: Modifier = Modifier,
@@ -69,7 +70,7 @@ fun LogbookMonth(
     Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
 
         Text(
-            date.month.getDisplayName(TextStyle.FULL, Locale.ENGLISH),
+            date.month.getDisplayName(TextStyle.FULL, Locale.getDefault()),
             style = Typography.headlineLarge
         )
 
