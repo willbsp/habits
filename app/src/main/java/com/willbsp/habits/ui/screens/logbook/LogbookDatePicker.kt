@@ -102,10 +102,12 @@ fun LogbookMonth(
     val startDate = date.withDayOfMonth(1).with(DayOfWeek.MONDAY)
     val today = LocalDate.now()
 
+    // TODO still a bug here where last day or two will get cut off!
     Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
 
         Text(
-            date.month.getDisplayName(TextStyle.FULL, Locale.getDefault()),
+            text = "${date.month.getDisplayName(TextStyle.FULL, Locale.getDefault())} " +
+                    "${date.year}",
             style = Typography.headlineLarge
         )
 
@@ -116,9 +118,18 @@ fun LogbookMonth(
             horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             repeat(7) { row ->
+                val weekday = startDate.plusDays(row.toLong())
                 Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                    Text(
+                        modifier = Modifier.width(40.dp),
+                        text = weekday.dayOfWeek.getDisplayName(
+                            TextStyle.NARROW,
+                            Locale.getDefault()
+                        ),
+                        textAlign = TextAlign.Center
+                    )
                     repeat(5) { col ->
-                        val currentDate = startDate.plusWeeks(col.toLong()).plusDays(row.toLong())
+                        val currentDate = weekday.plusWeeks(col.toLong())
                         if (currentDate.month == date.month) {
                             DateIconButton(
                                 modifier = Modifier.size(40.dp),
