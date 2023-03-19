@@ -12,10 +12,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.willbsp.habits.R
 import com.willbsp.habits.ui.common.DefaultHabitsAppTopBar
-import com.willbsp.habits.ui.common.PreferencesUiState
 import com.willbsp.habits.ui.theme.HabitsTheme
 import com.willbsp.habits.ui.theme.Typography
-import kotlinx.coroutines.launch
 
 @Composable
 fun SettingsScreen(
@@ -24,19 +22,18 @@ fun SettingsScreen(
     navigateUp: () -> Unit
 ) {
 
-    val preferencesUiState by viewModel.preferencesUiState.collectAsState(PreferencesUiState())
-    val coroutineScope = rememberCoroutineScope()
+    val settingsUiState by viewModel.settingsUiState.collectAsState(SettingsUiState())
 
     Settings(
         modifier = modifier,
         navigateUp = navigateUp,
         onShowStreaksPressed = {
-            coroutineScope.launch { viewModel.saveStreaksPreference(it) }
+            viewModel.saveStreaksPreference(it)
         },
         onShowSubtitlePressed = {
-            coroutineScope.launch { viewModel.saveSubtitlePreference(it) }
+            viewModel.saveSubtitlePreference(it)
         },
-        preferencesUiState = preferencesUiState
+        settingsUiState = settingsUiState
     )
 
 }
@@ -48,7 +45,7 @@ private fun Settings(
     navigateUp: () -> Unit,
     onShowStreaksPressed: (Boolean) -> Unit,
     onShowSubtitlePressed: (Boolean) -> Unit,
-    preferencesUiState: PreferencesUiState
+    settingsUiState: SettingsUiState
 ) {
 
     Scaffold(
@@ -68,14 +65,14 @@ private fun Settings(
         ) {
 
             SettingItem(
-                checked = preferencesUiState.showStreaks,
+                checked = settingsUiState.showStreaks,
                 onCheckedChange = onShowStreaksPressed,
                 title = R.string.settings_display_streaks,
                 subtitle = R.string.settings_display_streaks_subtitle
             )
 
             SettingItem(
-                checked = preferencesUiState.showCompletedSubtitle,
+                checked = settingsUiState.showCompletedSubtitle,
                 onCheckedChange = onShowSubtitlePressed,
                 title = R.string.settings_completed_subtitle,
                 subtitle = R.string.settings_completed_subtitle_desc

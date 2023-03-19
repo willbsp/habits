@@ -3,12 +3,13 @@ package com.willbsp.habits.ui.screens.settings
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.willbsp.habits.data.repository.SettingsRepository
-import com.willbsp.habits.ui.common.PreferencesUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -16,23 +17,27 @@ class SettingsViewModel @Inject constructor(
     private val settingsRepository: SettingsRepository
 ) : ViewModel() {
 
-    val preferencesUiState: StateFlow<PreferencesUiState> = settingsRepository.preferences.map {
-        PreferencesUiState(
+    val settingsUiState: StateFlow<SettingsUiState> = settingsRepository.getSettingsMap().map {
+        SettingsUiState(
             it[SettingsRepository.SettingsKey.SHOW_STREAKS_ON_HOME] as Boolean? ?: true,
             it[SettingsRepository.SettingsKey.SHOW_COMPLETED_SUBTITLE] as Boolean? ?: true
         )
     }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
-        initialValue = PreferencesUiState()
+        initialValue = SettingsUiState()
     )
 
-    suspend fun saveStreaksPreference(value: Boolean) {
-        settingsRepository.saveStreaksPreference(value)
+    fun saveStreaksPreference(value: Boolean) {
+        viewModelScope.launch(Dispatchers.IO) { // TODO inject dispatcher into settingsRepository
+            settingsRepository.saveStreaksPreference(value)
+        }
     }
 
-    suspend fun saveSubtitlePreference(value: Boolean) {
-        settingsRepository.saveSubtitlePreference(value)
+    fun saveSubtitlePreference(value: Boolean) {
+        viewModelScope.launch(Dispatchers.IO) {
+            settingsRepository.saveSubtitlePreference(value)
+        }
     }
 
     companion object {
