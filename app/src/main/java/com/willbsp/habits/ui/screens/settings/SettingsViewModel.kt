@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.willbsp.habits.data.repository.SettingsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
@@ -29,13 +28,13 @@ class SettingsViewModel @Inject constructor(
     )
 
     fun saveStreaksPreference(value: Boolean) {
-        viewModelScope.launch(Dispatchers.IO) { // TODO inject dispatcher into settingsRepository
+        viewModelScope.launch {
             settingsRepository.saveStreaksPreference(value)
         }
     }
 
     fun saveSubtitlePreference(value: Boolean) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             settingsRepository.saveSubtitlePreference(value)
         }
     }
