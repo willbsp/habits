@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        compose_version = '1.3.3'
+        compose_version = '1.4.0-rc01'
         lifecycle_version = '2.6.0'
         material3_version = '1.0.1'
         room_version = '2.5.0'

@@ -2,6 +2,7 @@ package com.willbsp.habits.ui.screens.logbook
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,21 +12,30 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.pager.VerticalPager
+import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material3.Button
 import androidx.compose.material3.FilledIconToggleButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.util.lerp
 import com.willbsp.habits.ui.theme.Typography
+import kotlinx.coroutines.launch
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.format.TextStyle
 import java.util.Locale
+import kotlin.math.absoluteValue
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun LogbookDatePicker(
     modifier: Modifier = Modifier,
@@ -33,23 +43,48 @@ fun LogbookDatePicker(
     dateOnClick: (LocalDate) -> Unit
 ) {
 
-    LazyColumn(
+    val pagerState = rememberPagerState(Integer.MAX_VALUE)
+    VerticalPager(
         modifier = modifier,
-        state = rememberLazyListState(Integer.MAX_VALUE),
-        horizontalAlignment = Alignment.CenterHorizontally
+        state = pagerState,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        pageCount = Integer.MAX_VALUE,
+        key = { it }
     ) {
+        val date = LocalDate.now().minusMonths(Integer.MAX_VALUE - it.toLong() - 1)
+        LogbookMonth(
+            modifier = Modifier
+                .fillMaxWidth()
+                .graphicsLayer {
+                    // Calculate the absolute offset for the current page from the
+                    // scroll position. We use the absolute value which allows us to mirror
+                    // any effects for both directions
+                    val pageOffset =
+                        ((pagerState.currentPage - it) + pagerState.currentPageOffsetFraction).absoluteValue
 
-        items(count = Integer.MAX_VALUE, key = { it }) {
-            val date = LocalDate.now().minusMonths(Integer.MAX_VALUE - it.toLong() - 1)
-            LogbookMonth(
-                modifier = Modifier.fillMaxWidth(),
-                date = date,
-                checkedDates = dates,
-                dateOnClick = dateOnClick
-            )
-            Spacer(modifier = Modifier.height(80.dp))
-        }
+                    scaleX = lerp(
+                        start = 0.5f,
+                        stop = 1f,
+                        fraction = 1f - pageOffset.coerceIn(0f, 1f)
+                    )
 
+                    scaleY = lerp(
+                        start = 0.5f,
+                        stop = 1f,
+                        fraction = 1f - pageOffset.coerceIn(0f, 1f)
+                    )
+
+                    // We animate the alpha, between 50% and 100%
+                    alpha = lerp(
+                        start = 0f,
+                        stop = 1f,
+                        fraction = 1f - pageOffset.coerceIn(0f, 1f)
+                    )
+                },
+            date = date,
+            checkedDates = dates,
+            dateOnClick = dateOnClick
+        )
     }
 
 }

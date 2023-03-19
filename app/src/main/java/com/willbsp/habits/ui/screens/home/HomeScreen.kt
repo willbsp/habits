@@ -127,7 +127,7 @@ private fun Home(
 
                 AnimatedVisibility(
                     visible = showHabits,
-                    enter = scaleIn(TweenSpec(delay = 400)), // TODO make all delays and animation times constants
+                    enter = scaleIn(TweenSpec(delay = 400)),
                     exit = scaleOut()
                 ) {
                     FullscreenHint(
