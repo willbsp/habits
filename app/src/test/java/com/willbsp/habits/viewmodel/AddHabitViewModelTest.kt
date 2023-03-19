@@ -6,17 +6,14 @@ import com.willbsp.habits.fake.repository.FakeHabitRepository
 import com.willbsp.habits.rules.TestDispatcherRule
 import com.willbsp.habits.ui.common.ModifyHabitUiState
 import com.willbsp.habits.ui.screens.add.AddHabitViewModel
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
 class AddHabitViewModelTest {
-
-    // TODO need tests for validation
 
     @get:Rule
     val testDispatcher = TestDispatcherRule()
@@ -51,13 +48,27 @@ class AddHabitViewModelTest {
         assertEquals(HabitFrequency.WEEKLY, viewModel.uiState.frequency)
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun saveHabit_whenStateSaved_saved() = runTest {
+    fun uiState_whenStateInvalid_stateInvalid() {
+        val uiState = viewModel.uiState.copy(name = "this is a really long name hi hi")
+        viewModel.updateUiState(uiState)
+        assertTrue(viewModel.uiState.nameIsInvalid)
+    }
+
+    @Test
+    fun saveHabit_whenStateValid_saved() {
         val updatedUiState = viewModel.uiState.copy(name = "Reading")
         viewModel.updateUiState(updatedUiState)
-        viewModel.saveHabit()
+        assertTrue(viewModel.saveHabit())
         assertTrue(habitRepository.habits.any { it.name == "Reading" })
+    }
+
+    @Test
+    fun saveHabit_whenStateInvalid_notSaved() {
+        val uiState = viewModel.uiState.copy(name = "this is a really long name hi hi")
+        viewModel.updateUiState(uiState)
+        assertFalse(viewModel.saveHabit())
+        assertFalse(habitRepository.habits.any { it.name == uiState.name })
     }
 
 }
