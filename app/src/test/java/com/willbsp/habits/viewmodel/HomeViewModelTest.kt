@@ -35,6 +35,7 @@ class HomeViewModelTest {
     private val time = "T12:00:00Z"
     private val entryRepository = FakeEntryRepository()
     private val habitRepository = FakeHabitRepository()
+    private val settingsRepository = FakeSettingsRepository()
     private lateinit var viewModel: HomeViewModel
 
     @Before
@@ -42,14 +43,14 @@ class HomeViewModelTest {
 
         val clock = Clock.fixed(Instant.parse(date.toString() + time), ZoneOffset.UTC)
         val calculateStreakUseCase = CalculateStreakUseCase(entryRepository, clock)
-        val fakeHabitWithEntriesRepository =
+        val habitWithEntriesRepository =
             FakeHabitWithEntriesRepository(habitRepository, entryRepository)
 
         viewModel = HomeViewModel(
             entryRepository = entryRepository,
             calculateStreak = calculateStreakUseCase,
-            habitRepository = fakeHabitWithEntriesRepository,
-            settingsRepository = FakeSettingsRepository()
+            habitRepository = habitWithEntriesRepository,
+            settingsRepository = settingsRepository
         )
 
     }
@@ -108,6 +109,21 @@ class HomeViewModelTest {
         collectJob.cancel()
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun uiState_whenPreferencesSet_getPreferences() = runTest {
+        val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
+        settingsRepository.emit()
+        val state = viewModel.uiState.map { (it as HomeUiState.Habits) }
+        habitRepository.upsertHabit(habit1)
+        assertTrue(state.first().showStreaks)
+        assertTrue(state.first().showSubtitle)
+        settingsRepository.saveStreaksPreference(false)
+        settingsRepository.saveSubtitlePreference(false)
+        assertFalse(state.first().showStreaks)
+        assertFalse(state.first().showSubtitle)
+        collectJob.cancel()
+    }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
