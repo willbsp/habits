@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.willbsp.habits.common.DATABASE_NAME
 import com.willbsp.habits.data.database.HabitDatabase
+import com.willbsp.habits.data.database.MIGRATION_1_2
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -19,7 +20,8 @@ class DatabaseModule {
     @Provides
     fun provideHabitDatabase(
         @ApplicationContext app: Context
-    ) = Room.databaseBuilder(app, HabitDatabase::class.java, DATABASE_NAME).build()
+    ) = Room.databaseBuilder(app, HabitDatabase::class.java, DATABASE_NAME)
+        .addMigrations(MIGRATION_1_2).build()
 
     @Singleton
     @Provides
