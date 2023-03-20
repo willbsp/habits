@@ -23,6 +23,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -56,7 +57,7 @@ fun LogbookDatePicker(
         pageCount = Integer.MAX_VALUE,
         key = { it }
     ) {
-        val date = LocalDate.now().minusMonths(Integer.MAX_VALUE - it.toLong() - 1)
+        val date = remember { LocalDate.now().minusMonths((Integer.MAX_VALUE - it - 1).toLong()) }
         LogbookMonth(
             modifier = Modifier
                 .graphicsLayer {
@@ -84,12 +85,16 @@ fun LogbookMonth(
     checkedDates: List<LocalDate>
 ) {
 
-    val startDate = date.withDayOfMonth(1).with(DayOfWeek.MONDAY)
+    val startDate = remember { date.withDayOfMonth(1).with(DayOfWeek.MONDAY) }
     val scope = rememberCoroutineScope()
-    val today = LocalDate.now()
+    val today = remember { LocalDate.now() }
 
     // TODO still a bug here where last day or two will get cut off!
     Column(modifier.width(350.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+
+        val monthText = remember {
+            "${date.month.getDisplayName(TextStyle.FULL, Locale.getDefault())} ${date.year}"
+        }
 
         Row {
             IconButton(
@@ -104,8 +109,7 @@ fun LogbookMonth(
             }
             Spacer(modifier.weight(1f))
             Text(
-                text = "${date.month.getDisplayName(TextStyle.FULL, Locale.getDefault())} " +
-                        "${date.year}",
+                text = monthText,
                 style = Typography.headlineLarge
             )
             Spacer(modifier.weight(1f))
@@ -128,7 +132,7 @@ fun LogbookMonth(
             horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             repeat(7) { row ->
-                val weekday = startDate.plusDays(row.toLong())
+                val weekday = remember { startDate.plusDays(row.toLong()) }
                 Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                     Text(
                         modifier = Modifier.width(40.dp),
@@ -139,7 +143,7 @@ fun LogbookMonth(
                         textAlign = TextAlign.Center
                     )
                     repeat(5) { col ->
-                        val currentDate = weekday.plusWeeks(col.toLong())
+                        val currentDate = remember { weekday.plusWeeks(col.toLong()) }
                         if (currentDate.month == date.month) {
                             DateIconButton(
                                 modifier = Modifier.size(40.dp),
@@ -168,7 +172,8 @@ private fun DateIconButton(
     enabled: Boolean,
     onCheckedChange: (LocalDate) -> (Unit)
 ) {
-    val dayOfMonth = date.dayOfMonth.toString()
+
+    val dayOfMonth = remember { date.dayOfMonth.toString() }
 
     AnimatedContent(targetState = checked) {
         FilledIconToggleButton(
