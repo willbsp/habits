@@ -65,12 +65,15 @@ private fun Logbook(
                     modifier = modifier
                         .padding(innerPadding)
                         .fillMaxSize(),
-                    verticalArrangement = Arrangement.Bottom
+                    verticalArrangement = Arrangement.Bottom,
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
 
 
                     LogbookDatePicker(
-                        modifier = Modifier.weight(1f, true),
+                        modifier = Modifier
+                            .weight(1f, true)
+                            .padding(horizontal = 20.dp),
                         dates = logbookUiState.selectedHabitDates,
                         dateOnClick = completedOnClick
                     )

@@ -9,14 +9,18 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.VerticalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.material3.Button
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ExpandLess
+import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material3.FilledIconToggleButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
@@ -47,6 +51,7 @@ fun LogbookDatePicker(
     VerticalPager(
         modifier = modifier,
         state = pagerState,
+        userScrollEnabled = false,
         horizontalAlignment = Alignment.CenterHorizontally,
         pageCount = Integer.MAX_VALUE,
         key = { it }
@@ -54,62 +59,67 @@ fun LogbookDatePicker(
         val date = LocalDate.now().minusMonths(Integer.MAX_VALUE - it.toLong() - 1)
         LogbookMonth(
             modifier = Modifier
-                .fillMaxWidth()
                 .graphicsLayer {
-                    // Calculate the absolute offset for the current page from the
-                    // scroll position. We use the absolute value which allows us to mirror
-                    // any effects for both directions
                     val pageOffset =
                         ((pagerState.currentPage - it) + pagerState.currentPageOffsetFraction).absoluteValue
-
-                    scaleX = lerp(
-                        start = 0.5f,
-                        stop = 1f,
-                        fraction = 1f - pageOffset.coerceIn(0f, 1f)
-                    )
-
-                    scaleY = lerp(
-                        start = 0.5f,
-                        stop = 1f,
-                        fraction = 1f - pageOffset.coerceIn(0f, 1f)
-                    )
-
-                    // We animate the alpha, between 50% and 100%
-                    alpha = lerp(
-                        start = 0f,
-                        stop = 1f,
-                        fraction = 1f - pageOffset.coerceIn(0f, 1f)
-                    )
+                    val fraction = 1f - pageOffset.coerceIn(0f, 1f)
+                    alpha = lerp(start = 0f, stop = 1f, fraction = fraction)
                 },
             date = date,
             checkedDates = dates,
-            dateOnClick = dateOnClick
+            dateOnClick = dateOnClick,
+            pagerState = pagerState
         )
     }
 
 }
 
-// TODO could these be animated to fade in when the user scrolls to them
-// TODO need to show weekdays
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun LogbookMonth(
     modifier: Modifier = Modifier,
     date: LocalDate,
     dateOnClick: (LocalDate) -> Unit,
+    pagerState: PagerState,
     checkedDates: List<LocalDate>
 ) {
 
     val startDate = date.withDayOfMonth(1).with(DayOfWeek.MONDAY)
+    val scope = rememberCoroutineScope()
     val today = LocalDate.now()
 
     // TODO still a bug here where last day or two will get cut off!
-    Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
+    Column(modifier.width(350.dp), horizontalAlignment = Alignment.CenterHorizontally) {
 
-        Text(
-            text = "${date.month.getDisplayName(TextStyle.FULL, Locale.getDefault())} " +
-                    "${date.year}",
-            style = Typography.headlineLarge
-        )
+        Row {
+            IconButton(
+                onClick = {
+                    scope.launch { pagerState.animateScrollToPage(pagerState.currentPage - 1) }
+                }
+            ) {
+                Icon(
+                    imageVector = Icons.Default.ExpandLess,
+                    contentDescription = null
+                )
+            }
+            Spacer(modifier.weight(1f))
+            Text(
+                text = "${date.month.getDisplayName(TextStyle.FULL, Locale.getDefault())} " +
+                        "${date.year}",
+                style = Typography.headlineLarge
+            )
+            Spacer(modifier.weight(1f))
+            IconButton(
+                onClick = {
+                    scope.launch { pagerState.animateScrollToPage(pagerState.currentPage + 1) }
+                }
+            ) {
+                Icon(
+                    imageVector = Icons.Default.ExpandMore,
+                    contentDescription = null
+                )
+            }
+        }
 
         Spacer(modifier = Modifier.height(30.dp))
 
