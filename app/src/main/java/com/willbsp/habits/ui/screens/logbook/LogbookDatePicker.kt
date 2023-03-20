@@ -89,14 +89,15 @@ fun LogbookMonth(
     val scope = rememberCoroutineScope()
     val today = remember { LocalDate.now() }
 
-    // TODO still a bug here where last day or two will get cut off!
     Column(modifier.width(350.dp), horizontalAlignment = Alignment.CenterHorizontally) {
 
         val monthText = remember {
             "${date.month.getDisplayName(TextStyle.FULL, Locale.getDefault())} ${date.year}"
         }
 
-        Row {
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             IconButton(
                 onClick = {
                     scope.launch { pagerState.animateScrollToPage(pagerState.currentPage - 1) }
@@ -142,7 +143,7 @@ fun LogbookMonth(
                         ),
                         textAlign = TextAlign.Center
                     )
-                    repeat(5) { col ->
+                    repeat(6) { col ->
                         val currentDate = remember { weekday.plusWeeks(col.toLong()) }
                         if (currentDate.month == date.month) {
                             DateIconButton(
@@ -195,7 +196,7 @@ private fun DateIconButton(
 
 }
 
-@Preview(showSystemUi = true, showBackground = true)
+@Preview(showBackground = true)
 @Composable
 private fun NewLogbookDatePickerPreview() {
     LogbookDatePicker(
