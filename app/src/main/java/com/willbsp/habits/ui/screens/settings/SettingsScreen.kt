@@ -22,7 +22,7 @@ fun SettingsScreen(
     navigateUp: () -> Unit
 ) {
 
-    val settingsUiState by viewModel.settingsUiState.collectAsState(SettingsUiState())
+    val settingsUiState by viewModel.uiState.collectAsState(SettingsUiState())
 
     Settings(
         modifier = modifier,
