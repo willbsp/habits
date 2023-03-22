@@ -11,8 +11,9 @@ object TestData {
     val habit2 = Habit(id = 1, name = "Reading", HabitFrequency.WEEKLY)
     val habit3 = Habit(id = 2, name = "Flashcards", HabitFrequency.DAILY)
 
-    val entry1: Entry = Entry(1, 1, LocalDate.parse("2023-01-13"))
-    val entry2: Entry = Entry(2, 2, LocalDate.parse("2023-04-15"))
+    val entry1: Entry = Entry(0, 0, LocalDate.parse("2023-01-13"))
+    val entry2: Entry = Entry(1, 1, LocalDate.parse("2023-04-15"))
+    val entry3: Entry = Entry(2, 2, LocalDate.parse("2023-03-02"))
 
     // entries for testing domain layer
     // streak (from 07-20): 5

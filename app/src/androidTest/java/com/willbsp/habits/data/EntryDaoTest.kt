@@ -4,14 +4,18 @@ import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.willbsp.habits.TestData.entry1
 import com.willbsp.habits.TestData.entry2
-import com.willbsp.habits.TestData.habit1
+import com.willbsp.habits.TestData.entry3
 import com.willbsp.habits.TestData.habit2
+import com.willbsp.habits.TestData.habit3
 import com.willbsp.habits.data.database.HabitDatabase
 import com.willbsp.habits.data.database.dao.EntryDao
 import com.willbsp.habits.data.database.dao.HabitDao
-import kotlinx.coroutines.runBlocking
+import com.willbsp.habits.data.database.dao.HabitWithEntriesDao
+import com.willbsp.habits.data.model.Entry
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Assert.*
 import org.junit.Before
@@ -24,17 +28,16 @@ class EntryDaoTest {
 
     private lateinit var entryDao: EntryDao
     private lateinit var habitDao: HabitDao
+    private lateinit var habitWithEntriesDao: HabitWithEntriesDao
     private lateinit var habitDatabase: HabitDatabase
-
 
     @Before
     fun createDb() {
         val context: Context = ApplicationProvider.getApplicationContext()
-        habitDatabase = Room.inMemoryDatabaseBuilder(context, HabitDatabase::class.java)
-            .allowMainThreadQueries()
-            .build()
+        habitDatabase = Room.inMemoryDatabaseBuilder(context, HabitDatabase::class.java).build()
         entryDao = habitDatabase.entryDao()
         habitDao = habitDatabase.habitDao()
+        habitWithEntriesDao = habitDatabase.habitWithEntriesDao()
     }
 
     @After
@@ -43,70 +46,84 @@ class EntryDaoTest {
         habitDatabase.close()
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    @Throws(Exception::class)
-    fun daoGetEntryForDate_returnsNull() = runBlocking {
-        addOneHabitToDb()
-        addOneEntryToDb()
-        val actualEntry = entryDao.getEntryForDate(entry2.date, entry2.habitId)
-        assertEquals(null, actualEntry)
+    fun getAllEntries_whenNoEntries_returnsEmptyList() = runTest {
+        assertEquals(listOf<Entry>(), entryDao.getAllEntries().first())
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    @Throws(Exception::class)
-    fun daoGetEntryForDate_returnsEntryForDate() = runBlocking {
-        addTwoHabitsToDb()
-        addTwoEntriesToDb()
-        val actualEntry = entryDao.getEntryForDate(entry2.date, entry2.habitId)
-        assertEquals(actualEntry, entry2)
-    }
-
-    @Test
-    @Throws(Exception::class)
-    fun daoInsertEntry_insertsEntryIntoDb() = runBlocking {
-        addOneHabitToDb()
-        addOneEntryToDb()
-        val entry = entryDao.getEntryForDate(entry1.date, entry1.habitId)
-        assertEquals(entry, entry1)
-    }
-
-    @Test
-    @Throws(Exception::class)
-    fun daoDeleteEntry_deletesEntryFromDb() = runBlocking {
-        addOneHabitToDb()
-        addOneEntryToDb()
-        entryDao.delete(entry1)
-        val entry = entryDao.getEntryForDate(entry1.date, entry1.habitId)
-        assertNull(entry)
-    }
-
-    @Test
-    @Throws(Exception::class)
-    fun daoUpdateEntry_updatesEntryInDb() = runBlocking {
-        addTwoHabitsToDb()
-        addOneEntryToDb()
-        val updateEntry = entry1.copy(habitId = 2)
-        entryDao.update(updateEntry)
-        val entry = entryDao.getEntryForDate(updateEntry.date, updateEntry.habitId)
-        assertEquals(entry, updateEntry)
-    }
-
-    private suspend fun addOneEntryToDb() {
-        entryDao.insert(entry1)
-    }
-
-    private suspend fun addTwoEntriesToDb() {
-        entryDao.insert(entry1)
+    fun getAllEntries_whenEntries_returnsEntries() = runTest {
+        habitDao.upsert(habit2)
         entryDao.insert(entry2)
+        assertEquals(listOf(entry2), entryDao.getAllEntries().first())
+        habitDao.upsert(habit3)
+        entryDao.insert(entry3)
+        assertEquals(listOf(entry2, entry3), entryDao.getAllEntries().first())
     }
 
-    private suspend fun addOneHabitToDb() {
-        habitDao.insert(habit1)
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun getEntriesForHabit_whenNoEntries_returnsEmptyList() = runTest {
+        assertEquals(listOf<Entry>(), entryDao.getEntriesForHabit(habit2.id).first())
     }
 
-    private suspend fun addTwoHabitsToDb() {
-        habitDao.insert(habit1)
-        habitDao.insert(habit2)
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun getEntriesForHabit_whenEntries_returnsEntries() = runTest {
+        habitDao.upsert(habit2)
+        entryDao.insert(entry2)
+        assertEquals(listOf(entry2), entryDao.getEntriesForHabit(habit2.id).first())
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun getEntryForDate_whenNoEntryExists_returnNull() = runTest {
+        assertNull(entryDao.getEntryForDate(habit2.id, entry2.date))
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun getEntryForDate_whenEntryExists_returnEntry() = runTest {
+        habitDao.upsert(habit2)
+        entryDao.insert(entry2)
+        assertEquals(entry2, entryDao.getEntryForDate(habit2.id, entry2.date))
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun getOldestEntry_whenNoEntries_returnNull() = runTest {
+        assertNull(entryDao.getOldestEntry(habit2.id))
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun getOldestEntry_whenEntries_returnsOldest() = runTest {
+        habitDao.upsert(habit2)
+        entryDao.insert(entry2)
+        entryDao.insert(entry2.copy(id = entry2.id + 1, date = entry2.date.minusDays(3)))
+        val expected = entry2.copy(id = entry2.id + 2, date = entry2.date.minusWeeks(3))
+        entryDao.insert(expected)
+        assertEquals(expected, entryDao.getOldestEntry(habit2.id))
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun insert_whenEntryInserted_addedToDb() = runTest {
+        habitDao.upsert(habit2)
+        entryDao.insert(entry2)
+        assertEquals(entry2, entryDao.getEntryForDate(entry2.habitId, entry2.date))
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun delete_whenEntryDeleted_removedFromDb() = runTest {
+        habitDao.upsert(habit2)
+        entryDao.insert(entry2)
+        assertEquals(entry2, entryDao.getEntryForDate(entry2.habitId, entry2.date))
+        entryDao.delete(entry2)
+        assertNull(entryDao.getEntryForDate(entry2.habitId, entry2.date))
     }
 
 }
