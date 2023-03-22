@@ -23,9 +23,6 @@ interface EntryDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(entry: Entry)
 
-    @Update
-    suspend fun update(entry: Entry)
-
     @Delete
     suspend fun delete(entry: Entry)
 

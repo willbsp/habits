@@ -29,12 +29,6 @@ class FakeEntryDao : EntryDao {
         emit()
     }
 
-    override suspend fun update(entry: Entry) {
-        val index = entries.indexOfFirst { it.id == entry.id }
-        if (index != -1) entries[index] = entry
-        emit()
-    }
-
     override suspend fun delete(entry: Entry) {
         entries.removeAll { it == entry }
         emit()
