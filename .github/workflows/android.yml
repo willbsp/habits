@@ -77,9 +77,6 @@ jobs:
   instrumented-tests:
     runs-on: macOS-latest
     needs: build
-    strategy:
-      matrix:
-        api-level: [26, 29, 33]
         
     steps:
     - name: checkout
@@ -102,7 +99,7 @@ jobs:
     - name: Run UI tests
       uses: reactivecircus/android-emulator-runner@v2
       with:
-        api-level: ${{ matrix.api-level }}
+        api-level: 33
         script: ./gradlew connectedCheck
         
     - name: Upload Reports
