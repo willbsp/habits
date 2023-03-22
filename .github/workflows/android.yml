@@ -76,6 +76,7 @@ jobs:
       
   instrumented-tests:
     runs-on: macOS-latest
+    needs: build
     steps:
     - name: checkout
       uses: actions/checkout@v3
