@@ -11,7 +11,6 @@ import com.willbsp.habits.TestData.habit3
 import com.willbsp.habits.data.database.HabitDatabase
 import com.willbsp.habits.data.database.dao.EntryDao
 import com.willbsp.habits.data.database.dao.HabitDao
-import com.willbsp.habits.data.database.dao.HabitWithEntriesDao
 import com.willbsp.habits.data.model.Entry
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
@@ -28,7 +27,6 @@ class EntryDaoTest {
 
     private lateinit var entryDao: EntryDao
     private lateinit var habitDao: HabitDao
-    private lateinit var habitWithEntriesDao: HabitWithEntriesDao
     private lateinit var habitDatabase: HabitDatabase
 
     @Before
@@ -37,7 +35,6 @@ class EntryDaoTest {
         habitDatabase = Room.inMemoryDatabaseBuilder(context, HabitDatabase::class.java).build()
         entryDao = habitDatabase.entryDao()
         habitDao = habitDatabase.habitDao()
-        habitWithEntriesDao = habitDatabase.habitWithEntriesDao()
     }
 
     @After
