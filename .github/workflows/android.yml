@@ -10,9 +10,7 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
     - name: Checkout the code
       uses: actions/checkout@v3
@@ -72,7 +70,7 @@ jobs:
     needs: build
         
     steps:
-    - name: checkout
+    - name: Checkout the code
       uses: actions/checkout@v3
       
     - uses: actions/cache@v3.3.0
