@@ -1,14 +1,25 @@
 package com.willbsp.habits.ui.screens.detail
 
 import androidx.annotation.StringRes
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -65,15 +76,23 @@ private fun Detail(
             )
 
         }
-    ) {
+    ) { innerPadding ->
 
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(it),
+                .padding(horizontal = 20.dp)
+                .padding(innerPadding),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceEvenly
         ) {
+
+            CircularDetailScoreCard(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(300.dp),
+                score = detailUiState.score.toFloat()
+            )
 
             DetailScoreCard(
                 modifier = modifier
@@ -100,6 +119,100 @@ private fun Detail(
 }
 
 @Composable
+fun CircularDetailScoreCard(
+    modifier: Modifier = Modifier,
+    score: Float,
+) {
+
+    var initialScore by rememberSaveable {
+        mutableStateOf(0f)
+    }
+
+    val animatedScore = animateFloatAsState(
+        targetValue = initialScore,
+        animationSpec = tween(durationMillis = 1000)
+    )
+
+    LaunchedEffect(score) {
+        initialScore = score
+    }
+
+    OutlinedCard(
+        modifier = modifier,
+    ) {
+
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+
+            val foregroundColor = MaterialTheme.colorScheme.primary
+            val inactiveColor = MaterialTheme.colorScheme.primaryContainer
+            val lineThickness = 20.dp
+            val lineThicknessInactive = 10.dp
+
+            Canvas(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(25.dp)
+            ) {
+
+                val angle = (animatedScore.value) * 360 / 100
+                val size = Size(this.size.minDimension, this.size.minDimension)
+
+                drawArc(
+                    color = inactiveColor,
+                    startAngle = -90f,
+                    sweepAngle = 360f,
+                    useCenter = false,
+                    style = Stroke(width = lineThicknessInactive.toPx(), cap = StrokeCap.Round),
+                    size = size,
+                    topLeft = Offset(
+                        x = this.center.x - (size.width / 2),
+                        y = this.center.y - (size.height / 2)
+                    )
+                )
+
+                drawArc(
+                    color = foregroundColor,
+                    startAngle = -90f,
+                    sweepAngle = angle,
+                    useCenter = false,
+                    style = Stroke(width = lineThickness.toPx(), cap = StrokeCap.Round),
+                    size = size,
+                    topLeft = Offset(
+                        x = this.center.x - (size.width / 2),
+                        y = this.center.y - (size.height / 2)
+                    )
+                )
+
+            }
+
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+
+                Text(
+                    text = stringResource(id = R.string.detail_score),
+                    style = Typography.displayMedium,
+                    textAlign = TextAlign.Center
+                )
+
+                Text(
+                    text = "${animatedScore.value.toInt()}%",
+                    style = Typography.displayLarge,
+                    textAlign = TextAlign.Center
+                )
+
+            }
+
+        }
+
+    }
+
+}
+
+@Composable
 fun DetailScoreCard(
     modifier: Modifier = Modifier,
     @StringRes title: Int,
@@ -107,16 +220,23 @@ fun DetailScoreCard(
     percentage: Boolean
 ) {
 
-    ElevatedCard(
+    OutlinedCard(
         modifier = modifier,
     ) {
         Text(
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxWidth()
                 .wrapContentHeight(),
-            text = "${stringResource(id = title)}\n" +
-                    if (percentage) "${value}%" else "$value",
+            text = stringResource(id = title),
             style = Typography.displayMedium,
+            textAlign = TextAlign.Center
+        )
+        Text(
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight(),
+            text = if (percentage) "${value}%" else "$value",
+            style = Typography.displayLarge,
             textAlign = TextAlign.Center
         )
     }
