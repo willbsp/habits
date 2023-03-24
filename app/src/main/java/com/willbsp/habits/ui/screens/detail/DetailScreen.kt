@@ -1,6 +1,5 @@
 package com.willbsp.habits.ui.screens.detail
 
-import androidx.annotation.StringRes
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
@@ -80,12 +79,14 @@ private fun Detail(
 
         Column(
             modifier = Modifier
+                //.verticalScroll(rememberScrollState())
                 .fillMaxSize()
-                .padding(horizontal = 20.dp)
+                .padding(20.dp)
                 .padding(innerPadding),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.SpaceEvenly
+            verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
+
 
             CircularDetailScoreCard(
                 modifier = Modifier
@@ -94,23 +95,52 @@ private fun Detail(
                 score = detailUiState.score.toFloat()
             )
 
-            DetailScoreCard(
-                modifier = modifier
-                    .width(200.dp)
-                    .height(150.dp),
-                title = R.string.detail_streak,
-                value = detailUiState.streak,
-                percentage = false
-            )
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
 
-            DetailScoreCard(
-                modifier = modifier
-                    .width(200.dp)
-                    .height(150.dp),
-                title = R.string.detail_score,
-                value = detailUiState.score,
-                percentage = true
-            )
+                DetailCard(
+                    modifier = modifier.weight(1f),
+                    title = stringResource(R.string.detail_streak),
+                    value = detailUiState.streak.toString()
+                )
+
+                Spacer(modifier.width(20.dp))
+
+                DetailCard(
+                    modifier = modifier.weight(1f),
+                    title = "Longest Streak",
+                    value = "83"
+                )
+
+            }
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+
+                DetailCard(
+                    modifier = modifier.weight(1f),
+                    title = "Started",
+                    value = "25 Feb"
+                )
+
+                Spacer(modifier.width(20.dp))
+
+                DetailCard(
+                    modifier = modifier.weight(1f),
+                    title = "Total",
+                    value = "206"
+                )
+
+            }
+
 
         }
 
@@ -200,6 +230,7 @@ fun CircularDetailScoreCard(
 
                 Text(
                     text = "${animatedScore.value.toInt()}%",
+                    color = MaterialTheme.colorScheme.primary,
                     style = Typography.displayLarge,
                     textAlign = TextAlign.Center
                 )
@@ -213,32 +244,35 @@ fun CircularDetailScoreCard(
 }
 
 @Composable
-fun DetailScoreCard(
+fun DetailCard(
     modifier: Modifier = Modifier,
-    @StringRes title: Int,
-    value: Int,
-    percentage: Boolean
+    title: String,
+    value: String,
 ) {
 
     OutlinedCard(
         modifier = modifier,
     ) {
-        Text(
-            modifier = Modifier
-                .fillMaxWidth()
-                .wrapContentHeight(),
-            text = stringResource(id = title),
-            style = Typography.displayMedium,
-            textAlign = TextAlign.Center
-        )
-        Text(
-            modifier = Modifier
-                .fillMaxWidth()
-                .wrapContentHeight(),
-            text = if (percentage) "${value}%" else "$value",
-            style = Typography.displayLarge,
-            textAlign = TextAlign.Center
-        )
+        Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center) {
+
+            Text(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight(),
+                text = title,
+                style = Typography.displaySmall,
+                textAlign = TextAlign.Center
+            )
+            Text(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight(),
+                color = MaterialTheme.colorScheme.primary,
+                text = value,
+                style = Typography.displayMedium,
+                textAlign = TextAlign.Center
+            )
+        }
     }
 
 }
