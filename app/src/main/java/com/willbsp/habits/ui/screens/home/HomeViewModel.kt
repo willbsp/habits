@@ -53,9 +53,11 @@ class HomeViewModel @Inject constructor(
     }
 
     private suspend fun HabitWithEntries.toHabit(): HomeUiState.Habit {
-        val streak = calculateStreak(habit.id).first()
+        val streak = calculateStreak(habit.id).first().find { streak ->
+            streak.endDate == LocalDate.now() || streak.endDate == LocalDate.now().minusDays(1)
+        }
         val dates = entries.map { it.date }.sortedDescending()
-        return HomeUiState.Habit(habit.id, habit.name, streak, dates)
+        return HomeUiState.Habit(habit.id, habit.name, streak?.length, dates)
     }
 
     companion object {
