@@ -3,34 +3,37 @@ package com.willbsp.habits.domain
 import com.willbsp.habits.data.repository.EntryRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import java.time.Clock
-import java.time.LocalDate
 import javax.inject.Inject
 
 class CalculateStreakUseCase @Inject constructor(
-    private val entryRepository: EntryRepository,
-    private val clock: Clock
+    private val entryRepository: EntryRepository
 ) {
 
-    operator fun invoke(habitId: Int): Flow<Int?> {
-
-        val date = LocalDate.now(clock)
-        val yesterday = date.minusDays(1)
+    operator fun invoke(habitId: Int): Flow<List<Streak>> {
 
         return entryRepository.getAllEntriesStream(habitId).map { list ->
 
             val entries = list.sortedByDescending { it.date }
+            val streaks = mutableListOf<Streak>()
+
             var streak = 0
+            var endDate = entries.first().date
+            var lastDate = entries.first().date.plusDays(1)
 
-            if (entries.isNotEmpty()) entries.forEach { entry ->
-                if (entry.date == yesterday.minusDays(streak.toLong())) streak++
-                else return@forEach
-            } else return@map null
+            entries.forEach { entry ->
 
-            if (entries.first().date == date) streak++
+                if (entry.date.plusDays(1) == lastDate) streak++
+                else {
+                    if (streak > 1) streaks.add(Streak(streak, endDate))
+                    endDate = entry.date
+                    streak = 1
+                }
+                lastDate = entry.date
 
-            return@map if (streak > 1) streak
-            else null
+            }
+            if (streak > 1) streaks.add(Streak(streak, endDate))
+
+            return@map streaks
 
         }
 
