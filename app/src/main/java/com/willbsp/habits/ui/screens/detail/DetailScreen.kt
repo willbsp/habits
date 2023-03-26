@@ -113,7 +113,7 @@ private fun Detail(
                 DetailCard(
                     modifier = modifier.weight(1f),
                     title = "Longest Streak",
-                    value = "83"
+                    value = detailUiState.longestStreak.toString()
                 )
 
             }

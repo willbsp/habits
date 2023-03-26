@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
+import java.time.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
@@ -28,17 +29,21 @@ class DetailViewModel @Inject constructor(
             calculateScoreUseCase(habitId),
             calculateStreakUseCase(habitId),
             habitRepository.getHabitStream(habitId)
-        ) { score, streak, habit ->
+        ) { score, streaks, habit ->
 
             val habitName = habit?.name ?: ""
-
-            if (streak != null && score != null) {
-                DetailUiState(habitId, habitName, streak, (score * 100).toInt())
-            } else if (score != null) {
-                DetailUiState(habitId, habitName, 0, (score * 100).toInt())
-            } else {
-                DetailUiState(habitId, habitName)
+            val currentStreak = streaks.find { streak ->
+                streak.endDate == LocalDate.now() || streak.endDate == LocalDate.now().minusDays(1)
             }
+            val longestStreak = streaks.maxOf { it.length }
+
+            DetailUiState(
+                habitId,
+                habitName,
+                streak = currentStreak?.length ?: 0,
+                longestStreak = longestStreak,
+                score = (score?.times(100))?.toInt() ?: 0
+            )
 
         }.stateIn(
             scope = viewModelScope,
