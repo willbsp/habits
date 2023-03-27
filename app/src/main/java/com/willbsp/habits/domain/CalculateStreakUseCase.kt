@@ -13,6 +13,9 @@ class CalculateStreakUseCase @Inject constructor(
 
         return entryRepository.getAllEntriesStream(habitId).map { list ->
 
+            if (list.isEmpty())
+                return@map listOf<Streak>()
+
             val entries = list.sortedByDescending { it.date }
             val streaks = mutableListOf<Streak>()
 

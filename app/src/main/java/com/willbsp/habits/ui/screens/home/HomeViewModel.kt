@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import java.time.Clock
 import java.time.LocalDate
 import javax.inject.Inject
 
@@ -21,6 +22,7 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val entryRepository: EntryRepository,
     private val calculateStreak: CalculateStreakUseCase,
+    private val clock: Clock,
     habitRepository: HabitWithEntriesRepository,
     settingsRepository: SettingsRepository,
 ) : ViewModel() {
@@ -54,7 +56,8 @@ class HomeViewModel @Inject constructor(
 
     private suspend fun HabitWithEntries.toHabit(): HomeUiState.Habit {
         val streak = calculateStreak(habit.id).first().find { streak ->
-            streak.endDate == LocalDate.now() || streak.endDate == LocalDate.now().minusDays(1)
+            streak.endDate == LocalDate.now(clock) || streak.endDate == LocalDate.now(clock)
+                .minusDays(1)
         }
         val dates = entries.map { it.date }.sortedDescending()
         return HomeUiState.Habit(habit.id, habit.name, streak?.length, dates)

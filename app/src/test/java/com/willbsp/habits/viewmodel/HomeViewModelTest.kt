@@ -42,13 +42,14 @@ class HomeViewModelTest {
     fun setup() {
 
         val clock = Clock.fixed(Instant.parse(date.toString() + time), ZoneOffset.UTC)
-        val calculateStreakUseCase = CalculateStreakUseCase(entryRepository, clock)
+        val calculateStreakUseCase = CalculateStreakUseCase(entryRepository)
         val habitWithEntriesRepository =
             FakeHabitWithEntriesRepository(habitRepository, entryRepository)
 
         viewModel = HomeViewModel(
             entryRepository = entryRepository,
             calculateStreak = calculateStreakUseCase,
+            clock = clock,
             habitRepository = habitWithEntriesRepository,
             settingsRepository = settingsRepository
         )
