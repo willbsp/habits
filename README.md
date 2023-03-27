@@ -7,9 +7,9 @@ It is currently in development, with plans to release on Google Play and F-Droid
 
 ## Screenshots
 
-![Editing habits](screenshots/screenshot-3.gif)
 ![Completing habits](screenshots/screenshot-1.gif)
-![Logbook](screenshots/screenshot-2.gif)
+![Editing habits](screenshots/screenshot-2.gif)
+![Logbook](screenshots/screenshot-3.gif)
 
 ## Features
 

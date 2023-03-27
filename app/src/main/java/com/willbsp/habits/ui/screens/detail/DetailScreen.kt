@@ -128,7 +128,7 @@ private fun Detail(
                 DetailCard(
                     modifier = modifier.weight(1f),
                     title = "Started",
-                    value = "25 Feb"
+                    value = "6th Jan"
                 )
 
                 Spacer(modifier.width(20.dp))
@@ -136,7 +136,7 @@ private fun Detail(
                 DetailCard(
                     modifier = modifier.weight(1f),
                     title = "Total",
-                    value = "206"
+                    value = "80"
                 )
 
             }
