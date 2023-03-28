@@ -56,6 +56,10 @@
     <string name="edit_dismiss">Dismiss</string>
     <string name="edit_delete_habit">Delete habit?</string>
     <string name="edit_cannot_undo">This action cannot be undone.</string>
+    <string name="detail_longest_streak">Longest Streak</string>
+    <string name="detail_not_started">Not started</string>
+    <string name="detail_started">Started</string>
+    <string name="detail_total">Total</string>
     <!--detail screen end-->
 
 </resources>

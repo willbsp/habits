@@ -28,6 +28,8 @@ import com.willbsp.habits.R
 import com.willbsp.habits.ui.common.DefaultHabitsAppTopBar
 import com.willbsp.habits.ui.theme.HabitsTheme
 import com.willbsp.habits.ui.theme.Typography
+import java.time.format.TextStyle
+import java.util.Locale
 
 @Composable
 fun DetailScreen(
@@ -112,7 +114,7 @@ private fun Detail(
 
                 DetailCard(
                     modifier = modifier.weight(1f),
-                    title = "Longest Streak",
+                    title = stringResource(R.string.detail_longest_streak),
                     value = detailUiState.longestStreak.toString()
                 )
 
@@ -125,18 +127,29 @@ private fun Detail(
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
 
+                val startedDate =
+                    if (detailUiState.started == null) stringResource(R.string.detail_not_started)
+                    else {
+                        "${detailUiState.started.dayOfMonth} ${
+                            detailUiState.started.month.getDisplayName(
+                                TextStyle.SHORT,
+                                Locale.getDefault()
+                            )
+                        }"
+                    }
+
                 DetailCard(
                     modifier = modifier.weight(1f),
-                    title = "Started",
-                    value = "6th Jan"
+                    title = stringResource(R.string.detail_started),
+                    value = startedDate
                 )
 
                 Spacer(modifier.width(20.dp))
 
                 DetailCard(
                     modifier = modifier.weight(1f),
-                    title = "Total",
-                    value = "80"
+                    title = stringResource(R.string.detail_total),
+                    value = detailUiState.total.toString()
                 )
 
             }
