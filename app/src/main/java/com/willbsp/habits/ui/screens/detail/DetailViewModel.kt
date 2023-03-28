@@ -34,14 +34,14 @@ class DetailViewModel @Inject constructor(
             val habitName = habit?.name ?: ""
             val currentStreak = streaks.find { streak ->
                 streak.endDate == LocalDate.now() || streak.endDate == LocalDate.now().minusDays(1)
-            }
-            val longestStreak = streaks.maxOf { it.length }
+            }?.length
+            val longestStreak = streaks.maxOfOrNull { it.length }
 
             DetailUiState(
                 habitId,
                 habitName,
-                streak = currentStreak?.length ?: 0,
-                longestStreak = longestStreak,
+                streak = currentStreak ?: 0,
+                longestStreak = longestStreak ?: 0,
                 score = (score?.times(100))?.toInt() ?: 0
             )
 
