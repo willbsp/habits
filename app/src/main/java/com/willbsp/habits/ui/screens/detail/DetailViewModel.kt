@@ -4,8 +4,8 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.willbsp.habits.data.repository.HabitRepository
-import com.willbsp.habits.domain.CalculateScoreUseCase
-import com.willbsp.habits.domain.CalculateStreakUseCase
+import com.willbsp.habits.domain.usecase.CalculateScoreUseCase
+import com.willbsp.habits.domain.usecase.CalculateStreakUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow

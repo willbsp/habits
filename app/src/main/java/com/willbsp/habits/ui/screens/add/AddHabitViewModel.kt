@@ -6,7 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.willbsp.habits.common.HABIT_NAME_MAX_CHARACTER_LIMIT
-import com.willbsp.habits.domain.SaveHabitUseCase
+import com.willbsp.habits.domain.usecase.SaveHabitUseCase
 import com.willbsp.habits.ui.common.HabitUiState
 import com.willbsp.habits.ui.common.toHabit
 import dagger.hilt.android.lifecycle.HiltViewModel

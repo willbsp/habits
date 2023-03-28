@@ -1,4 +1,4 @@
-package com.willbsp.habits.domain
+package com.willbsp.habits.domain.model
 
 import java.time.LocalDate
 

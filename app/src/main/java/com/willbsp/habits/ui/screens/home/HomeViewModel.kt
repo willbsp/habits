@@ -6,7 +6,7 @@ import com.willbsp.habits.data.model.HabitWithEntries
 import com.willbsp.habits.data.repository.EntryRepository
 import com.willbsp.habits.data.repository.HabitWithEntriesRepository
 import com.willbsp.habits.data.repository.SettingsRepository
-import com.willbsp.habits.domain.CalculateStreakUseCase
+import com.willbsp.habits.domain.usecase.CalculateStreakUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow

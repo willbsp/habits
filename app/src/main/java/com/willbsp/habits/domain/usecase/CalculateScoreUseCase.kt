@@ -1,4 +1,4 @@
-package com.willbsp.habits.domain
+package com.willbsp.habits.domain.usecase
 
 import com.willbsp.habits.data.repository.EntryRepository
 import kotlinx.coroutines.flow.Flow

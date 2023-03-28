@@ -1,6 +1,6 @@
 package com.willbsp.habits.usecases
 
-import com.willbsp.habits.domain.CalculateScoreUseCase
+import com.willbsp.habits.domain.usecase.CalculateScoreUseCase
 import com.willbsp.habits.fake.repository.FakeEntryRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first

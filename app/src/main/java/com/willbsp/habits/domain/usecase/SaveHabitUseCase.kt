@@ -1,4 +1,4 @@
-package com.willbsp.habits.domain
+package com.willbsp.habits.domain.usecase
 
 import com.willbsp.habits.common.HABIT_NAME_MAX_CHARACTER_LIMIT
 import com.willbsp.habits.common.HABIT_NAME_MIN_CHARACTER_LIMIT

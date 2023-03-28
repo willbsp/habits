@@ -3,7 +3,7 @@ package com.willbsp.habits.viewmodel
 import androidx.lifecycle.SavedStateHandle
 import com.willbsp.habits.TestData.habit1
 import com.willbsp.habits.data.model.HabitFrequency
-import com.willbsp.habits.domain.SaveHabitUseCase
+import com.willbsp.habits.domain.usecase.SaveHabitUseCase
 import com.willbsp.habits.fake.repository.FakeHabitRepository
 import com.willbsp.habits.rules.TestDispatcherRule
 import com.willbsp.habits.ui.common.HabitUiState

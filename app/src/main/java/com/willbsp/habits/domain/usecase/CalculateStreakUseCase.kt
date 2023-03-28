@@ -1,6 +1,7 @@
-package com.willbsp.habits.domain
+package com.willbsp.habits.domain.usecase
 
 import com.willbsp.habits.data.repository.EntryRepository
+import com.willbsp.habits.domain.model.Streak
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject

@@ -2,7 +2,7 @@ package com.willbsp.habits.viewmodel
 
 import com.willbsp.habits.TestData.habit1
 import com.willbsp.habits.TestData.habit3
-import com.willbsp.habits.domain.CalculateStreakUseCase
+import com.willbsp.habits.domain.usecase.CalculateStreakUseCase
 import com.willbsp.habits.fake.repository.FakeEntryRepository
 import com.willbsp.habits.fake.repository.FakeHabitRepository
 import com.willbsp.habits.fake.repository.FakeHabitWithEntriesRepository

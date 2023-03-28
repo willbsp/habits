@@ -3,7 +3,7 @@ package com.willbsp.habits.usecases
 import com.willbsp.habits.TestData.habit1
 import com.willbsp.habits.data.model.Habit
 import com.willbsp.habits.data.model.HabitFrequency
-import com.willbsp.habits.domain.SaveHabitUseCase
+import com.willbsp.habits.domain.usecase.SaveHabitUseCase
 import com.willbsp.habits.fake.repository.FakeHabitRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
