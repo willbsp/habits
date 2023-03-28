@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.willbsp.habits.data.repository.HabitRepository
 import com.willbsp.habits.domain.usecase.CalculateScoreUseCase
+import com.willbsp.habits.domain.usecase.CalculateStatisticsUseCase
 import com.willbsp.habits.domain.usecase.CalculateStreakUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
@@ -19,7 +20,8 @@ class DetailViewModel @Inject constructor(
     habitRepository: HabitRepository,
     savedStateHandle: SavedStateHandle,
     calculateScoreUseCase: CalculateScoreUseCase,
-    calculateStreakUseCase: CalculateStreakUseCase
+    calculateStreakUseCase: CalculateStreakUseCase,
+    calculateStatisticsUseCase: CalculateStatisticsUseCase
 ) : ViewModel() {
 
     private var habitId: Int = checkNotNull(savedStateHandle[HABIT_ID_SAVED_STATE_KEY])
@@ -28,8 +30,9 @@ class DetailViewModel @Inject constructor(
         combine(
             calculateScoreUseCase(habitId),
             calculateStreakUseCase(habitId),
+            calculateStatisticsUseCase(habitId),
             habitRepository.getHabitStream(habitId)
-        ) { score, streaks, habit ->
+        ) { score, streaks, stats, habit ->
 
             val habitName = habit?.name ?: ""
             val currentStreak = streaks.find { streak ->
@@ -38,10 +41,12 @@ class DetailViewModel @Inject constructor(
             val longestStreak = streaks.maxOfOrNull { it.length }
 
             DetailUiState(
-                habitId,
-                habitName,
+                habitId = habitId,
+                habitName = habitName,
                 streak = currentStreak ?: 0,
                 longestStreak = longestStreak ?: 0,
+                started = stats.started,
+                total = stats.total,
                 score = (score?.times(100))?.toInt() ?: 0
             )
 

@@ -7,7 +7,7 @@ data class DetailUiState(
     val habitName: String = "",
     val streak: Int = 0,
     val longestStreak: Int = 0,
-    val started: LocalDate = LocalDate.now(),
-    val totalDays: Int = 0,
+    val started: LocalDate? = null,
+    val total: Int = 0,
     val score: Int = 0,
 )
