@@ -39,7 +39,7 @@ fun DetailScreen(
     navigateToEditHabit: (Int) -> Unit
 ) {
 
-    val detailUiState by viewModel.detailUiState.collectAsStateWithLifecycle()
+    val detailUiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     Detail(
         modifier = modifier,

@@ -26,7 +26,7 @@ class DetailViewModel @Inject constructor(
 
     private var habitId: Int = checkNotNull(savedStateHandle[HABIT_ID_SAVED_STATE_KEY])
 
-    val detailUiState: StateFlow<DetailUiState> =
+    val uiState: StateFlow<DetailUiState> =
         combine(
             calculateScoreUseCase(habitId),
             calculateStreakUseCase(habitId),
