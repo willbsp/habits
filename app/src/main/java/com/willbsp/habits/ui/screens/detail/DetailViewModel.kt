@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
+import java.time.Clock
 import java.time.LocalDate
 import javax.inject.Inject
 
@@ -21,7 +22,8 @@ class DetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     calculateScoreUseCase: CalculateScoreUseCase,
     calculateStreakUseCase: CalculateStreakUseCase,
-    calculateStatisticsUseCase: CalculateStatisticsUseCase
+    calculateStatisticsUseCase: CalculateStatisticsUseCase,
+    clock: Clock
 ) : ViewModel() {
 
     private var habitId: Int = checkNotNull(savedStateHandle[HABIT_ID_SAVED_STATE_KEY])
@@ -36,7 +38,8 @@ class DetailViewModel @Inject constructor(
 
             val habitName = habit?.name ?: ""
             val currentStreak = streaks.find { streak ->
-                streak.endDate == LocalDate.now() || streak.endDate == LocalDate.now().minusDays(1)
+                streak.endDate == LocalDate.now(clock) || streak.endDate == LocalDate.now(clock)
+                    .minusDays(1)
             }?.length
             val longestStreak = streaks.maxOfOrNull { it.length }
 
