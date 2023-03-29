@@ -11,7 +11,7 @@ sealed class HabitUiState {
         val name: String = "",
         val nameIsInvalid: Boolean = false,
         val frequency: HabitFrequency = HabitFrequency.DAILY,
-        val repeat: Int? = null
+        val repeat: Int = 1
     ) : HabitUiState()
 
 }

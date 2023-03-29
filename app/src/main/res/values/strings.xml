@@ -60,6 +60,7 @@
     <string name="detail_not_started">Not started</string>
     <string name="detail_started">Started</string>
     <string name="detail_total">Total</string>
+    <string name="modify_times_per_week">How many times per week?</string>
     <!--detail screen end-->
 
 </resources>

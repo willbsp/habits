@@ -47,42 +47,6 @@ fun HabitForm(
             onValueChange = onValueChange
         )
 
-        Spacer(modifier = Modifier.height(10.dp))
-
-        AnimatedVisibility(visible = habitUiState.frequency == HabitFrequency.WEEKLY) {
-
-            HabitFrequencyWeeklyForm(
-                modifier = Modifier.fillMaxWidth(),
-                uiState = habitUiState,
-                onValueChange = {}
-            )
-
-        }
-
-    }
-
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun HabitFrequencyWeeklyForm(
-    modifier: Modifier = Modifier,
-    uiState: HabitUiState.Habit,
-    onValueChange: (HabitUiState.Habit) -> Unit
-) {
-
-    Column(
-        modifier = modifier,
-    ) {
-
-        OutlinedTextField(
-            modifier = Modifier.fillMaxWidth(),
-            value = uiState.repeat.toString(),
-            onValueChange = { onValueChange(uiState.copy(repeat = it.toIntOrNull())) },
-            label = { Text("How many times per week?") },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
-        )
-
     }
 
 }
@@ -95,42 +59,90 @@ private fun HabitFrequencyDropdown(
     onValueChange: (HabitUiState.Habit) -> Unit
 ) {
 
-    val options = HabitFrequency.values()
-    var expanded by remember { mutableStateOf(false) }
-    var selectedFrequency by remember { mutableStateOf(uiState.frequency) }
+    val frequencyOptions = HabitFrequency.values()
+    var frequencyExpanded by remember { mutableStateOf(false) }
+    var frequencySelected by remember { mutableStateOf(uiState.frequency) }
 
-    ExposedDropdownMenuBox(
-        modifier = modifier,
-        expanded = expanded,
-        onExpandedChange = { expanded = !expanded },
+    Column(
+        modifier = modifier
     ) {
-        OutlinedTextField(
-            modifier = Modifier
-                .menuAnchor()
-                .fillMaxWidth(),
-            readOnly = true,
-            value = stringResource(id = selectedFrequency.userReadableStringRes),
-            onValueChange = {},
-            label = { Text("Frequency") },
-            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
-            colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors()
-        )
-        ExposedDropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false },
+
+        ExposedDropdownMenuBox(
+            expanded = frequencyExpanded,
+            onExpandedChange = { frequencyExpanded = !frequencyExpanded },
         ) {
-            options.forEach { selectionOption ->
-                DropdownMenuItem(
-                    text = { Text(stringResource(id = selectionOption.userReadableStringRes)) },
-                    onClick = {
-                        selectedFrequency = selectionOption
-                        onValueChange(uiState.copy(frequency = selectionOption))
-                        expanded = false
-                    },
-                    contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
-                )
+            OutlinedTextField(
+                modifier = Modifier
+                    .menuAnchor()
+                    .fillMaxWidth(),
+                readOnly = true,
+                value = stringResource(id = frequencySelected.userReadableStringRes),
+                onValueChange = {},
+                label = { Text("Frequency") },
+                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = frequencyExpanded) },
+                colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors()
+            )
+            ExposedDropdownMenu(
+                expanded = frequencyExpanded,
+                onDismissRequest = { frequencyExpanded = false },
+            ) {
+                frequencyOptions.forEach { selectionOption ->
+                    DropdownMenuItem(
+                        text = { Text(stringResource(id = selectionOption.userReadableStringRes)) },
+                        onClick = {
+                            frequencySelected = selectionOption
+                            onValueChange(uiState.copy(frequency = selectionOption))
+                            frequencyExpanded = false
+                        },
+                        contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
+                    )
+                }
             }
         }
+
+        Spacer(modifier = Modifier.height(10.dp))
+
+        val repeatOptions = 1..7
+        var repeatExpanded by remember { mutableStateOf(false) }
+        var selectedRepeat by remember { mutableStateOf(uiState.repeat) }
+
+        AnimatedVisibility(visible = uiState.frequency == HabitFrequency.WEEKLY) {
+
+            ExposedDropdownMenuBox(
+                expanded = repeatExpanded,
+                onExpandedChange = { repeatExpanded = !repeatExpanded },
+            ) {
+                OutlinedTextField(
+                    modifier = Modifier
+                        .menuAnchor()
+                        .fillMaxWidth(),
+                    readOnly = true,
+                    value = selectedRepeat.toString(),
+                    onValueChange = {},
+                    label = { Text(stringResource(id = R.string.modify_times_per_week)) },
+                    trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = repeatExpanded) },
+                    colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors()
+                )
+                ExposedDropdownMenu(
+                    expanded = repeatExpanded,
+                    onDismissRequest = { repeatExpanded = false },
+                ) {
+                    repeatOptions.forEach { selectionOption ->
+                        DropdownMenuItem(
+                            text = { Text(selectionOption.toString()) },
+                            onClick = {
+                                selectedRepeat = selectionOption
+                                onValueChange(uiState.copy(repeat = selectionOption))
+                                repeatExpanded = false
+                            },
+                            contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
+                        )
+                    }
+                }
+            }
+
+        }
+
     }
 
 }
