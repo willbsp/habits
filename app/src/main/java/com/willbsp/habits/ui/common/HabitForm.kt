@@ -1,14 +1,18 @@
 package com.willbsp.habits.ui.common
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.willbsp.habits.R
 import com.willbsp.habits.data.model.HabitFrequency
@@ -43,6 +47,42 @@ fun HabitForm(
             onValueChange = onValueChange
         )
 
+        Spacer(modifier = Modifier.height(10.dp))
+
+        AnimatedVisibility(visible = habitUiState.frequency == HabitFrequency.WEEKLY) {
+
+            HabitFrequencyWeeklyForm(
+                modifier = Modifier.fillMaxWidth(),
+                uiState = habitUiState,
+                onValueChange = {}
+            )
+
+        }
+
+    }
+
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun HabitFrequencyWeeklyForm(
+    modifier: Modifier = Modifier,
+    uiState: HabitUiState.Habit,
+    onValueChange: (HabitUiState.Habit) -> Unit
+) {
+
+    Column(
+        modifier = modifier,
+    ) {
+
+        OutlinedTextField(
+            modifier = Modifier.fillMaxWidth(),
+            value = uiState.repeat.toString(),
+            onValueChange = { onValueChange(uiState.copy(repeat = it.toIntOrNull())) },
+            label = { Text("How many times per week?") },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+        )
+
     }
 
 }
@@ -64,7 +104,7 @@ private fun HabitFrequencyDropdown(
         expanded = expanded,
         onExpandedChange = { expanded = !expanded },
     ) {
-        TextField(
+        OutlinedTextField(
             modifier = Modifier
                 .menuAnchor()
                 .fillMaxWidth(),
@@ -93,4 +133,10 @@ private fun HabitFrequencyDropdown(
         }
     }
 
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun HabitFormPreview() {
+    HabitForm(onValueChange = {}, habitUiState = HabitUiState.Habit())
 }

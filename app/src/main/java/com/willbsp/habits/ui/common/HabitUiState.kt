@@ -10,7 +10,8 @@ sealed class HabitUiState {
     data class Habit(
         val name: String = "",
         val nameIsInvalid: Boolean = false,
-        val frequency: HabitFrequency = HabitFrequency.DAILY
+        val frequency: HabitFrequency = HabitFrequency.DAILY,
+        val repeat: Int? = null
     ) : HabitUiState()
 
 }
