@@ -15,5 +15,6 @@ data class Habit(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     val name: String,
-    val frequency: HabitFrequency
+    val frequency: HabitFrequency,
+    val repeat: Int? = null
 )
