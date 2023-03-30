@@ -9,5 +9,5 @@ data class Habit(
     val id: Int = 0,
     val name: String,
     val frequency: HabitFrequency,
-    val repeat: Int? = null
+    val repeat: Int = 1
 )

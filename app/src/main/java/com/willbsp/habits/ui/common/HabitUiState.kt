@@ -18,6 +18,11 @@ sealed class HabitUiState {
 
 
 fun HabitUiState.Habit.toHabit(id: Int? = null): Habit {
-    return if (id != null) Habit(id = id, name = this.name, frequency = this.frequency)
-    else Habit(name = this.name, frequency = this.frequency)
+    return if (id != null) Habit(
+        id = id,
+        name = this.name,
+        frequency = this.frequency,
+        repeat = this.repeat
+    )
+    else Habit(name = this.name, frequency = this.frequency, repeat = this.repeat)
 }
