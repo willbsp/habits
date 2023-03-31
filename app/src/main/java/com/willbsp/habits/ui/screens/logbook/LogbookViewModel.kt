@@ -2,6 +2,7 @@ package com.willbsp.habits.ui.screens.logbook
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.willbsp.habits.data.model.HabitFrequency
 import com.willbsp.habits.data.model.HabitWithEntries
 import com.willbsp.habits.data.repository.EntryRepository
 import com.willbsp.habits.data.repository.HabitWithEntriesRepository
@@ -10,6 +11,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
+import java.time.DayOfWeek
 import java.time.LocalDate
 import javax.inject.Inject
 import kotlin.properties.Delegates
@@ -51,9 +53,35 @@ class LogbookViewModel @Inject constructor(
     }
 
     private fun List<HabitWithEntries>.toLogbookUiState(): LogbookUiState.SelectedHabit {
+
+        val selectedHabitWithEntries = first { it.habit.id == selectedHabitId }
         val habits = map { LogbookUiState.Habit(it.habit.id, it.habit.name) }
-        val entries = find { it.habit.id == selectedHabitId }?.entries?.map { it.date } ?: listOf()
-        return LogbookUiState.SelectedHabit(selectedHabitId, entries, habits)
+
+        val completedDates = selectedHabitWithEntries.entries.map { it.date }
+
+        if (selectedHabitWithEntries.habit.frequency == HabitFrequency.WEEKLY) {
+            val completedWeeks = selectedHabitWithEntries.entries.map { entry ->
+                entry.date.with(DayOfWeek.MONDAY)
+            }
+                .groupingBy { it }
+                .eachCount()
+                .filter { it.value >= selectedHabitWithEntries.habit.repeat }
+                .map { it.key }
+            return LogbookUiState.SelectedHabit(
+                selectedHabitId,
+                completedDates,
+                completedWeeks,
+                habits
+            )
+        } else {
+            return LogbookUiState.SelectedHabit(
+                selectedHabitId,
+                completedDates,
+                listOf(),
+                habits
+            )
+        }
+
     }
 
 

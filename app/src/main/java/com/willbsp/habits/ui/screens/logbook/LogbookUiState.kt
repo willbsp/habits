@@ -7,8 +7,9 @@ sealed class LogbookUiState {
     object NoHabits : LogbookUiState()
 
     data class SelectedHabit(
-        val selectedHabitId: Int,
-        val selectedHabitDates: List<LocalDate>,
+        val habitId: Int,
+        val completedDates: List<LocalDate>,
+        val completedWeeks: List<LocalDate>,
         val habits: List<Habit>
     ) : LogbookUiState()
 
