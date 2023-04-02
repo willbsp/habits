@@ -55,7 +55,7 @@ class LogbookViewModelTest {
         viewModel = LogbookViewModel(habitWithEntriesRepository, entryRepository)
         val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
         val uiState = viewModel.uiState.map { (it as LogbookUiState.SelectedHabit) }
-        assertEquals(habit2.id, uiState.first().selectedHabitId)
+        assertEquals(habit2.id, uiState.first().habitId)
         collectJob.cancel()
     }
 
@@ -68,8 +68,8 @@ class LogbookViewModelTest {
         viewModel = LogbookViewModel(habitWithEntriesRepository, entryRepository)
         val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
         val uiState = viewModel.uiState.map { it as LogbookUiState.SelectedHabit }
-        assertTrue(uiState.first().selectedHabitDates.contains(date))
-        assertTrue(uiState.first().selectedHabitDates.contains(date.minusDays(1)))
+        assertTrue(uiState.first().completedDates.contains(date))
+        assertTrue(uiState.first().completedDates.contains(date.minusDays(1)))
         collectJob.cancel()
     }
 
@@ -96,9 +96,9 @@ class LogbookViewModelTest {
         viewModel.setSelectedHabit(habit1.id)
         val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
         val uiState = viewModel.uiState.map { it as LogbookUiState.SelectedHabit }
-        assertTrue(uiState.first().selectedHabitDates.contains(date))
+        assertTrue(uiState.first().completedDates.contains(date))
         viewModel.setSelectedHabit(habit2.id)
-        assertTrue(uiState.first().selectedHabitDates.contains(date.plusDays(1)))
+        assertTrue(uiState.first().completedDates.contains(date.plusDays(1)))
         collectJob.cancel()
     }
 
@@ -111,11 +111,11 @@ class LogbookViewModelTest {
         viewModel.setSelectedHabit(habit1.id)
         val uiState = viewModel.uiState.map { it as LogbookUiState.SelectedHabit }
         viewModel.toggleEntry(date)
-        assertTrue(uiState.first().selectedHabitDates.contains(date))
+        assertTrue(uiState.first().completedDates.contains(date))
         viewModel.setSelectedHabit(habit2.id)
-        assertFalse(uiState.first().selectedHabitDates.contains(date))
+        assertFalse(uiState.first().completedDates.contains(date))
         viewModel.toggleEntry(date)
-        assertTrue(uiState.first().selectedHabitDates.contains(date))
+        assertTrue(uiState.first().completedDates.contains(date))
         collectJob.cancel()
     }
 
