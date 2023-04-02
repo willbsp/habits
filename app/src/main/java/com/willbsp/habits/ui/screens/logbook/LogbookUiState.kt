@@ -8,8 +8,8 @@ sealed class LogbookUiState {
 
     data class SelectedHabit(
         val habitId: Int,
-        val completedDates: List<LocalDate>,
-        val completedWeeks: List<LocalDate>,
+        val completed: List<LocalDate>,
+        val completedByWeek: List<LocalDate>,
         val habits: List<Habit>
     ) : LogbookUiState()
 

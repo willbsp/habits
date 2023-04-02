@@ -149,9 +149,9 @@ fun LogbookMonth(
                             DateIconButton(
                                 modifier = Modifier.size(40.dp),
                                 date = currentDate,
-                                checked = logbookUiState.completedDates.contains(currentDate),
-                                checkedSecondary = logbookUiState.completedWeeks.contains(
-                                    currentDate.with(DayOfWeek.MONDAY)
+                                checked = logbookUiState.completed.contains(currentDate),
+                                checkedSecondary = logbookUiState.completedByWeek.contains(
+                                    currentDate
                                 ),
                                 enabled = !currentDate.isAfter(today),
                                 onCheckedChange = { dateOnClick(currentDate) }
