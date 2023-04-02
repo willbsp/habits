@@ -2,23 +2,23 @@ package com.willbsp.habits.ui.screens.logbook
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.willbsp.habits.data.model.HabitFrequency
-import com.willbsp.habits.data.model.HabitWithEntries
 import com.willbsp.habits.data.repository.EntryRepository
-import com.willbsp.habits.data.repository.HabitWithEntriesRepository
+import com.willbsp.habits.data.repository.HabitRepository
+import com.willbsp.habits.domain.model.HabitWithVirtualEntries
+import com.willbsp.habits.domain.usecase.GetHabitsWithVirtualEntriesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
-import java.time.DayOfWeek
 import java.time.LocalDate
 import javax.inject.Inject
 import kotlin.properties.Delegates
 
 @HiltViewModel
 class LogbookViewModel @Inject constructor(
-    private val habitRepository: HabitWithEntriesRepository,
+    private val habitRepository: HabitRepository,
+    private val getVirtualEntries: GetHabitsWithVirtualEntriesUseCase,
     private val entryRepository: EntryRepository
 ) : ViewModel() {
 
@@ -30,16 +30,15 @@ class LogbookViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            val habitWithEntries =
-                habitRepository.getHabitsWithEntries().firstOrNull()?.firstOrNull()
-            if (habitWithEntries != null) setSelectedHabit(habitWithEntries.habit.id)
+            val habit = habitRepository.getAllHabitsStream().firstOrNull()?.firstOrNull()
+            if (habit != null) setSelectedHabit(habit.id)
         }
     }
 
     fun setSelectedHabit(habitId: Int) {
         this.selectedHabitId = habitId
         viewModelScope.launch {
-            habitRepository.getHabitsWithEntries().collect { list ->
+            getVirtualEntries().collect { list ->
                 if (list.isEmpty()) _uiState.value = LogbookUiState.NoHabits
                 else _uiState.value = list.toLogbookUiState()
             }
@@ -52,35 +51,20 @@ class LogbookViewModel @Inject constructor(
         }
     }
 
-    private fun List<HabitWithEntries>.toLogbookUiState(): LogbookUiState.SelectedHabit {
+    private fun List<HabitWithVirtualEntries>.toLogbookUiState(): LogbookUiState.SelectedHabit {
 
-        val selectedHabitWithEntries = first { it.habit.id == selectedHabitId }
-        val habits = map { LogbookUiState.Habit(it.habit.id, it.habit.name) }
+        val habits = this.map { it.habit }
+        val entries = this.find { it.habit.id == selectedHabitId }?.entries ?: listOf()
 
-        val completedDates = selectedHabitWithEntries.entries.map { it.date }
+        val completed = entries.filter { it.id != null }.map { it.date }
+        val completedByWeek = entries.filter { it.id == null }.map { it.date }
 
-        if (selectedHabitWithEntries.habit.frequency == HabitFrequency.WEEKLY) {
-            val completedWeeks = selectedHabitWithEntries.entries.map { entry ->
-                entry.date.with(DayOfWeek.MONDAY)
-            }
-                .groupingBy { it }
-                .eachCount()
-                .filter { it.value >= selectedHabitWithEntries.habit.repeat }
-                .map { it.key }
-            return LogbookUiState.SelectedHabit(
-                selectedHabitId,
-                completedDates,
-                completedWeeks,
-                habits
-            )
-        } else {
-            return LogbookUiState.SelectedHabit(
-                selectedHabitId,
-                completedDates,
-                listOf(),
-                habits
-            )
-        }
+        return LogbookUiState.SelectedHabit(
+            habitId = selectedHabitId,
+            completed = completed,
+            completedByWeek = completedByWeek,
+            habits = habits.map { LogbookUiState.Habit(it.id, it.name) }
+        )
 
     }
 
