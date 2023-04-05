@@ -2,6 +2,7 @@ package com.willbsp.habits.usecases
 
 import com.willbsp.habits.data.model.Habit
 import com.willbsp.habits.data.model.HabitFrequency
+import com.willbsp.habits.domain.usecase.GetHabitsWithVirtualEntriesUseCase
 import com.willbsp.habits.domain.usecase.GetVirtualEntriesUseCase
 import com.willbsp.habits.fake.repository.FakeEntryRepository
 import com.willbsp.habits.fake.repository.FakeHabitRepository
@@ -13,17 +14,22 @@ import org.junit.Before
 import org.junit.Test
 import java.time.LocalDate
 
-class GetVirtualEntriesUseCaseTest {
+class GetHabitsWithVirtualEntriesUseCaseTest {
 
     private lateinit var entryRepository: FakeEntryRepository
     private lateinit var habitRepository: FakeHabitRepository
     private lateinit var getVirtualEntriesUseCase: GetVirtualEntriesUseCase
+    private lateinit var getHabitsWithVirtualEntriesUseCase: GetHabitsWithVirtualEntriesUseCase
+
+    // TODO currently testing getvirtualentries rather than habitswithvirtualentries
 
     @Before
     fun setup() {
         entryRepository = FakeEntryRepository()
         habitRepository = FakeHabitRepository()
-        getVirtualEntriesUseCase = GetVirtualEntriesUseCase(entryRepository, habitRepository)
+        getVirtualEntriesUseCase = GetVirtualEntriesUseCase(habitRepository, entryRepository)
+        getHabitsWithVirtualEntriesUseCase =
+            GetHabitsWithVirtualEntriesUseCase(habitRepository, getVirtualEntriesUseCase)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -33,7 +39,8 @@ class GetVirtualEntriesUseCaseTest {
         val dates = listOf("2023-04-01", "2023-03-31", "2023-03-30")
         habitRepository.upsertHabit(habit)
         dates.forEach { date -> entryRepository.toggleEntry(habit.id, LocalDate.parse(date)) }
-        val virtualEntries = getVirtualEntriesUseCase(habit.id).first()
+        val virtualEntries = getHabitsWithVirtualEntriesUseCase().first().first().entries
+        println(virtualEntries)
         val actualDates = virtualEntries.map { it.date.toString() }
             .sortedDescending()
         val expectedDates = getDatesInWeek(LocalDate.parse("2023-03-27"))
@@ -49,7 +56,7 @@ class GetVirtualEntriesUseCaseTest {
         val dates = listOf("2023-04-01", "2023-03-31", "2023-03-30")
         habitRepository.upsertHabit(habit)
         dates.forEach { date -> entryRepository.toggleEntry(habit.id, LocalDate.parse(date)) }
-        val virtualEntries = getVirtualEntriesUseCase(habit.id).first()
+        val virtualEntries = getHabitsWithVirtualEntriesUseCase().first().first().entries
         val actualDates = virtualEntries.filter { !dates.contains(it.date.toString()) }
         assertTrue(actualDates.all { it.id == null })
     }
@@ -61,7 +68,7 @@ class GetVirtualEntriesUseCaseTest {
         val dates = listOf("2023-04-01", "2023-03-31", "2023-03-30")
         habitRepository.upsertHabit(habit)
         dates.forEach { date -> entryRepository.toggleEntry(habit.id, LocalDate.parse(date)) }
-        val virtualEntries = getVirtualEntriesUseCase(habit.id).first()
+        val virtualEntries = getHabitsWithVirtualEntriesUseCase().first().first().entries
         val actualDates = virtualEntries.filter { dates.contains(it.date.toString()) }
         assertTrue(actualDates.all { it.id != null })
     }
@@ -73,7 +80,7 @@ class GetVirtualEntriesUseCaseTest {
         val dates = listOf("2023-04-01", "2023-03-31", "2023-03-30")
         habitRepository.upsertHabit(habit)
         dates.forEach { date -> entryRepository.toggleEntry(habit.id, LocalDate.parse(date)) }
-        val virtualEntries = getVirtualEntriesUseCase(habit.id).first()
+        val virtualEntries = getHabitsWithVirtualEntriesUseCase().first().first().entries
         val actualDates = virtualEntries.map { it.date.toString() }
         assertEquals(dates, actualDates)
     }
@@ -93,7 +100,7 @@ class GetVirtualEntriesUseCaseTest {
         )
         habitRepository.upsertHabit(habit)
         dates.forEach { date -> entryRepository.toggleEntry(habit.id, LocalDate.parse(date)) }
-        val virtualEntries = getVirtualEntriesUseCase(habit.id).first()
+        val virtualEntries = getHabitsWithVirtualEntriesUseCase().first().first().entries
         val actualDates = virtualEntries.map { it.date.toString() }
         assertEquals(dates, actualDates)
     }
@@ -112,7 +119,7 @@ class GetVirtualEntriesUseCaseTest {
         )
         habitRepository.upsertHabit(habit)
         dates.forEach { date -> entryRepository.toggleEntry(habit.id, LocalDate.parse(date)) }
-        val virtualEntries = getVirtualEntriesUseCase(habit.id).first()
+        val virtualEntries = getHabitsWithVirtualEntriesUseCase().first().first().entries
         val actualDates = virtualEntries.map { it.date.toString() }
             .sortedDescending()
         val expectedDates = listOf(
@@ -139,7 +146,7 @@ class GetVirtualEntriesUseCaseTest {
         )
         habitRepository.upsertHabit(habit)
         dates.forEach { date -> entryRepository.toggleEntry(habit.id, LocalDate.parse(date)) }
-        val virtualEntries = getVirtualEntriesUseCase(habit.id).first()
+        val virtualEntries = getHabitsWithVirtualEntriesUseCase().first().first().entries
         val actualDates = virtualEntries.filter { !dates.contains(it.date.toString()) }
         assertTrue(actualDates.all { it.id == null })
     }
@@ -158,7 +165,7 @@ class GetVirtualEntriesUseCaseTest {
         )
         habitRepository.upsertHabit(habit)
         dates.forEach { date -> entryRepository.toggleEntry(habit.id, LocalDate.parse(date)) }
-        val virtualEntries = getVirtualEntriesUseCase(habit.id).first()
+        val virtualEntries = getHabitsWithVirtualEntriesUseCase().first().first().entries
         val actualDates = virtualEntries.filter { dates.contains(it.date.toString()) }
         assertTrue(actualDates.all { it.id != null })
     }
