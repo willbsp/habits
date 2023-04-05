@@ -18,8 +18,8 @@ import kotlin.properties.Delegates
 @HiltViewModel
 class LogbookViewModel @Inject constructor(
     private val habitRepository: HabitRepository,
-    private val getVirtualEntries: GetHabitsWithVirtualEntriesUseCase,
-    private val entryRepository: EntryRepository
+    private val entryRepository: EntryRepository,
+    private val getVirtualEntries: GetHabitsWithVirtualEntriesUseCase
 ) : ViewModel() {
 
     private var selectedHabitId by Delegates.notNull<Int>()
