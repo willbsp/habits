@@ -2,7 +2,6 @@ package com.willbsp.habits.usecases
 
 import com.willbsp.habits.data.model.Habit
 import com.willbsp.habits.data.model.HabitFrequency
-import com.willbsp.habits.domain.usecase.GetHabitsWithVirtualEntriesUseCase
 import com.willbsp.habits.domain.usecase.GetVirtualEntriesUseCase
 import com.willbsp.habits.fake.repository.FakeEntryRepository
 import com.willbsp.habits.fake.repository.FakeHabitRepository
@@ -14,29 +13,17 @@ import org.junit.Before
 import org.junit.Test
 import java.time.LocalDate
 
-class GetHabitsWithVirtualEntriesUseCaseTest {
+class GetVirtualEntriesUseCaseTest {
 
     private lateinit var entryRepository: FakeEntryRepository
     private lateinit var habitRepository: FakeHabitRepository
-    private lateinit var getVirtualEntriesUseCase: GetVirtualEntriesUseCase
-    private lateinit var getHabitsWithVirtualEntriesUseCase: GetHabitsWithVirtualEntriesUseCase
+    private lateinit var getVirtualEntries: GetVirtualEntriesUseCase
 
     @Before
     fun setup() {
         entryRepository = FakeEntryRepository()
         habitRepository = FakeHabitRepository()
-        getVirtualEntriesUseCase = GetVirtualEntriesUseCase(habitRepository, entryRepository)
-        getHabitsWithVirtualEntriesUseCase =
-            GetHabitsWithVirtualEntriesUseCase(habitRepository, getVirtualEntriesUseCase)
-    }
-
-    @OptIn(ExperimentalCoroutinesApi::class)
-    @Test
-    fun getVirtualEntries_whenHabitExists_returnsHabit() = runTest {
-        val habit = Habit(id = 3, name = "test", frequency = HabitFrequency.WEEKLY, repeat = 3)
-        habitRepository.upsertHabit(habit)
-        val habitsWithVirtualEntries = getHabitsWithVirtualEntriesUseCase().first()
-        assertTrue(habitsWithVirtualEntries.any { it.habit == habit })
+        getVirtualEntries = GetVirtualEntriesUseCase(habitRepository, entryRepository)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -46,7 +33,7 @@ class GetHabitsWithVirtualEntriesUseCaseTest {
         val dates = listOf("2023-04-01", "2023-03-31", "2023-03-30")
         habitRepository.upsertHabit(habit)
         dates.forEach { date -> entryRepository.toggleEntry(habit.id, LocalDate.parse(date)) }
-        val virtualEntries = getHabitsWithVirtualEntriesUseCase().first().first().entries
+        val virtualEntries = getVirtualEntries(habit.id).first()
         println(virtualEntries)
         val actualDates = virtualEntries.map { it.date.toString() }
             .sortedDescending()
@@ -63,7 +50,7 @@ class GetHabitsWithVirtualEntriesUseCaseTest {
         val dates = listOf("2023-04-01", "2023-03-31", "2023-03-30")
         habitRepository.upsertHabit(habit)
         dates.forEach { date -> entryRepository.toggleEntry(habit.id, LocalDate.parse(date)) }
-        val virtualEntries = getHabitsWithVirtualEntriesUseCase().first().first().entries
+        val virtualEntries = getVirtualEntries(habit.id).first()
         val actualDates = virtualEntries.filter { !dates.contains(it.date.toString()) }
         assertTrue(actualDates.all { it.id == null })
     }
@@ -75,7 +62,7 @@ class GetHabitsWithVirtualEntriesUseCaseTest {
         val dates = listOf("2023-04-01", "2023-03-31", "2023-03-30")
         habitRepository.upsertHabit(habit)
         dates.forEach { date -> entryRepository.toggleEntry(habit.id, LocalDate.parse(date)) }
-        val virtualEntries = getHabitsWithVirtualEntriesUseCase().first().first().entries
+        val virtualEntries = getVirtualEntries(habit.id).first()
         val actualDates = virtualEntries.filter { dates.contains(it.date.toString()) }
         assertTrue(actualDates.all { it.id != null })
     }
@@ -87,7 +74,7 @@ class GetHabitsWithVirtualEntriesUseCaseTest {
         val dates = listOf("2023-04-01", "2023-03-31", "2023-03-30")
         habitRepository.upsertHabit(habit)
         dates.forEach { date -> entryRepository.toggleEntry(habit.id, LocalDate.parse(date)) }
-        val virtualEntries = getHabitsWithVirtualEntriesUseCase().first().first().entries
+        val virtualEntries = getVirtualEntries(habit.id).first()
         val actualDates = virtualEntries.map { it.date.toString() }
         assertEquals(dates, actualDates)
     }
@@ -107,7 +94,7 @@ class GetHabitsWithVirtualEntriesUseCaseTest {
         )
         habitRepository.upsertHabit(habit)
         dates.forEach { date -> entryRepository.toggleEntry(habit.id, LocalDate.parse(date)) }
-        val virtualEntries = getHabitsWithVirtualEntriesUseCase().first().first().entries
+        val virtualEntries = getVirtualEntries(habit.id).first()
         val actualDates = virtualEntries.map { it.date.toString() }
         assertEquals(dates, actualDates)
     }
@@ -126,7 +113,7 @@ class GetHabitsWithVirtualEntriesUseCaseTest {
         )
         habitRepository.upsertHabit(habit)
         dates.forEach { date -> entryRepository.toggleEntry(habit.id, LocalDate.parse(date)) }
-        val virtualEntries = getHabitsWithVirtualEntriesUseCase().first().first().entries
+        val virtualEntries = getVirtualEntries(habit.id).first()
         val actualDates = virtualEntries.map { it.date.toString() }
             .sortedDescending()
         val expectedDates = listOf(
@@ -153,7 +140,7 @@ class GetHabitsWithVirtualEntriesUseCaseTest {
         )
         habitRepository.upsertHabit(habit)
         dates.forEach { date -> entryRepository.toggleEntry(habit.id, LocalDate.parse(date)) }
-        val virtualEntries = getHabitsWithVirtualEntriesUseCase().first().first().entries
+        val virtualEntries = getVirtualEntries(habit.id).first()
         val actualDates = virtualEntries.filter { !dates.contains(it.date.toString()) }
         assertTrue(actualDates.all { it.id == null })
     }
@@ -172,7 +159,7 @@ class GetHabitsWithVirtualEntriesUseCaseTest {
         )
         habitRepository.upsertHabit(habit)
         dates.forEach { date -> entryRepository.toggleEntry(habit.id, LocalDate.parse(date)) }
-        val virtualEntries = getHabitsWithVirtualEntriesUseCase().first().first().entries
+        val virtualEntries = getVirtualEntries(habit.id).first()
         val actualDates = virtualEntries.filter { dates.contains(it.date.toString()) }
         assertTrue(actualDates.all { it.id != null })
     }
