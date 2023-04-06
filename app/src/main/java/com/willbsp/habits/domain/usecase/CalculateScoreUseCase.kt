@@ -18,10 +18,15 @@ class CalculateScoreUseCase @Inject constructor(
             if (list.isEmpty())
                 return@map null
 
-            val startDate: LocalDate = list.sortedByDescending { it.date }.last().date
-            if (startDate.isAfter(LocalDate.now(clock)))
+            val today = LocalDate.now(clock)
+            val entries = list
+                .sortedByDescending { it.date }
+                .filter { !it.date.isAfter(LocalDate.now(clock)) }
+            println(entries.toString())
+            if (entries.isEmpty())
                 return@map null
 
+            val startDate: LocalDate = entries.last().date
             var date = startDate
             var previous = 0f
             while (date != LocalDate.now(clock)) {
