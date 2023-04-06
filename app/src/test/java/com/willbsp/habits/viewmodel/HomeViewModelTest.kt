@@ -3,6 +3,7 @@ package com.willbsp.habits.viewmodel
 import com.willbsp.habits.TestData.habit1
 import com.willbsp.habits.TestData.habit3
 import com.willbsp.habits.domain.usecase.CalculateStreakUseCase
+import com.willbsp.habits.domain.usecase.GetVirtualEntriesUseCase
 import com.willbsp.habits.fake.repository.FakeEntryRepository
 import com.willbsp.habits.fake.repository.FakeHabitRepository
 import com.willbsp.habits.fake.repository.FakeHabitWithEntriesRepository
@@ -35,6 +36,8 @@ class HomeViewModelTest {
     private val time = "T12:00:00Z"
     private val entryRepository = FakeEntryRepository()
     private val habitRepository = FakeHabitRepository()
+    private val getVirtualEntriesUseCase =
+        GetVirtualEntriesUseCase(habitRepository, entryRepository)
     private val settingsRepository = FakeSettingsRepository()
     private lateinit var viewModel: HomeViewModel
 
@@ -42,7 +45,7 @@ class HomeViewModelTest {
     fun setup() {
 
         val clock = Clock.fixed(Instant.parse(date.toString() + time), ZoneOffset.UTC)
-        val calculateStreakUseCase = CalculateStreakUseCase(entryRepository)
+        val calculateStreakUseCase = CalculateStreakUseCase(getVirtualEntriesUseCase)
         val habitWithEntriesRepository =
             FakeHabitWithEntriesRepository(habitRepository, entryRepository)
 

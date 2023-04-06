@@ -1,18 +1,17 @@
 package com.willbsp.habits.domain.usecase
 
-import com.willbsp.habits.data.repository.EntryRepository
 import com.willbsp.habits.domain.model.Streak
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class CalculateStreakUseCase @Inject constructor(
-    private val entryRepository: EntryRepository
+    private val getVirtualEntriesUseCase: GetVirtualEntriesUseCase
 ) {
 
     operator fun invoke(habitId: Int): Flow<List<Streak>> {
 
-        return entryRepository.getAllEntriesStream(habitId).map { list ->
+        return getVirtualEntriesUseCase(habitId).map { list ->
 
             if (list.isEmpty())
                 return@map listOf<Streak>()
