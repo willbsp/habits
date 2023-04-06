@@ -29,12 +29,13 @@ class CalculateScoreUseCase @Inject constructor(
             val startDate: LocalDate = entries.last().date
             var date = startDate
             var previous = 0f
-            while (date != LocalDate.now(clock)) {
+            while (date != today.plusDays(1)) {
 
-                previous = if (list.any { it.habitId == habitId && it.date == date }) {
-                    singleExponentialSmoothing(1f, previous)
+                if (list.any { it.habitId == habitId && it.date == date }) {
+                    previous = singleExponentialSmoothing(1f, previous)
                 } else {
-                    singleExponentialSmoothing(0f, previous)
+                    if (date != today) // score should not be penalised for not being completed today
+                        previous = singleExponentialSmoothing(0f, previous)
                 }
                 date = date.plusDays(1f.toLong())
 
