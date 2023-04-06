@@ -48,7 +48,7 @@ class DetailViewModelTest {
         runBlocking { habitRepository.upsertHabit(habit3) }
         getVirtualEntriesUseCase = GetVirtualEntriesUseCase(habitRepository, entryRepository)
         scoreUseCase = CalculateScoreUseCase(getVirtualEntriesUseCase, clock)
-        streakUseCase = CalculateStreakUseCase(getVirtualEntriesUseCase)
+        streakUseCase = CalculateStreakUseCase(getVirtualEntriesUseCase, clock)
         statisticsUseCase = CalculateStatisticsUseCase(entryRepository)
         viewModel = DetailViewModel(
             habitRepository,
