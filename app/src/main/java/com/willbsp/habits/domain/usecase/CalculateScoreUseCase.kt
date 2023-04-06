@@ -19,6 +19,8 @@ class CalculateScoreUseCase @Inject constructor(
                 return@map null
 
             val startDate: LocalDate = list.sortedByDescending { it.date }.last().date
+            if (startDate.isAfter(LocalDate.now(clock)))
+                return@map null
 
             var date = startDate
             var previous = 0f
@@ -30,6 +32,7 @@ class CalculateScoreUseCase @Inject constructor(
                     singleExponentialSmoothing(0f, previous)
                 }
                 date = date.plusDays(1f.toLong())
+
             }
 
             return@map previous
