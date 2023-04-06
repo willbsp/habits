@@ -3,10 +3,13 @@ package com.willbsp.habits.domain.usecase
 import com.willbsp.habits.domain.model.Streak
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import java.time.Clock
+import java.time.LocalDate
 import javax.inject.Inject
 
 class CalculateStreakUseCase @Inject constructor(
-    private val getVirtualEntriesUseCase: GetVirtualEntriesUseCase
+    private val getVirtualEntriesUseCase: GetVirtualEntriesUseCase,
+    private val clock: Clock
 ) {
 
     operator fun invoke(habitId: Int): Flow<List<Streak>> {
@@ -16,7 +19,10 @@ class CalculateStreakUseCase @Inject constructor(
             if (list.isEmpty())
                 return@map listOf<Streak>()
 
-            val entries = list.sortedByDescending { it.date }
+            val today = LocalDate.now(clock)
+            val entries = list
+                .sortedByDescending { it.date }
+                .filter { !it.date.isAfter(today) }
             val streaks = mutableListOf<Streak>()
 
             var streak = 0
