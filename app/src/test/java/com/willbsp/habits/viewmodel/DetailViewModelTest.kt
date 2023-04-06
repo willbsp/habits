@@ -5,6 +5,7 @@ import com.willbsp.habits.TestData.habit3
 import com.willbsp.habits.domain.usecase.CalculateScoreUseCase
 import com.willbsp.habits.domain.usecase.CalculateStatisticsUseCase
 import com.willbsp.habits.domain.usecase.CalculateStreakUseCase
+import com.willbsp.habits.domain.usecase.GetVirtualEntriesUseCase
 import com.willbsp.habits.fake.repository.FakeEntryRepository
 import com.willbsp.habits.fake.repository.FakeHabitRepository
 import com.willbsp.habits.rules.TestDispatcherRule
@@ -34,6 +35,7 @@ class DetailViewModelTest {
     private val time = "T12:00:00Z"
     private val habitRepository: FakeHabitRepository = FakeHabitRepository()
     private val entryRepository: FakeEntryRepository = FakeEntryRepository()
+    private lateinit var getVirtualEntriesUseCase: GetVirtualEntriesUseCase
     private lateinit var scoreUseCase: CalculateScoreUseCase
     private lateinit var streakUseCase: CalculateStreakUseCase
     private lateinit var statisticsUseCase: CalculateStatisticsUseCase
@@ -44,7 +46,8 @@ class DetailViewModelTest {
         val clock = Clock.fixed(Instant.parse(date.toString() + time), ZoneOffset.UTC)
         val savedStateHandle = SavedStateHandle(mapOf("habitId" to habit3.id))
         runBlocking { habitRepository.upsertHabit(habit3) }
-        scoreUseCase = CalculateScoreUseCase(entryRepository, clock)
+        getVirtualEntriesUseCase = GetVirtualEntriesUseCase(habitRepository, entryRepository)
+        scoreUseCase = CalculateScoreUseCase(getVirtualEntriesUseCase, clock)
         streakUseCase = CalculateStreakUseCase(entryRepository)
         statisticsUseCase = CalculateStatisticsUseCase(entryRepository)
         viewModel = DetailViewModel(
