@@ -1,6 +1,5 @@
 package com.willbsp.habits.domain.usecase
 
-import com.willbsp.habits.data.repository.EntryRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import java.time.Clock
@@ -8,23 +7,24 @@ import java.time.LocalDate
 import javax.inject.Inject
 
 class CalculateScoreUseCase @Inject constructor(
-    private val entryRepository: EntryRepository,
+    private val getVirtualEntries: GetVirtualEntriesUseCase,
     private val clock: Clock
 ) {
 
     operator fun invoke(habitId: Int): Flow<Float?> {
 
-        return entryRepository.getAllEntriesStream(habitId).map { list ->
+        return getVirtualEntries(habitId).map { list ->
 
             if (list.isEmpty())
                 return@map null
 
-            val startDate: LocalDate = entryRepository.getOldestEntry(habitId)?.date!!
+            val startDate: LocalDate = list.sortedByDescending { it.date }.last().date
 
             var date = startDate
             var previous = 0f
             while (date != LocalDate.now(clock)) {
-                previous = if (entryRepository.getEntry(date, habitId) != null) {
+
+                previous = if (list.any { it.habitId == habitId && it.date == date }) {
                     singleExponentialSmoothing(1f, previous)
                 } else {
                     singleExponentialSmoothing(0f, previous)
