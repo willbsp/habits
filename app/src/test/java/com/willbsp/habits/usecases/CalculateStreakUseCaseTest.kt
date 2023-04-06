@@ -13,13 +13,16 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
+import java.time.Clock
+import java.time.Instant
 import java.time.LocalDate
+import java.time.ZoneOffset
 
 class CalculateStreakUseCaseTest {
 
     private val date = LocalDate.parse("2023-03-10")
 
-    // private val time = "T12:00:00Z"
+    private val time = "T12:00:00Z"
     private lateinit var entryRepository: FakeEntryRepository
     private lateinit var habitRepository: FakeHabitRepository
     private lateinit var getVirtualEntriesUseCase: GetVirtualEntriesUseCase
@@ -27,11 +30,11 @@ class CalculateStreakUseCaseTest {
 
     @Before
     fun setup() {
-        // val clock = Clock.fixed(Instant.parse(date.toString() + time), ZoneOffset.UTC)
+        val clock = Clock.fixed(Instant.parse(date.toString() + time), ZoneOffset.UTC)
         entryRepository = FakeEntryRepository()
         habitRepository = FakeHabitRepository()
         getVirtualEntriesUseCase = GetVirtualEntriesUseCase(habitRepository, entryRepository)
-        calculateStreakUseCase = CalculateStreakUseCase(getVirtualEntriesUseCase)
+        calculateStreakUseCase = CalculateStreakUseCase(getVirtualEntriesUseCase, clock)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -66,6 +69,20 @@ class CalculateStreakUseCaseTest {
         )
         habitRepository.upsertHabit(habit4)
         entryRepository.populate2()
+        val streaks = calculateStreakUseCase(habit4.id)
+        assertEquals(correctStreaks, streaks.first())
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun calculateStreak_whenWeeklyHabitCompleted_ignoresDatesAfterToday() = runTest {
+        val correctStreaks = listOf(
+            Streak(5, LocalDate.parse("2023-03-10")),
+        )
+        habitRepository.upsertHabit(habit4)
+        entryRepository.toggleEntry(habit4.id, LocalDate.parse("2023-03-07"))
+        entryRepository.toggleEntry(habit4.id, LocalDate.parse("2023-03-08"))
+        entryRepository.toggleEntry(habit4.id, LocalDate.parse("2023-03-09"))
         val streaks = calculateStreakUseCase(habit4.id)
         assertEquals(correctStreaks, streaks.first())
     }

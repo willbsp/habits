@@ -65,6 +65,22 @@ class CalculateScoreUseCaseTest {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
+    fun calculateScore_onCalculationWeeklyCompleted_ignoresDatesAfterToday() = runTest {
+
+        val correctScore = 22
+
+        habitRepository.upsertHabit(habit4)
+        entryRepository.toggleEntry(habit4.id, LocalDate.parse("2023-03-07"))
+        entryRepository.toggleEntry(habit4.id, LocalDate.parse("2023-03-08"))
+        entryRepository.toggleEntry(habit4.id, LocalDate.parse("2023-03-09"))
+        val score = calculateScoreUseCase(habit4.id).first()?.times(100)?.toInt()
+
+        assertEquals(correctScore, score)
+
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
     fun calculateScore_onCalculationWeeklyUncompleted_calculationCorrect() = runTest {
 
         val correctScore = 6
