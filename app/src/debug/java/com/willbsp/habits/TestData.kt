@@ -19,9 +19,9 @@ object TestData {
     // entries for testing frequency
     // should complete week
     val entryListF: List<Entry> = listOf(
-        Entry(3, 3, LocalDate.parse("2023-03-28")),
-        Entry(4, 3, LocalDate.parse("2023-03-29")),
-        Entry(5, 3, LocalDate.parse("2023-03-30")),
+        Entry(3, 3, LocalDate.parse("2023-02-28")),
+        Entry(4, 3, LocalDate.parse("2023-03-01")),
+        Entry(5, 3, LocalDate.parse("2023-03-02")),
     )
 
     // entries for testing domain layer

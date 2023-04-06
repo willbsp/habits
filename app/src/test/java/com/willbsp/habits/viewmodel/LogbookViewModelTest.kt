@@ -98,10 +98,10 @@ class LogbookViewModelTest {
         viewModel.setSelectedHabit(habit4.id)
         entryListF.forEach { entryRepository.toggleEntry(habit4.id, it.date) }
         val uiState = viewModel.uiState.map { it as LogbookUiState.SelectedHabit }.first()
-        assertTrue(uiState.completedByWeek.contains(LocalDate.parse("2023-03-27")))
-        assertTrue(uiState.completedByWeek.contains(LocalDate.parse("2023-03-31")))
-        assertTrue(uiState.completedByWeek.contains(LocalDate.parse("2023-04-01")))
-        assertTrue(uiState.completedByWeek.contains(LocalDate.parse("2023-04-02")))
+        assertTrue(uiState.completedByWeek.contains(LocalDate.parse("2023-02-27")))
+        assertTrue(uiState.completedByWeek.contains(LocalDate.parse("2023-03-03")))
+        assertTrue(uiState.completedByWeek.contains(LocalDate.parse("2023-03-04")))
+        assertTrue(uiState.completedByWeek.contains(LocalDate.parse("2023-03-05")))
         collectJob.cancel()
     }
 
