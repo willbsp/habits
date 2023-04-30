@@ -20,10 +20,16 @@ import com.willbsp.habits.R
 fun HabitToggleButton(
     modifier: Modifier = Modifier,
     onCheckedChange: (Boolean) -> (Unit),
-    checked: Boolean
+    checked: Boolean,
+    checkedSecondary: Boolean
 ) {
 
     val haptic = LocalHapticFeedback.current
+
+    val colors = if (checkedSecondary) IconButtonDefaults.filledIconToggleButtonColors(
+        contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
+        containerColor = MaterialTheme.colorScheme.tertiaryContainer
+    ) else IconButtonDefaults.filledIconToggleButtonColors()
 
     AnimatedContent(targetState = checked) {
         FilledIconToggleButton(
@@ -32,7 +38,8 @@ fun HabitToggleButton(
                 haptic.performHapticFeedback(HapticFeedbackType.LongPress)
                 onCheckedChange(value)
             },
-            checked = it
+            checked = it,
+            colors = colors
         ) {
             Icon(
                 imageVector = Icons.Default.Done,
@@ -47,7 +54,7 @@ fun HabitToggleButton(
 @Composable
 fun HabitToggleButtonCheckedPreview() {
     HabitToggleButton(
-        onCheckedChange = {}, checked = true
+        onCheckedChange = {}, checked = true, checkedSecondary = true
     )
 }
 
@@ -55,6 +62,14 @@ fun HabitToggleButtonCheckedPreview() {
 @Composable
 fun HabitToggleButtonUncheckedPreview() {
     HabitToggleButton(
-        onCheckedChange = {}, checked = false
+        onCheckedChange = {}, checked = false, checkedSecondary = false
+    )
+}
+
+@Preview
+@Composable
+fun HabitToggleButtonCheckedSecondaryPreview() {
+    HabitToggleButton(
+        onCheckedChange = {}, checked = false, checkedSecondary = true
     )
 }
