@@ -16,7 +16,8 @@ sealed class HomeUiState {
         val id: Int,
         val name: String,
         val streak: Int?,
-        val dates: List<LocalDate>
+        val dates: List<LocalDate>,
+        val datesByWeek: List<LocalDate>
     )
 
 }
