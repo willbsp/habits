@@ -82,8 +82,8 @@ fun HomeHabitCard(
                     Spacer(modifier = Modifier.width(10.dp))
                     HabitToggleButton(
                         onCheckedChange = { completedOnClick(habit.id, LocalDate.now()) },
-                        checked = habit.dates.firstOrNull() == LocalDate.now(),
-                        checkedSecondary = habit.datesByWeek.firstOrNull() == LocalDate.now()
+                        checked = habit.completed.firstOrNull() == LocalDate.now(),
+                        checkedSecondary = habit.completedByWeek.firstOrNull() == LocalDate.now()
                     )
 
                 }
@@ -139,8 +139,8 @@ private fun HomeHabitCardDayRow(
             val date = LocalDate.now().minusDays(i.toLong())
             HomeHabitCardDay(
                 onCheckedChange = { completedOnClick(habit.id, date) },
-                completed = habit.dates.any { it == date },
-                completedByWeek = habit.datesByWeek.any { it == date},
+                completed = habit.completed.any { it == date },
+                completedByWeek = habit.completedByWeek.any { it == date},
                 date = date
             )
         }

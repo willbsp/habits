@@ -122,7 +122,7 @@ private fun Home(
             is HomeUiState.Habits -> {
 
                 val allCompleted = remember(homeUiState) {
-                    homeUiState.habits.all { it.dates.firstOrNull() == LocalDate.now() }
+                    homeUiState.habits.all { it.completed.firstOrNull() == LocalDate.now() }
                 }
                 val showHabits = !showCompleted && allCompleted
 
@@ -187,7 +187,7 @@ private fun HabitsList(
 
         items(items = habitsList, key = { it.id }) { habit ->
             AnimatedVisibility(
-                visible = !habit.dates.any { it == LocalDate.now() } || showCompleted,
+                visible = !habit.completed.any { it == LocalDate.now() } || showCompleted,
                 exit = shrinkVertically(animationSpec = TweenSpec(delay = 200)),
                 enter = expandVertically()
             ) {
@@ -206,7 +206,7 @@ private fun HabitsList(
         }
         this.stickyHeader {
             val completedCount =
-                habitsList.count { habit -> habit.dates.any { it == LocalDate.now() } }
+                habitsList.count { habit -> habit.completed.any { it == LocalDate.now() } }
             if (homeUiState.showSubtitle) {
                 AnimatedVisibility(
                     visible = completedCount > 0 && !showCompleted,

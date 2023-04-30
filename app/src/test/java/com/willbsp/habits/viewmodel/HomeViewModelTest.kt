@@ -86,9 +86,9 @@ class HomeViewModelTest {
         val habits = viewModel.uiState.map { (it as HomeUiState.Habits).habits }
         habitRepository.upsertHabit(habit1)
         entryRepository.toggleEntry(habit1.id, date)
-        assertTrue(habits.first().find { it.name == habit1.name }?.dates?.contains(date) == true)
+        assertTrue(habits.first().find { it.name == habit1.name }?.completed?.contains(date) == true)
         entryRepository.toggleEntry(habit1.id, date)
-        assertFalse(habits.first().find { it.name == habit1.name }?.dates?.contains(date) == true)
+        assertFalse(habits.first().find { it.name == habit1.name }?.completed?.contains(date) == true)
         collectJob.cancel()
     }
 
@@ -138,9 +138,9 @@ class HomeViewModelTest {
         val habits = viewModel.uiState.map { (it as HomeUiState.Habits).habits }
         habitRepository.upsertHabit(habit1)
         viewModel.toggleEntry(habit1.id, date)
-        assertTrue(habits.first().find { it.name == habit1.name }?.dates?.contains(date) == true)
+        assertTrue(habits.first().find { it.name == habit1.name }?.completed?.contains(date) == true)
         viewModel.toggleEntry(habit1.id, date)
-        assertFalse(habits.first().find { it.name == habit1.name }?.dates?.contains(date) == true)
+        assertFalse(habits.first().find { it.name == habit1.name }?.completed?.contains(date) == true)
         collectJob.cancel()
     }
 
