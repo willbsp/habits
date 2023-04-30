@@ -6,6 +6,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -28,7 +29,11 @@ class GetHabitsWithVirtualEntriesUseCase @Inject constructor(
                     HabitWithVirtualEntries(habit, virtualEntries)
                 }
             }
-            combine(flows) { it.toList() }
+
+            if (flows.isEmpty())
+                return@flatMapLatest flowOf(listOf<HabitWithVirtualEntries>())
+
+            return@flatMapLatest combine(flows) { it.toList() }
 
         }
 
