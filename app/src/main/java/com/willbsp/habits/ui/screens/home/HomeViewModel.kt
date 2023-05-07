@@ -61,7 +61,7 @@ class HomeViewModel @Inject constructor(
         }
         val completed = entries.filter { it.id != null }.map { it.date }.sortedDescending()
         val completedByWeek = entries.filter { it.id == null }.map { it.date }.sortedDescending()
-        return HomeUiState.Habit(habit.id, habit.name, streak?.length, completed, completedByWeek)
+        return HomeUiState.Habit(habit.id, habit.name, habit.frequency, streak?.length, completed, completedByWeek)
     }
 
     companion object {
