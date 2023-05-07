@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -25,24 +26,20 @@ fun HabitToggleButton(
 ) {
 
     val haptic = LocalHapticFeedback.current
+    val icon = if (!checkedSecondary && !checked) Icons.Default.Close
+    else Icons.Default.Done
 
-    val colors = if (checkedSecondary) IconButtonDefaults.filledIconToggleButtonColors(
-        contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
-        containerColor = MaterialTheme.colorScheme.tertiaryContainer
-    ) else IconButtonDefaults.filledIconToggleButtonColors()
-
-    AnimatedContent(targetState = checked) {
+    AnimatedContent(targetState = listOf(checked, checkedSecondary), label = "") {
         FilledIconToggleButton(
             modifier = modifier.size(40.dp),
             onCheckedChange = { value ->
                 haptic.performHapticFeedback(HapticFeedbackType.LongPress)
                 onCheckedChange(value)
             },
-            checked = it,
-            colors = colors
+            checked = checked
         ) {
             Icon(
-                imageVector = Icons.Default.Done,
+                imageVector = icon,
                 contentDescription = stringResource(id = R.string.home_completed)
             )
         }
