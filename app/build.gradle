@@ -56,17 +56,17 @@ android {
 
 dependencies {
 
-    implementation 'androidx.core:core-ktx:1.9.0'
+    implementation 'androidx.core:core-ktx:1.10.0'
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-runtime-compose:$lifecycle_version"
-    implementation 'androidx.activity:activity-compose:1.7.0'
+    implementation 'androidx.activity:activity-compose:1.7.1'
 
     // Compose
     implementation "androidx.compose.ui:ui:$compose_version"
     implementation "androidx.compose.ui:ui-util:$compose_version"
     implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
-    implementation "androidx.compose.material:material-icons-extended:1.4.0"
+    implementation "androidx.compose.material:material-icons-extended:$compose_version"
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_version"
 
@@ -88,7 +88,7 @@ dependencies {
     implementation "com.google.accompanist:accompanist-navigation-animation:0.28.0"
 
     // Pager layouts
-    implementation "androidx.paging:paging-compose:1.0.0-alpha18"
+    implementation "androidx.paging:paging-compose:1.0.0-alpha19"
 
     // Room
     implementation "androidx.room:room-runtime:$room_version"
