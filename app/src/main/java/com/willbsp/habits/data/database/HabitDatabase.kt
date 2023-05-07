@@ -15,7 +15,7 @@ import com.willbsp.habits.data.model.Habit
 @Database(
     entities = [Habit::class, Entry::class],
     version = 2, // TODO reset to 1 for first release
-    exportSchema = false,
+    exportSchema = true,
 )
 @TypeConverters(Converters::class)
 abstract class HabitDatabase : RoomDatabase() {
