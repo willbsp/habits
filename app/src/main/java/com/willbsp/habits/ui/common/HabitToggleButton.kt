@@ -29,7 +29,7 @@ fun HabitToggleButton(
     val icon = if (!checkedSecondary && !checked) Icons.Default.Close
     else Icons.Default.Done
 
-    AnimatedContent(targetState = listOf(checked, checkedSecondary), label = "") {
+    AnimatedContent(targetState = listOf(checked, checkedSecondary)) {
         FilledIconToggleButton(
             modifier = modifier.size(40.dp),
             onCheckedChange = { value ->

@@ -1,5 +1,6 @@
 package com.willbsp.habits.data.database
 
+import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
@@ -14,8 +15,11 @@ import com.willbsp.habits.data.model.Habit
 
 @Database(
     entities = [Habit::class, Entry::class],
-    version = 2, // TODO reset to 1 for first release
-    exportSchema = false,
+    version = 3, // TODO reset to 1 for first release
+    exportSchema = true,
+    autoMigrations = [
+        AutoMigration (from = 2, to = 3)
+    ]
 )
 @TypeConverters(Converters::class)
 abstract class HabitDatabase : RoomDatabase() {
