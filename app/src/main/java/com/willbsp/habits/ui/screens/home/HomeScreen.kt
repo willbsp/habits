@@ -19,7 +19,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.willbsp.habits.R
 import com.willbsp.habits.ui.common.FullscreenHint
 import com.willbsp.habits.ui.common.HabitsFloatingAction
@@ -27,33 +26,9 @@ import com.willbsp.habits.ui.theme.HabitsTheme
 import com.willbsp.habits.ui.theme.Typography
 import java.time.LocalDate
 
-@Composable
-fun HomeScreen(
-    modifier: Modifier = Modifier,
-    viewModel: HomeViewModel,
-    navigateToLogbook: () -> Unit,
-    navigateToAddHabit: () -> Unit,
-    navigateToDetail: (Int) -> Unit,
-    navigateToSettings: () -> Unit
-) {
-
-    val homeUiState by viewModel.uiState.collectAsStateWithLifecycle()
-
-    Home(
-        modifier = modifier,
-        navigateToLogbook = navigateToLogbook,
-        navigateToAddHabit = navigateToAddHabit,
-        navigateToDetail = navigateToDetail,
-        navigateToSettings = navigateToSettings,
-        completedOnClick = { id, date -> viewModel.toggleEntry(id, date) },
-        homeUiState = homeUiState,
-    )
-
-}
-
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
 @Composable
-private fun Home(
+fun HomeScreen(
     modifier: Modifier = Modifier,
     completedOnClick: (Int, LocalDate) -> Unit,
     navigateToLogbook: () -> Unit,
@@ -242,7 +217,7 @@ private fun HabitsList(
 @Composable
 private fun HomeScreenPreview() {
     HabitsTheme {
-        Home(
+        HomeScreen(
             navigateToAddHabit = {},
             navigateToDetail = {},
             navigateToSettings = {},

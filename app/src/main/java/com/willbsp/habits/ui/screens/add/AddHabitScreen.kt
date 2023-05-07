@@ -16,33 +16,9 @@ import com.willbsp.habits.ui.common.HabitUiState
 import com.willbsp.habits.ui.common.HabitsFloatingAction
 import com.willbsp.habits.ui.theme.HabitsTheme
 
-@Composable
-fun AddHabitScreen(
-    modifier: Modifier = Modifier,
-    viewModel: AddHabitViewModel,
-    navigateUp: () -> Unit,
-    navigateBack: () -> Unit
-) {
-
-    AddHabit(
-        modifier = modifier,
-        navigateUp = navigateUp,
-        onSaveClick = {
-            if (viewModel.saveHabit()) {
-                navigateBack()
-            }
-        },
-        onValueChange = {
-            viewModel.updateUiState(it)
-        },
-        habitUiState = viewModel.uiState
-    )
-
-}
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun AddHabit(
+fun AddHabitScreen(
     modifier: Modifier = Modifier,
     navigateUp: () -> Unit,
     onSaveClick: () -> Unit,
@@ -83,7 +59,7 @@ private fun AddHabit(
 @Composable
 private fun AddHabitScreenPreview() {
     HabitsTheme {
-        AddHabit(
+        AddHabitScreen(
             navigateUp = {},
             onSaveClick = {},
             onValueChange = {},

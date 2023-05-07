@@ -3,19 +3,28 @@ package com.willbsp.habits.ui.navigation
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
+import com.willbsp.habits.ui.common.HabitUiState
 import com.willbsp.habits.ui.screens.add.AddHabitScreen
+import com.willbsp.habits.ui.screens.add.AddHabitViewModel
 import com.willbsp.habits.ui.screens.detail.DetailScreen
+import com.willbsp.habits.ui.screens.detail.DetailViewModel
 import com.willbsp.habits.ui.screens.edit.EditHabitScreen
+import com.willbsp.habits.ui.screens.edit.EditHabitViewModel
 import com.willbsp.habits.ui.screens.home.HomeScreen
+import com.willbsp.habits.ui.screens.home.HomeViewModel
 import com.willbsp.habits.ui.screens.logbook.LogbookScreen
+import com.willbsp.habits.ui.screens.logbook.LogbookViewModel
 import com.willbsp.habits.ui.screens.settings.SettingsScreen
+import com.willbsp.habits.ui.screens.settings.SettingsViewModel
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -35,8 +44,11 @@ fun HabitsNavigationGraph(
             exitTransition = { fadeOut() }
         ) {
 
+            val viewModel = hiltViewModel<HomeViewModel>()
+            val state by viewModel.uiState.collectAsStateWithLifecycle()
+
             HomeScreen(
-                viewModel = hiltViewModel(),
+                homeUiState = state,
                 navigateToLogbook = {
                     navController.navigate(HabitsNavigationDestination.LOGBOOK.route)
                 },
@@ -48,6 +60,9 @@ fun HabitsNavigationGraph(
                 },
                 navigateToSettings = {
                     navController.navigate(HabitsNavigationDestination.SETTINGS.route)
+                },
+                completedOnClick = { id, date ->
+                    viewModel.toggleEntry(id, date)
                 }
             )
 
@@ -69,14 +84,22 @@ fun HabitsNavigationGraph(
             }
         ) {
 
+            val viewModel = hiltViewModel<AddHabitViewModel>()
+            val state = viewModel.uiState
+
             AddHabitScreen(
-                viewModel = hiltViewModel(),
                 navigateUp = {
                     navController.navigateUp()
                 },
-                navigateBack = {
-                    navController.popBackStack()
-                }
+                onSaveClick = {
+                    if (viewModel.saveHabit()) {
+                        navController.popBackStack()
+                    }
+                },
+                onValueChange = {
+                    viewModel.updateUiState(it)
+                },
+                habitUiState = state
             )
 
         }
@@ -104,9 +127,14 @@ fun HabitsNavigationGraph(
             }
         ) {
 
+            val viewModel = hiltViewModel<DetailViewModel>()
+            val state by viewModel.uiState.collectAsStateWithLifecycle()
+
             DetailScreen(
-                viewModel = hiltViewModel(),
-                navigateUp = { navController.navigateUp() },
+                detailUiState = state,
+                navigateUp = {
+                    navController.navigateUp()
+                },
                 navigateToEditHabit = { habitId ->
                     navController.navigate(HabitsNavigationDestination.EDIT.route + habitId)
                 }
@@ -132,17 +160,25 @@ fun HabitsNavigationGraph(
 
         ) {
 
+            val viewModel = hiltViewModel<EditHabitViewModel>()
+            val state = viewModel.uiState
+
             EditHabitScreen(
-                viewModel = hiltViewModel(),
                 navigateUp = {
                     navController.navigateUp()
                 },
-                navigateBack = {
-                    navController.popBackStack()
+                onSaveClick = {
+                    if (viewModel.saveHabit())
+                        navController.popBackStack()
                 },
-                navigateToHome = {
+                onDeleteClick = {
+                    viewModel.deleteHabit()
                     navController.popBackStack(HabitsNavigationDestination.HOME.route, false)
-                }
+                },
+                onValueChange = {
+                    viewModel.updateUiState(it as HabitUiState.Habit)
+                },
+                habitUiState = state
             )
 
         }
@@ -163,8 +199,17 @@ fun HabitsNavigationGraph(
             }
         ) {
 
+            val viewModel = hiltViewModel<LogbookViewModel>()
+            val state by viewModel.uiState.collectAsStateWithLifecycle()
+
             LogbookScreen(
-                viewModel = hiltViewModel(),
+                logbookUiState = state,
+                completedOnClick = { date ->
+                    viewModel.toggleEntry(date)
+                },
+                habitOnClick = { habitId ->
+                    viewModel.setSelectedHabit(habitId)
+                },
                 navigateUp = {
                     navController.navigateUp()
                 }
@@ -188,11 +233,20 @@ fun HabitsNavigationGraph(
             }
         ) {
 
+            val viewModel = hiltViewModel<SettingsViewModel>()
+            val state by viewModel.uiState.collectAsStateWithLifecycle()
+
             SettingsScreen(
-                viewModel = hiltViewModel(),
                 navigateUp = {
-                    navController.navigateUp()
-                }
+                             navController.navigateUp()
+                },
+                onShowStreaksPressed = {
+                    viewModel.saveStreaksPreference(it)
+                },
+                onShowSubtitlePressed = {
+                    viewModel.saveSubtitlePreference(it)
+                },
+                settingsUiState = state
             )
 
         }

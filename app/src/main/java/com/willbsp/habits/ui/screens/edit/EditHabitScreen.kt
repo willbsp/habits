@@ -21,36 +21,9 @@ import com.willbsp.habits.ui.common.HabitUiState
 import com.willbsp.habits.ui.common.HabitsFloatingAction
 import com.willbsp.habits.ui.theme.HabitsTheme
 
-@Composable
-fun EditHabitScreen(
-    modifier: Modifier = Modifier,
-    viewModel: EditHabitViewModel,
-    navigateUp: () -> Unit,
-    navigateBack: () -> Unit,
-    navigateToHome: () -> Unit
-) {
-
-    EditHabit(
-        modifier = modifier,
-        navigateUp = navigateUp,
-        onSaveClick = {
-            if (viewModel.saveHabit()) navigateBack()
-        },
-        onDeleteClick = {
-            viewModel.deleteHabit()
-            navigateToHome()
-        },
-        onValueChange = {
-            viewModel.updateUiState(it as HabitUiState.Habit)
-        },
-        habitUiState = viewModel.uiState
-    )
-
-}
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun EditHabit(
+fun EditHabitScreen(
     modifier: Modifier = Modifier,
     navigateUp: () -> Unit,
     onSaveClick: () -> Unit,
@@ -130,7 +103,7 @@ private fun EditHabit(
 @Composable
 private fun EditHabitScreenPreview() {
     HabitsTheme {
-        EditHabit(
+        EditHabitScreen(
             navigateUp = {},
             onSaveClick = {},
             onDeleteClick = {},
