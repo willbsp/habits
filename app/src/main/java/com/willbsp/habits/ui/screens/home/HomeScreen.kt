@@ -1,33 +1,42 @@
 package com.willbsp.habits.ui.screens.home
 
-import androidx.compose.animation.*
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.TweenSpec
-import androidx.compose.animation.core.tween
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.Done
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.willbsp.habits.R
-import com.willbsp.habits.common.rangeTo
-import com.willbsp.habits.data.model.HabitFrequency
 import com.willbsp.habits.ui.common.FullscreenHint
 import com.willbsp.habits.ui.common.HabitsFloatingAction
 import com.willbsp.habits.ui.theme.HabitsTheme
-import com.willbsp.habits.ui.theme.Typography
-import java.time.DayOfWeek
 import java.time.LocalDate
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
@@ -129,7 +138,7 @@ fun HomeScreen(
                             .fillMaxSize()
                     ) {
                         //Spacer(modifier = Modifier.height(10.dp))
-                        HabitsList(
+                        HomeHabitList(
                             homeUiState = homeUiState,
                             completedOnClick = completedOnClick,
                             navigateToDetail = navigateToDetail,
@@ -143,188 +152,6 @@ fun HomeScreen(
     }
 }
 
-
-@OptIn(ExperimentalFoundationApi::class)
-@Composable
-private fun HabitsList(
-    homeUiState: HomeUiState.Habits,
-    completedOnClick: (Int, LocalDate) -> Unit,
-    navigateToDetail: (Int) -> Unit,
-    showCompleted: Boolean,
-    modifier: Modifier = Modifier
-) {
-
-    //val habitsList = homeUiState.habits
-    val dailyHabitsList = homeUiState.habits.filter { it.type == HabitFrequency.DAILY }
-    val weeklyHabitsList = homeUiState.habits.filter { it.type == HabitFrequency.WEEKLY }
-    // TODO remember filtering operation
-
-    // TODO use further down
-    val weekDates = (LocalDate.now().with(DayOfWeek.MONDAY)..LocalDate.now()).toList()
-    val dailyCompleted = dailyHabitsList.map { habit ->
-        habit.completed.contains(LocalDate.now())
-    }.all { it }
-    val weeklyCompleted = weeklyHabitsList.map { habit ->
-        (habit.completed + habit.completedByWeek).containsAll(weekDates)
-    }.all { it }
-
-    LazyColumn(modifier = modifier) {
-        this.stickyHeader {
-            AnimatedVisibility(
-                visible = !dailyCompleted || showCompleted,
-                exit = shrinkVertically(animationSpec = TweenSpec(delay = 200)),
-                enter = expandVertically()
-            ) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(MaterialTheme.colorScheme.background)
-                ) {
-                    Text( // TODO could have title area change colour when list is scrolled, e.g timers in google clock
-                        text = stringResource(R.string.home_today),
-                        style = Typography.titleLarge,
-                        modifier = Modifier
-                            .padding(start = 30.dp, bottom = 10.dp) // keep inline with habit titles
-                            .fillMaxWidth()
-                    )
-                }
-            }
-        }
-        items(
-            items = dailyHabitsList,
-            key = { it.id }) { habit ->
-
-            // TODO remember
-            val habitCompleted = habit.completed.any { it == LocalDate.now() }
-
-            AnimatedVisibility(
-                visible = !habitCompleted || showCompleted,
-                exit = shrinkVertically(animationSpec = TweenSpec(delay = 200)),
-                enter = expandVertically()
-            ) {
-
-                HomeHabitCard(
-                    modifier = Modifier
-                        .animateItemPlacement(tween())
-                        .padding(start = 20.dp, end = 20.dp, bottom = 10.dp),
-                    habit = habit,
-                    completedOnClick = completedOnClick,
-                    navigateToDetail = navigateToDetail,
-                    showStreaks = homeUiState.showStreaks
-                )
-
-            }
-        }
-        item {
-            val completedCount = dailyHabitsList.count { habit ->
-                habit.completed.any { it == LocalDate.now() }
-            }
-            if (homeUiState.showSubtitle) {
-                HabitListSubtitle(
-                    modifier = Modifier.fillMaxWidth(),
-                    visible = completedCount > 0 && !showCompleted,
-                    text = pluralStringResource(
-                        id = R.plurals.home_habit_list_subtitle,
-                        count = completedCount,
-                        completedCount
-                    )
-                )
-            }
-            Spacer(Modifier.height(20.dp))
-        }
-        this.stickyHeader {
-            AnimatedVisibility(
-                visible = !weeklyCompleted || showCompleted,
-                exit = shrinkVertically(animationSpec = TweenSpec(delay = 200)),
-                enter = expandVertically()
-            ) {
-
-
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(MaterialTheme.colorScheme.background)
-                ) {
-                    Text( // TODO could have title area change colour when list is scrolled, e.g timers in google clock
-                        text = "This Week",
-                        style = Typography.titleLarge,
-                        modifier = Modifier
-                            .padding(start = 30.dp, bottom = 10.dp) // keep inline with habit titles
-                            .fillMaxWidth()
-                    )
-                }
-
-            }
-        }
-        items(
-            items = weeklyHabitsList,
-            key = { it.id }) { habit ->
-
-            // TODO remember
-            val weekDates = (LocalDate.now().with(DayOfWeek.MONDAY)..LocalDate.now()).toList()
-            val weekCompleted = (habit.completed + habit.completedByWeek).containsAll(weekDates)
-
-            AnimatedVisibility(
-                visible = !weekCompleted || showCompleted,
-                exit = shrinkVertically(animationSpec = TweenSpec(delay = 200)),
-                enter = expandVertically()
-            ) {
-
-                HomeHabitCard(
-                    modifier = Modifier
-                        .animateItemPlacement(tween())
-                        .padding(start = 20.dp, end = 20.dp, bottom = 10.dp),
-                    habit = habit,
-                    completedOnClick = completedOnClick,
-                    navigateToDetail = navigateToDetail,
-                    showStreaks = homeUiState.showStreaks
-                )
-
-            }
-        }
-        item {
-            // TODO remember ?
-            val weekDates = (LocalDate.now().with(DayOfWeek.MONDAY)..LocalDate.now()).toList()
-            val completedCount = weeklyHabitsList.count { habit ->
-                (habit.completed + habit.completedByWeek).containsAll(weekDates)
-            }
-            if (homeUiState.showSubtitle) {
-                HabitListSubtitle(
-                    modifier = Modifier.fillMaxWidth(),
-                    visible = completedCount > 0 && !showCompleted,
-                    text = pluralStringResource(
-                        id = R.plurals.home_habit_list_weekly_subtitle,
-                        count = completedCount,
-                        completedCount
-                    )
-                )
-            }
-            // Spacer at the bottom ensures that FAB does not obscure habits at the bottom of the list
-            Spacer(modifier.height(100.dp)) // TODO
-        }
-    }
-
-}
-
-@Composable
-fun HabitListSubtitle(
-    modifier: Modifier = Modifier,
-    visible: Boolean,
-    text: String
-) {
-    AnimatedVisibility(
-        visible = visible,
-        exit = shrinkVertically(animationSpec = TweenSpec(delay = 200)),
-        enter = expandVertically()
-    ) {
-        Box(modifier = modifier, contentAlignment = Alignment.Center) {
-            Text(
-                text = text,
-                style = Typography.labelLarge
-            )
-        }
-    }
-}
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
