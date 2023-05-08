@@ -47,7 +47,7 @@ fun HomeHabitList(
         homeUiState.habits.filter { it.type == HabitFrequency.WEEKLY }
     }
     val weekDates = remember {
-        (LocalDate.now().with(DayOfWeek.MONDAY)..LocalDate.now()).toList()
+        (LocalDate.now().with(DayOfWeek.MONDAY)..LocalDate.now().with(DayOfWeek.SUNDAY)).toList()
     }
 
     val dailyCompleted = remember(dailyHabitsList) {
