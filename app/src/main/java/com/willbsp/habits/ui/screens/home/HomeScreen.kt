@@ -4,6 +4,7 @@ import androidx.compose.animation.*
 import androidx.compose.animation.core.TweenSpec
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -20,10 +21,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.willbsp.habits.R
+import com.willbsp.habits.common.rangeTo
+import com.willbsp.habits.data.model.HabitFrequency
 import com.willbsp.habits.ui.common.FullscreenHint
 import com.willbsp.habits.ui.common.HabitsFloatingAction
 import com.willbsp.habits.ui.theme.HabitsTheme
 import com.willbsp.habits.ui.theme.Typography
+import java.time.DayOfWeek
 import java.time.LocalDate
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
@@ -122,15 +126,9 @@ fun HomeScreen(
                     Column(
                         modifier = modifier
                             .padding(innerPadding)
-                            .padding(horizontal = 20.dp)
                             .fillMaxSize()
                     ) {
-                        Text( // TODO could have title area change colour when list is scrolled, e.g timers in google clock
-                            text = stringResource(R.string.home_today),
-                            style = Typography.titleLarge,
-                            modifier = Modifier.padding(horizontal = 10.dp) // keep inline with habit titles
-                        )
-                        Spacer(modifier = Modifier.height(10.dp))
+                        //Spacer(modifier = Modifier.height(10.dp))
                         HabitsList(
                             homeUiState = homeUiState,
                             completedOnClick = completedOnClick,
@@ -156,13 +154,51 @@ private fun HabitsList(
     modifier: Modifier = Modifier
 ) {
 
-    val habitsList = homeUiState.habits
+    //val habitsList = homeUiState.habits
+    val dailyHabitsList = homeUiState.habits.filter { it.type == HabitFrequency.DAILY }
+    val weeklyHabitsList = homeUiState.habits.filter { it.type == HabitFrequency.WEEKLY }
+    // TODO remember filtering operation
+
+    // TODO use further down
+    val weekDates = (LocalDate.now().with(DayOfWeek.MONDAY)..LocalDate.now()).toList()
+    val dailyCompleted = dailyHabitsList.map { habit ->
+        habit.completed.contains(LocalDate.now())
+    }.all { it }
+    val weeklyCompleted = weeklyHabitsList.map { habit ->
+        (habit.completed + habit.completedByWeek).containsAll(weekDates)
+    }.all { it }
 
     LazyColumn(modifier = modifier) {
-
-        items(items = habitsList, key = { it.id }) { habit ->
+        this.stickyHeader {
             AnimatedVisibility(
-                visible = !habit.completed.any { it == LocalDate.now() } || showCompleted,
+                visible = !dailyCompleted || showCompleted,
+                exit = shrinkVertically(animationSpec = TweenSpec(delay = 200)),
+                enter = expandVertically()
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(MaterialTheme.colorScheme.background)
+                ) {
+                    Text( // TODO could have title area change colour when list is scrolled, e.g timers in google clock
+                        text = stringResource(R.string.home_today),
+                        style = Typography.titleLarge,
+                        modifier = Modifier
+                            .padding(start = 30.dp, bottom = 10.dp) // keep inline with habit titles
+                            .fillMaxWidth()
+                    )
+                }
+            }
+        }
+        items(
+            items = dailyHabitsList,
+            key = { it.id }) { habit ->
+
+            // TODO remember
+            val habitCompleted = habit.completed.any { it == LocalDate.now() }
+
+            AnimatedVisibility(
+                visible = !habitCompleted || showCompleted,
                 exit = shrinkVertically(animationSpec = TweenSpec(delay = 200)),
                 enter = expandVertically()
             ) {
@@ -170,7 +206,7 @@ private fun HabitsList(
                 HomeHabitCard(
                     modifier = Modifier
                         .animateItemPlacement(tween())
-                        .padding(bottom = 10.dp),
+                        .padding(start = 20.dp, end = 20.dp, bottom = 10.dp),
                     habit = habit,
                     completedOnClick = completedOnClick,
                     navigateToDetail = navigateToDetail,
@@ -179,43 +215,120 @@ private fun HabitsList(
 
             }
         }
-        this.stickyHeader {
-            val completedCount =
-                habitsList.count { habit -> habit.completed.any { it == LocalDate.now() } }
+        item {
+            val completedCount = dailyHabitsList.count { habit ->
+                habit.completed.any { it == LocalDate.now() }
+            }
             if (homeUiState.showSubtitle) {
-                AnimatedVisibility(
+                HabitListSubtitle(
+                    modifier = Modifier.fillMaxWidth(),
                     visible = completedCount > 0 && !showCompleted,
-                    enter = fadeIn(
-                        animationSpec = TweenSpec(
-                            delay = 500
-                        )
-                    ),
-                    exit = fadeOut()
+                    text = pluralStringResource(
+                        id = R.plurals.home_habit_list_subtitle,
+                        count = completedCount,
+                        completedCount
+                    )
+                )
+            }
+            Spacer(Modifier.height(20.dp))
+        }
+        this.stickyHeader {
+            AnimatedVisibility(
+                visible = !weeklyCompleted || showCompleted,
+                exit = shrinkVertically(animationSpec = TweenSpec(delay = 200)),
+                enter = expandVertically()
+            ) {
+
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(MaterialTheme.colorScheme.background)
                 ) {
-                    Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                        Text(
-                            text = pluralStringResource(
-                                R.plurals.home_habit_list_subtitle,
-                                completedCount,
-                                completedCount
-                            ),
-                            style = Typography.labelLarge
-                        )
-                    }
+                    Text( // TODO could have title area change colour when list is scrolled, e.g timers in google clock
+                        text = "This Week",
+                        style = Typography.titleLarge,
+                        modifier = Modifier
+                            .padding(start = 30.dp, bottom = 10.dp) // keep inline with habit titles
+                            .fillMaxWidth()
+                    )
                 }
+
+            }
+        }
+        items(
+            items = weeklyHabitsList,
+            key = { it.id }) { habit ->
+
+            // TODO remember
+            val weekDates = (LocalDate.now().with(DayOfWeek.MONDAY)..LocalDate.now()).toList()
+            val weekCompleted = (habit.completed + habit.completedByWeek).containsAll(weekDates)
+
+            AnimatedVisibility(
+                visible = !weekCompleted || showCompleted,
+                exit = shrinkVertically(animationSpec = TweenSpec(delay = 200)),
+                enter = expandVertically()
+            ) {
+
+                HomeHabitCard(
+                    modifier = Modifier
+                        .animateItemPlacement(tween())
+                        .padding(start = 20.dp, end = 20.dp, bottom = 10.dp),
+                    habit = habit,
+                    completedOnClick = completedOnClick,
+                    navigateToDetail = navigateToDetail,
+                    showStreaks = homeUiState.showStreaks
+                )
+
+            }
+        }
+        item {
+            // TODO remember ?
+            val weekDates = (LocalDate.now().with(DayOfWeek.MONDAY)..LocalDate.now()).toList()
+            val completedCount = weeklyHabitsList.count { habit ->
+                (habit.completed + habit.completedByWeek).containsAll(weekDates)
+            }
+            if (homeUiState.showSubtitle) {
+                HabitListSubtitle(
+                    modifier = Modifier.fillMaxWidth(),
+                    visible = completedCount > 0 && !showCompleted,
+                    text = pluralStringResource(
+                        id = R.plurals.home_habit_list_weekly_subtitle,
+                        count = completedCount,
+                        completedCount
+                    )
+                )
             }
             // Spacer at the bottom ensures that FAB does not obscure habits at the bottom of the list
-            Spacer(modifier.height(100.dp))
+            Spacer(modifier.height(100.dp)) // TODO
         }
     }
 
-    Spacer(modifier = Modifier.height(50.dp))
+}
 
+@Composable
+fun HabitListSubtitle(
+    modifier: Modifier = Modifier,
+    visible: Boolean,
+    text: String
+) {
+    AnimatedVisibility(
+        visible = visible,
+        exit = shrinkVertically(animationSpec = TweenSpec(delay = 200)),
+        enter = expandVertically()
+    ) {
+        Box(modifier = modifier, contentAlignment = Alignment.Center) {
+            Text(
+                text = text,
+                style = Typography.labelLarge
+            )
+        }
+    }
 }
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-private fun HomeScreenPreview() {
+private fun HomeScreenNoHabitsPreview() {
     HabitsTheme {
         HomeScreen(
             navigateToAddHabit = {},
