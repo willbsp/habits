@@ -137,7 +137,6 @@ fun HomeScreen(
                             .padding(innerPadding)
                             .fillMaxSize()
                     ) {
-                        //Spacer(modifier = Modifier.height(10.dp))
                         HomeHabitList(
                             homeUiState = homeUiState,
                             completedOnClick = completedOnClick,
