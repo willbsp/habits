@@ -23,7 +23,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.willbsp.habits.R
 import com.willbsp.habits.ui.common.DefaultHabitsAppTopBar
 import com.willbsp.habits.ui.theme.HabitsTheme
@@ -31,28 +30,9 @@ import com.willbsp.habits.ui.theme.Typography
 import java.time.format.TextStyle
 import java.util.Locale
 
-@Composable
-fun DetailScreen(
-    modifier: Modifier = Modifier,
-    viewModel: DetailViewModel,
-    navigateUp: () -> Unit,
-    navigateToEditHabit: (Int) -> Unit
-) {
-
-    val detailUiState by viewModel.uiState.collectAsStateWithLifecycle()
-
-    Detail(
-        modifier = modifier,
-        detailUiState = detailUiState,
-        navigateUp = navigateUp,
-        navigateToEditHabit = navigateToEditHabit
-    )
-
-}
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun Detail(
+fun DetailScreen(
     modifier: Modifier = Modifier,
     detailUiState: DetailUiState,
     navigateUp: () -> Unit,
@@ -294,7 +274,7 @@ fun DetailCard(
 @Composable
 private fun DetailScreenPreview() {
     HabitsTheme {
-        Detail(
+        DetailScreen(
             detailUiState = DetailUiState(-1, "Flashcards", 5, 23),
             navigateUp = { },
             navigateToEditHabit = {}

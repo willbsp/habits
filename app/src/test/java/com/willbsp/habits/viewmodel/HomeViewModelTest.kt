@@ -1,11 +1,13 @@
 package com.willbsp.habits.viewmodel
 
 import com.willbsp.habits.TestData.habit1
+import com.willbsp.habits.TestData.habit2
 import com.willbsp.habits.TestData.habit3
 import com.willbsp.habits.domain.usecase.CalculateStreakUseCase
+import com.willbsp.habits.domain.usecase.GetHabitsWithVirtualEntriesUseCase
+import com.willbsp.habits.domain.usecase.GetVirtualEntriesUseCase
 import com.willbsp.habits.fake.repository.FakeEntryRepository
 import com.willbsp.habits.fake.repository.FakeHabitRepository
-import com.willbsp.habits.fake.repository.FakeHabitWithEntriesRepository
 import com.willbsp.habits.fake.repository.FakeSettingsRepository
 import com.willbsp.habits.rules.TestDispatcherRule
 import com.willbsp.habits.ui.screens.home.HomeUiState
@@ -35,6 +37,8 @@ class HomeViewModelTest {
     private val time = "T12:00:00Z"
     private val entryRepository = FakeEntryRepository()
     private val habitRepository = FakeHabitRepository()
+    private val getVirtualEntriesUseCase =
+        GetVirtualEntriesUseCase(habitRepository, entryRepository)
     private val settingsRepository = FakeSettingsRepository()
     private lateinit var viewModel: HomeViewModel
 
@@ -42,15 +46,15 @@ class HomeViewModelTest {
     fun setup() {
 
         val clock = Clock.fixed(Instant.parse(date.toString() + time), ZoneOffset.UTC)
-        val calculateStreakUseCase = CalculateStreakUseCase(entryRepository)
-        val habitWithEntriesRepository =
-            FakeHabitWithEntriesRepository(habitRepository, entryRepository)
+        val calculateStreakUseCase = CalculateStreakUseCase(getVirtualEntriesUseCase, clock)
+        val getHabitsWithVirtualEntries =
+            GetHabitsWithVirtualEntriesUseCase(habitRepository, getVirtualEntriesUseCase)
 
         viewModel = HomeViewModel(
             entryRepository = entryRepository,
             calculateStreak = calculateStreakUseCase,
             clock = clock,
-            habitRepository = habitWithEntriesRepository,
+            getHabitsWithVirtualEntries = getHabitsWithVirtualEntries,
             settingsRepository = settingsRepository
         )
 
@@ -81,9 +85,9 @@ class HomeViewModelTest {
         val habits = viewModel.uiState.map { (it as HomeUiState.Habits).habits }
         habitRepository.upsertHabit(habit1)
         entryRepository.toggleEntry(habit1.id, date)
-        assertTrue(habits.first().find { it.name == habit1.name }?.dates?.contains(date) == true)
+        assertTrue(habits.first().find { it.name == habit1.name }?.completed?.contains(date) == true)
         entryRepository.toggleEntry(habit1.id, date)
-        assertFalse(habits.first().find { it.name == habit1.name }?.dates?.contains(date) == true)
+        assertFalse(habits.first().find { it.name == habit1.name }?.completed?.contains(date) == true)
         collectJob.cancel()
     }
 
@@ -112,6 +116,32 @@ class HomeViewModelTest {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
+    fun uiState_whenDateToggledWeekly_thenShowWeeklyCompleted() = runTest {
+        val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
+        val habits = viewModel.uiState.map { (it as HomeUiState.Habits).habits }
+        habitRepository.upsertHabit(habit2)
+        entryRepository.toggleEntry(habit2.id, date)
+        val habit = habits.first().find { it.name == habit2.name }!!
+        assertTrue(habit.completed.contains(date))
+        assertTrue(habit.completedByWeek.contains(date.minusDays(1)))
+        assertTrue(habit.completedByWeek.contains(date.minusDays(3)))
+        collectJob.cancel()
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun uiState_whenDateToggledWeekly_thenShowStreak() = runTest {
+        val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
+        val habits = viewModel.uiState.map { (it as HomeUiState.Habits).habits }
+        habitRepository.upsertHabit(habit2)
+        entryRepository.toggleEntry(habit2.id, date)
+        val habit = habits.first().find { it.name == habit2.name }!!
+        assertEquals(5, habit.streak)
+        collectJob.cancel()
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
     fun uiState_whenPreferencesSet_getPreferences() = runTest {
         val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
         settingsRepository.emit()
@@ -133,9 +163,9 @@ class HomeViewModelTest {
         val habits = viewModel.uiState.map { (it as HomeUiState.Habits).habits }
         habitRepository.upsertHabit(habit1)
         viewModel.toggleEntry(habit1.id, date)
-        assertTrue(habits.first().find { it.name == habit1.name }?.dates?.contains(date) == true)
+        assertTrue(habits.first().find { it.name == habit1.name }?.completed?.contains(date) == true)
         viewModel.toggleEntry(habit1.id, date)
-        assertFalse(habits.first().find { it.name == habit1.name }?.dates?.contains(date) == true)
+        assertFalse(habits.first().find { it.name == habit1.name }?.completed?.contains(date) == true)
         collectJob.cancel()
     }
 

@@ -15,32 +15,9 @@ import com.willbsp.habits.ui.common.DefaultHabitsAppTopBar
 import com.willbsp.habits.ui.theme.HabitsTheme
 import com.willbsp.habits.ui.theme.Typography
 
-@Composable
-fun SettingsScreen(
-    modifier: Modifier = Modifier,
-    viewModel: SettingsViewModel,
-    navigateUp: () -> Unit
-) {
-
-    val settingsUiState by viewModel.uiState.collectAsState(SettingsUiState())
-
-    Settings(
-        modifier = modifier,
-        navigateUp = navigateUp,
-        onShowStreaksPressed = {
-            viewModel.saveStreaksPreference(it)
-        },
-        onShowSubtitlePressed = {
-            viewModel.saveSubtitlePreference(it)
-        },
-        settingsUiState = settingsUiState
-    )
-
-}
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun Settings(
+fun SettingsScreen(
     modifier: Modifier = Modifier,
     navigateUp: () -> Unit,
     onShowStreaksPressed: (Boolean) -> Unit,

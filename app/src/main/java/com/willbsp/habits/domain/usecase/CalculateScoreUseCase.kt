@@ -1,6 +1,5 @@
 package com.willbsp.habits.domain.usecase
 
-import com.willbsp.habits.data.repository.EntryRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import java.time.Clock
@@ -8,28 +7,38 @@ import java.time.LocalDate
 import javax.inject.Inject
 
 class CalculateScoreUseCase @Inject constructor(
-    private val entryRepository: EntryRepository,
+    private val getVirtualEntries: GetVirtualEntriesUseCase,
     private val clock: Clock
 ) {
 
     operator fun invoke(habitId: Int): Flow<Float?> {
 
-        return entryRepository.getAllEntriesStream(habitId).map { list ->
+        return getVirtualEntries(habitId).map { list ->
 
             if (list.isEmpty())
                 return@map null
 
-            val startDate: LocalDate = entryRepository.getOldestEntry(habitId)?.date!!
+            val today = LocalDate.now(clock)
+            val entries = list
+                .sortedByDescending { it.date }
+                .filter { !it.date.isAfter(LocalDate.now(clock)) }
+            println(entries.toString())
+            if (entries.isEmpty())
+                return@map null
 
+            val startDate: LocalDate = entries.last().date
             var date = startDate
             var previous = 0f
-            while (date != LocalDate.now(clock)) {
-                previous = if (entryRepository.getEntry(date, habitId) != null) {
-                    singleExponentialSmoothing(1f, previous)
+            while (date != today.plusDays(1)) {
+
+                if (list.any { it.habitId == habitId && it.date == date }) {
+                    previous = singleExponentialSmoothing(1f, previous)
                 } else {
-                    singleExponentialSmoothing(0f, previous)
+                    if (date != today) // score should not be penalised for not being completed today
+                        previous = singleExponentialSmoothing(0f, previous)
                 }
                 date = date.plusDays(1f.toLong())
+
             }
 
             return@map previous

@@ -16,6 +16,7 @@
     <string name="edit_habit_delete">Delete</string>
     <string name="modify_habit_name">Name</string>
     <string name="modify_habit_frequency">Frequency</string>
+    <string name="modify_times_per_week">How many times per week?</string>
     <!--modify habit screen end-->
 
     <!--home screen start-->
@@ -23,12 +24,17 @@
     <string name="home_completed">Completed</string>
     <string name="home_uncompleted">Uncompleted</string>
     <string name="home_today">Today</string>
+    <string name="home_this_week">This Week</string>
     <string name="home_all_completed">All completed for today!</string>
     <string name="home_all_completed_tick">All completed</string>
     <!--<string name="home_habit_list_subtitle">"%d habits completed today…"</string>-->
     <plurals name="home_habit_list_subtitle">
         <item quantity="one">%d habit completed today…</item>
         <item quantity="other">%d habits completed today…</item>
+    </plurals>
+    <plurals name="home_habit_list_weekly_subtitle">
+        <item quantity="one">%d habit completed this week…</item>
+        <item quantity="other">%d habits completed this week…</item>
     </plurals>
     <string name="home_no_habits">Add a habit with the button below!</string>
     <string name="home_show_completed">Show completed</string>

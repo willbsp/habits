@@ -63,7 +63,11 @@ class EditHabitViewModel @Inject constructor(
         viewModelScope.launch {
             val habit = habitsRepository.getHabit(habitId)
             if (habit != null) {
-                uiState = HabitUiState.Habit(name = habit.name, frequency = habit.frequency)
+                uiState = HabitUiState.Habit(
+                    name = habit.name,
+                    frequency = habit.frequency,
+                    repeat = habit.repeat
+                )
             }
         }
     }

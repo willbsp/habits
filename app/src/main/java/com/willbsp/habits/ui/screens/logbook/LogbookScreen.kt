@@ -10,36 +10,15 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.willbsp.habits.R
 import com.willbsp.habits.ui.common.DefaultHabitsAppTopBar
 import com.willbsp.habits.ui.common.FullscreenHint
 import java.time.LocalDate
 
-@Composable
-fun LogbookScreen(
-    modifier: Modifier = Modifier,
-    viewModel: LogbookViewModel,
-    navigateUp: () -> Unit,
-) {
-
-    val logbookUiState by viewModel.uiState.collectAsStateWithLifecycle()
-
-    Logbook(
-        modifier = modifier,
-        logbookUiState = logbookUiState,
-        completedOnClick = { date -> viewModel.toggleEntry(date) },
-        habitOnClick = { habitId -> viewModel.setSelectedHabit(habitId) },
-        navigateUp = navigateUp
-    )
-
-}
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun Logbook(
+fun LogbookScreen(
     modifier: Modifier = Modifier,
     navigateUp: () -> Unit,
     logbookUiState: LogbookUiState,
@@ -74,7 +53,7 @@ private fun Logbook(
                         modifier = Modifier
                             .weight(1f, true)
                             .padding(horizontal = 20.dp),
-                        dates = logbookUiState.selectedHabitDates,
+                        logbookUiState = logbookUiState,
                         dateOnClick = completedOnClick
                     )
 
@@ -90,7 +69,7 @@ private fun Logbook(
                             FilterChip(
                                 modifier = Modifier
                                     .padding(end = 8.dp),
-                                selected = it.id == logbookUiState.selectedHabitId,
+                                selected = it.id == logbookUiState.habitId,
                                 onClick = { habitOnClick(it.id) },
                                 label = { Text(text = it.name) })
                         }
@@ -114,7 +93,7 @@ private fun Logbook(
     }
 }
 
-@Preview
+/*@Preview
 @Composable
 fun LogbookPreview() {
     Logbook(
@@ -132,4 +111,4 @@ fun LogbookPreview() {
         completedOnClick = { },
         habitOnClick = { }
     )
-}
+}*/

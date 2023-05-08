@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -20,22 +21,25 @@ import com.willbsp.habits.R
 fun HabitToggleButton(
     modifier: Modifier = Modifier,
     onCheckedChange: (Boolean) -> (Unit),
-    checked: Boolean
+    checked: Boolean,
+    checkedSecondary: Boolean
 ) {
 
     val haptic = LocalHapticFeedback.current
+    val icon = if (!checkedSecondary && !checked) Icons.Default.Close
+    else Icons.Default.Done
 
-    AnimatedContent(targetState = checked) {
+    AnimatedContent(targetState = listOf(checked, checkedSecondary)) {
         FilledIconToggleButton(
             modifier = modifier.size(40.dp),
             onCheckedChange = { value ->
                 haptic.performHapticFeedback(HapticFeedbackType.LongPress)
                 onCheckedChange(value)
             },
-            checked = it
+            checked = checked
         ) {
             Icon(
-                imageVector = Icons.Default.Done,
+                imageVector = icon,
                 contentDescription = stringResource(id = R.string.home_completed)
             )
         }
@@ -47,7 +51,7 @@ fun HabitToggleButton(
 @Composable
 fun HabitToggleButtonCheckedPreview() {
     HabitToggleButton(
-        onCheckedChange = {}, checked = true
+        onCheckedChange = {}, checked = true, checkedSecondary = true
     )
 }
 
@@ -55,6 +59,14 @@ fun HabitToggleButtonCheckedPreview() {
 @Composable
 fun HabitToggleButtonUncheckedPreview() {
     HabitToggleButton(
-        onCheckedChange = {}, checked = false
+        onCheckedChange = {}, checked = false, checkedSecondary = false
+    )
+}
+
+@Preview
+@Composable
+fun HabitToggleButtonCheckedSecondaryPreview() {
+    HabitToggleButton(
+        onCheckedChange = {}, checked = false, checkedSecondary = true
     )
 }

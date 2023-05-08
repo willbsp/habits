@@ -18,6 +18,11 @@ class FakeEntryRepository : EntryRepository {
         emit()
     }
 
+    suspend fun populate2() {
+        entries.addAll(TestData.entryListF)
+        emit()
+    }
+
     override fun getAllEntriesStream(): Flow<List<Entry>> = observableEntries
 
     override fun getAllEntriesStream(habitId: Int): Flow<List<Entry>> =

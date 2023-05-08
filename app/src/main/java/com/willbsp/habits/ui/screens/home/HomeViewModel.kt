@@ -2,11 +2,11 @@ package com.willbsp.habits.ui.screens.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.willbsp.habits.data.model.HabitWithEntries
 import com.willbsp.habits.data.repository.EntryRepository
-import com.willbsp.habits.data.repository.HabitWithEntriesRepository
 import com.willbsp.habits.data.repository.SettingsRepository
+import com.willbsp.habits.domain.model.HabitWithVirtualEntries
 import com.willbsp.habits.domain.usecase.CalculateStreakUseCase
+import com.willbsp.habits.domain.usecase.GetHabitsWithVirtualEntriesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -23,13 +23,13 @@ class HomeViewModel @Inject constructor(
     private val entryRepository: EntryRepository,
     private val calculateStreak: CalculateStreakUseCase,
     private val clock: Clock,
-    habitRepository: HabitWithEntriesRepository,
+    getHabitsWithVirtualEntries: GetHabitsWithVirtualEntriesUseCase,
     settingsRepository: SettingsRepository,
 ) : ViewModel() {
 
     val uiState: StateFlow<HomeUiState> =
         combine(
-            habitRepository.getHabitsWithEntries(),
+            getHabitsWithVirtualEntries(),
             settingsRepository.getStreakPreference(),
             settingsRepository.getSubtitlePreference()
         ) { habitWithEntriesList, streakPref, subtitlePref ->
@@ -46,7 +46,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private suspend fun List<HabitWithEntries>.toHomeUiState(
+    private suspend fun List<HabitWithVirtualEntries>.toHomeUiState(
         streakPref: Boolean,
         subtitlePref: Boolean
     ): HomeUiState {
@@ -54,13 +54,14 @@ class HomeViewModel @Inject constructor(
         else HomeUiState.Habits(this.map { it.toHabit() }, streakPref, subtitlePref)
     }
 
-    private suspend fun HabitWithEntries.toHabit(): HomeUiState.Habit {
+    private suspend fun HabitWithVirtualEntries.toHabit(): HomeUiState.Habit {
         val streak = calculateStreak(habit.id).first().find { streak ->
-            streak.endDate == LocalDate.now(clock) || streak.endDate == LocalDate.now(clock)
-                .minusDays(1)
+            streak.endDate == LocalDate.now(clock)
+                    || streak.endDate == LocalDate.now(clock).minusDays(1)
         }
-        val dates = entries.map { it.date }.sortedDescending()
-        return HomeUiState.Habit(habit.id, habit.name, streak?.length, dates)
+        val completed = entries.filter { it.id != null }.map { it.date }.sortedDescending()
+        val completedByWeek = entries.filter { it.id == null }.map { it.date }.sortedDescending()
+        return HomeUiState.Habit(habit.id, habit.name, habit.frequency, streak?.length, completed, completedByWeek)
     }
 
     companion object {

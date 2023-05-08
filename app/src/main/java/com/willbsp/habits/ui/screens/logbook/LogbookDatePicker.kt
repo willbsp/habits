@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -21,6 +20,8 @@ import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material3.FilledIconToggleButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -29,7 +30,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
 import com.willbsp.habits.ui.theme.Typography
@@ -44,7 +44,7 @@ import kotlin.math.absoluteValue
 @Composable
 fun LogbookDatePicker(
     modifier: Modifier = Modifier,
-    dates: List<LocalDate>,
+    logbookUiState: LogbookUiState.SelectedHabit,
     dateOnClick: (LocalDate) -> Unit
 ) {
 
@@ -67,7 +67,7 @@ fun LogbookDatePicker(
                     alpha = lerp(start = 0f, stop = 1f, fraction = fraction)
                 },
             date = date,
-            checkedDates = dates,
+            logbookUiState = logbookUiState,
             dateOnClick = dateOnClick,
             pagerState = pagerState
         )
@@ -82,7 +82,7 @@ fun LogbookMonth(
     date: LocalDate,
     dateOnClick: (LocalDate) -> Unit,
     pagerState: PagerState,
-    checkedDates: List<LocalDate>
+    logbookUiState: LogbookUiState.SelectedHabit
 ) {
 
     val startDate = remember { date.withDayOfMonth(1).with(DayOfWeek.MONDAY) }
@@ -149,7 +149,10 @@ fun LogbookMonth(
                             DateIconButton(
                                 modifier = Modifier.size(40.dp),
                                 date = currentDate,
-                                checked = checkedDates.contains(currentDate),
+                                checked = logbookUiState.completed.contains(currentDate),
+                                checkedSecondary = logbookUiState.completedByWeek.contains(
+                                    currentDate
+                                ),
                                 enabled = !currentDate.isAfter(today),
                                 onCheckedChange = { dateOnClick(currentDate) }
                             )
@@ -170,11 +173,16 @@ private fun DateIconButton(
     modifier: Modifier = Modifier,
     date: LocalDate,
     checked: Boolean,
+    checkedSecondary: Boolean,
     enabled: Boolean,
     onCheckedChange: (LocalDate) -> (Unit)
 ) {
 
     val dayOfMonth = remember { date.dayOfMonth.toString() }
+    val colors = if (checkedSecondary) IconButtonDefaults.filledIconToggleButtonColors(
+        contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
+        containerColor = MaterialTheme.colorScheme.tertiaryContainer
+    ) else IconButtonDefaults.filledIconToggleButtonColors()
 
     AnimatedContent(targetState = checked) {
         FilledIconToggleButton(
@@ -183,7 +191,8 @@ private fun DateIconButton(
             enabled = enabled,
             onCheckedChange = {
                 onCheckedChange(date)
-            }
+            },
+            colors = colors
         ) {
             Box(
                 modifier = Modifier,
@@ -196,12 +205,16 @@ private fun DateIconButton(
 
 }
 
-@Preview(showBackground = true)
+/*@Preview(showBackground = true)
 @Composable
 private fun NewLogbookDatePickerPreview() {
     LogbookDatePicker(
         modifier = Modifier.fillMaxSize(),
-        dates = listOf(),
+        logbookUiState = listOf(
+            LocalDate.parse("2023-03-22"),
+            LocalDate.parse("2023-03-23"),
+            LocalDate.parse("2023-03-24")
+        ),
         dateOnClick = { }
     )
-}
+}*/

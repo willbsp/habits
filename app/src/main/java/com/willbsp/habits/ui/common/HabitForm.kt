@@ -1,5 +1,6 @@
 package com.willbsp.habits.ui.common
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -9,6 +10,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.willbsp.habits.R
 import com.willbsp.habits.data.model.HabitFrequency
@@ -55,42 +57,96 @@ private fun HabitFrequencyDropdown(
     onValueChange: (HabitUiState.Habit) -> Unit
 ) {
 
-    val options = HabitFrequency.values()
-    var expanded by remember { mutableStateOf(false) }
-    var selectedFrequency by remember { mutableStateOf(uiState.frequency) }
+    val frequencyOptions = HabitFrequency.values()
+    var frequencyExpanded by remember { mutableStateOf(false) }
+    var frequencySelected by remember { mutableStateOf(uiState.frequency) }
 
-    ExposedDropdownMenuBox(
-        modifier = modifier,
-        expanded = expanded,
-        onExpandedChange = { expanded = !expanded },
+    Column(
+        modifier = modifier
     ) {
-        TextField(
-            modifier = Modifier
-                .menuAnchor()
-                .fillMaxWidth(),
-            readOnly = true,
-            value = stringResource(id = selectedFrequency.userReadableStringRes),
-            onValueChange = {},
-            label = { Text("Frequency") },
-            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
-            colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors()
-        )
-        ExposedDropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false },
+
+        ExposedDropdownMenuBox(
+            expanded = frequencyExpanded,
+            onExpandedChange = { frequencyExpanded = !frequencyExpanded },
         ) {
-            options.forEach { selectionOption ->
-                DropdownMenuItem(
-                    text = { Text(stringResource(id = selectionOption.userReadableStringRes)) },
-                    onClick = {
-                        selectedFrequency = selectionOption
-                        onValueChange(uiState.copy(frequency = selectionOption))
-                        expanded = false
-                    },
-                    contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
-                )
+            OutlinedTextField(
+                modifier = Modifier
+                    .menuAnchor()
+                    .fillMaxWidth(),
+                readOnly = true,
+                value = stringResource(id = frequencySelected.userReadableStringRes),
+                onValueChange = {},
+                label = { Text("Frequency") },
+                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = frequencyExpanded) },
+                colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors()
+            )
+            ExposedDropdownMenu(
+                expanded = frequencyExpanded,
+                onDismissRequest = { frequencyExpanded = false },
+            ) {
+                frequencyOptions.forEach { selectionOption ->
+                    DropdownMenuItem(
+                        text = { Text(stringResource(id = selectionOption.userReadableStringRes)) },
+                        onClick = {
+                            frequencySelected = selectionOption
+                            onValueChange(uiState.copy(frequency = selectionOption))
+                            frequencyExpanded = false
+                        },
+                        contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
+                    )
+                }
             }
         }
+
+        Spacer(modifier = Modifier.height(10.dp))
+
+        val repeatOptions = 1..6
+        var repeatExpanded by remember { mutableStateOf(false) }
+        var selectedRepeat by remember { mutableStateOf(uiState.repeat) }
+
+        AnimatedVisibility(visible = uiState.frequency == HabitFrequency.WEEKLY) {
+
+            ExposedDropdownMenuBox(
+                expanded = repeatExpanded,
+                onExpandedChange = { repeatExpanded = !repeatExpanded },
+            ) {
+                OutlinedTextField(
+                    modifier = Modifier
+                        .menuAnchor()
+                        .fillMaxWidth(),
+                    readOnly = true,
+                    value = selectedRepeat.toString(),
+                    onValueChange = {},
+                    label = { Text(stringResource(id = R.string.modify_times_per_week)) },
+                    trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = repeatExpanded) },
+                    colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors()
+                )
+                ExposedDropdownMenu(
+                    expanded = repeatExpanded,
+                    onDismissRequest = { repeatExpanded = false },
+                ) {
+                    repeatOptions.forEach { selectionOption ->
+                        DropdownMenuItem(
+                            text = { Text(selectionOption.toString()) },
+                            onClick = {
+                                selectedRepeat = selectionOption
+                                onValueChange(uiState.copy(repeat = selectionOption))
+                                repeatExpanded = false
+                            },
+                            contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
+                        )
+                    }
+                }
+            }
+
+        }
+
     }
 
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun HabitFormPreview() {
+    HabitForm(onValueChange = {}, habitUiState = HabitUiState.Habit())
 }

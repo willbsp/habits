@@ -1,5 +1,6 @@
 package com.willbsp.habits.ui.screens.home
 
+import com.willbsp.habits.data.model.HabitFrequency
 import java.time.LocalDate
 
 sealed class HomeUiState {
@@ -15,8 +16,10 @@ sealed class HomeUiState {
     data class Habit(
         val id: Int,
         val name: String,
+        val type: HabitFrequency,
         val streak: Int?,
-        val dates: List<LocalDate>
+        val completed: List<LocalDate>,
+        val completedByWeek: List<LocalDate>
     )
 
 }
