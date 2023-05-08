@@ -179,7 +179,6 @@ private fun DateIconButton(
 ) {
 
     val dayOfMonth = remember { date.dayOfMonth.toString() }
-    // TODO make these colors available globally so habittogglebutton can use
     val colors = if (checkedSecondary) IconButtonDefaults.filledIconToggleButtonColors(
         contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
         containerColor = MaterialTheme.colorScheme.tertiaryContainer
