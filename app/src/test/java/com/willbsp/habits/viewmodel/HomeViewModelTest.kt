@@ -1,6 +1,7 @@
 package com.willbsp.habits.viewmodel
 
 import com.willbsp.habits.TestData.habit1
+import com.willbsp.habits.TestData.habit2
 import com.willbsp.habits.TestData.habit3
 import com.willbsp.habits.domain.usecase.CalculateStreakUseCase
 import com.willbsp.habits.domain.usecase.GetHabitsWithVirtualEntriesUseCase
@@ -40,8 +41,6 @@ class HomeViewModelTest {
         GetVirtualEntriesUseCase(habitRepository, entryRepository)
     private val settingsRepository = FakeSettingsRepository()
     private lateinit var viewModel: HomeViewModel
-
-    // TODO add test for testing ventries for weekly habits
 
     @Before
     fun setup() {
@@ -112,6 +111,32 @@ class HomeViewModelTest {
         assertTrue(viewModel.uiState.value is HomeUiState.Habits)
         habitRepository.deleteHabit(habit1.id)
         assertTrue(viewModel.uiState.value is HomeUiState.Empty)
+        collectJob.cancel()
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun uiState_whenDateToggledWeekly_thenShowWeeklyCompleted() = runTest {
+        val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
+        val habits = viewModel.uiState.map { (it as HomeUiState.Habits).habits }
+        habitRepository.upsertHabit(habit2)
+        entryRepository.toggleEntry(habit2.id, date)
+        val habit = habits.first().find { it.name == habit2.name }!!
+        assertTrue(habit.completed.contains(date))
+        assertTrue(habit.completedByWeek.contains(date.minusDays(1)))
+        assertTrue(habit.completedByWeek.contains(date.minusDays(3)))
+        collectJob.cancel()
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun uiState_whenDateToggledWeekly_thenShowStreak() = runTest {
+        val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
+        val habits = viewModel.uiState.map { (it as HomeUiState.Habits).habits }
+        habitRepository.upsertHabit(habit2)
+        entryRepository.toggleEntry(habit2.id, date)
+        val habit = habits.first().find { it.name == habit2.name }!!
+        assertEquals(5, habit.streak)
         collectJob.cancel()
     }
 

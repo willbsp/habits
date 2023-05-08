@@ -8,7 +8,7 @@ import java.time.LocalDate
 object TestData {
 
     val habit1 = Habit(id = 0, name = "Running", frequency = HabitFrequency.DAILY)
-    val habit2 = Habit(id = 1, name = "Reading", HabitFrequency.WEEKLY)
+    val habit2 = Habit(id = 1, name = "Reading", HabitFrequency.WEEKLY, repeat = 1)
     val habit3 = Habit(id = 2, name = "Flashcards", HabitFrequency.DAILY)
     val habit4 = Habit(id = 3, name = "Boxing", HabitFrequency.WEEKLY, repeat = 3)
 
