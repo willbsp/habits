@@ -2,6 +2,7 @@ package com.willbsp.habits.viewmodel
 
 import androidx.lifecycle.SavedStateHandle
 import com.willbsp.habits.TestData.habit3
+import com.willbsp.habits.data.model.HabitFrequency
 import com.willbsp.habits.domain.usecase.CalculateScoreUseCase
 import com.willbsp.habits.domain.usecase.CalculateStatisticsUseCase
 import com.willbsp.habits.domain.usecase.CalculateStreakUseCase
@@ -66,7 +67,17 @@ class DetailViewModelTest {
         val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
         entryRepository.populate()
         val expected =
-            DetailUiState(habit3.id, habit3.name, 5, 5, LocalDate.parse("2023-02-11"), 11, 37)
+            DetailUiState(
+                habit3.id,
+                habit3.name,
+                HabitFrequency.DAILY,
+                1,
+                5,
+                5,
+                LocalDate.parse("2023-02-11"),
+                11,
+                37
+            )
         assertEquals(expected, viewModel.uiState.value)
         collectJob.cancel()
     }
@@ -77,12 +88,32 @@ class DetailViewModelTest {
         val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
         entryRepository.populate()
         val expected =
-            DetailUiState(habit3.id, habit3.name, 5, 5, LocalDate.parse("2023-02-11"), 11, 37)
+            DetailUiState(
+                habit3.id,
+                habit3.name,
+                HabitFrequency.DAILY,
+                1,
+                5,
+                5,
+                LocalDate.parse("2023-02-11"),
+                11,
+                37
+            )
         assertEquals(expected, viewModel.uiState.value)
         entryRepository.toggleEntry(habit3.id, LocalDate.parse("2023-03-04"))
         entryRepository.toggleEntry(habit3.id, LocalDate.parse("2023-02-10"))
         val updated =
-            DetailUiState(habit3.id, habit3.name, 7, 7, LocalDate.parse("2023-02-10"), 13, 42)
+            DetailUiState(
+                habit3.id,
+                habit3.name,
+                HabitFrequency.DAILY,
+                1,
+                7,
+                7,
+                LocalDate.parse("2023-02-10"),
+                13,
+                42
+            )
         assertEquals(updated, viewModel.uiState.value)
         collectJob.cancel()
     }
