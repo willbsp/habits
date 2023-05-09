@@ -14,6 +14,10 @@
     <string name="edit_habit_title">Edit Habit</string>
     <string name="edit_habit_update_habit">Update habit</string>
     <string name="edit_habit_delete">Delete</string>
+    <string name="edit_confirm">Confirm</string>
+    <string name="edit_dismiss">Dismiss</string>
+    <string name="edit_delete_habit">Delete habit?</string>
+    <string name="edit_cannot_undo">This action cannot be undone.</string>
     <string name="modify_habit_name">Name</string>
     <string name="modify_habit_frequency">Frequency</string>
     <string name="modify_times_per_week">How many times per week?</string>
@@ -27,7 +31,6 @@
     <string name="home_this_week">This Week</string>
     <string name="home_all_completed">All completed for today!</string>
     <string name="home_all_completed_tick">All completed</string>
-    <!--<string name="home_habit_list_subtitle">"%d habits completed today…"</string>-->
     <plurals name="home_habit_list_subtitle">
         <item quantity="one">%d habit completed today…</item>
         <item quantity="other">%d habits completed today…</item>
@@ -58,14 +61,17 @@
     <string name="detail_edit_habit">Edit habit</string>
     <string name="detail_streak">Streak</string>
     <string name="detail_score">Score</string>
-    <string name="edit_confirm">Confirm</string>
-    <string name="edit_dismiss">Dismiss</string>
-    <string name="edit_delete_habit">Delete habit?</string>
-    <string name="edit_cannot_undo">This action cannot be undone.</string>
     <string name="detail_longest_streak">Longest Streak</string>
     <string name="detail_not_started">Not started</string>
     <string name="detail_started">Started</string>
     <string name="detail_total">Total</string>
+    <string name="detail_every_day">Every day</string>
+    <string name="detail_times_per_week">3 times per week</string>
+    <plurals name="detail_times_per_week">
+        <item quantity="one">Once a week</item>
+        <item quantity="two">Twice a week</item>
+        <item quantity="other">%d times a week</item>
+    </plurals>
     <!--detail screen end-->
 
 </resources>

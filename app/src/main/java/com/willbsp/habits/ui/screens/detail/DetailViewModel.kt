@@ -3,6 +3,7 @@ package com.willbsp.habits.ui.screens.detail
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.willbsp.habits.data.model.HabitFrequency
 import com.willbsp.habits.data.repository.HabitRepository
 import com.willbsp.habits.domain.usecase.CalculateScoreUseCase
 import com.willbsp.habits.domain.usecase.CalculateStatisticsUseCase
@@ -50,6 +51,8 @@ class DetailViewModel @Inject constructor(
                 longestStreak = longestStreak ?: 0,
                 started = stats.started,
                 total = stats.total,
+                type = habit?.frequency ?: HabitFrequency.DAILY,
+                repeat = habit?.repeat ?: 0,
                 score = (score?.times(100))?.toInt() ?: 0
             )
 

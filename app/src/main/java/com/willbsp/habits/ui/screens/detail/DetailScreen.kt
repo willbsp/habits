@@ -5,6 +5,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -19,11 +20,13 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.willbsp.habits.R
+import com.willbsp.habits.data.model.HabitFrequency
 import com.willbsp.habits.ui.common.DefaultHabitsAppTopBar
 import com.willbsp.habits.ui.theme.HabitsTheme
 import com.willbsp.habits.ui.theme.Typography
@@ -63,12 +66,28 @@ fun DetailScreen(
             modifier = Modifier
                 //.verticalScroll(rememberScrollState())
                 .fillMaxSize()
-                .padding(20.dp)
+                .padding(start = 20.dp, end = 20.dp, bottom = 20.dp, top = 10.dp)
                 .padding(innerPadding),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(20.dp)
+            verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
 
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(5.dp)
+            ) {
+                Icon(imageVector = Icons.Default.CalendarToday, contentDescription = "")
+                if (detailUiState.type == HabitFrequency.DAILY)
+                    Text(stringResource(R.string.detail_every_day))
+                else if (detailUiState.type == HabitFrequency.WEEKLY)
+                    Text(
+                        text = pluralStringResource(
+                            id = R.plurals.detail_times_per_week,
+                            count = detailUiState.repeat,
+                            detailUiState.repeat
+                        )
+                    )
+            }
 
             CircularDetailScoreCard(
                 modifier = Modifier
@@ -275,7 +294,7 @@ fun DetailCard(
 private fun DetailScreenPreview() {
     HabitsTheme {
         DetailScreen(
-            detailUiState = DetailUiState(-1, "Flashcards", 5, 23),
+            detailUiState = DetailUiState(-1, "Flashcards", type = HabitFrequency.WEEKLY, 1, 5, 23),
             navigateUp = { },
             navigateToEditHabit = {}
         )
