@@ -6,5 +6,6 @@ enum class HabitsNavigationDestination(val route: String) {
     DETAIL(route = "detail/"),
     EDIT(route = "edit/"),
     LOGBOOK(route = "logbook"),
-    SETTINGS(route = "settings")
+    SETTINGS(route = "settings"),
+    ABOUT(route = "about")
 }

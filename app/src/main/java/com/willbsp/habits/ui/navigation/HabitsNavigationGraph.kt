@@ -13,6 +13,7 @@ import androidx.navigation.navArgument
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.willbsp.habits.ui.common.HabitUiState
+import com.willbsp.habits.ui.screens.about.AboutScreen
 import com.willbsp.habits.ui.screens.add.AddHabitScreen
 import com.willbsp.habits.ui.screens.add.AddHabitViewModel
 import com.willbsp.habits.ui.screens.detail.DetailScreen
@@ -220,17 +221,24 @@ fun HabitsNavigationGraph(
         composable(
             route = HabitsNavigationDestination.SETTINGS.route,
             enterTransition = {
-                slideIntoContainer(
-                    AnimatedContentScope.SlideDirection.Left,
-                    animationSpec = tween(300)
-                )
+                when (initialState.destination.route) {
+                    HabitsNavigationDestination.ABOUT.route -> fadeIn()
+                    else -> slideIntoContainer(
+                        AnimatedContentScope.SlideDirection.Left,
+                        animationSpec = tween(300)
+                    )
+                }
             },
             exitTransition = {
-                slideOutOfContainer(
-                    AnimatedContentScope.SlideDirection.Right,
-                    animationSpec = tween(300)
-                )
+                when (targetState.destination.route) {
+                    HabitsNavigationDestination.ABOUT.route -> fadeOut()
+                    else -> slideOutOfContainer(
+                        AnimatedContentScope.SlideDirection.Right,
+                        animationSpec = tween(300)
+                    )
+                }
             }
+
         ) {
 
             val viewModel = hiltViewModel<SettingsViewModel>()
@@ -247,6 +255,30 @@ fun HabitsNavigationGraph(
                     viewModel.saveSubtitlePreference(it)
                 },
                 settingsUiState = state
+            )
+
+        }
+
+        composable(
+            route = HabitsNavigationDestination.ABOUT.route,
+            enterTransition = {
+                slideIntoContainer(
+                    AnimatedContentScope.SlideDirection.Left,
+                    animationSpec = tween(300)
+                )
+            },
+            exitTransition = {
+                slideOutOfContainer(
+                    AnimatedContentScope.SlideDirection.Right,
+                    animationSpec = tween(300)
+                )
+            }
+        ) {
+
+            AboutScreen(
+                navigateUp = {
+                    navController.navigateUp()
+                }
             )
 
         }
