@@ -4,6 +4,7 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -130,19 +131,25 @@ private fun HomeHabitCardDayRow(
     modifier: Modifier = Modifier
 ) {
 
-    Row(
-        modifier = modifier,
-        horizontalArrangement = Arrangement.spacedBy(15.dp)
-    ) {
+    BoxWithConstraints {
 
-        (1..5).forEach { i ->
-            val date = LocalDate.now().minusDays(i.toLong())
-            HomeHabitCardDay(
-                onCheckedChange = { completedOnClick(habit.id, date) },
-                completed = habit.completed.any { it == date },
-                completedByWeek = habit.completedByWeek.any { it == date},
-                date = date
-            )
+        val days : Int = (maxWidth.value / 60).toInt()
+
+        Row(
+            modifier = modifier,
+            horizontalArrangement = Arrangement.spacedBy(15.dp)
+        ) {
+
+            (1..days).forEach { i ->
+                val date = LocalDate.now().minusDays(i.toLong())
+                HomeHabitCardDay(
+                    onCheckedChange = { completedOnClick(habit.id, date) },
+                    completed = habit.completed.any { it == date },
+                    completedByWeek = habit.completedByWeek.any { it == date },
+                    date = date
+                )
+            }
+
         }
 
     }
