@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -20,6 +22,7 @@ import com.willbsp.habits.ui.theme.Typography
 fun SettingsScreen(
     modifier: Modifier = Modifier,
     navigateUp: () -> Unit,
+    navigateToAboutScreen: () -> Unit,
     onShowStreaksPressed: (Boolean) -> Unit,
     onShowSubtitlePressed: (Boolean) -> Unit,
     settingsUiState: SettingsUiState
@@ -30,10 +33,19 @@ fun SettingsScreen(
             DefaultHabitsAppTopBar(
                 title = stringResource(R.string.settings_title),
                 canNavigateBack = true,
-                navigateUp = navigateUp
+                navigateUp = navigateUp,
+                actions = {
+                    IconButton(onClick = navigateToAboutScreen) {
+                        Icon(
+                            imageVector = Icons.Filled.Info,
+                            contentDescription = stringResource(R.string.settings_about_screen)
+                        )
+                    }
+                }
             )
-        }
-    ) { innerPadding ->
+        },
+
+        ) { innerPadding ->
 
         Column(
             modifier = modifier

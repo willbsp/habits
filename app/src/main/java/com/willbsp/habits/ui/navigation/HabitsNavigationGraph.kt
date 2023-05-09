@@ -246,7 +246,10 @@ fun HabitsNavigationGraph(
 
             SettingsScreen(
                 navigateUp = {
-                             navController.navigateUp()
+                    navController.navigateUp()
+                },
+                navigateToAboutScreen = {
+                    navController.navigate(HabitsNavigationDestination.ABOUT.route)
                 },
                 onShowStreaksPressed = {
                     viewModel.saveStreaksPreference(it)

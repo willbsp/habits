@@ -49,6 +49,7 @@
     <string name="settings_display_streaks_subtitle">Display streaks on home screen</string>
     <string name="settings_completed_subtitle">Show completed subtitle</string>
     <string name="settings_completed_subtitle_desc">Show completed habit count in today view</string>
+    <string name="settings_about_screen">About screen</string>
     <!--settings screen end-->
 
     <!--logbook screen start-->
@@ -73,5 +74,9 @@
         <item quantity="other">%d times a week</item>
     </plurals>
     <!--detail screen end-->
+
+    <!--about screen start-->
+    <string name="about_title">About</string>
+    <!--about screen end-->
 
 </resources>
