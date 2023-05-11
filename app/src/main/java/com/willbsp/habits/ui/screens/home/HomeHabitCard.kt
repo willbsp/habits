@@ -83,8 +83,8 @@ fun HomeHabitCard(
                     Spacer(modifier = Modifier.width(10.dp))
                     HabitToggleButton(
                         onCheckedChange = { completedOnClick(habit.id, LocalDate.now()) },
-                        checked = habit.completed.firstOrNull() == LocalDate.now(),
-                        checkedSecondary = habit.completedByWeek.firstOrNull() == LocalDate.now()
+                        checked = habit.completed.any { it == LocalDate.now() },
+                        checkedSecondary = habit.completedByWeek.any { it == LocalDate.now() }
                     )
 
                 }
@@ -133,7 +133,7 @@ private fun HomeHabitCardDayRow(
 
     BoxWithConstraints {
 
-        val days : Int = (maxWidth.value / 60).toInt()
+        val days: Int = (maxWidth.value / 60).toInt()
 
         Row(
             modifier = modifier,
