@@ -70,23 +70,6 @@ fun HomeHabitList(
                 showStreaks = homeUiState.showStreaks
             )
         }
-        item {
-            val dailyCompletedCount = remember(dailyHabitsList) {
-                dailyHabitsList.count { it.hasBeenCompleted() }
-            }
-            if (homeUiState.showSubtitle) {
-                HabitListSubtitle(
-                    modifier = Modifier.fillMaxWidth(),
-                    visible = dailyCompletedCount > 0 && !showCompleted,
-                    text = pluralStringResource(
-                        id = R.plurals.home_habit_list_subtitle,
-                        count = dailyCompletedCount,
-                        dailyCompletedCount
-                    )
-                )
-            }
-            Spacer(Modifier.height(20.dp))
-        }
         this.stickyHeader {
             HabitListStickyHeader(
                 visible = (!weeklyCompleted || showCompleted) && weeklyHabitsList.isNotEmpty(),
@@ -109,17 +92,17 @@ fun HomeHabitList(
             )
         }
         item {
-            val weeklyCompletedCount = remember(weeklyHabitsList) {
-                weeklyHabitsList.count { it.hasBeenCompleted() }
+            val completedCount = remember(homeUiState.habits) {
+                homeUiState.habits.count { it.hasBeenCompleted() }
             }
             if (homeUiState.showSubtitle) {
                 HabitListSubtitle(
                     modifier = Modifier.fillMaxWidth(),
-                    visible = weeklyCompletedCount > 0 && !showCompleted,
+                    visible = completedCount > 0 && !showCompleted,
                     text = pluralStringResource(
-                        id = R.plurals.home_habit_list_weekly_subtitle,
-                        count = weeklyCompletedCount,
-                        weeklyCompletedCount
+                        id = R.plurals.home_habit_list_subtitle,
+                        count = completedCount,
+                        completedCount
                     )
                 )
             }

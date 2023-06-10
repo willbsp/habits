@@ -32,12 +32,8 @@
     <string name="home_all_completed">All completed for today!</string>
     <string name="home_all_completed_tick">All completed</string>
     <plurals name="home_habit_list_subtitle">
-        <item quantity="one">%d habit completed today…</item>
-        <item quantity="other">%d habits completed today…</item>
-    </plurals>
-    <plurals name="home_habit_list_weekly_subtitle">
-        <item quantity="one">%d habit completed this week…</item>
-        <item quantity="other">%d habits completed this week…</item>
+        <item quantity="one">%d habit completed already…</item>
+        <item quantity="other">%d habits completed already…</item>
     </plurals>
     <string name="home_no_habits">Add a habit with the button below!</string>
     <string name="home_show_completed">Show completed</string>
