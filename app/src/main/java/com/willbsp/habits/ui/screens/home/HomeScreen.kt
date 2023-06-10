@@ -34,9 +34,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import com.willbsp.habits.R
+import com.willbsp.habits.common.rangeTo
+import com.willbsp.habits.data.model.HabitFrequency
 import com.willbsp.habits.ui.common.FullscreenHint
 import com.willbsp.habits.ui.common.HabitsFloatingAction
 import com.willbsp.habits.ui.theme.HabitsTheme
+import java.time.DayOfWeek
 import java.time.LocalDate
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
@@ -110,7 +113,22 @@ fun HomeScreen(
             is HomeUiState.Habits -> {
 
                 val allCompleted = remember(homeUiState) {
-                    homeUiState.habits.all { it.completed.firstOrNull() == LocalDate.now() }
+                    homeUiState.habits.all {
+                        if (it.type == HabitFrequency.DAILY) {
+                            it.completed.firstOrNull() == LocalDate.now()
+                        } else {
+
+                            // TODO this code is also in HomeHabitList!!!
+                            // TODO code needs standardising somewhere
+                            val weekDates =
+                                (LocalDate.now().with(DayOfWeek.MONDAY)..LocalDate.now().with(
+                                    DayOfWeek.SUNDAY
+                                )).toList()
+
+                            (it.completed + it.completedByWeek).containsAll(weekDates)
+
+                        }
+                    }
                 }
                 val showHabits = !showCompleted && allCompleted
 
