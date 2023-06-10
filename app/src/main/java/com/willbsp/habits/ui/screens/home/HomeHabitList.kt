@@ -24,10 +24,8 @@ import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.willbsp.habits.R
-import com.willbsp.habits.common.rangeTo
 import com.willbsp.habits.data.model.HabitFrequency
 import com.willbsp.habits.ui.theme.Typography
-import java.time.DayOfWeek
 import java.time.LocalDate
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -40,25 +38,14 @@ fun HomeHabitList(
     modifier: Modifier = Modifier
 ) {
 
-    val dailyHabitsList = remember(homeUiState.habits) {
-        homeUiState.habits.filter { it.type == HabitFrequency.DAILY }
+    val (dailyHabitsList, weeklyHabitsList) = remember(homeUiState.habits) {
+        homeUiState.habits.partition { it.type == HabitFrequency.DAILY }
     }
-    val weeklyHabitsList = remember(homeUiState.habits) {
-        homeUiState.habits.filter { it.type == HabitFrequency.WEEKLY }
-    }
-    val weekDates = remember {
-        (LocalDate.now().with(DayOfWeek.MONDAY)..LocalDate.now().with(DayOfWeek.SUNDAY)).toList()
-    }
-
     val dailyCompleted = remember(dailyHabitsList) {
-        dailyHabitsList.map { habit ->
-            habit.completed.contains(LocalDate.now())
-        }.all { it }
+        dailyHabitsList.map { it.hasBeenCompleted() }.all { it }
     }
     val weeklyCompleted = remember(weeklyHabitsList) {
-        weeklyHabitsList.map { habit ->
-            (habit.completed + habit.completedByWeek).containsAll(weekDates)
-        }.all { it }
+        weeklyHabitsList.map { it.hasBeenCompleted() }.all { it }
     }
 
     LazyColumn(modifier = modifier) {
@@ -72,14 +59,11 @@ fun HomeHabitList(
             items = dailyHabitsList,
             key = { it.id }
         ) { habit ->
-            val habitCompleted = remember(habit.completed) {
-                habit.completed.any { it == LocalDate.now() }
-            }
             HabitListCard(
                 modifier = Modifier
                     .animateItemPlacement(tween())
                     .padding(start = 20.dp, end = 20.dp, bottom = 10.dp),
-                visible = !habitCompleted || showCompleted,
+                visible = !habit.hasBeenCompleted() || showCompleted,
                 habit = habit,
                 completedOnClick = completedOnClick,
                 navigateToDetail = navigateToDetail,
@@ -87,19 +71,17 @@ fun HomeHabitList(
             )
         }
         item {
-            val completedCount = remember(dailyHabitsList) {
-                dailyHabitsList.count { habit ->
-                    habit.completed.any { it == LocalDate.now() }
-                }
+            val dailyCompletedCount = remember(dailyHabitsList) {
+                dailyHabitsList.count { it.hasBeenCompleted() }
             }
             if (homeUiState.showSubtitle) {
                 HabitListSubtitle(
                     modifier = Modifier.fillMaxWidth(),
-                    visible = completedCount > 0 && !showCompleted,
+                    visible = dailyCompletedCount > 0 && !showCompleted,
                     text = pluralStringResource(
                         id = R.plurals.home_habit_list_subtitle,
-                        count = completedCount,
-                        completedCount
+                        count = dailyCompletedCount,
+                        dailyCompletedCount
                     )
                 )
             }
@@ -115,14 +97,11 @@ fun HomeHabitList(
             items = weeklyHabitsList,
             key = { it.id }
         ) { habit ->
-            val weekCompleted = remember(habit) {
-                (habit.completed + habit.completedByWeek).containsAll(weekDates)
-            }
             HabitListCard(
                 modifier = Modifier
                     .animateItemPlacement(tween())
                     .padding(start = 20.dp, end = 20.dp, bottom = 10.dp),
-                visible = !weekCompleted || showCompleted,
+                visible = !habit.hasBeenCompleted() || showCompleted,
                 habit = habit,
                 completedOnClick = completedOnClick,
                 navigateToDetail = navigateToDetail,
@@ -130,19 +109,17 @@ fun HomeHabitList(
             )
         }
         item {
-            val weekCompletedCount = remember(weeklyHabitsList) {
-                weeklyHabitsList.count { habit ->
-                    (habit.completed + habit.completedByWeek).containsAll(weekDates)
-                }
+            val weeklyCompletedCount = remember(weeklyHabitsList) {
+                weeklyHabitsList.count { it.hasBeenCompleted() }
             }
             if (homeUiState.showSubtitle) {
                 HabitListSubtitle(
                     modifier = Modifier.fillMaxWidth(),
-                    visible = weekCompletedCount > 0 && !showCompleted,
+                    visible = weeklyCompletedCount > 0 && !showCompleted,
                     text = pluralStringResource(
                         id = R.plurals.home_habit_list_weekly_subtitle,
-                        count = weekCompletedCount,
-                        weekCompletedCount
+                        count = weeklyCompletedCount,
+                        weeklyCompletedCount
                     )
                 )
             }
