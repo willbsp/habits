@@ -1,8 +1,32 @@
 package com.willbsp.habits.ui
 
-// TODO need to reimplement
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performTextInput
+import androidx.navigation.NavHostController
+import androidx.navigation.NavigatorProvider
+import androidx.navigation.compose.ComposeNavigator
+import androidx.navigation.testing.TestNavHostController
+import androidx.navigation.testing.TestNavigatorState
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.google.accompanist.navigation.animation.rememberAnimatedNavController
+import com.willbsp.habits.R
+import com.willbsp.habits.HiltComponentActivity
+import com.willbsp.habits.helper.assertCurrentRouteName
+import com.willbsp.habits.ui.navigation.HabitsNavigationDestination
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
+import org.junit.Before
+import org.junit.Rule
+import org.junit.Test
+import org.junit.runner.RunWith
 
-/*@HiltAndroidTest
+@HiltAndroidTest
 @RunWith(AndroidJUnit4::class)
 class HabitsNavigationTest {
 
@@ -11,7 +35,7 @@ class HabitsNavigationTest {
 
     @get:Rule(order = 1)
     val composeTestRule = createAndroidComposeRule<HiltComponentActivity>()
-    private lateinit var navController: TestNavHostController
+    private lateinit var navController: NavHostController
 
     @Before
     fun init() {
@@ -19,9 +43,10 @@ class HabitsNavigationTest {
         setupHabitsNavHost()
     }
 
+    @OptIn(ExperimentalAnimationApi::class)
     private fun setupHabitsNavHost() {
         composeTestRule.setContent {
-            navController = TestNavHostController(LocalContext.current)
+            navController = rememberAnimatedNavController()
             navController.navigatorProvider.addNavigator(ComposeNavigator())
             HabitsApp(navController = navController)
         }
@@ -74,4 +99,4 @@ class HabitsNavigationTest {
         composeTestRule.onNodeWithContentDescription(addText).performClick()
     }
 
-}*/
+}
