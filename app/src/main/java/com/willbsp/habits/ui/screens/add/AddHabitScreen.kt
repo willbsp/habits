@@ -16,7 +16,6 @@ import com.willbsp.habits.ui.common.HabitUiState
 import com.willbsp.habits.ui.common.HabitsFloatingAction
 import com.willbsp.habits.ui.theme.HabitsTheme
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddHabitScreen(
     modifier: Modifier = Modifier,

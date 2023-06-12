@@ -3,7 +3,6 @@ package com.willbsp.habits.ui.screens.edit
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -21,7 +20,6 @@ import com.willbsp.habits.ui.common.HabitUiState
 import com.willbsp.habits.ui.common.HabitsFloatingAction
 import com.willbsp.habits.ui.theme.HabitsTheme
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditHabitScreen(
     modifier: Modifier = Modifier,

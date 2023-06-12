@@ -33,7 +33,6 @@ import com.willbsp.habits.ui.theme.Typography
 import java.time.format.TextStyle
 import java.util.Locale
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailScreen(
     modifier: Modifier = Modifier,

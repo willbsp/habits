@@ -15,7 +15,6 @@ import androidx.compose.ui.unit.dp
 import com.willbsp.habits.R
 import com.willbsp.habits.data.model.HabitFrequency
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HabitForm(
     modifier: Modifier = Modifier,
