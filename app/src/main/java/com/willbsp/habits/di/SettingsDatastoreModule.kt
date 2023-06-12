@@ -2,8 +2,12 @@ package com.willbsp.habits.di
 
 import android.content.Context
 import androidx.datastore.core.DataStore
+import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
+import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.preferencesDataStore
+import androidx.datastore.preferences.preferencesDataStoreFile
 import com.willbsp.habits.common.SETTINGS_DATASTORE_NAME
 import dagger.Module
 import dagger.Provides
@@ -23,7 +27,12 @@ class SettingsDatastoreModule {
     fun provideSettingsDatastore(
         @ApplicationContext app: Context
     ): DataStore<Preferences> {
-        return app.datastore
+        return PreferenceDataStoreFactory.create(
+            corruptionHandler = ReplaceFileCorruptionHandler(
+                produceNewData = { emptyPreferences() }
+            ),
+            produceFile = { app.preferencesDataStoreFile(SETTINGS_DATASTORE_NAME) }
+        )
     }
 
 }
