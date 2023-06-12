@@ -1,8 +1,6 @@
 plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
-    id 'com.google.dagger.hilt.android'
-    id 'kotlin-kapt'
 }
 
 android {
@@ -39,13 +37,6 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
-
-    // Dagger Hilt
-    kapt "com.google.dagger:hilt-compiler:$hilt_version"
-    kaptAndroidTest "com.google.dagger:hilt-compiler:$hilt_version"
-    implementation "com.google.dagger:hilt-android:$hilt_version"
-    implementation "androidx.hilt:hilt-navigation-compose:1.0.0"
-    androidTestImplementation "com.google.dagger:hilt-android-testing:$hilt_version"
 
     // Datastore
     implementation "androidx.datastore:datastore-preferences:1.0.0"
