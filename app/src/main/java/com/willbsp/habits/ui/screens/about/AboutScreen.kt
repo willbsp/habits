@@ -34,7 +34,6 @@ import com.willbsp.habits.ui.common.DefaultHabitsAppTopBar
 import com.willbsp.habits.ui.theme.Typography
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AboutScreen(
     navigateUp: () -> Unit,
@@ -99,7 +98,6 @@ fun AboutScreen(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AboutListItem(
     modifier: Modifier = Modifier,
@@ -109,7 +107,7 @@ fun AboutListItem(
 ) {
     ListItem(
         modifier = modifier.clickable { onClick(); },
-        headlineText = {
+        headlineContent = {
             Row {
                 Icon(icon, "")
                 Spacer(Modifier.width(10.dp))

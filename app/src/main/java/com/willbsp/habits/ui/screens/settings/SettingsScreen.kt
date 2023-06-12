@@ -83,13 +83,13 @@ private fun SettingItem(
 ) {
     ListItem(
         modifier = modifier.fillMaxWidth(),
-        headlineText = {
+        headlineContent = {
             Text(
                 text = stringResource(title),
                 style = Typography.titleLarge
             )
         },
-        supportingText = {
+        supportingContent = {
             Text(
                 text = stringResource(subtitle),
                 style = Typography.bodyMedium
