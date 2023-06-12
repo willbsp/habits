@@ -15,7 +15,7 @@ import javax.inject.Singleton
     components = [SingletonComponent::class],
     replaces = [DatabaseModule::class]
 )
-class InMemoryHabitDatabaseModule {
+class DatabaseTestModule {
 
     @Singleton
     @Provides
@@ -32,5 +32,9 @@ class InMemoryHabitDatabaseModule {
     @Singleton
     @Provides
     fun provideEntryDao(db: HabitDatabase) = db.entryDao()
+
+    @Singleton
+    @Provides
+    fun provideHabitEntryDao(db: HabitDatabase) = db.habitWithEntriesDao()
 
 }
