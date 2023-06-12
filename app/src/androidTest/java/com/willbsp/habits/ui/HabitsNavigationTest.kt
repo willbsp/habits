@@ -1,21 +1,15 @@
 package com.willbsp.habits.ui
 
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import androidx.navigation.NavHostController
-import androidx.navigation.NavigatorProvider
 import androidx.navigation.compose.ComposeNavigator
-import androidx.navigation.testing.TestNavHostController
-import androidx.navigation.testing.TestNavigatorState
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
-import com.willbsp.habits.R
 import com.willbsp.habits.HiltComponentActivity
 import com.willbsp.habits.helper.assertCurrentRouteName
 import com.willbsp.habits.ui.navigation.HabitsNavigationDestination
@@ -25,6 +19,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import com.willbsp.habits.R
 
 @HiltAndroidTest
 @RunWith(AndroidJUnit4::class)
