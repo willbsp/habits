@@ -1,7 +1,7 @@
 package com.willbsp.habits.repository
 
-import com.willbsp.habits.TestData.habit1
-import com.willbsp.habits.TestData.habit2
+import com.willbsp.habits.data.TestData.habit1
+import com.willbsp.habits.data.TestData.habit2
 import com.willbsp.habits.data.model.Habit
 import com.willbsp.habits.data.model.HabitFrequency
 import com.willbsp.habits.data.repository.HabitRepository

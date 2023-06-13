@@ -1,6 +1,6 @@
 package com.willbsp.habits.fake.repository
 
-import com.willbsp.habits.TestData
+import com.willbsp.habits.data.TestData
 import com.willbsp.habits.data.model.Entry
 import com.willbsp.habits.data.repository.EntryRepository
 import kotlinx.coroutines.flow.Flow

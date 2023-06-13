@@ -1,8 +1,8 @@
 package com.willbsp.habits.viewmodel
 
-import com.willbsp.habits.TestData.habit1
-import com.willbsp.habits.TestData.habit2
-import com.willbsp.habits.TestData.habit3
+import com.willbsp.habits.data.TestData.habit1
+import com.willbsp.habits.data.TestData.habit2
+import com.willbsp.habits.data.TestData.habit3
 import com.willbsp.habits.domain.usecase.CalculateStreakUseCase
 import com.willbsp.habits.domain.usecase.GetHabitsWithVirtualEntriesUseCase
 import com.willbsp.habits.domain.usecase.GetVirtualEntriesUseCase

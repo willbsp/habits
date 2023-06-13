@@ -1,4 +1,4 @@
-package com.willbsp.habits
+package com.willbsp.habits.data
 
 import com.willbsp.habits.data.model.Entry
 import com.willbsp.habits.data.model.Habit

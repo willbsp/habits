@@ -1,10 +1,10 @@
 package com.willbsp.habits.viewmodel
 
-import com.willbsp.habits.TestData.entryListF
-import com.willbsp.habits.TestData.habit1
-import com.willbsp.habits.TestData.habit2
-import com.willbsp.habits.TestData.habit3
-import com.willbsp.habits.TestData.habit4
+import com.willbsp.habits.data.TestData.entryListF
+import com.willbsp.habits.data.TestData.habit1
+import com.willbsp.habits.data.TestData.habit2
+import com.willbsp.habits.data.TestData.habit3
+import com.willbsp.habits.data.TestData.habit4
 import com.willbsp.habits.domain.usecase.GetHabitsWithVirtualEntriesUseCase
 import com.willbsp.habits.domain.usecase.GetVirtualEntriesUseCase
 import com.willbsp.habits.fake.repository.FakeEntryRepository

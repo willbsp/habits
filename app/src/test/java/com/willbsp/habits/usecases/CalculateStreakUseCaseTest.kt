@@ -1,7 +1,7 @@
 package com.willbsp.habits.usecases
 
-import com.willbsp.habits.TestData.habit3
-import com.willbsp.habits.TestData.habit4
+import com.willbsp.habits.data.TestData.habit3
+import com.willbsp.habits.data.TestData.habit4
 import com.willbsp.habits.domain.model.Streak
 import com.willbsp.habits.domain.usecase.CalculateStreakUseCase
 import com.willbsp.habits.domain.usecase.GetVirtualEntriesUseCase

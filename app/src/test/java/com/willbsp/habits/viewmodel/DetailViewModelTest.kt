@@ -1,7 +1,7 @@
 package com.willbsp.habits.viewmodel
 
 import androidx.lifecycle.SavedStateHandle
-import com.willbsp.habits.TestData.habit3
+import com.willbsp.habits.data.TestData.habit3
 import com.willbsp.habits.data.model.HabitFrequency
 import com.willbsp.habits.domain.usecase.CalculateScoreUseCase
 import com.willbsp.habits.domain.usecase.CalculateStatisticsUseCase

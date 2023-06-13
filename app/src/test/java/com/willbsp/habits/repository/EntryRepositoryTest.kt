@@ -1,7 +1,7 @@
 package com.willbsp.habits.repository
 
-import com.willbsp.habits.TestData.habit1
-import com.willbsp.habits.TestData.habit2
+import com.willbsp.habits.data.TestData.habit1
+import com.willbsp.habits.data.TestData.habit2
 import com.willbsp.habits.data.model.Entry
 import com.willbsp.habits.data.repository.EntryRepository
 import com.willbsp.habits.data.repository.local.LocalEntryRepository

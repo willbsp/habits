@@ -4,10 +4,10 @@ import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.willbsp.habits.TestData.entry2
-import com.willbsp.habits.TestData.entry3
-import com.willbsp.habits.TestData.habit2
-import com.willbsp.habits.TestData.habit3
+import com.willbsp.habits.data.TestData.entry2
+import com.willbsp.habits.data.TestData.entry3
+import com.willbsp.habits.data.TestData.habit2
+import com.willbsp.habits.data.TestData.habit3
 import com.willbsp.habits.data.database.HabitDatabase
 import com.willbsp.habits.data.database.dao.EntryDao
 import com.willbsp.habits.data.database.dao.HabitDao
