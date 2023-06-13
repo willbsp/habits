@@ -76,6 +76,7 @@
     <string name="about_creator">Will Spooner (@wilbsp)</string>
     <string name="about_view_source">View the source on Github</string>
     <string name="about_report_an_issue">Report an issue</string>
+    <string name="home_logbook">Logbook</string>
     <!--about screen end-->
 
 </resources>

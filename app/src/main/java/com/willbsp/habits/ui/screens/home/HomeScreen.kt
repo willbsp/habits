@@ -66,7 +66,7 @@ fun HomeScreen(
                     IconButton(onClick = navigateToLogbook) {
                         Icon(
                             imageVector = Icons.Filled.DateRange,
-                            contentDescription = ""
+                            contentDescription = stringResource(R.string.home_logbook)
                         )
                     }
                 },
