@@ -20,6 +20,8 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import com.willbsp.habits.R
+import com.willbsp.habits.helper.onNodeWithContentDescriptionId
+import com.willbsp.habits.helper.onNodeWithTextId
 
 @HiltAndroidTest
 @RunWith(AndroidJUnit4::class)
@@ -89,9 +91,26 @@ class HabitsNavigationTest {
         navController.assertCurrentRouteName(HabitsNavigationDestination.HOME.route)
     }
 
+    @Test
+    fun navHost_verifyBackNavigationNavigatesBackFromAddScreen() {
+        navigateToAddHabitScreen()
+        composeTestRule.onNodeWithContentDescriptionId(R.string.topbar_back).performClick()
+        navController.assertCurrentRouteName(HabitsNavigationDestination.HOME.route)
+    }
+
+    @Test
+    fun navHost_verifyBackNavigationNotShownOnHome() {
+        composeTestRule.onNodeWithContentDescriptionId(R.string.topbar_back).assertDoesNotExist()
+    }
+
+    @Test
+    fun navHost_verifyBackNavigationShownOnAddScreen() {
+        navigateToAddHabitScreen()
+        composeTestRule.onNodeWithContentDescriptionId(R.string.topbar_back).assertExists()
+    }
+
     private fun navigateToAddHabitScreen() {
-        val addText = composeTestRule.activity.getString(R.string.home_add_habit)
-        composeTestRule.onNodeWithContentDescription(addText).performClick()
+        composeTestRule.onNodeWithContentDescriptionId(R.string.home_add_habit).performClick()
     }
 
 }
