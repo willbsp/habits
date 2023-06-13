@@ -2,7 +2,6 @@ package com.willbsp.habits.ui
 
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
@@ -20,6 +19,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import com.willbsp.habits.R
+import com.willbsp.habits.data.TestData.habit1
 import com.willbsp.habits.helper.onNodeWithContentDescriptionId
 import com.willbsp.habits.helper.onNodeWithTextId
 
@@ -49,45 +49,61 @@ class HabitsNavigationTest {
         }
     }
 
+    // verify routes
+
     @Test
     fun navHost_verifyStartDestination() {
         navController.assertCurrentRouteName(HabitsNavigationDestination.HOME.route)
     }
 
     @Test
-    fun navHost_clickAddHabit_navigatesToAddHabitScreen() {
+    fun navHost_clickAddHabit_navigatesToAddHabit() {
         navigateToAddHabitScreen()
         navController.assertCurrentRouteName(HabitsNavigationDestination.ADD.route)
     }
 
     @Test
-    fun navHost_verifyBackNavigationNotShownOnHome() {
-        val backText = composeTestRule.activity.getString(R.string.topbar_back)
-        composeTestRule.onNodeWithContentDescription(backText).assertDoesNotExist()
+    fun navHost_clickLogbook_navigatesToLogbook() {
+        navigateToLogbookScreen()
+        navController.assertCurrentRouteName(HabitsNavigationDestination.LOGBOOK.route)
     }
 
     @Test
-    fun navHost_verifyBackNavigationShownOnAddScreen() {
-        navigateToAddHabitScreen()
-        val backText = composeTestRule.activity.getString(R.string.topbar_back)
-        composeTestRule.onNodeWithContentDescription(backText).assertExists()
+    fun navHost_clickSettings_navigatesToSettings() {
+        navigateToSettingsScreen()
+        navController.assertCurrentRouteName(HabitsNavigationDestination.SETTINGS.route)
     }
 
     @Test
-    fun navHost_verifyBackNavigationNavigatesBackFromAddScreen() {
+    fun navHost_clickDetail_navigatesToDetail() {
         navigateToAddHabitScreen()
-        val backText = composeTestRule.activity.getString(R.string.topbar_back)
-        composeTestRule.onNodeWithContentDescription(backText).performClick()
-        navController.assertCurrentRouteName(HabitsNavigationDestination.HOME.route)
+        addHabit()
+        navigateToDetailScreen()
+        navController.assertCurrentRouteName(HabitsNavigationDestination.DETAIL.route, "habitId")
     }
+
+    @Test
+    fun navHost_clickModify_navigatesToEditHabit() {
+        navigateToAddHabitScreen()
+        addHabit()
+        navigateToDetailScreen()
+        navigateToEditHabitScreen()
+        navController.assertCurrentRouteName(HabitsNavigationDestination.EDIT.route, "habitId")
+    }
+
+    @Test
+    fun navHost_clickAbout_navigatesToAbout() {
+        navigateToSettingsScreen()
+        navigateToAboutScreen()
+        navController.assertCurrentRouteName(HabitsNavigationDestination.ABOUT.route)
+    }
+
+    // verify back navigation behaviour
 
     @Test
     fun navHost_verifyAddHabitNavigatesBackToHome() {
         navigateToAddHabitScreen()
-        val nameText = composeTestRule.activity.getString(R.string.modify_habit_name)
-        composeTestRule.onNodeWithText(nameText).performClick().performTextInput("Swimming")
-        val doneText = composeTestRule.activity.getString(R.string.add_habit_add_habit)
-        composeTestRule.onNodeWithContentDescription(doneText).performClick()
+        addHabit()
         navController.assertCurrentRouteName(HabitsNavigationDestination.HOME.route)
     }
 
@@ -111,6 +127,32 @@ class HabitsNavigationTest {
 
     private fun navigateToAddHabitScreen() {
         composeTestRule.onNodeWithContentDescriptionId(R.string.home_add_habit).performClick()
+    }
+
+    private fun navigateToLogbookScreen() {
+        composeTestRule.onNodeWithContentDescriptionId(R.string.home_logbook).performClick()
+    }
+
+    private fun navigateToSettingsScreen() {
+        composeTestRule.onNodeWithContentDescriptionId(R.string.settings).performClick()
+    }
+
+    private fun navigateToAboutScreen() {
+        composeTestRule.onNodeWithContentDescriptionId(R.string.settings_about_screen).performClick()
+    }
+
+    private fun navigateToDetailScreen() {
+        composeTestRule.onNodeWithText(habit1.name).performClick()
+        composeTestRule.onNodeWithContentDescriptionId(R.string.home_detail).performClick()
+    }
+
+    private fun navigateToEditHabitScreen() {
+        composeTestRule.onNodeWithContentDescriptionId(R.string.detail_edit_habit).performClick()
+    }
+
+    private fun addHabit() {
+        composeTestRule.onNodeWithTextId(R.string.modify_habit_name).performClick().performTextInput(habit1.name)
+        composeTestRule.onNodeWithContentDescriptionId(R.string.add_habit_add_habit).performClick()
     }
 
 }
