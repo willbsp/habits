@@ -77,6 +77,7 @@
     <string name="about_view_source">View the source on Github</string>
     <string name="about_report_an_issue">Report an issue</string>
     <string name="home_logbook">Logbook</string>
+    <string name="home_detail">Detail</string>
     <!--about screen end-->
 
 </resources>

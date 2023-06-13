@@ -111,7 +111,7 @@ fun HomeHabitCard(
                         ) {
                             Icon(
                                 imageVector = Icons.Outlined.MoreHoriz,
-                                contentDescription = stringResource(R.string.home_completed)
+                                contentDescription = stringResource(R.string.home_detail)
                             )
                         }
 
