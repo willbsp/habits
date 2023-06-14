@@ -98,6 +98,34 @@ class HabitsNavigationTest {
         navController.assertCurrentRouteName(HabitsNavigationDestination.ABOUT.route)
     }
 
+    @Test
+    fun navHost_verifyAddingHabitNavigatesBackToHome() {
+        navigateToAddHabitScreen()
+        addHabit()
+        navController.assertCurrentRouteName(HabitsNavigationDestination.HOME.route)
+    }
+
+    @Test
+    fun navHost_verifyEditingHabitNavigatesBackToDetail() {
+        navigateToAddHabitScreen()
+        addHabit()
+        navigateToDetailScreen()
+        navigateToEditHabitScreen()
+        composeTestRule.onNodeWithContentDescriptionId(R.string.edit_habit_update_habit).performClick()
+        navController.assertCurrentRouteName(HabitsNavigationDestination.DETAIL.route, "habitId")
+    }
+
+    @Test
+    fun navHost_verifyDeletingHabitNavigatesBackToHome() {
+        navigateToAddHabitScreen()
+        addHabit()
+        navigateToDetailScreen()
+        navigateToEditHabitScreen()
+        composeTestRule.onNodeWithTextId(R.string.edit_habit_delete).performClick()
+        composeTestRule.onNodeWithTextId(R.string.edit_confirm).performClick()
+        navController.assertCurrentRouteName(HabitsNavigationDestination.HOME.route)
+    }
+
     // verify back navigation is shown on correct pages
 
     @Test
@@ -150,17 +178,51 @@ class HabitsNavigationTest {
     // verify back navigation behaviour
 
     @Test
-    fun navHost_verifyAddHabitNavigatesBackToHome() {
+    fun navHost_verifyBackNavigationNavigatesToHomeFromAddHabit() {
         navigateToAddHabitScreen()
-        addHabit()
+        navigateBack()
         navController.assertCurrentRouteName(HabitsNavigationDestination.HOME.route)
     }
 
     @Test
-    fun navHost_verifyBackNavigationNavigatesBackFromAddHabit() {
-        navigateToAddHabitScreen()
-        composeTestRule.onNodeWithContentDescriptionId(R.string.topbar_back).performClick()
+    fun navHost_verifyBackNavigationNavigatesToHomeFromLogbook() {
+        navigateToLogbookScreen()
+        navigateBack()
         navController.assertCurrentRouteName(HabitsNavigationDestination.HOME.route)
+    }
+
+    @Test
+    fun navHost_verifyBackNavigationNavigatesToHomeFromSettings() {
+        navigateToSettingsScreen()
+        navigateBack()
+        navController.assertCurrentRouteName(HabitsNavigationDestination.HOME.route)
+    }
+
+    @Test
+    fun navHost_verifyBackNavigationNavigatesToHomeFromDetail() {
+        navigateToAddHabitScreen()
+        addHabit()
+        navigateToDetailScreen()
+        navigateBack()
+        navController.assertCurrentRouteName(HabitsNavigationDestination.HOME.route)
+    }
+
+    @Test
+    fun navHost_verifyBackNavigationNavigatesToDetailFromEditHabit() {
+        navigateToAddHabitScreen()
+        addHabit()
+        navigateToDetailScreen()
+        navigateToEditHabitScreen()
+        navigateBack()
+        navController.assertCurrentRouteName(HabitsNavigationDestination.DETAIL.route, "habitId")
+    }
+
+    @Test
+    fun navHost_verifyBackNavigationNavigatesToSettingsFromAbout() {
+        navigateToSettingsScreen()
+        navigateToAboutScreen()
+        navigateBack()
+        navController.assertCurrentRouteName(HabitsNavigationDestination.SETTINGS.route)
     }
 
     // helper functions
@@ -188,6 +250,10 @@ class HabitsNavigationTest {
 
     private fun navigateToEditHabitScreen() {
         composeTestRule.onNodeWithContentDescriptionId(R.string.detail_edit_habit).performClick()
+    }
+
+    private fun navigateBack() {
+        composeTestRule.onNodeWithContentDescriptionId(R.string.topbar_back).performClick()
     }
 
     private fun addHabit() {
