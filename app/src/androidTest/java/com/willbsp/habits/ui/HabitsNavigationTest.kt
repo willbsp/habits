@@ -98,6 +98,55 @@ class HabitsNavigationTest {
         navController.assertCurrentRouteName(HabitsNavigationDestination.ABOUT.route)
     }
 
+    // verify back navigation is shown on correct pages
+
+    @Test
+    fun navHost_verifyBackNavigationNotShownOnHome() {
+        composeTestRule.onNodeWithContentDescriptionId(R.string.topbar_back).assertDoesNotExist()
+    }
+
+    @Test
+    fun navHost_verifyBackNavigationShownOnAddHabit() {
+        navigateToAddHabitScreen()
+        composeTestRule.onNodeWithContentDescriptionId(R.string.topbar_back).assertExists()
+    }
+
+    @Test
+    fun navHost_verifyBackNavigationShownOnLogbook() {
+        navigateToLogbookScreen()
+        composeTestRule.onNodeWithContentDescriptionId(R.string.topbar_back).assertExists()
+    }
+
+    @Test
+    fun navHost_verifyBackNavigationShownOnSettings() {
+        navigateToSettingsScreen()
+        composeTestRule.onNodeWithContentDescriptionId(R.string.topbar_back).assertExists()
+    }
+
+    @Test
+    fun navHost_verifyBackNavigationShownOnAbout() {
+        navigateToSettingsScreen()
+        navigateToAboutScreen()
+        composeTestRule.onNodeWithContentDescriptionId(R.string.topbar_back).assertExists()
+    }
+
+    @Test
+    fun navHost_verifyBackNavigationShownOnDetail() {
+        navigateToAddHabitScreen()
+        addHabit()
+        navigateToDetailScreen()
+        composeTestRule.onNodeWithContentDescriptionId(R.string.topbar_back).assertExists()
+    }
+
+    @Test
+    fun navHost_verifyBackNavigationShownOnEditHabit() {
+        navigateToAddHabitScreen()
+        addHabit()
+        navigateToDetailScreen()
+        navigateToEditHabitScreen()
+        composeTestRule.onNodeWithContentDescriptionId(R.string.topbar_back).assertExists()
+    }
+
     // verify back navigation behaviour
 
     @Test
@@ -108,22 +157,13 @@ class HabitsNavigationTest {
     }
 
     @Test
-    fun navHost_verifyBackNavigationNavigatesBackFromAddScreen() {
+    fun navHost_verifyBackNavigationNavigatesBackFromAddHabit() {
         navigateToAddHabitScreen()
         composeTestRule.onNodeWithContentDescriptionId(R.string.topbar_back).performClick()
         navController.assertCurrentRouteName(HabitsNavigationDestination.HOME.route)
     }
 
-    @Test
-    fun navHost_verifyBackNavigationNotShownOnHome() {
-        composeTestRule.onNodeWithContentDescriptionId(R.string.topbar_back).assertDoesNotExist()
-    }
-
-    @Test
-    fun navHost_verifyBackNavigationShownOnAddScreen() {
-        navigateToAddHabitScreen()
-        composeTestRule.onNodeWithContentDescriptionId(R.string.topbar_back).assertExists()
-    }
+    // helper functions
 
     private fun navigateToAddHabitScreen() {
         composeTestRule.onNodeWithContentDescriptionId(R.string.home_add_habit).performClick()
