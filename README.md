@@ -17,8 +17,11 @@ It is currently in development, with plans to release on Google Play and F-Droid
   the today view to complete it.
 - **Learn about your habits** - Habits will calculate a score for each of your habits, so you can
   see if you are on track to achieving your goals.
+- **Track weekly or daily habits** - Running twice a week? Piano on a Thursday? With Habits you can 
+  track what habits you perform each week.
+- **The full picture** - You can visualise your habits over past months in the logbook view.
 - **Fluent animations** - Built with the latest Android technologies, every action in Habits is
-  beautifully animated to provide satisfying feedback.
+  beautifully animated to make completing habits satisfying.
 - **Supports material you** - Habits follows the
   latest [Material Design guidelines](https://m3.material.io/) and supports dynamic colour theming
   out of the box.
