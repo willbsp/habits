@@ -78,6 +78,7 @@
     <string name="about_report_an_issue">Report an issue</string>
     <string name="home_logbook">Logbook</string>
     <string name="home_detail">Detail</string>
+    <string name="modify_frequency">Frequency</string>
     <!--about screen end-->
 
 </resources>

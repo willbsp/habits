@@ -2,6 +2,7 @@ package com.willbsp.habits.ui
 
 import androidx.compose.material3.Surface
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextClearance
 import androidx.compose.ui.test.performTextInput
@@ -69,7 +70,18 @@ class AddScreenTest {
     }
 
     @Test
-    fun invalidHabit_isNotSaved() = runTest {
+    fun habitNameTooShort_isNotSaved() = runTest {
+        composeTestRule.onNodeWithTextId(R.string.modify_habit_name)
+            .performClick()
+            .performTextInput("h")
+        composeTestRule.onNodeWithContentDescriptionId(R.string.add_habit_add_habit).performClick()
+        composeTestRule.onNodeWithTextId(R.string.modify_habit_name).assertExists()
+        val habits = habitRepository.getAllHabitsStream().first()
+        assertEquals(0, habits.size)
+    }
+
+    @Test
+    fun habitNameTooLong_isNotSaved() = runTest {
         composeTestRule.onNodeWithTextId(R.string.modify_habit_name)
             .performClick()
             .performTextInput("this name is too long to be a habit name")
@@ -80,7 +92,7 @@ class AddScreenTest {
     }
 
     @Test
-    fun validHabit_isSaved() = runTest {
+    fun validDailyHabit_isSaved() = runTest {
         composeTestRule.onNodeWithTextId(R.string.modify_habit_name)
             .performClick()
             .performTextInput(habit1.name)
@@ -88,7 +100,24 @@ class AddScreenTest {
         val habits = habitRepository.getAllHabitsStream().first()
         assertEquals(1, habits.size)
         assertEquals(habit1.name, habits.first().name)
-        assertEquals(habit1.frequency, HabitFrequency.DAILY)
+        assertEquals(habit1.frequency, habits.first().frequency)
+    }
+
+    @Test
+    fun validWeeklyHabit_isSaved() = runTest {
+        composeTestRule.onNodeWithTextId(R.string.modify_habit_name)
+            .performClick()
+            .performTextInput(habit1.name)
+        composeTestRule.onNodeWithTextId(R.string.modify_frequency).performClick()
+        composeTestRule.onNodeWithTextId(R.string.frequency_weekly).performClick()
+        composeTestRule.onNodeWithTextId(R.string.modify_times_per_week).performClick()
+        composeTestRule.onNodeWithText("3").performClick()
+        composeTestRule.onNodeWithContentDescriptionId(R.string.add_habit_add_habit).performClick()
+        val habits = habitRepository.getAllHabitsStream().first()
+        assertEquals(1, habits.size)
+        assertEquals(habit1.name, habits.first().name)
+        assertEquals(HabitFrequency.WEEKLY, habits.first().frequency)
+        assertEquals(3, habits.first().repeat)
     }
 
 }

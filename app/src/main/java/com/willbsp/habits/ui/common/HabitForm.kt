@@ -75,7 +75,7 @@ private fun HabitFrequencyDropdown(
                 readOnly = true,
                 value = stringResource(id = frequencySelected.userReadableStringRes),
                 onValueChange = {},
-                label = { Text("Frequency") },
+                label = { Text(stringResource(R.string.modify_frequency)) },
                 trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = frequencyExpanded) },
                 colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors()
             )
