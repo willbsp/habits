@@ -25,7 +25,7 @@ import com.willbsp.habits.helper.onNodeWithTextId
 
 @HiltAndroidTest
 @RunWith(AndroidJUnit4::class)
-class HabitsNavigationTest {
+class NavigationTest {
 
     @get:Rule(order = 0)
     val hiltRule = HiltAndroidRule(this)
@@ -35,13 +35,13 @@ class HabitsNavigationTest {
     private lateinit var navController: NavHostController
 
     @Before
-    fun init() {
+    fun setup() {
         hiltRule.inject()
-        setupHabitsNavHost()
+        setupNavHost()
     }
 
     @OptIn(ExperimentalAnimationApi::class)
-    private fun setupHabitsNavHost() {
+    private fun setupNavHost() {
         composeTestRule.setContent {
             navController = rememberAnimatedNavController()
             navController.navigatorProvider.addNavigator(ComposeNavigator())
