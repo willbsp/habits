@@ -32,7 +32,7 @@ import javax.inject.Inject
 @HiltAndroidTest
 @RunWith(AndroidJUnit4::class)
 @OptIn(ExperimentalCoroutinesApi::class)
-class AddScreenTest {
+class AddHabitScreenTest {
 
     @get:Rule(order = 0)
     val hiltRule = HiltAndroidRule(this)
