@@ -42,10 +42,10 @@ fun HomeHabitList(
         homeUiState.habits.partition { it.type == HabitFrequency.DAILY }
     }
     val dailyCompleted = remember(dailyHabitsList) {
-        dailyHabitsList.map { it.hasBeenCompleted() }.all { it }
+        dailyHabitsList.map { it.hasBeenCompleted(homeUiState.todaysDate) }.all { it }
     }
     val weeklyCompleted = remember(weeklyHabitsList) {
-        weeklyHabitsList.map { it.hasBeenCompleted() }.all { it }
+        weeklyHabitsList.map { it.hasBeenCompleted(homeUiState.todaysDate) }.all { it }
     }
 
     LazyColumn(modifier = modifier) {
@@ -63,7 +63,7 @@ fun HomeHabitList(
                 modifier = Modifier
                     .animateItemPlacement(tween())
                     .padding(start = 20.dp, end = 20.dp, bottom = 10.dp),
-                visible = !habit.hasBeenCompleted() || showCompleted,
+                visible = !habit.hasBeenCompleted(homeUiState.todaysDate) || showCompleted,
                 habit = habit,
                 todaysDate = homeUiState.todaysDate,
                 completedOnClick = completedOnClick,
@@ -85,7 +85,7 @@ fun HomeHabitList(
                 modifier = Modifier
                     .animateItemPlacement(tween())
                     .padding(start = 20.dp, end = 20.dp, bottom = 10.dp),
-                visible = !habit.hasBeenCompleted() || showCompleted,
+                visible = !habit.hasBeenCompleted(homeUiState.todaysDate) || showCompleted,
                 habit = habit,
                 todaysDate = homeUiState.todaysDate,
                 completedOnClick = completedOnClick,
@@ -95,7 +95,7 @@ fun HomeHabitList(
         }
         item {
             val completedCount = remember(homeUiState.habits) {
-                homeUiState.habits.count { it.hasBeenCompleted() }
+                homeUiState.habits.count { it.hasBeenCompleted(homeUiState.todaysDate) }
             }
             if (homeUiState.showSubtitle) {
                 HabitListSubtitle(

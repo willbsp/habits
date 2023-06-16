@@ -25,7 +25,7 @@ sealed class HomeUiState {
         val completedByWeek: List<LocalDate>
     ) {
 
-        fun hasBeenCompleted(date: LocalDate = LocalDate.now()): Boolean {
+        fun hasBeenCompleted(date: LocalDate): Boolean {
             return when (type) {
 
                 HabitFrequency.DAILY -> {

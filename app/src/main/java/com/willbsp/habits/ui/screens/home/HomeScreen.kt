@@ -110,7 +110,7 @@ fun HomeScreen(
             is HomeUiState.Habits -> {
 
                 val allCompleted = remember(homeUiState) {
-                    homeUiState.habits.all { it.hasBeenCompleted() }
+                    homeUiState.habits.all { it.hasBeenCompleted(homeUiState.todaysDate) }
                 }
                 val showHabits = !showCompleted && allCompleted
 
