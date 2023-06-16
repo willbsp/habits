@@ -65,6 +65,7 @@ fun HomeHabitList(
                     .padding(start = 20.dp, end = 20.dp, bottom = 10.dp),
                 visible = !habit.hasBeenCompleted() || showCompleted,
                 habit = habit,
+                todaysDate = homeUiState.todaysDate,
                 completedOnClick = completedOnClick,
                 navigateToDetail = navigateToDetail,
                 showStreaks = homeUiState.showStreaks
@@ -86,6 +87,7 @@ fun HomeHabitList(
                     .padding(start = 20.dp, end = 20.dp, bottom = 10.dp),
                 visible = !habit.hasBeenCompleted() || showCompleted,
                 habit = habit,
+                todaysDate = homeUiState.todaysDate,
                 completedOnClick = completedOnClick,
                 navigateToDetail = navigateToDetail,
                 showStreaks = homeUiState.showStreaks
@@ -117,6 +119,7 @@ fun HomeHabitList(
 private fun HabitListCard(
     modifier: Modifier = Modifier,
     visible: Boolean,
+    todaysDate: LocalDate,
     habit: HomeUiState.Habit,
     completedOnClick: (Int, LocalDate) -> Unit,
     navigateToDetail: (Int) -> Unit,
@@ -133,7 +136,8 @@ private fun HabitListCard(
             habit = habit,
             completedOnClick = completedOnClick,
             navigateToDetail = navigateToDetail,
-            showStreaks = showStreaks
+            showStreaks = showStreaks,
+            todaysDate = todaysDate
         )
 
     }

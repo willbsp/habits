@@ -44,6 +44,7 @@ fun HomeHabitCard(
     navigateToDetail: (Int) -> Unit,
     modifier: Modifier = Modifier,
     showStreaks: Boolean,
+    todaysDate: LocalDate,
     expandedInitialValue: Boolean = false
 ) {
 
@@ -82,9 +83,9 @@ fun HomeHabitCard(
                     }
                     Spacer(modifier = Modifier.width(10.dp))
                     HabitToggleButton(
-                        onCheckedChange = { completedOnClick(habit.id, LocalDate.now()) },
-                        checked = habit.completed.any { it == LocalDate.now() },
-                        checkedSecondary = habit.completedByWeek.any { it == LocalDate.now() }
+                        onCheckedChange = { completedOnClick(habit.id, todaysDate) },
+                        checked = habit.completed.any { it == todaysDate },
+                        checkedSecondary = habit.completedByWeek.any { it == todaysDate }
                     )
 
                 }
@@ -102,6 +103,7 @@ fun HomeHabitCard(
 
                         HomeHabitCardDayRow(
                             habit = habit,
+                            todaysDate = todaysDate,
                             completedOnClick = completedOnClick
                         )
                         Spacer(modifier = Modifier.weight(1f))
@@ -127,6 +129,7 @@ fun HomeHabitCard(
 @Composable
 private fun HomeHabitCardDayRow(
     habit: HomeUiState.Habit,
+    todaysDate: LocalDate,
     completedOnClick: (Int, LocalDate) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -141,7 +144,7 @@ private fun HomeHabitCardDayRow(
         ) {
 
             (1..days).forEach { i ->
-                val date = LocalDate.now().minusDays(i.toLong())
+                val date = todaysDate.minusDays(i.toLong())
                 HomeHabitCardDay(
                     onCheckedChange = { completedOnClick(habit.id, date) },
                     completed = habit.completed.any { it == date },

@@ -51,17 +51,29 @@ class HomeViewModel @Inject constructor(
         subtitlePref: Boolean
     ): HomeUiState {
         return if (this.isEmpty()) HomeUiState.Empty
-        else HomeUiState.Habits(this.map { it.toHabit() }, streakPref, subtitlePref)
+        else HomeUiState.Habits(
+            this.map { it.toHabit() },
+            LocalDate.now(clock),
+            streakPref,
+            subtitlePref
+        )
     }
 
     private suspend fun HabitWithVirtualEntries.toHabit(): HomeUiState.Habit {
         val streak = calculateStreak(habit.id).first().find { streak ->
             streak.endDate == LocalDate.now(clock)
-                    || streak.endDate == LocalDate.now(clock).minusDays(1)
+                    || streak.endDate == LocalDate.now().minusDays(1)
         }
         val completed = entries.filter { it.id != null }.map { it.date }.sortedDescending()
         val completedByWeek = entries.filter { it.id == null }.map { it.date }.sortedDescending()
-        return HomeUiState.Habit(habit.id, habit.name, habit.frequency, streak?.length, completed, completedByWeek)
+        return HomeUiState.Habit(
+            habit.id,
+            habit.name,
+            habit.frequency,
+            streak?.length,
+            completed,
+            completedByWeek
+        )
     }
 
     companion object {

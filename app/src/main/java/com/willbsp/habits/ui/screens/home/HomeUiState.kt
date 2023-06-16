@@ -11,6 +11,7 @@ sealed class HomeUiState {
 
     data class Habits(
         val habits: List<Habit>,
+        val todaysDate: LocalDate,
         val showStreaks: Boolean,
         val showSubtitle: Boolean
     ) : HomeUiState()
