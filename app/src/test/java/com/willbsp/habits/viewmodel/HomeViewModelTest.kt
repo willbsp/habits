@@ -28,6 +28,7 @@ import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneOffset
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class HomeViewModelTest {
 
     @get:Rule
@@ -60,7 +61,6 @@ class HomeViewModelTest {
 
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun uiState_whenInitialised_thenEmpty() = runTest {
         val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
@@ -68,7 +68,15 @@ class HomeViewModelTest {
         collectJob.cancel()
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun uiState_whenInitialised_correctDate() = runTest {
+        val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
+        habitRepository.upsertHabit(habit1)
+        val state = viewModel.uiState.value as HomeUiState.Habits
+        assertEquals(date, state.todaysDate)
+        collectJob.cancel()
+    }
+
     @Test
     fun uiState_whenHabitsAdded_thenShowHabits() = runTest {
         val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
@@ -78,20 +86,22 @@ class HomeViewModelTest {
         collectJob.cancel()
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun uiState_whenDateToggled_thenShowCompleted() = runTest {
         val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
         val habits = viewModel.uiState.map { (it as HomeUiState.Habits).habits }
         habitRepository.upsertHabit(habit1)
         entryRepository.toggleEntry(habit1.id, date)
-        assertTrue(habits.first().find { it.name == habit1.name }?.completed?.contains(date) == true)
+        assertTrue(
+            habits.first().find { it.name == habit1.name }?.completed?.contains(date) == true
+        )
         entryRepository.toggleEntry(habit1.id, date)
-        assertFalse(habits.first().find { it.name == habit1.name }?.completed?.contains(date) == true)
+        assertFalse(
+            habits.first().find { it.name == habit1.name }?.completed?.contains(date) == true
+        )
         collectJob.cancel()
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun uiState_whenStreak_thenShowStreak() = runTest {
         val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
@@ -103,7 +113,6 @@ class HomeViewModelTest {
         collectJob.cancel()
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun uiState_whenNoHabits_thenNoHabitsState() = runTest {
         val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
@@ -114,7 +123,6 @@ class HomeViewModelTest {
         collectJob.cancel()
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun uiState_whenDateToggledWeekly_thenShowWeeklyCompleted() = runTest {
         val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
@@ -128,7 +136,6 @@ class HomeViewModelTest {
         collectJob.cancel()
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun uiState_whenDateToggledWeekly_thenShowStreak() = runTest {
         val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
@@ -140,7 +147,6 @@ class HomeViewModelTest {
         collectJob.cancel()
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun uiState_whenPreferencesSet_getPreferences() = runTest {
         val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
@@ -156,16 +162,19 @@ class HomeViewModelTest {
         collectJob.cancel()
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun toggleEntry_whenDateToggled_thenModifyState() = runTest {
         val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
         val habits = viewModel.uiState.map { (it as HomeUiState.Habits).habits }
         habitRepository.upsertHabit(habit1)
         viewModel.toggleEntry(habit1.id, date)
-        assertTrue(habits.first().find { it.name == habit1.name }?.completed?.contains(date) == true)
+        assertTrue(
+            habits.first().find { it.name == habit1.name }?.completed?.contains(date) == true
+        )
         viewModel.toggleEntry(habit1.id, date)
-        assertFalse(habits.first().find { it.name == habit1.name }?.completed?.contains(date) == true)
+        assertFalse(
+            habits.first().find { it.name == habit1.name }?.completed?.contains(date) == true
+        )
         collectJob.cancel()
     }
 
