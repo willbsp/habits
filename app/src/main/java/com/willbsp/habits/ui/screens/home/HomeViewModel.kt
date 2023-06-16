@@ -62,7 +62,7 @@ class HomeViewModel @Inject constructor(
     private suspend fun HabitWithVirtualEntries.toHabit(): HomeUiState.Habit {
         val streak = calculateStreak(habit.id).first().find { streak ->
             streak.endDate == LocalDate.now(clock)
-                    || streak.endDate == LocalDate.now().minusDays(1)
+                    || streak.endDate == LocalDate.now(clock).minusDays(1)
         }
         val completed = entries.filter { it.id != null }.map { it.date }.sortedDescending()
         val completedByWeek = entries.filter { it.id == null }.map { it.date }.sortedDescending()
