@@ -35,7 +35,7 @@ sealed class HomeUiState {
                 HabitFrequency.WEEKLY -> {
                     val weekDates =
                         (date.with(DayOfWeek.MONDAY)..date.with(DayOfWeek.SUNDAY)).toList()
-                    (completed + completedByWeek).containsAll(weekDates)
+                    (completed + completedByWeek).containsAll(weekDates) || completed.contains(date)
                 }
 
             }
