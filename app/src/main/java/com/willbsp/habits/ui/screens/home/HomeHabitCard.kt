@@ -85,7 +85,8 @@ fun HomeHabitCard(
                     HabitToggleButton(
                         onCheckedChange = { completedOnClick(habit.id, todaysDate) },
                         checked = habit.completed.any { it == todaysDate },
-                        checkedSecondary = habit.completedByWeek.any { it == todaysDate }
+                        checkedSecondary = habit.completedByWeek.any { it == todaysDate },
+                        contentDescription = "${todaysDate.dayOfWeek} ${todaysDate.dayOfMonth}"
                     )
 
                 }
@@ -188,7 +189,8 @@ private fun HomeHabitCardDay(
         HabitToggleButton(
             onCheckedChange = onCheckedChange,
             checked = completed,
-            checkedSecondary = completedByWeek
+            checkedSecondary = completedByWeek,
+            contentDescription = "${date.dayOfWeek} ${date.dayOfMonth}"
         )
 
     }

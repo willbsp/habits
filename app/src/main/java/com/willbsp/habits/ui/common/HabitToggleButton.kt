@@ -11,10 +11,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.willbsp.habits.R
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -22,7 +20,8 @@ fun HabitToggleButton(
     modifier: Modifier = Modifier,
     onCheckedChange: (Boolean) -> (Unit),
     checked: Boolean,
-    checkedSecondary: Boolean
+    checkedSecondary: Boolean,
+    contentDescription: String
 ) {
 
     val haptic = LocalHapticFeedback.current
@@ -40,7 +39,7 @@ fun HabitToggleButton(
         ) {
             Icon(
                 imageVector = icon,
-                contentDescription = stringResource(id = R.string.home_completed)
+                contentDescription = contentDescription
             )
         }
     }
@@ -51,7 +50,7 @@ fun HabitToggleButton(
 @Composable
 fun HabitToggleButtonCheckedPreview() {
     HabitToggleButton(
-        onCheckedChange = {}, checked = true, checkedSecondary = true
+        onCheckedChange = {}, checked = true, checkedSecondary = true, contentDescription = ""
     )
 }
 
@@ -59,7 +58,7 @@ fun HabitToggleButtonCheckedPreview() {
 @Composable
 fun HabitToggleButtonUncheckedPreview() {
     HabitToggleButton(
-        onCheckedChange = {}, checked = false, checkedSecondary = false
+        onCheckedChange = {}, checked = false, checkedSecondary = false, contentDescription = ""
     )
 }
 
@@ -67,6 +66,6 @@ fun HabitToggleButtonUncheckedPreview() {
 @Composable
 fun HabitToggleButtonCheckedSecondaryPreview() {
     HabitToggleButton(
-        onCheckedChange = {}, checked = false, checkedSecondary = true
+        onCheckedChange = {}, checked = false, checkedSecondary = true, contentDescription = ""
     )
 }
