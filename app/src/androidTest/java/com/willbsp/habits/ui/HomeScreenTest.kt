@@ -3,7 +3,9 @@ package com.willbsp.habits.ui
 import androidx.activity.ComponentActivity
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.filterToOne
+import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onChildren
 import androidx.compose.ui.test.onNodeWithText
@@ -123,13 +125,23 @@ class HomeScreenTest {
     }
 
     @Test
+    fun clickHabit_showsPreviousDaysAndDetail() = runTest {
+        habitRepository.upsertHabit(habit1)
+        composeTestRule.onNodeWithText(habit1.name).performClick()
+        getDateToggle(habit1.name, date.minusDays(1)).assertExists()
+        getDateToggle(habit1.name, date.minusDays(2)).assertExists()
+        getDateToggle(habit1.name, date.minusDays(3)).assertExists()
+        composeTestRule.onNodeWithText(habit1.name)
+            .onChildren()
+            .filterToOne(hasContentDescriptionId(R.string.home_detail, activity))
+            .assertExists()
+    }
+
+    @Test
     fun dailyHabit_toggleCompleted_habitDisappears() = runTest {
         habitRepository.upsertHabit(habit1)
         composeTestRule.onNodeWithText(habit1.name).assertExists()
-        val habitCard = composeTestRule.onNodeWithText(habit1.name)
-        habitCard.onChildren()
-            .filterToOne(hasContentDescriptionId(R.string.home_completed, activity))
-            .performClick()
+        getDateToggle(habit1.name).performClick()
         composeTestRule.onNodeWithText(habit1.name).assertDoesNotExist()
         composeTestRule.onNodeWithTextId(R.string.home_all_completed).assertExists()
     }
@@ -138,20 +150,60 @@ class HomeScreenTest {
     fun dailyHabit_toggleShowCompleted_showsCompletedHabit() = runTest {
         habitRepository.upsertHabit(habit1)
         composeTestRule.onNodeWithText(habit1.name).assertExists()
-        val habitCard = composeTestRule.onNodeWithText(habit1.name)
-        habitCard.onChildren()
-            .filterToOne(hasContentDescriptionId(R.string.home_completed, activity))
-            .performClick()
+        getDateToggle(habit1.name).performClick()
         composeTestRule.onNodeWithText(habit1.name).assertDoesNotExist()
         composeTestRule.onNodeWithContentDescriptionId(R.string.home_show_completed).performClick()
         composeTestRule.onNodeWithText(habit1.name).assertExists()
     }
 
     @Test
+    fun weeklyHabit_toggleShowCompleted_showsCompletedHabit() = runTest {
+        habitRepository.upsertHabit(habit4)
+        composeTestRule.onNodeWithText(habit4.name).assertExists()
+        composeTestRule.onNodeWithText(habit4.name).performClick()
+        getDateToggle(habit4.name, date.minusDays(1)).performClick()
+        getDateToggle(habit4.name, date.minusDays(2)).performClick()
+        getDateToggle(habit4.name, date.minusDays(3)).performClick()
+        composeTestRule.onNodeWithText(habit4.name).assertDoesNotExist()
+        composeTestRule.onNodeWithContentDescriptionId(R.string.home_show_completed).performClick()
+        composeTestRule.onNodeWithText(habit4.name).assertExists()
+    }
+
+    @Test
+    fun weeklyHabit_toggleCompletedToday_habitDisappears() = runTest {
+        habitRepository.upsertHabit(habit4)
+        composeTestRule.onNodeWithText(habit4.name).assertExists()
+        getDateToggle(habit4.name).performClick()
+        composeTestRule.onNodeWithText(habit4.name).assertDoesNotExist()
+        composeTestRule.onNodeWithTextId(R.string.home_all_completed).assertExists()
+    }
+
+    @Test
+    fun weeklyHabit_toggleCompletedCompletesWeek_habitDisappears() = runTest {
+        habitRepository.upsertHabit(habit4)
+        composeTestRule.onNodeWithText(habit4.name).assertExists()
+        composeTestRule.onNodeWithText(habit4.name).performClick()
+        getDateToggle(habit4.name, date.minusDays(1)).performClick()
+        getDateToggle(habit4.name, date.minusDays(2)).performClick()
+        getDateToggle(habit4.name, date.minusDays(3)).performClick()
+        composeTestRule.onNodeWithText(habit4.name).assertDoesNotExist()
+        composeTestRule.onNodeWithTextId(R.string.home_all_completed).assertExists()
+    }
+
+    @Test
     fun dailyHabit_streakShownAndCorrect() = runTest {
+        settingsRepository.saveStreaksPreference(true)
         habitRepository.upsertHabit(habit3)
         (entryRepository as FakeEntryRepository).populate()
         composeTestRule.onNodeWithText("5").assertExists()
+    }
+
+    @Test
+    fun showStreaksDisabled_doesNotShowStreak() = runTest {
+        settingsRepository.saveStreaksPreference(false)
+        habitRepository.upsertHabit(habit3)
+        (entryRepository as FakeEntryRepository).populate()
+        composeTestRule.onNodeWithText("5").assertDoesNotExist()
     }
 
     @Test
@@ -162,6 +214,64 @@ class HomeScreenTest {
         entryRepository.toggleEntry(habit4.id, LocalDate.parse("2023-03-08"))
         composeTestRule.onNodeWithContentDescriptionId(R.string.home_show_completed).performClick()
         composeTestRule.onNodeWithText("5").assertExists()
+    }
+
+    @Test
+    fun showSubtitleEnabled_showsSubtitle() = runTest {
+        settingsRepository.saveSubtitlePreference(true)
+        habitRepository.upsertHabit(habit1)
+        habitRepository.upsertHabit(habit4)
+        val dateText = "${date.dayOfWeek} ${date.dayOfMonth}"
+        composeTestRule.onNodeWithText(habit1.name)
+            .onChildren()
+            .filterToOne(hasContentDescription(dateText))
+            .performClick()
+        composeTestRule.onNodeWithText("completed already", substring = true).assertExists()
+    }
+
+
+    @Test
+    fun showSubtitleEnabled_showsCorrectSubtitleCount() = runTest {
+        settingsRepository.saveSubtitlePreference(true)
+        habitRepository.upsertHabit(habit1)
+        habitRepository.upsertHabit(habit2)
+        habitRepository.upsertHabit(habit3)
+        habitRepository.upsertHabit(habit4)
+        val dateText = "${date.dayOfWeek} ${date.dayOfMonth}"
+        composeTestRule.onNodeWithText(habit1.name)
+            .onChildren()
+            .filterToOne(hasContentDescription(dateText))
+            .performClick()
+        composeTestRule.onNodeWithText(habit2.name).performClick()
+        getDateToggle(habit2.name, date.minusDays(1)).performClick()
+        composeTestRule.onNodeWithText(habit3.name)
+            .onChildren()
+            .filterToOne(hasContentDescription(dateText))
+            .performClick()
+        composeTestRule.onNodeWithText("3 habits completed already", substring = true)
+            .assertExists()
+    }
+
+    @Test
+    fun showSubtitleDisabled_doesNotShowSubtitle() = runTest {
+        settingsRepository.saveSubtitlePreference(false)
+        habitRepository.upsertHabit(habit1)
+        habitRepository.upsertHabit(habit4)
+        val dateText = "${date.dayOfWeek} ${date.dayOfMonth}"
+        composeTestRule.onNodeWithText(habit1.name)
+            .onChildren()
+            .filterToOne(hasContentDescription(dateText))
+            .performClick()
+        composeTestRule.onNodeWithText("completed already", substring = true).assertDoesNotExist()
+    }
+
+    private fun getDateToggle(
+        habitName: String,
+        date: LocalDate = this.date
+    ): SemanticsNodeInteraction {
+        val habitCard = composeTestRule.onNodeWithText(habitName)
+        val dateText = "${date.dayOfWeek} ${date.dayOfMonth}"
+        return habitCard.onChildren().filterToOne(hasContentDescription(dateText))
     }
 
 }
