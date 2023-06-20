@@ -29,9 +29,12 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
+import com.willbsp.habits.R
 import com.willbsp.habits.ui.theme.Typography
 import kotlinx.coroutines.launch
 import java.time.DayOfWeek
@@ -106,7 +109,7 @@ fun LogbookMonth(
             ) {
                 Icon(
                     imageVector = Icons.Default.ExpandLess,
-                    contentDescription = null
+                    contentDescription = stringResource(R.string.logbook_previous_month)
                 )
             }
             Spacer(modifier.weight(1f))
@@ -122,7 +125,7 @@ fun LogbookMonth(
             ) {
                 Icon(
                     imageVector = Icons.Default.ExpandMore,
-                    contentDescription = null
+                    contentDescription = stringResource(R.string.logbook_next_month)
                 )
             }
         }

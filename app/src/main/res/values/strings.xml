@@ -79,6 +79,8 @@
     <string name="home_logbook">Logbook</string>
     <string name="home_detail">Detail</string>
     <string name="modify_frequency">Frequency</string>
+    <string name="logbook_previous_month">Previous month</string>
+    <string name="logbook_next_month">Next month</string>
     <!--about screen end-->
 
 </resources>
