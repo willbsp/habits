@@ -57,7 +57,8 @@ fun LogbookDatePicker(
         pageCount = Integer.MAX_VALUE,
         key = { it }
     ) {
-        val date = remember { LocalDate.now().minusMonths((Integer.MAX_VALUE - it - 1).toLong()) }
+        val date =
+            remember { logbookUiState.todaysDate.minusMonths((Integer.MAX_VALUE - it - 1).toLong()) }
         LogbookMonth(
             modifier = Modifier
                 .graphicsLayer {
@@ -87,7 +88,7 @@ fun LogbookMonth(
 
     val startDate = remember { date.withDayOfMonth(1).with(DayOfWeek.MONDAY) }
     val scope = rememberCoroutineScope()
-    val today = remember { LocalDate.now() }
+    val today = remember { logbookUiState.todaysDate }
 
     Column(modifier.width(350.dp), horizontalAlignment = Alignment.CenterHorizontally) {
 

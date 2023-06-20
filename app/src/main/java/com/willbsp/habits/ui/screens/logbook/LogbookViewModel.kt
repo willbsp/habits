@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import java.time.Clock
 import java.time.LocalDate
 import javax.inject.Inject
 
@@ -21,6 +22,7 @@ import javax.inject.Inject
 class LogbookViewModel @Inject constructor(
     private val habitRepository: HabitRepository,
     private val entryRepository: EntryRepository,
+    private val clock: Clock,
     private val getVirtualEntries: GetHabitsWithVirtualEntriesUseCase
 ) : ViewModel() {
 
@@ -63,6 +65,7 @@ class LogbookViewModel @Inject constructor(
 
         return LogbookUiState.SelectedHabit(
             habitId = selectedHabitId.value,
+            todaysDate = LocalDate.now(clock),
             completed = completed,
             completedByWeek = completedByWeek,
             habits = habits.map { LogbookUiState.Habit(it.id, it.name) }
