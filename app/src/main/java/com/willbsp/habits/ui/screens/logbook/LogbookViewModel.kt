@@ -8,12 +8,14 @@ import com.willbsp.habits.domain.model.HabitWithVirtualEntries
 import com.willbsp.habits.domain.usecase.GetHabitsWithVirtualEntriesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import javax.inject.Inject
-import kotlin.properties.Delegates
 
 @HiltViewModel
 class LogbookViewModel @Inject constructor(
@@ -22,11 +24,17 @@ class LogbookViewModel @Inject constructor(
     private val getVirtualEntries: GetHabitsWithVirtualEntriesUseCase
 ) : ViewModel() {
 
-    private var selectedHabitId by Delegates.notNull<Int>()
+    private var selectedHabitId: MutableStateFlow<Int> = MutableStateFlow(-1)
 
-    private val _uiState: MutableStateFlow<LogbookUiState> =
-        MutableStateFlow(LogbookUiState.NoHabits)
-    val uiState: StateFlow<LogbookUiState> = _uiState
+    val uiState: StateFlow<LogbookUiState> = getVirtualEntries()
+        .combine(selectedHabitId) { list, _ ->
+            if (list.isEmpty()) LogbookUiState.NoHabits
+            else list.toLogbookUiState()
+        }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
+            initialValue = LogbookUiState.NoHabits
+        )
 
     init {
         viewModelScope.launch {
@@ -36,31 +44,25 @@ class LogbookViewModel @Inject constructor(
     }
 
     fun setSelectedHabit(habitId: Int) {
-        this.selectedHabitId = habitId
-        viewModelScope.launch {
-            getVirtualEntries().collect { list ->
-                if (list.isEmpty()) _uiState.value = LogbookUiState.NoHabits
-                else _uiState.value = list.toLogbookUiState()
-            }
-        }
+        this.selectedHabitId.value = habitId
     }
 
     fun toggleEntry(date: LocalDate) {
         viewModelScope.launch {
-            entryRepository.toggleEntry(selectedHabitId, date)
+            entryRepository.toggleEntry(selectedHabitId.value, date)
         }
     }
 
     private fun List<HabitWithVirtualEntries>.toLogbookUiState(): LogbookUiState.SelectedHabit {
 
         val habits = this.map { it.habit }
-        val entries = this.find { it.habit.id == selectedHabitId }?.entries ?: listOf()
+        val entries = this.find { it.habit.id == selectedHabitId.value }?.entries ?: listOf()
 
         val completed = entries.filter { it.id != null }.map { it.date }
         val completedByWeek = entries.filter { it.id == null }.map { it.date }
 
         return LogbookUiState.SelectedHabit(
-            habitId = selectedHabitId,
+            habitId = selectedHabitId.value,
             completed = completed,
             completedByWeek = completedByWeek,
             habits = habits.map { LogbookUiState.Habit(it.id, it.name) }
@@ -68,5 +70,8 @@ class LogbookViewModel @Inject constructor(
 
     }
 
+    companion object {
+        const val TIMEOUT_MILLIS = 5_000L
+    }
 
 }
