@@ -3,6 +3,7 @@ package com.willbsp.habits.ui
 import androidx.activity.ComponentActivity
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
@@ -17,7 +18,6 @@ import com.willbsp.habits.data.repository.EntryRepository
 import com.willbsp.habits.data.repository.HabitRepository
 import com.willbsp.habits.domain.usecase.GetHabitsWithVirtualEntriesUseCase
 import com.willbsp.habits.domain.usecase.GetVirtualEntriesUseCase
-import com.willbsp.habits.helper.onNodeWithContentDescriptionId
 import com.willbsp.habits.helper.onNodeWithTextId
 import com.willbsp.habits.ui.screens.logbook.LogbookScreen
 import com.willbsp.habits.ui.screens.logbook.LogbookViewModel
@@ -102,44 +102,67 @@ class LogbookScreenTest {
     @Test
     fun calendarMonths_areCorrect() = runTest {
         habitRepository.upsertHabit(habit1)
+        var day = date
         composeTestRule.onNodeWithText(
-            date.month.getDisplayName(TextStyle.FULL, Locale.getDefault()), substring = true
+            day.month.getDisplayName(TextStyle.FULL, Locale.getDefault()), substring = true
         ).assertExists()
-        previousMonth(date.month)
-        composeTestRule.onNodeWithText(
-            date.minusMonths(1).month
-                .getDisplayName(TextStyle.FULL, Locale.getDefault()), substring = true
-        ).assertExists()
+        repeat(6) {
+            previousMonth(day)
+            day = day.minusMonths(1)
+            composeTestRule.onNodeWithText(
+                day.month
+                    .getDisplayName(TextStyle.FULL, Locale.getDefault()), substring = true
+            ).assertExists()
+        }
     }
 
     @Test
     fun calendarDays_areCorrect() = runTest {
         habitRepository.upsertHabit(habit1)
-        composeTestRule.onNodeWithText(date.month.maxLength().toString()).assertExists()
-        previousMonth(date.month)
-        previousMonth(date.month.minus(1))
-        composeTestRule.onNodeWithText(date.minusMonths(2).month.maxLength().toString())
+        var day = date
+        getButtonForDate(LocalDate.of(day.year, day.month, 1)).assertExists()
+        getButtonForDate(LocalDate.of(day.year, day.month, day.month.maxLength())).assertExists()
+
+        previousMonth(day)
+        day = day.minusMonths(1)
+        getButtonForDate(LocalDate.of(day.year, day.month, 1))
             .assertExists()
-        previousMonth(date.month.minus(2))
-        composeTestRule.onNodeWithText(date.minusMonths(3).month.maxLength().toString())
+        getButtonForDate(LocalDate.of(day.year, day.month, 28)) // feb
             .assertExists()
+
+        repeat(6) {
+            previousMonth(day)
+            day = day.minusMonths(1)
+            getButtonForDate(LocalDate.of(day.year, day.month, 1))
+                .assertExists()
+            getButtonForDate(LocalDate.of(day.year, day.month, day.month.maxLength()))
+                .assertExists()
+        }
+
     }
 
     private fun nextMonth(currentMonth: Month) {
-        composeTestRule.onNodeWithContentDescriptionId(R.string.logbook_next_month)
-            .performClick()
+        composeTestRule.onNodeWithTag(
+            activity.getString(R.string.logbook_previous_month) +
+                    " " +
+                    currentMonth.getDisplayName(TextStyle.FULL, Locale.getDefault()) +
+                    " " +
+                    date.year
+        ).performClick()
     }
 
-    private fun previousMonth(currentMonth: Month) {
+    private fun previousMonth(currentMonth: LocalDate) {
         composeTestRule.onNodeWithTag(
-            activity.getString(R.string.logbook_previous_month) + " " + currentMonth.getDisplayName(
-                TextStyle.FULL,
-                Locale.getDefault()
-            ) + " " + date.year
+            activity.getString(R.string.logbook_previous_month) +
+                    " " +
+                    currentMonth.month.getDisplayName(TextStyle.FULL, Locale.getDefault()) +
+                    " " +
+                    currentMonth.year
         ).performClick()
-        composeTestRule.onNodeWithText(
-            "${date.month.getDisplayName(TextStyle.FULL, Locale.getDefault())} ${date.year}"
-        )
+    }
+
+    private fun getButtonForDate(date: LocalDate): SemanticsNodeInteraction {
+        return composeTestRule.onNodeWithTag(date.toString())
     }
 
 }
