@@ -4,6 +4,8 @@ import androidx.activity.ComponentActivity
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.test.SemanticsNodeInteraction
+import androidx.compose.ui.test.assertIsOff
+import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
@@ -14,6 +16,8 @@ import com.willbsp.habits.HiltComponentActivity
 import com.willbsp.habits.R
 import com.willbsp.habits.data.TestData.habit1
 import com.willbsp.habits.data.TestData.habit2
+import com.willbsp.habits.data.TestData.habit3
+import com.willbsp.habits.data.model.Entry
 import com.willbsp.habits.data.repository.EntryRepository
 import com.willbsp.habits.data.repository.HabitRepository
 import com.willbsp.habits.domain.usecase.GetHabitsWithVirtualEntriesUseCase
@@ -24,7 +28,9 @@ import com.willbsp.habits.ui.screens.logbook.LogbookViewModel
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -139,6 +145,64 @@ class LogbookScreenTest {
                 .assertExists()
         }
 
+    }
+
+    @Test
+    fun toggleButtons_createEntries() = runTest {
+        habitRepository.upsertHabit(habit1)
+        habitRepository.upsertHabit(habit3)
+
+        composeTestRule.onNodeWithText(habit1.name).performClick()
+        getButtonForDate(date).performClick()
+        val entries1 = entryRepository.getAllEntriesStream(habit1.id).first()
+        assertEquals(date, entries1.first().date)
+
+        composeTestRule.onNodeWithText(habit3.name).performClick()
+        getButtonForDate(date.minusDays(5)).performClick()
+        val entries2 = entryRepository.getAllEntriesStream(habit3.id).first()
+        assertEquals(date.minusDays(5), entries2.first().date)
+
+    }
+
+    @Test
+    fun toggleButtons_removeEntries() = runTest {
+        habitRepository.upsertHabit(habit1)
+        habitRepository.upsertHabit(habit3)
+
+        entryRepository.toggleEntry(habit1.id, date)
+        val entries1 = entryRepository.getAllEntriesStream(habit1.id)
+        assertEquals(date, entries1.first().first().date)
+
+        entryRepository.toggleEntry(habit3.id, date.minusDays(5))
+        val entries2 = entryRepository.getAllEntriesStream(habit3.id)
+        assertEquals(date.minusDays(5), entries2.first().first().date)
+
+        composeTestRule.onNodeWithText(habit1.name).performClick()
+        getButtonForDate(date).performClick()
+        assertEquals(emptyList<Entry>(), entries1.first())
+
+        composeTestRule.onNodeWithText(habit3.name).performClick()
+        getButtonForDate(date.minusDays(5)).performClick()
+        assertEquals(emptyList<Entry>(), entries2.first())
+
+        assertEquals(emptyList<Entry>(), entryRepository.getAllEntriesStream().first())
+
+    }
+
+    @Test
+    fun habitSelected_showsCorrectEntries() = runTest {
+        habitRepository.upsertHabit(habit1)
+        entryRepository.toggleEntry(habit1.id, date)
+        habitRepository.upsertHabit(habit3)
+        entryRepository.toggleEntry(habit3.id, date.minusDays(5))
+
+        composeTestRule.onNodeWithText(habit1.name).performClick()
+        getButtonForDate(date).assertIsOn()
+        getButtonForDate(date.minusDays(5)).assertIsOff()
+
+        composeTestRule.onNodeWithText(habit3.name).performClick()
+        getButtonForDate(date).assertIsOff()
+        getButtonForDate(date.minusDays(5)).assertIsOn()
     }
 
     private fun nextMonth(currentMonth: Month) {
