@@ -34,7 +34,6 @@ class GetVirtualEntriesUseCaseTest {
         habitRepository.upsertHabit(habit)
         dates.forEach { date -> entryRepository.toggleEntry(habit.id, LocalDate.parse(date)) }
         val virtualEntries = getVirtualEntries(habit.id).first()
-        println(virtualEntries)
         val actualDates = virtualEntries.map { it.date.toString() }
             .sortedDescending()
         val expectedDates = getDatesInWeek(LocalDate.parse("2023-03-27"))
