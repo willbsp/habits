@@ -18,6 +18,7 @@ import com.willbsp.habits.data.TestData.habit1
 import com.willbsp.habits.data.TestData.habit2
 import com.willbsp.habits.data.TestData.habit3
 import com.willbsp.habits.data.TestData.habit4
+import com.willbsp.habits.data.model.Entry
 import com.willbsp.habits.data.repository.EntryRepository
 import com.willbsp.habits.data.repository.HabitRepository
 import com.willbsp.habits.data.repository.SettingsRepository
@@ -276,12 +277,33 @@ class HomeScreenTest {
     }
 
     @Test
+    fun toggleDate_removesEntry() = runTest {
+        composeTestRule.onNodeWithContentDescriptionId(R.string.home_show_completed).performClick()
+        habitRepository.upsertHabit(habit1)
+        entryRepository.toggleEntry(habit1.id, date)
+        assertEquals(date, entryRepository.getAllEntriesStream(habit1.id).first().first().date)
+        getDateToggle(habit1.name).performClick()
+        assertEquals(emptyList<Entry>(), entryRepository.getAllEntriesStream(habit1.id).first())
+    }
+
+    @Test
     fun toggleDateDuringWeek_createsEntry() = runTest {
         habitRepository.upsertHabit(habit1)
         composeTestRule.onNodeWithText(habit1.name).performClick()
         getDateToggle(habit1.name, date.minusDays(2)).performClick()
         val entries = entryRepository.getAllEntriesStream(habit1.id).first()
         assertEquals(date.minusDays(2), entries.first().date)
+    }
+
+    @Test
+    fun toggleDateDuringWeek_removesEntry() = runTest {
+        habitRepository.upsertHabit(habit1)
+        entryRepository.toggleEntry(habit1.id, date.minusDays(2))
+        val entries = entryRepository.getAllEntriesStream(habit1.id).first()
+        assertEquals(date.minusDays(2), entries.first().date)
+        composeTestRule.onNodeWithText(habit1.name).performClick()
+        getDateToggle(habit1.name, date.minusDays(2)).performClick()
+        assertEquals(emptyList<Entry>(), entryRepository.getAllEntriesStream(habit1.id).first())
     }
 
     private fun getDateToggle(
