@@ -153,7 +153,7 @@ fun LogbookMonth(
                         val currentDate = remember { weekday.plusWeeks(col.toLong()) }
                         if (currentDate.month == date.month) {
                             DateIconButton(
-                                modifier = Modifier.size(40.dp),
+                                modifier = Modifier.size(40.dp).testTag(currentDate.toString()),
                                 date = currentDate,
                                 checked = logbookUiState.completed.contains(currentDate),
                                 checkedSecondary = logbookUiState.completedByWeek.contains(
