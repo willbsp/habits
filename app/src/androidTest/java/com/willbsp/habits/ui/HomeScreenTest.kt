@@ -4,6 +4,7 @@ import androidx.activity.ComponentActivity
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.test.SemanticsNodeInteraction
+import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
@@ -125,6 +126,21 @@ class HomeScreenTest {
     fun habitExistsWeekly_showWeekTitle() = runTest {
         habitRepository.upsertHabit(habit2)
         composeTestRule.onNodeWithTextId(R.string.home_this_week).assertExists()
+    }
+
+    @Test
+    fun toggleButton_whenEntryExists_isOn() = runTest {
+        composeTestRule.onNodeWithContentDescriptionId(R.string.home_show_completed).performClick()
+        habitRepository.upsertHabit(habit1)
+        entryRepository.toggleEntry(habit1.id, date)
+        entryRepository.toggleEntry(habit1.id, date.minusDays(1))
+        entryRepository.toggleEntry(habit1.id, date.minusDays(2))
+        entryRepository.toggleEntry(habit1.id, date.minusDays(4))
+        getDateToggle(habit1.name).assertIsOn()
+        composeTestRule.onNodeWithText(habit1.name).performClick()
+        getDateToggle(habit1.name, date.minusDays(1)).assertIsOn()
+        getDateToggle(habit1.name, date.minusDays(2)).assertIsOn()
+        getDateToggle(habit1.name, date.minusDays(4)).assertIsOn()
     }
 
     @Test
