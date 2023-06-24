@@ -33,7 +33,9 @@ import com.willbsp.habits.ui.screens.home.HomeViewModel
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -263,6 +265,23 @@ class HomeScreenTest {
             .filterToOne(hasContentDescription(dateText))
             .performClick()
         composeTestRule.onNodeWithText("completed already", substring = true).assertDoesNotExist()
+    }
+
+    @Test
+    fun toggleDate_createsEntry() = runTest {
+        habitRepository.upsertHabit(habit1)
+        getDateToggle(habit1.name).performClick()
+        val entries = entryRepository.getAllEntriesStream(habit1.id).first()
+        assertEquals(date, entries.first().date)
+    }
+
+    @Test
+    fun toggleDateDuringWeek_createsEntry() = runTest {
+        habitRepository.upsertHabit(habit1)
+        composeTestRule.onNodeWithText(habit1.name).performClick()
+        getDateToggle(habit1.name, date.minusDays(2)).performClick()
+        val entries = entryRepository.getAllEntriesStream(habit1.id).first()
+        assertEquals(date.minusDays(2), entries.first().date)
     }
 
     private fun getDateToggle(
