@@ -105,7 +105,8 @@ fun LogbookMonth(
             IconButton(
                 onClick = {
                     scope.launch { pagerState.animateScrollToPage(pagerState.currentPage - 1) }
-                }
+                },
+                modifier = Modifier.testTag(stringResource(R.string.logbook_previous_month) + " $monthText")
             ) {
                 Icon(
                     imageVector = Icons.Default.ExpandLess,
@@ -121,7 +122,8 @@ fun LogbookMonth(
             IconButton(
                 onClick = {
                     scope.launch { pagerState.animateScrollToPage(pagerState.currentPage + 1) }
-                }
+                },
+                modifier = Modifier.testTag(stringResource(R.string.logbook_next_month) + " $monthText")
             ) {
                 Icon(
                     imageVector = Icons.Default.ExpandMore,
