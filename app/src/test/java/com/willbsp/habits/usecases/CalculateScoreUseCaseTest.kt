@@ -6,10 +6,10 @@ import com.willbsp.habits.domain.usecase.CalculateScoreUseCase
 import com.willbsp.habits.domain.usecase.GetVirtualEntriesUseCase
 import com.willbsp.habits.fake.repository.FakeEntryRepository
 import com.willbsp.habits.fake.repository.FakeHabitRepository
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Test
 import java.time.Clock
@@ -35,7 +35,6 @@ class CalculateScoreUseCaseTest {
         calculateScoreUseCase = CalculateScoreUseCase(getVirtualEntriesUseCase, clock)
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun calculateScore_onCalculateDaily_calculationCorrect() = runTest {
 
@@ -49,7 +48,6 @@ class CalculateScoreUseCaseTest {
 
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun calculateScore_onCalculationWeeklyCompleted_calculationCorrect() = runTest {
 
@@ -63,7 +61,6 @@ class CalculateScoreUseCaseTest {
 
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun calculateScore_onCalculationWeeklyCompleted_ignoresDatesAfterToday() = runTest {
 
@@ -79,7 +76,6 @@ class CalculateScoreUseCaseTest {
 
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun calculateScore_onCalculationWeeklyUncompleted_calculationCorrect() = runTest {
 
@@ -94,13 +90,11 @@ class CalculateScoreUseCaseTest {
 
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun calculateScore_whenNoEntries_returnNull() = runTest {
         assertNull(calculateScoreUseCase(2).first())
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun calculateScore_whenStartDateIsAfterToday_returnNull() = runTest {
         val clock = Clock.fixed(Instant.parse("2023-04-20$time"), ZoneOffset.UTC)
