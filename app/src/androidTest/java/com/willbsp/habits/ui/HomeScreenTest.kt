@@ -245,7 +245,9 @@ class HomeScreenTest {
             .onChildren()
             .filterToOne(hasContentDescription(dateText))
             .performClick()
-        composeTestRule.onNodeWithText("completed already", substring = true).assertExists()
+        composeTestRule.onNodeWithText(
+            activity.resources.getQuantityString(R.plurals.home_habit_list_subtitle, 1, 1)
+        ).assertExists()
     }
 
 
@@ -267,8 +269,9 @@ class HomeScreenTest {
             .onChildren()
             .filterToOne(hasContentDescription(dateText))
             .performClick()
-        composeTestRule.onNodeWithText("3 habits completed already", substring = true)
-            .assertExists()
+        composeTestRule.onNodeWithText(
+            activity.resources.getQuantityString(R.plurals.home_habit_list_subtitle, 3, 3)
+        ).assertExists()
     }
 
     @Test
