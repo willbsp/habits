@@ -63,7 +63,6 @@
     <string name="detail_started">Started</string>
     <string name="detail_total">Total</string>
     <string name="detail_every_day">Every day</string>
-    <string name="detail_times_per_week">3 times per week</string>
     <plurals name="detail_times_per_week">
         <item quantity="one">Once a week</item>
         <item quantity="two">Twice a week</item>
