@@ -138,11 +138,26 @@ class DetailScreenTest {
     }
 
     @Test
+    fun weeklyHabit_showsCorrectScore() = runTest {
+        init(habit4)
+        (entryRepository as FakeEntryRepository).populate2()
+        composeTestRule.onNodeWithText("24%").assertExists()
+    }
+
+    @Test
     fun dailyHabit_showsCorrectStreak() = runTest {
         init(habit3)
         (entryRepository as FakeEntryRepository).populate()
         composeTestRule.onNodeWithTextId(R.string.detail_streak)
             .onSiblings().filterToOne(hasText("5")).assertExists()
+    }
+
+    @Test
+    fun weeklyHabit_showsCorrectStreak() = runTest {
+        init(habit4)
+        (entryRepository as FakeEntryRepository).populate2()
+        composeTestRule.onNodeWithTextId(R.string.detail_streak)
+            .onSiblings().filterToOne(hasText("0")).assertExists()
     }
 
     @Test
@@ -154,11 +169,27 @@ class DetailScreenTest {
     }
 
     @Test
+    fun weeklyHabit_showsLongestStreak() = runTest {
+        init(habit4)
+        (entryRepository as FakeEntryRepository).populate2()
+        composeTestRule.onNodeWithTextId(R.string.detail_longest_streak)
+            .onSiblings().filterToOne(hasText("7")).assertExists()
+    }
+
+    @Test
     fun dailyHabit_showsCorrectTotal() = runTest {
         init(habit3)
         (entryRepository as FakeEntryRepository).populate()
         composeTestRule.onNodeWithTextId(R.string.detail_total)
             .onSiblings().filterToOne(hasText("11")).assertExists()
+    }
+
+    @Test
+    fun weeklyHabit_showsCorrectTotal() = runTest {
+        init(habit4)
+        (entryRepository as FakeEntryRepository).populate2()
+        composeTestRule.onNodeWithTextId(R.string.detail_total)
+            .onSiblings().filterToOne(hasText("3")).assertExists()
     }
 
     @Test
@@ -177,6 +208,36 @@ class DetailScreenTest {
                     }"
                 )
             ).assertExists()
+    }
+
+    @Test
+    fun weeklyHabit_showsCorrectStartDate() = runTest {
+        init(habit4)
+        val startDate = LocalDate.parse("2023-02-28")
+        (entryRepository as FakeEntryRepository).populate2()
+        composeTestRule.onNodeWithTextId(R.string.detail_started)
+            .onSiblings().filterToOne(
+                hasText(
+                    "${startDate.dayOfMonth} ${
+                        startDate.month.getDisplayName(
+                            TextStyle.SHORT,
+                            Locale.getDefault()
+                        )
+                    }"
+                )
+            ).assertExists()
+    }
+
+    @Test
+    fun habitNotStarted_initialValuesShown() = runTest {
+        init(habit1)
+        composeTestRule.onNodeWithTextId(R.string.detail_not_started).assertExists()
+        composeTestRule.onNodeWithTextId(R.string.detail_total)
+            .onSiblings().filterToOne(hasText("0")).assertExists()
+        composeTestRule.onNodeWithTextId(R.string.detail_streak)
+            .onSiblings().filterToOne(hasText("0")).assertExists()
+        composeTestRule.onNodeWithTextId(R.string.detail_longest_streak)
+            .onSiblings().filterToOne(hasText("0")).assertExists()
     }
 
 }
