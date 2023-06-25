@@ -22,7 +22,6 @@ class CalculateScoreUseCase @Inject constructor(
             val entries = list
                 .sortedByDescending { it.date }
                 .filter { !it.date.isAfter(LocalDate.now(clock)) }
-            println(entries.toString())
             if (entries.isEmpty())
                 return@map null
 
