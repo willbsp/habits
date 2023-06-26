@@ -13,6 +13,9 @@ import com.willbsp.habits.data.database.dao.EntryDao
 import com.willbsp.habits.data.database.dao.HabitDao
 import com.willbsp.habits.data.database.dao.HabitWithEntriesDao
 import com.willbsp.habits.data.model.HabitWithEntries
+import com.willbsp.habits.fake.dao.FakeEntryDao
+import com.willbsp.habits.fake.dao.FakeHabitDao
+import com.willbsp.habits.fake.dao.FakeHabitWithEntriesDao
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
@@ -25,15 +28,15 @@ import java.io.IOException
 
 @RunWith(AndroidJUnit4::class)
 @OptIn(ExperimentalCoroutinesApi::class)
-class HabitWithEntriesDaoTest {
+open class HabitWithEntriesDaoTest {
 
-    private lateinit var habitDao: HabitDao
-    private lateinit var entryDao: EntryDao
-    private lateinit var habitWithEntriesDao: HabitWithEntriesDao
+    lateinit var habitDao: HabitDao
+    lateinit var entryDao: EntryDao
+    lateinit var habitWithEntriesDao: HabitWithEntriesDao
     private lateinit var habitDatabase: HabitDatabase
 
     @Before
-    fun createDb() {
+    open fun createDb() {
         val context: Context = ApplicationProvider.getApplicationContext()
         habitDatabase = Room.inMemoryDatabaseBuilder(context, HabitDatabase::class.java).build()
         habitDao = habitDatabase.habitDao()
@@ -43,7 +46,7 @@ class HabitWithEntriesDaoTest {
 
     @After
     @Throws(IOException::class)
-    fun closeDb() {
+    open fun closeDb() {
         habitDatabase.close()
     }
 
@@ -83,6 +86,21 @@ class HabitWithEntriesDaoTest {
             ),
             habitWithEntriesDao.getHabitsWithEntries().first()
         )
+    }
+
+}
+
+class FakeHabitWithEntriesDaoTest : HabitWithEntriesDaoTest() {
+
+    @Before
+    override fun createDb() {
+        habitDao = FakeHabitDao()
+        entryDao = FakeEntryDao()
+        habitWithEntriesDao = FakeHabitWithEntriesDao(habitDao, entryDao)
+    }
+
+    @After
+    override fun closeDb() {
     }
 
 }
