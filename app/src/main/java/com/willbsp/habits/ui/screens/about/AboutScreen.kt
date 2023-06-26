@@ -69,9 +69,12 @@ fun AboutScreen(
                 style = Typography.titleLarge
             )
 
+            Spacer(Modifier.size(10.dp))
+
             Text(
-                text = "Version " + BuildConfig.VERSION_NAME + "\n"
-                        + stringResource(id = R.string.about_creator),
+                text = stringResource(R.string.about_version_text) + BuildConfig.VERSION_NAME + "\n"
+                        + stringResource(id = R.string.about_creator) + "\n"
+                        + stringResource(R.string.about_licence),
                 textAlign = TextAlign.Center,
                 style = Typography.titleMedium
             )

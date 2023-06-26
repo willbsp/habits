@@ -21,6 +21,7 @@
     <string name="modify_habit_name">Name</string>
     <string name="modify_habit_frequency">Frequency</string>
     <string name="modify_times_per_week">How many times per week?</string>
+    <string name="modify_frequency">Frequency</string>
     <!--modify habit screen end-->
 
     <!--home screen start-->
@@ -37,6 +38,8 @@
     </plurals>
     <string name="home_no_habits">Add a habit with the button below!</string>
     <string name="home_show_completed">Show completed</string>
+    <string name="home_logbook">Logbook</string>
+    <string name="home_detail">Detail</string>
     <!--home screen end-->
 
     <!--settings screen start-->
@@ -52,6 +55,8 @@
     <string name="logbook_title">Logbook</string>
     <string name="logbook_add_a_new_habit">Add a new habit</string>
     <string name="logbook_empty_text">You have no habits!</string>
+    <string name="logbook_previous_month">Previous month</string>
+    <string name="logbook_next_month">Next month</string>
     <!--logbook screen end-->
 
     <!--detail screen start-->
@@ -75,11 +80,8 @@
     <string name="about_creator">Will Spooner (@wilbsp)</string>
     <string name="about_view_source">View the source on Github</string>
     <string name="about_report_an_issue">Report an issue</string>
-    <string name="home_logbook">Logbook</string>
-    <string name="home_detail">Detail</string>
-    <string name="modify_frequency">Frequency</string>
-    <string name="logbook_previous_month">Previous month</string>
-    <string name="logbook_next_month">Next month</string>
+    <string name="about_version_text">"Version "</string>
+    <string name="about_licence">Licenced under GPLv3</string>
     <!--about screen end-->
 
 </resources>
