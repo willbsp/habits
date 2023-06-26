@@ -23,6 +23,7 @@ import org.junit.runner.RunWith
 import java.io.IOException
 
 @RunWith(AndroidJUnit4::class)
+@OptIn(ExperimentalCoroutinesApi::class)
 class EntryDaoTest {
 
     private lateinit var entryDao: EntryDao
@@ -43,13 +44,11 @@ class EntryDaoTest {
         habitDatabase.close()
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun getAllEntries_whenNoEntries_returnsEmptyList() = runTest {
         assertEquals(listOf<Entry>(), entryDao.getAllEntries().first())
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun getAllEntries_whenEntries_returnsEntries() = runTest {
         habitDao.upsert(habit2)
@@ -60,13 +59,11 @@ class EntryDaoTest {
         assertEquals(listOf(entry2, entry3), entryDao.getAllEntries().first())
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun getEntriesForHabit_whenNoEntries_returnsEmptyList() = runTest {
         assertEquals(listOf<Entry>(), entryDao.getEntriesForHabit(habit2.id).first())
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun getEntriesForHabit_whenEntries_returnsEntries() = runTest {
         habitDao.upsert(habit2)
@@ -74,13 +71,11 @@ class EntryDaoTest {
         assertEquals(listOf(entry2), entryDao.getEntriesForHabit(habit2.id).first())
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun getEntryForDate_whenNoEntryExists_returnNull() = runTest {
         assertNull(entryDao.getEntryForDate(habit2.id, entry2.date))
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun getEntryForDate_whenEntryExists_returnEntry() = runTest {
         habitDao.upsert(habit2)
@@ -88,13 +83,11 @@ class EntryDaoTest {
         assertEquals(entry2, entryDao.getEntryForDate(habit2.id, entry2.date))
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun getOldestEntry_whenNoEntries_returnNull() = runTest {
         assertNull(entryDao.getOldestEntry(habit2.id))
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun getOldestEntry_whenEntries_returnsOldest() = runTest {
         habitDao.upsert(habit2)
@@ -105,7 +98,6 @@ class EntryDaoTest {
         assertEquals(expected, entryDao.getOldestEntry(habit2.id))
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun insert_whenEntryInserted_addedToDb() = runTest {
         habitDao.upsert(habit2)
@@ -113,7 +105,6 @@ class EntryDaoTest {
         assertEquals(entry2, entryDao.getEntryForDate(entry2.habitId, entry2.date))
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun delete_whenEntryDeleted_removedFromDb() = runTest {
         habitDao.upsert(habit2)

@@ -21,6 +21,7 @@ import org.junit.runner.RunWith
 import java.io.IOException
 
 @RunWith(AndroidJUnit4::class)
+@OptIn(ExperimentalCoroutinesApi::class)
 class HabitDaoTest {
 
     private lateinit var habitDao: HabitDao
@@ -41,13 +42,11 @@ class HabitDaoTest {
         habitDatabase.close()
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun getAllHabitsStream_whenNoHabits_returnEmptyList() = runTest {
         assertEquals(listOf<Habit>(), habitDao.getAllHabitsStream().first())
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun getAllHabitsStream_whenHabits_returnHabits() = runTest {
         habitDao.upsert(habit2)
@@ -56,20 +55,17 @@ class HabitDaoTest {
         assertEquals(listOf(habit2, habit3), habitDao.getAllHabitsStream().first())
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun getHabitStream_whenNoHabit_returnNull() = runTest {
         assertNull(habitDao.getHabitStream(habit2.id).first())
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun getHabitStream_whenHabitExists_returnHabit() = runTest {
         habitDao.upsert(habit2)
         assertEquals(habit2, habitDao.getHabitStream(habit2.id).first())
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun getHabitStream_whenHabitAdded_returnHabit() = runTest {
         assertNull(habitDao.getHabitStream(habit2.id).first())
@@ -77,27 +73,23 @@ class HabitDaoTest {
         assertEquals(habit2, habitDao.getHabitStream(habit2.id).first())
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun getHabit_whenNoHabit_returnNull() = runTest {
         assertNull(habitDao.getHabit(habit2.id))
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun getHabit_whenHabitExists_returnHabit() = runTest {
         habitDao.upsert(habit2)
         assertEquals(habit2, habitDao.getHabit(habit2.id))
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun upsert_whenInserted_insertHabitInDb() = runTest {
         habitDao.upsert(habit2)
         assertEquals(habit2, habitDao.getHabit(habit2.id))
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun upsert_whenUpdated_updateHabitInDb() = runTest {
         habitDao.upsert(habit2)
@@ -107,7 +99,6 @@ class HabitDaoTest {
         assertEquals(expected, habitDao.getHabit(habit2.id))
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun delete_whenDeleted_removeHabitInDb() = runTest {
         habitDao.upsert(habit2)

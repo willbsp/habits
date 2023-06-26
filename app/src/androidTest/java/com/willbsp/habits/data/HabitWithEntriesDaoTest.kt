@@ -24,6 +24,7 @@ import org.junit.runner.RunWith
 import java.io.IOException
 
 @RunWith(AndroidJUnit4::class)
+@OptIn(ExperimentalCoroutinesApi::class)
 class HabitWithEntriesDaoTest {
 
     private lateinit var habitDao: HabitDao
@@ -46,13 +47,11 @@ class HabitWithEntriesDaoTest {
         habitDatabase.close()
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun getHabitsWithEntries_whenNoHabits_returnEmptyList() = runTest {
         assertEquals(listOf<HabitWithEntries>(), habitWithEntriesDao.getHabitsWithEntries().first())
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun getHabitsWithEntries_whenHabits_returnHabitsList() = runTest {
         habitDao.upsert(habit2)
@@ -67,7 +66,6 @@ class HabitWithEntriesDaoTest {
         )
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun getHabitsWithEntries_whenHabitsAndEntries_returnHabitsWithEntriesList() = runTest {
         habitDao.upsert(habit2)
