@@ -7,7 +7,6 @@ import com.willbsp.habits.data.repository.EntryRepository
 import com.willbsp.habits.data.repository.local.LocalEntryRepository
 import com.willbsp.habits.fake.dao.FakeEntryDao
 import com.willbsp.habits.fake.repository.FakeEntryRepository
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.*
@@ -42,12 +41,12 @@ class EntryRepositoryTest(
         when (repositoryClass) {
             LocalEntryRepository::class ->
                 repository = LocalEntryRepository(FakeEntryDao())
+
             FakeEntryRepository::class ->
                 repository = FakeEntryRepository()
         }
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun getAllEntriesStream_whenEntriesAdded_returnsEntries() = runTest {
         val entryStream = repository.getAllEntriesStream()
@@ -57,14 +56,12 @@ class EntryRepositoryTest(
         assertNotNull(entryStream.first().find { it.habitId == habit2.id && it.date == date })
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun getAllEntriesStream_whenNoEntries_returnEmptyList() = runTest {
         val entryStream = repository.getAllEntriesStream()
         assertEquals(listOf<Entry>(), entryStream.first())
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun getAllEntriesStream_whenEntriesForHabitAdded_returnEntries() = runTest {
         val entryStream = repository.getAllEntriesStream(habit1.id)
@@ -73,7 +70,6 @@ class EntryRepositoryTest(
         assertTrue(entryStream.first().all { it.date == date && it.habitId == habit1.id })
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun getAllEntriesStream_whenEntriesForHabitRemoved_returnEmpty() = runTest {
         val entryStream = repository.getAllEntriesStream(habit1.id)
@@ -83,20 +79,17 @@ class EntryRepositoryTest(
         assertEquals(listOf<Entry>(), entryStream.first())
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun getEntry_whenEntryExists_returnEntry() = runTest {
         repository.toggleEntry(habit1.id, date)
         assertNotNull(repository.getEntry(date, habit1.id))
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun getEntry_whenEntryDoesNotExist_returnNull() = runTest {
         assertNull(repository.getEntry(date, habit1.id))
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun getOldestEntry_whenEntriesExist_returnOldest() = runTest {
         repository.toggleEntry(habit1.id, date)
@@ -106,13 +99,11 @@ class EntryRepositoryTest(
         assertEquals(date.minusDays(10f.toLong()), repository.getOldestEntry(habit1.id)?.date)
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun getOldestEntry_whenNoEntriesExist_returnNull() = runTest {
         assertNull(repository.getOldestEntry(habit1.id))
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun toggleEntry_whenNoEntryExists_addEntry() = runTest {
         assertNull(repository.getEntry(date, habit1.id))
@@ -120,7 +111,6 @@ class EntryRepositoryTest(
         assertEquals(date, repository.getEntry(date, habit1.id)?.date)
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun toggleEntry_whenEntryExists_removeEntry() = runTest {
         repository.toggleEntry(habit1.id, date)

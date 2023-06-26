@@ -13,6 +13,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class SettingsViewModelTest {
 
     @get:Rule
@@ -26,7 +27,6 @@ class SettingsViewModelTest {
         viewModel = SettingsViewModel(settingsRepository)
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun uiState_whenShowStreaks_thenTrue() = runTest {
         val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
@@ -35,7 +35,6 @@ class SettingsViewModelTest {
         collectJob.cancel()
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun uiState_whenNotShowStreaks_thenFalse() = runTest {
         val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
@@ -44,7 +43,6 @@ class SettingsViewModelTest {
         collectJob.cancel()
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun uiState_whenStreaksPreferenceDoesNotExist_thenTrue() = runTest {
         val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
@@ -52,7 +50,6 @@ class SettingsViewModelTest {
         collectJob.cancel()
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun uiState_whenShowSubtitle_thenTrue() = runTest {
         val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
@@ -61,7 +58,6 @@ class SettingsViewModelTest {
         collectJob.cancel()
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun uiState_whenNotShowSubtitle_thenFalse() = runTest {
         val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
@@ -70,7 +66,6 @@ class SettingsViewModelTest {
         collectJob.cancel()
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun uiState_whenSubtitlePreferenceDoesNotExist_thenTrue() = runTest {
         val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
@@ -78,7 +73,6 @@ class SettingsViewModelTest {
         collectJob.cancel()
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun saveStreaksPreference_whenSaved_thenUpdateUiState() = runTest {
         val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
@@ -88,7 +82,6 @@ class SettingsViewModelTest {
         collectJob.cancel()
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun saveSubtitlePreference_whenSaved_thenUpdateUiState() = runTest {
         val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }

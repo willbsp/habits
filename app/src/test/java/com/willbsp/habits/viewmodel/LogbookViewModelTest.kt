@@ -28,6 +28,7 @@ import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneOffset
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class LogbookViewModelTest {
 
     @get:Rule
@@ -49,7 +50,6 @@ class LogbookViewModelTest {
         viewModel = LogbookViewModel(habitRepository, entryRepository, clock, getVirtualEntries)
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun uiState_whenEmpty_thenNoHabitsState() = runTest {
         val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
@@ -57,7 +57,6 @@ class LogbookViewModelTest {
         collectJob.cancel()
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun uiState_whenInitialised_getFirstHabitAndSetSelectedHabitId() = runTest {
         habitRepository.upsertHabit(habit2)
@@ -69,7 +68,6 @@ class LogbookViewModelTest {
         collectJob.cancel()
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun uiState_whenInitialised_getFirstHabitAndLoadEntries() = runTest {
         habitRepository.upsertHabit(habit2)
@@ -83,7 +81,6 @@ class LogbookViewModelTest {
         collectJob.cancel()
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun uiState_whenHabitSelected_thenLoadHabits() = runTest {
         habitRepository.upsertHabit(habit2)
@@ -96,7 +93,6 @@ class LogbookViewModelTest {
         collectJob.cancel()
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun uiState_whenCompletedByWeek_thenLoadCompletedByWeekDates() = runTest {
         habitRepository.upsertHabit(habit4)
@@ -111,7 +107,6 @@ class LogbookViewModelTest {
         collectJob.cancel()
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun uiState_whenNotCompletedByWeek_thenLoadCompletedDates() = runTest {
         habitRepository.upsertHabit(habit4)
@@ -125,7 +120,6 @@ class LogbookViewModelTest {
         collectJob.cancel()
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun setSelectedHabit_whenSelectedHabitChanges_thenLoadNewEntries() = runTest {
         habitRepository.upsertHabit(habit1)
@@ -141,7 +135,6 @@ class LogbookViewModelTest {
         collectJob.cancel()
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun toggleEntry_whenDateToggled_thenModifyState() = runTest {
         habitRepository.upsertHabit(habit1)

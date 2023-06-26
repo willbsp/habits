@@ -13,6 +13,7 @@ import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class SaveHabitUseCaseTest {
 
     private lateinit var habitRepository: FakeHabitRepository
@@ -24,7 +25,6 @@ class SaveHabitUseCaseTest {
         saveHabitUseCase = SaveHabitUseCase(habitRepository)
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun saveHabit_validHabit_addNewHabit() = runTest {
         assertTrue(saveHabitUseCase(habit1, this))
@@ -32,7 +32,6 @@ class SaveHabitUseCaseTest {
         assertEquals(habit1, habitRepository.getHabit(habit1.id))
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun saveHabit_validHabit_updatesHabit() = runTest {
         habitRepository.upsertHabit(habit1)
@@ -42,7 +41,6 @@ class SaveHabitUseCaseTest {
         assertEquals(updatedHabit, habitRepository.getAllHabitsStream().first().first())
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun saveHabit_invalidHabit_noHabitAdded() = runTest {
         val invalid1 =

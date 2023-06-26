@@ -8,7 +8,6 @@ import com.willbsp.habits.fake.repository.FakeHabitRepository
 import com.willbsp.habits.rules.TestDispatcherRule
 import com.willbsp.habits.ui.common.HabitUiState
 import com.willbsp.habits.ui.screens.edit.EditHabitViewModel
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
@@ -88,7 +87,6 @@ class EditHabitViewModelTest {
         assertFalse(habitRepository.habits.any { it.name == uiState.name })
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun deleteHabit_whenHabitDeleted_deleteHabit() = runTest {
         assertNotNull(habitRepository.getHabit(habit1.id))

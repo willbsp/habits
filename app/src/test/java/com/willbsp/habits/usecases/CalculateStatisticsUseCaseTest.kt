@@ -3,7 +3,6 @@ package com.willbsp.habits.usecases
 import com.willbsp.habits.data.TestData.entry3
 import com.willbsp.habits.domain.usecase.CalculateStatisticsUseCase
 import com.willbsp.habits.fake.repository.FakeEntryRepository
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
@@ -23,7 +22,6 @@ class CalculateStatisticsUseCaseTest {
         calculateStatisticsUseCase = CalculateStatisticsUseCase(fakeEntryRepository)
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun calculateStatistics_whenTotal_calculateTotal() = runTest {
         val expected = 11
@@ -32,14 +30,12 @@ class CalculateStatisticsUseCaseTest {
         assertEquals(expected, total)
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun calculateStatistics_whenNoEntries_totalIsZero() = runTest {
         val total = calculateStatisticsUseCase(entry3.habitId).first().total
         assertEquals(0, total)
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun calculateStatistics_whenEntries_returnOldest() = runTest {
         fakeEntryRepository.populate()
@@ -47,7 +43,6 @@ class CalculateStatisticsUseCaseTest {
         assertEquals(LocalDate.parse("2023-02-11"), started)
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun calculateStatistics_whenNoEntries_returnNull() = runTest {
         val started = calculateStatisticsUseCase(entry3.habitId).first().started

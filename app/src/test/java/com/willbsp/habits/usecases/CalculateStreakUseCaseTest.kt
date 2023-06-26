@@ -7,10 +7,10 @@ import com.willbsp.habits.domain.usecase.CalculateStreakUseCase
 import com.willbsp.habits.domain.usecase.GetVirtualEntriesUseCase
 import com.willbsp.habits.fake.repository.FakeEntryRepository
 import com.willbsp.habits.fake.repository.FakeHabitRepository
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import java.time.Clock
@@ -37,7 +37,6 @@ class CalculateStreakUseCaseTest {
         calculateStreakUseCase = CalculateStreakUseCase(getVirtualEntriesUseCase, clock)
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun calculateStreak_whenStreak_streakCalculated() = runTest {
         val correctStreak = 5
@@ -47,7 +46,6 @@ class CalculateStreakUseCaseTest {
         assertEquals(correctStreak, streak.first().length)
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun calculateStreak_whenMultipleStreaks_streaksCalculated() = runTest {
         val correctStreaks = listOf(
@@ -61,7 +59,6 @@ class CalculateStreakUseCaseTest {
         assertEquals(correctStreaks, streaks.first())
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun calculateStreak_whenWeeklyHabitCompleted_streaksCalculated() = runTest {
         val correctStreaks = listOf(
@@ -73,7 +70,6 @@ class CalculateStreakUseCaseTest {
         assertEquals(correctStreaks, streaks.first())
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun calculateStreak_whenWeeklyHabitCompleted_ignoresDatesAfterToday() = runTest {
         val correctStreaks = listOf(
@@ -87,7 +83,6 @@ class CalculateStreakUseCaseTest {
         assertEquals(correctStreaks, streaks.first())
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun calculateStreak_whenWeeklyHabitUncompleted_streaksCalculated() = runTest {
         val correctStreaks = listOf(
@@ -99,7 +94,6 @@ class CalculateStreakUseCaseTest {
         assertEquals(correctStreaks, streaks.first())
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun calculateStreak_whenNoStreak_returnEmptyList() = runTest {
         habitRepository.upsertHabit(habit3)
@@ -109,7 +103,6 @@ class CalculateStreakUseCaseTest {
         assertTrue(calculateStreakUseCase(habit3.id).first().isEmpty())
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun calculateStreak_whenEmptyList_returnEmptyList() = runTest {
         assertTrue(calculateStreakUseCase(habit3.id).first().isEmpty())

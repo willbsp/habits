@@ -8,7 +8,6 @@ import com.willbsp.habits.data.repository.HabitRepository
 import com.willbsp.habits.data.repository.local.LocalHabitRepository
 import com.willbsp.habits.fake.dao.FakeHabitDao
 import com.willbsp.habits.fake.repository.FakeHabitRepository
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.*
@@ -47,7 +46,6 @@ class HabitRepositoryTest(
         }
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun getAllHabitsStream_whenHabitsAdded_returnsHabits() = runTest {
         val habitsStream = repository.getAllHabitsStream()
@@ -57,7 +55,6 @@ class HabitRepositoryTest(
         assertEquals(listOf(habit1, habit2), habitsStream.first())
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun getAllHabitsStream_whenHabitsDeleted_returnsEmptyList() = runTest {
         val habitsStream = repository.getAllHabitsStream()
@@ -69,7 +66,6 @@ class HabitRepositoryTest(
         assertEquals(listOf<Habit>(), habitsStream.first())
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun getHabitStream_whenHabitUpdated_returnUpdatedHabit() = runTest {
         val habitStream = repository.getHabitStream(habit1.id)
@@ -80,7 +76,6 @@ class HabitRepositoryTest(
         assertEquals(newHabit, habitStream.first())
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun getHabitStream_whenHabitDeleted_returnNull() = runTest {
         val habitStream = repository.getHabitStream(habit1.id)
@@ -90,7 +85,6 @@ class HabitRepositoryTest(
         assertNull(habitStream.first())
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun getHabit_whenExists_returnsHabit() = runTest {
         repository.upsertHabit(habit1)
@@ -98,7 +92,6 @@ class HabitRepositoryTest(
         assertEquals(habit1, habit)
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun getHabit_whenNoHabit_returnsNull() = runTest {
         assertNull(repository.getHabit(habit1.id))
@@ -107,14 +100,12 @@ class HabitRepositoryTest(
         assertNull(repository.getHabit(habit1.id))
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun addHabit_whenHabitAdded_habitExists() = runTest {
         repository.upsertHabit(habit1)
         assertEquals(habit1, repository.getHabit(habit1.id))
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun updateHabit_whenHabitUpdated_habitUpdates() = runTest {
         repository.upsertHabit(habit1)
@@ -123,7 +114,6 @@ class HabitRepositoryTest(
         assertEquals(newHabit, repository.getHabit(newHabit.id))
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun deleteHabit_whenHabitDeleted_isNull() = runTest {
         repository.upsertHabit(habit1)

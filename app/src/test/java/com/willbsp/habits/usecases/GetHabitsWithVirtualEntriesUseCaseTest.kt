@@ -6,10 +6,10 @@ import com.willbsp.habits.domain.usecase.GetHabitsWithVirtualEntriesUseCase
 import com.willbsp.habits.domain.usecase.GetVirtualEntriesUseCase
 import com.willbsp.habits.fake.repository.FakeEntryRepository
 import com.willbsp.habits.fake.repository.FakeHabitRepository
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import java.time.LocalDate
@@ -30,7 +30,6 @@ class GetHabitsWithVirtualEntriesUseCaseTest {
             GetHabitsWithVirtualEntriesUseCase(habitRepository, getVirtualEntriesUseCase)
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun getVirtualEntries_whenHabitExists_returnsHabit() = runTest {
         val habit = Habit(id = 3, name = "test", frequency = HabitFrequency.WEEKLY, repeat = 3)
@@ -39,7 +38,6 @@ class GetHabitsWithVirtualEntriesUseCaseTest {
         assertTrue(habitsWithVirtualEntries.any { it.habit == habit })
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun getVirtualEntries_whenWeekCompleted_returnsAllEntriesForWeek() = runTest {
         val habit = Habit(id = 3, name = "test", frequency = HabitFrequency.WEEKLY, repeat = 3)
@@ -55,7 +53,6 @@ class GetHabitsWithVirtualEntriesUseCaseTest {
         assertEquals(expectedDates, actualDates)
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun getVirtualEntries_whenWeekCompleted_virtualEntriesIdIsNull() = runTest {
         val habit = Habit(id = 3, name = "test", frequency = HabitFrequency.WEEKLY, repeat = 3)
@@ -67,7 +64,6 @@ class GetHabitsWithVirtualEntriesUseCaseTest {
         assertTrue(actualDates.all { it.id == null })
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun getVirtualEntries_whenWeekCompleted_entriesIdsExist() = runTest {
         val habit = Habit(id = 3, name = "test", frequency = HabitFrequency.WEEKLY, repeat = 3)
@@ -79,7 +75,6 @@ class GetHabitsWithVirtualEntriesUseCaseTest {
         assertTrue(actualDates.all { it.id != null })
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun getVirtualEntries_whenWeekUncompleted_returnsOnlyActualEntries() = runTest {
         val habit = Habit(id = 3, name = "test", frequency = HabitFrequency.WEEKLY, repeat = 4)
@@ -92,7 +87,6 @@ class GetHabitsWithVirtualEntriesUseCaseTest {
     }
 
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun getVirtualEntries_whenMultipleWeekUncompleted_returnsOnlyActualEntries() = runTest {
         val habit = Habit(id = 3, name = "test", frequency = HabitFrequency.WEEKLY, repeat = 4)
@@ -111,7 +105,6 @@ class GetHabitsWithVirtualEntriesUseCaseTest {
         assertEquals(dates, actualDates)
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun getVirtualEntries_whenMultipleWeekCompleted_returnsAllEntriesForWeeks() = runTest {
         val habit = Habit(id = 3, name = "test", frequency = HabitFrequency.WEEKLY, repeat = 3)
@@ -138,7 +131,6 @@ class GetHabitsWithVirtualEntriesUseCaseTest {
         assertEquals(expectedDates, actualDates)
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun getVirtualEntries_whenMultipleWeekCompleted_virtualEntriesIdIsNull() = runTest {
         val habit = Habit(id = 3, name = "test", frequency = HabitFrequency.WEEKLY, repeat = 3)
@@ -157,7 +149,6 @@ class GetHabitsWithVirtualEntriesUseCaseTest {
         assertTrue(actualDates.all { it.id == null })
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun getVirtualEntries_whenMultipleWeekCompleted_entriesIdsExist() = runTest {
         val habit = Habit(id = 3, name = "test", frequency = HabitFrequency.WEEKLY, repeat = 3)

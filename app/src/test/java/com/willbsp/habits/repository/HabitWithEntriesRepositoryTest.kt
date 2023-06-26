@@ -11,7 +11,6 @@ import com.willbsp.habits.fake.dao.FakeEntryDao
 import com.willbsp.habits.fake.dao.FakeHabitDao
 import com.willbsp.habits.fake.dao.FakeHabitWithEntriesDao
 import com.willbsp.habits.fake.repository.FakeHabitWithEntriesRepository
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.*
@@ -56,13 +55,11 @@ class HabitWithEntriesRepositoryTest(
         }
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun getHabitsWithEntries_whenNoHabits_returnEmptyList() = runTest {
         assertEquals(listOf<HabitWithEntries>(), repository.getHabitsWithEntries().first())
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun getHabitsWithEntries_whenHabitsButNoEntries_returnHabitsAndEmptyList() = runTest {
         habitDao.upsert(habit1)
@@ -73,7 +70,6 @@ class HabitWithEntriesRepositoryTest(
         )
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun getHabitsWithEntries_whenHabitsAndEntries_returnHabitsAndEntries() = runTest {
         val entry = Entry(id = 0, habitId = habit1.id, date)
