@@ -10,6 +10,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.willbsp.habits.R
 import com.willbsp.habits.ui.common.DefaultHabitsAppTopBar
@@ -51,8 +52,8 @@ fun LogbookScreen(
 
                     LogbookDatePicker(
                         modifier = Modifier
-                            .weight(1f, true)
-                            .padding(horizontal = 20.dp),
+                            .fillMaxSize()
+                            .weight(1f, true),
                         logbookUiState = logbookUiState,
                         dateOnClick = completedOnClick
                     )
@@ -93,22 +94,36 @@ fun LogbookScreen(
     }
 }
 
-/*@Preview
+@Preview
 @Composable
 fun LogbookPreview() {
-    Logbook(
+    LogbookScreen(
         navigateUp = {},
         logbookUiState = LogbookUiState.SelectedHabit(
-            1,
+            habitId = 1,
+            todaysDate = LocalDate.of(2023, 6, 27),
+            listOf(LocalDate.of(2023, 6, 23), LocalDate.of(2023, 6, 20)),
             listOf(),
-            listOf(
-                LogbookUiState.Habit(id = 0, name = "Running"),
-                LogbookUiState.Habit(id = 1, name = "Flashcards"),
-                LogbookUiState.Habit(id = 2, name = "Reading"),
-                LogbookUiState.Habit(id = 3, name = "Meditation"),
-            )
+            listOf(LogbookUiState.Habit(3, "gaming"), LogbookUiState.Habit(4, "epic"))
         ),
         completedOnClick = { },
         habitOnClick = { }
     )
-}*/
+}
+
+@Preview(widthDp = 320, heightDp = 640)
+@Composable
+fun LogbookPreviewSmall() {
+    LogbookScreen(
+        navigateUp = {},
+        logbookUiState = LogbookUiState.SelectedHabit(
+            habitId = 1,
+            todaysDate = LocalDate.of(2023, 6, 27),
+            listOf(LocalDate.of(2023, 6, 23), LocalDate.of(2023, 6, 20)),
+            listOf(),
+            listOf(LogbookUiState.Habit(3, "gaming"), LogbookUiState.Habit(4, "epic"))
+        ),
+        completedOnClick = { },
+        habitOnClick = { }
+    )
+}

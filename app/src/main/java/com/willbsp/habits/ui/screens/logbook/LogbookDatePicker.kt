@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -69,7 +70,8 @@ fun LogbookDatePicker(
                         ((pagerState.currentPage - it) + pagerState.currentPageOffsetFraction).absoluteValue
                     val fraction = 1f - pageOffset.coerceIn(0f, 1f)
                     alpha = lerp(start = 0f, stop = 1f, fraction = fraction)
-                },
+                }
+                .fillMaxWidth(),
             date = date,
             logbookUiState = logbookUiState,
             dateOnClick = dateOnClick,
@@ -93,7 +95,7 @@ fun LogbookMonth(
     val scope = rememberCoroutineScope()
     val today = remember { logbookUiState.todaysDate }
 
-    Column(modifier.width(350.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+    Column(modifier, horizontalAlignment = Alignment.CenterHorizontally) {
 
         val monthText = remember {
             "${date.month.getDisplayName(TextStyle.FULL, Locale.getDefault())} ${date.year}"
@@ -135,12 +137,12 @@ fun LogbookMonth(
         Spacer(modifier = Modifier.height(30.dp))
 
         Row(
-            modifier = Modifier,
-            horizontalArrangement = Arrangement.spacedBy(10.dp)
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             repeat(7) { row ->
                 val weekday = remember { startDate.plusDays(row.toLong()) }
-                Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                Column(Modifier.height(350.dp), verticalArrangement = Arrangement.SpaceEvenly) {
                     Text(
                         modifier = Modifier.width(40.dp),
                         text = weekday.dayOfWeek.getDisplayName(
@@ -153,7 +155,9 @@ fun LogbookMonth(
                         val currentDate = remember { weekday.plusWeeks(col.toLong()) }
                         if (currentDate.month == date.month) {
                             DateIconButton(
-                                modifier = Modifier.size(40.dp).testTag(currentDate.toString()),
+                                modifier = Modifier
+                                    .size(40.dp)
+                                    .testTag(currentDate.toString()),
                                 date = currentDate,
                                 checked = logbookUiState.completed.contains(currentDate),
                                 checkedSecondary = logbookUiState.completedByWeek.contains(
