@@ -3,11 +3,28 @@ package com.willbsp.habits.ui.screens.detail
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material3.*
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedCard
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -16,6 +33,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.StrokeCap
@@ -30,6 +48,7 @@ import com.willbsp.habits.data.model.HabitFrequency
 import com.willbsp.habits.ui.common.DefaultHabitsAppTopBar
 import com.willbsp.habits.ui.theme.HabitsTheme
 import com.willbsp.habits.ui.theme.Typography
+import java.time.LocalDate
 import java.time.format.TextStyle
 import java.util.Locale
 
@@ -71,85 +90,98 @@ fun DetailScreen(
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
 
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(5.dp)
-            ) {
-                Icon(imageVector = Icons.Default.CalendarToday, contentDescription = "")
-                if (detailUiState.type == HabitFrequency.DAILY)
-                    Text(stringResource(R.string.detail_every_day))
-                else if (detailUiState.type == HabitFrequency.WEEKLY)
-                    Text(
-                        text = pluralStringResource(
-                            id = R.plurals.detail_times_per_week,
-                            count = detailUiState.repeat,
-                            detailUiState.repeat
-                        )
-                    )
-            }
+            LazyColumn {
+                item {
 
-            CircularDetailScoreCard(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(300.dp),
-                score = detailUiState.score.toFloat()
-            )
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f),
-                horizontalArrangement = Arrangement.SpaceEvenly
-            ) {
-
-                DetailCard(
-                    modifier = modifier.weight(1f),
-                    title = stringResource(R.string.detail_streak),
-                    value = detailUiState.streak.toString()
-                )
-
-                Spacer(modifier.width(20.dp))
-
-                DetailCard(
-                    modifier = modifier.weight(1f),
-                    title = stringResource(R.string.detail_longest_streak),
-                    value = detailUiState.longestStreak.toString()
-                )
-
-            }
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f),
-                horizontalArrangement = Arrangement.SpaceEvenly
-            ) {
-
-                val startedDate =
-                    if (detailUiState.started == null) stringResource(R.string.detail_not_started)
-                    else {
-                        "${detailUiState.started.dayOfMonth} ${
-                            detailUiState.started.month.getDisplayName(
-                                TextStyle.SHORT,
-                                Locale.getDefault()
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(5.dp)
+                    ) {
+                        Icon(imageVector = Icons.Default.CalendarToday, contentDescription = "")
+                        if (detailUiState.type == HabitFrequency.DAILY)
+                            Text(stringResource(R.string.detail_every_day))
+                        else if (detailUiState.type == HabitFrequency.WEEKLY)
+                            Text(
+                                text = pluralStringResource(
+                                    id = R.plurals.detail_times_per_week,
+                                    count = detailUiState.repeat,
+                                    detailUiState.repeat
+                                )
                             )
-                        }"
                     }
 
-                DetailCard(
-                    modifier = modifier.weight(1f),
-                    title = stringResource(R.string.detail_started),
-                    value = startedDate
-                )
+                    Spacer(modifier.height(10.dp))
 
-                Spacer(modifier.width(20.dp))
+                    CircularDetailScoreCard(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(300.dp),
+                        score = detailUiState.score.toFloat()
+                    )
 
-                DetailCard(
-                    modifier = modifier.weight(1f),
-                    title = stringResource(R.string.detail_total),
-                    value = detailUiState.total.toString()
-                )
+                    Spacer(modifier.height(10.dp))
 
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f),
+                        horizontalArrangement = Arrangement.SpaceEvenly
+                    ) {
+
+                        DetailCard(
+                            modifier = modifier
+                                .weight(1f),
+                            title = stringResource(R.string.detail_streak),
+                            value = detailUiState.streak.toString()
+                        )
+
+                        Spacer(modifier.width(10.dp))
+
+                        DetailCard(
+                            modifier = modifier
+                                .weight(1f),
+                            title = stringResource(R.string.detail_longest_streak),
+                            value = detailUiState.longestStreak.toString()
+                        )
+
+                    }
+
+                    Spacer(modifier.height(10.dp))
+
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f),
+                        horizontalArrangement = Arrangement.SpaceEvenly
+                    ) {
+
+                        val startedDate =
+                            if (detailUiState.started == null) stringResource(R.string.detail_not_started)
+                            else {
+                                "${detailUiState.started.dayOfMonth} ${
+                                    detailUiState.started.month.getDisplayName(
+                                        TextStyle.SHORT_STANDALONE,
+                                        Locale.getDefault()
+                                    )
+                                }"
+                            }
+
+                        DetailCard(
+                            modifier = modifier.weight(1f),
+                            title = stringResource(R.string.detail_started),
+                            value = startedDate
+                        )
+
+                        Spacer(modifier.width(10.dp))
+
+                        DetailCard(
+                            modifier = modifier.weight(1f),
+                            title = stringResource(R.string.detail_total),
+                            value = detailUiState.total.toString()
+                        )
+
+                    }
+                }
             }
 
 
@@ -264,25 +296,51 @@ fun DetailCard(
     OutlinedCard(
         modifier = modifier,
     ) {
-        Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center) {
+        Column(
+            modifier = Modifier
+                .background(MaterialTheme.colorScheme.primaryContainer)
+                .height(160.dp),
+            verticalArrangement = Arrangement.Center
+        ) {
 
-            Text(
+            Box(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .wrapContentHeight(),
-                text = title,
-                style = Typography.displaySmall,
-                textAlign = TextAlign.Center
-            )
-            Text(
+                    .clip(RoundedCornerShape(bottomStart = 10.dp, bottomEnd = 10.dp))
+                    .background(MaterialTheme.colorScheme.surface)
+                    .weight(0.7f),
+                contentAlignment = Alignment.Center
+            ) {
+
+
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    color = MaterialTheme.colorScheme.onSurface,
+                    text = value,
+                    style = Typography.displayMedium,
+                    textAlign = TextAlign.Center
+                )
+
+            }
+
+            Box(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .wrapContentHeight(),
-                color = MaterialTheme.colorScheme.primary,
-                text = value,
-                style = Typography.displayMedium,
-                textAlign = TextAlign.Center
-            )
+                    .clip(RoundedCornerShape(topStart = 15.dp, topEnd = 15.dp))
+                    .weight(0.3f),
+                contentAlignment = Alignment.Center
+            ) {
+
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    text = title,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                    style = Typography.headlineSmall,
+                    textAlign = TextAlign.Center
+                )
+
+            }
+
         }
     }
 
@@ -293,7 +351,15 @@ fun DetailCard(
 private fun DetailScreenPreview() {
     HabitsTheme {
         DetailScreen(
-            detailUiState = DetailUiState(-1, "Flashcards", type = HabitFrequency.WEEKLY, 1, 5, 23),
+            detailUiState = DetailUiState(
+                -1,
+                "Flashcards",
+                type = HabitFrequency.WEEKLY,
+                1,
+                5,
+                23,
+                started = LocalDate.of(2023, 4, 6)
+            ),
             navigateUp = { },
             navigateToEditHabit = {}
         )

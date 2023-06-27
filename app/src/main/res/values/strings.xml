@@ -63,8 +63,8 @@
     <string name="detail_edit_habit">Edit habit</string>
     <string name="detail_streak">Streak</string>
     <string name="detail_score">Score</string>
-    <string name="detail_longest_streak">Longest Streak</string>
-    <string name="detail_not_started">Not started</string>
+    <string name="detail_longest_streak">Longest</string>
+    <string name="detail_not_started">N/A</string>
     <string name="detail_started">Started</string>
     <string name="detail_total">Total</string>
     <string name="detail_every_day">Every day</string>
