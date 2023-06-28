@@ -84,7 +84,7 @@ fun DetailScreen(
             modifier = Modifier
                 //.verticalScroll(rememberScrollState())
                 .fillMaxSize()
-                .padding(start = 20.dp, end = 20.dp, bottom = 20.dp, top = 10.dp)
+                .padding(start = 20.dp, end = 20.dp)
                 .padding(innerPadding),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(10.dp)
@@ -181,6 +181,8 @@ fun DetailScreen(
                         )
 
                     }
+
+                    Spacer(Modifier.height(10.dp))
                 }
             }
 
