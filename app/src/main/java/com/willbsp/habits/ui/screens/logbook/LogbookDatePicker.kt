@@ -5,6 +5,7 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -95,84 +96,91 @@ fun LogbookMonth(
     val scope = rememberCoroutineScope()
     val today = remember { logbookUiState.todaysDate }
 
-    Column(modifier, horizontalAlignment = Alignment.CenterHorizontally) {
+    BoxWithConstraints {
 
-        val monthText = remember {
-            "${date.month.getDisplayName(TextStyle.FULL, Locale.getDefault())} ${date.year}"
-        }
+        val height = if (maxHeight > 350.dp) 350.dp else maxHeight
+        val width = if (maxWidth > 400.dp) 400.dp else maxWidth
 
-        Row(
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            IconButton(
-                onClick = {
-                    scope.launch { pagerState.animateScrollToPage(pagerState.currentPage - 1) }
-                },
-                modifier = Modifier.testTag(stringResource(R.string.logbook_previous_month) + " $monthText")
-            ) {
-                Icon(
-                    imageVector = Icons.Default.ExpandLess,
-                    contentDescription = stringResource(R.string.logbook_previous_month)
-                )
+        Column(modifier, horizontalAlignment = Alignment.CenterHorizontally) {
+
+            val monthText = remember {
+                "${date.month.getDisplayName(TextStyle.FULL, Locale.getDefault())} ${date.year}"
             }
-            Spacer(modifier.weight(1f))
-            Text(
-                text = monthText,
-                style = Typography.headlineLarge
-            )
-            Spacer(modifier.weight(1f))
-            IconButton(
-                onClick = {
-                    scope.launch { pagerState.animateScrollToPage(pagerState.currentPage + 1) }
-                },
-                modifier = Modifier.testTag(stringResource(R.string.logbook_next_month) + " $monthText")
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Icon(
-                    imageVector = Icons.Default.ExpandMore,
-                    contentDescription = stringResource(R.string.logbook_next_month)
-                )
-            }
-        }
-
-        Spacer(modifier = Modifier.height(30.dp))
-
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly
-        ) {
-            repeat(7) { row ->
-                val weekday = remember { startDate.plusDays(row.toLong()) }
-                Column(Modifier.height(350.dp), verticalArrangement = Arrangement.SpaceEvenly) {
-                    Text(
-                        modifier = Modifier.width(40.dp),
-                        text = weekday.dayOfWeek.getDisplayName(
-                            TextStyle.NARROW,
-                            Locale.getDefault()
-                        ),
-                        textAlign = TextAlign.Center
+                IconButton(
+                    onClick = {
+                        scope.launch { pagerState.animateScrollToPage(pagerState.currentPage - 1) }
+                    },
+                    modifier = Modifier.testTag(stringResource(R.string.logbook_previous_month) + " $monthText")
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.ExpandLess,
+                        contentDescription = stringResource(R.string.logbook_previous_month)
                     )
-                    repeat(6) { col ->
-                        val currentDate = remember { weekday.plusWeeks(col.toLong()) }
-                        if (currentDate.month == date.month) {
-                            DateIconButton(
-                                modifier = Modifier
-                                    .size(40.dp)
-                                    .testTag(currentDate.toString()),
-                                date = currentDate,
-                                checked = logbookUiState.completed.contains(currentDate),
-                                checkedSecondary = logbookUiState.completedByWeek.contains(
-                                    currentDate
-                                ),
-                                enabled = !currentDate.isAfter(today),
-                                onCheckedChange = { dateOnClick(currentDate) }
-                            )
-                        } else {
-                            Box(Modifier.size(40.dp))
+                }
+                Spacer(modifier.weight(1f))
+                Text(
+                    text = monthText,
+                    style = Typography.headlineLarge
+                )
+                Spacer(modifier.weight(1f))
+                IconButton(
+                    onClick = {
+                        scope.launch { pagerState.animateScrollToPage(pagerState.currentPage + 1) }
+                    },
+                    modifier = Modifier.testTag(stringResource(R.string.logbook_next_month) + " $monthText")
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.ExpandMore,
+                        contentDescription = stringResource(R.string.logbook_next_month)
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(30.dp))
+
+            Row(
+                modifier = Modifier.width(width),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                repeat(7) { row ->
+                    val weekday = remember { startDate.plusDays(row.toLong()) }
+                    Column(Modifier.height(height), verticalArrangement = Arrangement.SpaceEvenly) {
+                        Text(
+                            modifier = Modifier.width(40.dp),
+                            text = weekday.dayOfWeek.getDisplayName(
+                                TextStyle.NARROW,
+                                Locale.getDefault()
+                            ),
+                            textAlign = TextAlign.Center
+                        )
+                        repeat(6) { col ->
+                            val currentDate = remember { weekday.plusWeeks(col.toLong()) }
+                            if (currentDate.month == date.month) {
+                                DateIconButton(
+                                    modifier = Modifier
+                                        .size(40.dp)
+                                        .testTag(currentDate.toString()),
+                                    date = currentDate,
+                                    checked = logbookUiState.completed.contains(currentDate),
+                                    checkedSecondary = logbookUiState.completedByWeek.contains(
+                                        currentDate
+                                    ),
+                                    enabled = !currentDate.isAfter(today),
+                                    onCheckedChange = { dateOnClick(currentDate) }
+                                )
+                            } else {
+                                Box(Modifier.size(40.dp))
+                            }
                         }
                     }
                 }
             }
         }
+
     }
 
 }
