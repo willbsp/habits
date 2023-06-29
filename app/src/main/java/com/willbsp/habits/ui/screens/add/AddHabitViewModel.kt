@@ -21,7 +21,9 @@ class AddHabitViewModel @Inject constructor(
         private set
 
     fun updateUiState(newHabitsUiState: HabitUiState.Habit) {
-        uiState = if (newHabitsUiState.name.length <= HABIT_NAME_MAX_CHARACTER_LIMIT) {
+        uiState = if (newHabitsUiState.name.length <= HABIT_NAME_MAX_CHARACTER_LIMIT
+            || !newHabitsUiState.name.contains("\n")
+        ) {
             newHabitsUiState.copy(nameIsInvalid = false)
         } else newHabitsUiState.copy(nameIsInvalid = true)
     }
