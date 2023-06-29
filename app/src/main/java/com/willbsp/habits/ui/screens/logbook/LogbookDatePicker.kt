@@ -96,12 +96,12 @@ fun LogbookMonth(
     val scope = rememberCoroutineScope()
     val today = remember { logbookUiState.todaysDate }
 
-    BoxWithConstraints {
+    BoxWithConstraints(modifier, contentAlignment = Alignment.Center) {
 
         val height = if (maxHeight > 350.dp) 350.dp else maxHeight
         val width = if (maxWidth > 400.dp) 400.dp else maxWidth
 
-        Column(modifier, horizontalAlignment = Alignment.CenterHorizontally) {
+        Column(Modifier.width(width), horizontalAlignment = Alignment.CenterHorizontally) {
 
             val monthText = remember {
                 "${date.month.getDisplayName(TextStyle.FULL, Locale.getDefault())} ${date.year}"
