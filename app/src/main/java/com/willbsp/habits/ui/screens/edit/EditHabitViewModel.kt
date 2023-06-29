@@ -33,7 +33,7 @@ class EditHabitViewModel @Inject constructor(
 
     fun updateUiState(newHabitsUiState: HabitUiState.Habit) {
         uiState = if (newHabitsUiState.name.length <= HABIT_NAME_MAX_CHARACTER_LIMIT
-            || !newHabitsUiState.name.contains("\n")
+            && !newHabitsUiState.name.contains("\n")
         ) {
             newHabitsUiState.copy(nameIsInvalid = false)
         } else newHabitsUiState.copy(nameIsInvalid = true)
