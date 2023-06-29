@@ -15,10 +15,10 @@ import com.willbsp.habits.data.model.Habit
 
 @Database(
     entities = [Habit::class, Entry::class],
-    version = 3, // TODO reset to 1 for first release
+    version = 3,
     exportSchema = true,
     autoMigrations = [
-        AutoMigration (from = 2, to = 3)
+        AutoMigration(from = 2, to = 3)
     ]
 )
 @TypeConverters(Converters::class)
@@ -30,7 +30,7 @@ abstract class HabitDatabase : RoomDatabase() {
 
 }
 
-val MIGRATION_1_2 = object : Migration(1, 2) { // TODO remove for first release
+val MIGRATION_1_2 = object : Migration(1, 2) {
     override fun migrate(database: SupportSQLiteDatabase) {
         database.execSQL("CREATE INDEX IF NOT EXISTS index_entries_date ON entries (date)")
     }
