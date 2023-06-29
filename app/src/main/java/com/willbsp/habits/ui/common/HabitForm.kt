@@ -5,16 +5,20 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.willbsp.habits.R
 import com.willbsp.habits.data.model.HabitFrequency
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun HabitForm(
     modifier: Modifier = Modifier,
@@ -33,6 +37,7 @@ fun HabitForm(
             isError = habitUiState.nameIsInvalid,
             onValueChange = { onValueChange(habitUiState.copy(name = it)) },
             label = { Text(stringResource(R.string.modify_habit_name)) },
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
             modifier = Modifier.fillMaxWidth()
         )
 
