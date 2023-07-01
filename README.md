@@ -30,6 +30,9 @@ It is currently in development, with plans to release on Google Play and F-Droid
 - **Offline and privacy respecting** - Habits can be used in it's entirety without an internet
   connection, your information is never sent to anyone and is always kept on your device.
 
+## Privacy Policy
+Any data generated or input into Habits is always stored locally on your device, and is never sent to the developers of Habits or any third parties. Developers of Habits or any third parties do not have access to your data. Habits contains no advertisement, tracking or analytics code.
+
 ## Licence
 
 ```
