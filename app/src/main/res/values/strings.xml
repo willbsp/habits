@@ -1,3 +1,87 @@
 <resources>
     <string name="app_name">Habits</string>
+    <string name="settings">Settings</string>
+    <string name="topbar_back">Back</string>
+
+    <!--habit frequency-->
+    <string name="frequency_daily">Daily</string>
+    <string name="frequency_weekly">Weekly</string>
+    <!--end habit frequency-->
+
+    <!--modify habit screen start-->
+    <string name="add_habit_title">Add Habit</string>
+    <string name="add_habit_add_habit">Add item</string>
+    <string name="edit_habit_title">Edit Habit</string>
+    <string name="edit_habit_update_habit">Update habit</string>
+    <string name="edit_habit_delete">Delete</string>
+    <string name="edit_confirm">Confirm</string>
+    <string name="edit_dismiss">Dismiss</string>
+    <string name="edit_delete_habit">Delete habit?</string>
+    <string name="edit_cannot_undo">This action cannot be undone.</string>
+    <string name="modify_habit_name">Name</string>
+    <string name="modify_habit_frequency">Frequency</string>
+    <string name="modify_times_per_week">How many times per week?</string>
+    <string name="modify_frequency">Frequency</string>
+    <!--modify habit screen end-->
+
+    <!--home screen start-->
+    <string name="home_add_habit">Add Habit</string>
+    <string name="home_completed">Completed</string>
+    <string name="home_uncompleted">Uncompleted</string>
+    <string name="home_today">Today</string>
+    <string name="home_this_week">This Week</string>
+    <string name="home_all_completed">All completed for today!</string>
+    <string name="home_all_completed_tick">All completed</string>
+    <plurals name="home_habit_list_subtitle">
+        <item quantity="one">%d habit completed already…</item>
+        <item quantity="other">%d habits completed already…</item>
+    </plurals>
+    <string name="home_no_habits">Add a habit with the button below!</string>
+    <string name="home_show_completed">Show completed</string>
+    <string name="home_logbook">Logbook</string>
+    <string name="home_detail">Detail</string>
+    <!--home screen end-->
+
+    <!--settings screen start-->
+    <string name="settings_title">Settings</string>
+    <string name="settings_display_streaks">Display Streaks</string>
+    <string name="settings_display_streaks_subtitle">Display streaks on home screen</string>
+    <string name="settings_completed_subtitle">Show completed subtitle</string>
+    <string name="settings_completed_subtitle_desc">Show completed habit count in today view</string>
+    <string name="settings_about_screen">About screen</string>
+    <!--settings screen end-->
+
+    <!--logbook screen start-->
+    <string name="logbook_title">Logbook</string>
+    <string name="logbook_add_a_new_habit">Add a new habit</string>
+    <string name="logbook_empty_text">You have no habits!</string>
+    <string name="logbook_previous_month">Previous month</string>
+    <string name="logbook_next_month">Next month</string>
+    <!--logbook screen end-->
+
+    <!--detail screen start-->
+    <string name="detail_edit_habit">Edit habit</string>
+    <string name="detail_streak">Streak</string>
+    <string name="detail_score">Score</string>
+    <string name="detail_longest_streak">Longest</string>
+    <string name="detail_not_started">N/A</string>
+    <string name="detail_started">Started</string>
+    <string name="detail_total">Total</string>
+    <string name="detail_every_day">Every day</string>
+    <plurals name="detail_times_per_week">
+        <item quantity="one">Once a week</item>
+        <item quantity="two">Twice a week</item>
+        <item quantity="other">%d times a week</item>
+    </plurals>
+    <!--detail screen end-->
+
+    <!--about screen start-->
+    <string name="about_title">About</string>
+    <string name="about_creator">Will Spooner (@wilbsp)</string>
+    <string name="about_view_source">View the source on Github</string>
+    <string name="about_report_an_issue">Report an issue</string>
+    <string name="about_version_text">"Version "</string>
+    <string name="about_licence">Licenced under GPLv3</string>
+    <!--about screen end-->
+
 </resources>

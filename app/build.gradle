@@ -1,20 +1,23 @@
 plugins {
-    id 'com.android.application'
-    id 'org.jetbrains.kotlin.android'
+    alias libs.plugins.android.application
+    alias libs.plugins.kotlin.android
+    alias libs.plugins.kapt
+    alias libs.plugins.hilt
+    alias libs.plugins.ksp
 }
 
 android {
     namespace 'com.willbsp.habits'
-    compileSdk 33
+    compileSdk libs.versions.compileSdk.get().toInteger()
 
     defaultConfig {
         applicationId "com.willbsp.habits"
-        minSdk 24
-        targetSdk 33
+        minSdk libs.versions.minSdk.get().toInteger()
+        targetSdk libs.versions.targetSdk.get().toInteger()
         versionCode 1
         versionName "1.0"
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "com.willbsp.habits.CustomTestRunner"
         vectorDrawables {
             useSupportLibrary true
         }
@@ -22,22 +25,28 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
+            debuggable false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            applicationIdSuffix ".debug"
+            debuggable true
+            minifyEnabled false
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = '17'
     }
     buildFeatures {
         compose true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion '1.2.0'
+        kotlinCompilerExtensionVersion libs.versions.androidxComposeCompiler.get()
     }
     packagingOptions {
         resources {
@@ -48,21 +57,56 @@ android {
 
 dependencies {
 
-    implementation 'androidx.core:core-ktx:1.9.0'
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.5.1'
-    implementation 'androidx.activity:activity-compose:1.6.1'
-    implementation "androidx.compose.ui:ui:$compose_version"
-    implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
-    implementation 'androidx.compose.material3:material3:1.1.0-alpha03'
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.4'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
-    androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
-    debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
-    debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_version"
+    implementation libs.androidx.core.ktx
+    implementation libs.androidx.lifecycle.runtime.ktx
+    implementation libs.androidx.lifecycle.runtime.compose
+    implementation libs.androidx.lifecycle.viewmodel.compose
+    implementation libs.androidx.activity.compose
 
-    // Material 3
-    implementation "androidx.compose.material3:material3:$material3_version"
-    implementation "androidx.compose.material3:material3-window-size-class:$material3_version"
+    implementation libs.androidx.compose.ui
+    implementation libs.androidx.compose.ui.util
+    implementation libs.androidx.compose.ui.tooling.preview
+    debugImplementation libs.androidx.compose.ui.tooling
+    implementation libs.androidx.compose.ui.test.manifest
+    implementation libs.androidx.compose.material.icons.extended
 
+    testImplementation libs.junit
+    testImplementation libs.kotlinx.coroutines.test
+    androidTestImplementation libs.androidx.test.ext
+    androidTestImplementation libs.androidx.espresso.core
+    androidTestImplementation libs.androidx.espresso.intents
+    androidTestImplementation libs.androidx.ui.test.junit4
+    androidTestImplementation libs.androidx.navigation.testing
+
+    implementation libs.androidx.material3
+    implementation libs.androidx.material3.windowsizeclass
+
+    implementation libs.androidx.navigation.compose
+    implementation libs.accompanist.navigation.animation
+
+    implementation libs.androidx.paging.compose
+
+    implementation libs.androidx.room.runtime
+    implementation libs.androidx.room.ktx
+    ksp libs.androidx.room.compiler
+
+    implementation libs.androidx.datastore.preferences
+
+    kapt libs.hilt.compiler
+    kaptAndroidTest libs.hilt.compiler
+    implementation libs.hilt.android
+    implementation libs.androidx.hilt.navigation.compose
+    androidTestImplementation libs.hilt.android.testing
+
+    testImplementation(project(":shared-test"))
+    androidTestImplementation(project(":shared-test"))
+
+}
+
+kapt {
+    correctErrorTypes true
+}
+
+ksp {
+    arg('room.schemaLocation', "$projectDir/schemas")
 }
