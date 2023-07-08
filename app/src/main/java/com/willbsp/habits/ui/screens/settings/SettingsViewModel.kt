@@ -18,8 +18,12 @@ class SettingsViewModel @Inject constructor(
 
     val uiState: StateFlow<SettingsUiState> = settingsRepository.getSettingsMap().map {
         SettingsUiState(
-            it[SettingsRepository.SettingsKey.SHOW_STREAKS_ON_HOME] as Boolean? ?: true,
-            it[SettingsRepository.SettingsKey.SHOW_COMPLETED_SUBTITLE] as Boolean? ?: true
+            showStatistic =
+            it[SettingsRepository.SettingsKey.SHOW_STAT_ON_HOME] as Boolean? ?: true,
+            showCompletedSubtitle =
+            it[SettingsRepository.SettingsKey.SHOW_COMPLETED_SUBTITLE] as Boolean? ?: true,
+            showScore =
+            it[SettingsRepository.SettingsKey.SHOW_SCORE_ON_HOME] as Boolean? ?: false
         )
     }.stateIn(
         scope = viewModelScope,
@@ -27,15 +31,21 @@ class SettingsViewModel @Inject constructor(
         initialValue = SettingsUiState()
     )
 
-    fun saveStreaksPreference(value: Boolean) {
+    fun saveStatisticPreference(value: Boolean) {
         viewModelScope.launch {
-            settingsRepository.saveStreaksPreference(value)
+            settingsRepository.saveStatisticPreference(value)
         }
     }
 
     fun saveSubtitlePreference(value: Boolean) {
         viewModelScope.launch {
             settingsRepository.saveSubtitlePreference(value)
+        }
+    }
+
+    fun saveScorePreference(value: Boolean) {
+        viewModelScope.launch {
+            settingsRepository.saveScorePreference(value)
         }
     }
 

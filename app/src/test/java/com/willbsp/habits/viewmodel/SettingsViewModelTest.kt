@@ -30,23 +30,23 @@ class SettingsViewModelTest {
     @Test
     fun uiState_whenShowStreaks_thenTrue() = runTest {
         val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
-        settingsRepository.saveStreaksPreference(true)
-        assertTrue(viewModel.uiState.value.showStreaks)
+        settingsRepository.saveStatisticPreference(true)
+        assertTrue(viewModel.uiState.value.showStatistic)
         collectJob.cancel()
     }
 
     @Test
     fun uiState_whenNotShowStreaks_thenFalse() = runTest {
         val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
-        settingsRepository.saveStreaksPreference(false)
-        assertFalse(viewModel.uiState.value.showStreaks)
+        settingsRepository.saveStatisticPreference(false)
+        assertFalse(viewModel.uiState.value.showStatistic)
         collectJob.cancel()
     }
 
     @Test
     fun uiState_whenStreaksPreferenceDoesNotExist_thenTrue() = runTest {
         val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
-        assertTrue(viewModel.uiState.value.showStreaks)
+        assertTrue(viewModel.uiState.value.showStatistic)
         collectJob.cancel()
     }
 
@@ -76,9 +76,9 @@ class SettingsViewModelTest {
     @Test
     fun saveStreaksPreference_whenSaved_thenUpdateUiState() = runTest {
         val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
-        assertTrue(viewModel.uiState.value.showStreaks)
-        viewModel.saveStreaksPreference(false)
-        assertFalse(viewModel.uiState.value.showStreaks)
+        assertTrue(viewModel.uiState.value.showStatistic)
+        viewModel.saveStatisticPreference(false)
+        assertFalse(viewModel.uiState.value.showStatistic)
         collectJob.cancel()
     }
 
