@@ -1,6 +1,7 @@
 package com.willbsp.habits.ui.screens.settings
 
 import androidx.annotation.StringRes
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -61,9 +62,21 @@ fun SettingsScreen(
             SettingItem(
                 checked = settingsUiState.showStreaks,
                 onCheckedChange = onShowStreaksPressed,
-                title = R.string.settings_display_streaks,
-                subtitle = R.string.settings_display_streaks_subtitle
+                title = R.string.settings_display_stats,
+                subtitle = R.string.settings_display_stats_desc
             )
+
+            AnimatedVisibility(visible = settingsUiState.showStreaks) {
+
+                SettingItem(
+                    checked = true,
+                    onCheckedChange = {},
+                    title = R.string.settings_scores_on_home,
+                    subtitle = R.string.settings_scores_on_home_desc
+                )
+
+            }
+
 
             SettingItem(
                 checked = settingsUiState.showCompletedSubtitle,

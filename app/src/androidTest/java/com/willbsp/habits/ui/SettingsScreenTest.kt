@@ -59,9 +59,9 @@ class SettingsScreenTest {
     @Test
     fun displayStreaks_togglesSettings() = runTest {
         assertEquals(true, settingsRepository.getStreakPreference().first())
-        composeTestRule.onNodeWithTextId(R.string.settings_display_streaks).performClick()
+        composeTestRule.onNodeWithTextId(R.string.settings_display_stats).performClick()
         assertEquals(false, settingsRepository.getStreakPreference().first())
-        composeTestRule.onNodeWithTextId(R.string.settings_display_streaks).performClick()
+        composeTestRule.onNodeWithTextId(R.string.settings_display_stats).performClick()
         assertEquals(true, settingsRepository.getStreakPreference().first())
     }
 
