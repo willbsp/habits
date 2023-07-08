@@ -211,7 +211,7 @@ class HomeScreenTest {
 
     @Test
     fun dailyHabit_streakShownAndCorrect() = runTest {
-        settingsRepository.saveStreaksPreference(true)
+        settingsRepository.saveStatisticPreference(true)
         habitRepository.upsertHabit(habit3)
         (entryRepository as FakeEntryRepository).populate()
         composeTestRule.onNodeWithText("5").assertExists()
@@ -219,7 +219,7 @@ class HomeScreenTest {
 
     @Test
     fun showStreaksDisabled_doesNotShowStreak() = runTest {
-        settingsRepository.saveStreaksPreference(false)
+        settingsRepository.saveStatisticPreference(false)
         habitRepository.upsertHabit(habit3)
         (entryRepository as FakeEntryRepository).populate()
         composeTestRule.onNodeWithText("5").assertDoesNotExist()

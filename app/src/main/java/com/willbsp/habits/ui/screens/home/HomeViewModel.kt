@@ -30,7 +30,7 @@ class HomeViewModel @Inject constructor(
     val uiState: StateFlow<HomeUiState> =
         combine(
             getHabitsWithVirtualEntries(),
-            settingsRepository.getStreakPreference(),
+            settingsRepository.getStatisticPreference(),
             settingsRepository.getSubtitlePreference()
         ) { habitWithEntriesList, streakPref, subtitlePref ->
             habitWithEntriesList.toHomeUiState(streakPref, subtitlePref)

@@ -155,7 +155,7 @@ class HomeViewModelTest {
         habitRepository.upsertHabit(habit1)
         assertTrue(state.first().showStreaks)
         assertTrue(state.first().showSubtitle)
-        settingsRepository.saveStreaksPreference(false)
+        settingsRepository.saveStatisticPreference(false)
         settingsRepository.saveSubtitlePreference(false)
         assertFalse(state.first().showStreaks)
         assertFalse(state.first().showSubtitle)
