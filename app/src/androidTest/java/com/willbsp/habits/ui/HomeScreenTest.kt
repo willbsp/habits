@@ -23,6 +23,7 @@ import com.willbsp.habits.data.model.Entry
 import com.willbsp.habits.data.repository.EntryRepository
 import com.willbsp.habits.data.repository.HabitRepository
 import com.willbsp.habits.data.repository.SettingsRepository
+import com.willbsp.habits.domain.usecase.CalculateScoreUseCase
 import com.willbsp.habits.domain.usecase.CalculateStreakUseCase
 import com.willbsp.habits.domain.usecase.GetHabitsWithVirtualEntriesUseCase
 import com.willbsp.habits.domain.usecase.GetVirtualEntriesUseCase
@@ -88,6 +89,7 @@ class HomeScreenTest {
                 settingsRepository = settingsRepository,
                 getHabitsWithVirtualEntries = getHabitsWithVirtualEntriesUseCase,
                 calculateStreak = CalculateStreakUseCase(virtualEntriesUseCase, clock),
+                calculateScore = CalculateScoreUseCase(virtualEntriesUseCase, clock),
                 clock = clock
             )
             Surface {
@@ -218,11 +220,19 @@ class HomeScreenTest {
     }
 
     @Test
-    fun showStreaksDisabled_doesNotShowStreak() = runTest {
+    fun showStatisticDisabled_doesNotShowStreak() = runTest {
         settingsRepository.saveStatisticPreference(false)
         habitRepository.upsertHabit(habit3)
         (entryRepository as FakeEntryRepository).populate()
         composeTestRule.onNodeWithText("5").assertDoesNotExist()
+    }
+
+    @Test
+    fun showScoresEnabled_showsScoreAndCorrect() = runTest {
+        settingsRepository.saveScorePreference(true)
+        habitRepository.upsertHabit(habit3)
+        (entryRepository as FakeEntryRepository).populate()
+        composeTestRule.onNodeWithText("37%").assertExists()
     }
 
     @Test
