@@ -5,6 +5,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import com.willbsp.habits.data.repository.SettingsRepository
 import com.willbsp.habits.data.repository.SettingsRepository.SettingsKey.SHOW_COMPLETED_SUBTITLE
+import com.willbsp.habits.data.repository.SettingsRepository.SettingsKey.SHOW_SCORE_ON_HOME
 import com.willbsp.habits.data.repository.SettingsRepository.SettingsKey.SHOW_STREAKS_ON_HOME
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -21,6 +22,9 @@ class LocalSettingsRepository @Inject constructor(
 
     override fun getSubtitlePreference(): Flow<Boolean> =
         dataStore.data.map { it[SHOW_COMPLETED_SUBTITLE] ?: true }
+
+    override fun getScorePreference(): Flow<Boolean> =
+        dataStore.data.map { it[SHOW_SCORE_ON_HOME] ?: false }
 
     override suspend fun saveStreaksPreference(showStreaksOnHome: Boolean) {
         dataStore.edit { it[SHOW_STREAKS_ON_HOME] = showStreaksOnHome }
