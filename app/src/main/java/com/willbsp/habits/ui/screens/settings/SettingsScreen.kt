@@ -114,6 +114,15 @@ private fun SettingItem(
 @Composable
 private fun SettingsScreenPreview() {
     HabitsTheme {
-        //Settings {}
+        SettingsScreen(
+            navigateUp = {},
+            navigateToAboutScreen = {},
+            onShowStreaksPressed = {},
+            onShowSubtitlePressed = {},
+            settingsUiState = SettingsUiState(
+                showStreaks = true,
+                showCompletedSubtitle = false
+            )
+        )
     }
 }
