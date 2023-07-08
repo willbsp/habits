@@ -139,7 +139,7 @@ private fun HabitListCard(
             habit = habit,
             completedOnClick = completedOnClick,
             navigateToDetail = navigateToDetail,
-            showStreaks = showStatistic,
+            showStatistic = showStatistic,
             showScore = showScore,
             todaysDate = todaysDate
         )
