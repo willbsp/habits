@@ -1,5 +1,7 @@
 package com.willbsp.habits.ui.screens.home
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -37,6 +39,7 @@ import java.time.LocalDate
 import java.time.format.TextStyle
 import java.util.Locale
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun HomeHabitCard(
     habit: HomeUiState.Habit,
@@ -76,17 +79,19 @@ fun HomeHabitCard(
 
                     Text(text = habit.name, style = Typography.titleLarge)
                     Spacer(modifier = Modifier.weight(1f))
-                    if (showStatistic) {
-                        if (showScore) {
-                            Text(
-                                text = if (habit.score != null) "${habit.score}%" else " ",
-                                style = Typography.titleLarge
-                            )
-                        } else {
-                            Text(
-                                text = (habit.streak ?: " ").toString(),
-                                style = Typography.titleLarge
-                            )
+                    AnimatedContent(targetState = habit.score) {
+                        if (showStatistic) {
+                            if (showScore) {
+                                Text(
+                                    text = if (habit.score != null) "${habit.score}%" else " ",
+                                    style = Typography.titleLarge
+                                )
+                            } else {
+                                Text(
+                                    text = (habit.streak ?: " ").toString(),
+                                    style = Typography.titleLarge
+                                )
+                            }
                         }
                     }
                     Spacer(modifier = Modifier.width(10.dp))
