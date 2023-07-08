@@ -29,8 +29,9 @@ fun SettingsScreen(
     modifier: Modifier = Modifier,
     navigateUp: () -> Unit,
     navigateToAboutScreen: () -> Unit,
-    onShowStreaksPressed: (Boolean) -> Unit,
+    onShowStatisticPressed: (Boolean) -> Unit,
     onShowSubtitlePressed: (Boolean) -> Unit,
+    onShowScorePressed: (Boolean) -> Unit,
     settingsUiState: SettingsUiState
 ) {
 
@@ -60,17 +61,17 @@ fun SettingsScreen(
         ) {
 
             SettingItem(
-                checked = settingsUiState.showStreaks,
-                onCheckedChange = onShowStreaksPressed,
+                checked = settingsUiState.showStatistic,
+                onCheckedChange = onShowStatisticPressed,
                 title = R.string.settings_display_stats,
                 subtitle = R.string.settings_display_stats_desc
             )
 
-            AnimatedVisibility(visible = settingsUiState.showStreaks) {
+            AnimatedVisibility(visible = settingsUiState.showStatistic) {
 
                 SettingItem(
-                    checked = true,
-                    onCheckedChange = {},
+                    checked = settingsUiState.showScore,
+                    onCheckedChange = onShowScorePressed,
                     title = R.string.settings_scores_on_home,
                     subtitle = R.string.settings_scores_on_home_desc
                 )
@@ -130,10 +131,12 @@ private fun SettingsScreenPreview() {
         SettingsScreen(
             navigateUp = {},
             navigateToAboutScreen = {},
-            onShowStreaksPressed = {},
+            onShowStatisticPressed = {},
             onShowSubtitlePressed = {},
+            onShowScorePressed = {},
             settingsUiState = SettingsUiState(
-                showStreaks = true,
+                showStatistic = true,
+                showScore = true,
                 showCompletedSubtitle = false
             )
         )

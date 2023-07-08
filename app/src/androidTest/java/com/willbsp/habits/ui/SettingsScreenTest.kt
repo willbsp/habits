@@ -48,8 +48,9 @@ class SettingsScreenTest {
                 SettingsScreen(
                     navigateUp = { },
                     navigateToAboutScreen = { },
-                    onShowStreaksPressed = viewModel::saveStreaksPreference,
+                    onShowStatisticPressed = viewModel::saveStatisticPreference,
                     onShowSubtitlePressed = viewModel::saveSubtitlePreference,
+                    onShowScorePressed = viewModel::saveScorePreference,
                     settingsUiState = state
                 )
             }
@@ -58,11 +59,11 @@ class SettingsScreenTest {
 
     @Test
     fun displayStreaks_togglesSettings() = runTest {
-        assertEquals(true, settingsRepository.getStreakPreference().first())
+        assertEquals(true, settingsRepository.getStatisticPreference().first())
         composeTestRule.onNodeWithTextId(R.string.settings_display_stats).performClick()
-        assertEquals(false, settingsRepository.getStreakPreference().first())
+        assertEquals(false, settingsRepository.getStatisticPreference().first())
         composeTestRule.onNodeWithTextId(R.string.settings_display_stats).performClick()
-        assertEquals(true, settingsRepository.getStreakPreference().first())
+        assertEquals(true, settingsRepository.getStatisticPreference().first())
     }
 
     @Test

@@ -251,11 +251,14 @@ fun HabitsNavigationGraph(
                 navigateToAboutScreen = {
                     navController.navigate(HabitsNavigationDestination.ABOUT.route)
                 },
-                onShowStreaksPressed = {
-                    viewModel.saveStreaksPreference(it)
+                onShowStatisticPressed = {
+                    viewModel.saveStatisticPreference(it)
                 },
                 onShowSubtitlePressed = {
                     viewModel.saveSubtitlePreference(it)
+                },
+                onShowScorePressed = {
+                    viewModel.saveScorePreference(it)
                 },
                 settingsUiState = state
             )
