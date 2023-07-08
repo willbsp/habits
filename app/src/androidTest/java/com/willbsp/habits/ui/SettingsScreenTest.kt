@@ -58,7 +58,7 @@ class SettingsScreenTest {
     }
 
     @Test
-    fun displayStreaks_togglesSettings() = runTest {
+    fun displayStatistic_togglesSettings() = runTest {
         assertEquals(true, settingsRepository.getStatisticPreference().first())
         composeTestRule.onNodeWithTextId(R.string.settings_display_stats).performClick()
         assertEquals(false, settingsRepository.getStatisticPreference().first())
@@ -73,6 +73,15 @@ class SettingsScreenTest {
         assertEquals(false, settingsRepository.getSubtitlePreference().first())
         composeTestRule.onNodeWithTextId(R.string.settings_completed_subtitle).performClick()
         assertEquals(true, settingsRepository.getSubtitlePreference().first())
+    }
+
+    @Test
+    fun displayScore_togglesSettings() = runTest {
+        assertEquals(false, settingsRepository.getScorePreference().first())
+        composeTestRule.onNodeWithTextId(R.string.settings_scores_on_home).performClick()
+        assertEquals(true, settingsRepository.getScorePreference().first())
+        composeTestRule.onNodeWithTextId(R.string.settings_scores_on_home).performClick()
+        assertEquals(false, settingsRepository.getScorePreference().first())
     }
 
 }
