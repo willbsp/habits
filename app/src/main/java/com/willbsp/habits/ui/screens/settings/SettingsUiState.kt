@@ -1,6 +1,7 @@
 package com.willbsp.habits.ui.screens.settings
 
 data class SettingsUiState(
-    val showStreaks: Boolean = true,
+    val showStatistic: Boolean = true,
+    val showScore: Boolean = false,
     val showCompletedSubtitle: Boolean = true
 )

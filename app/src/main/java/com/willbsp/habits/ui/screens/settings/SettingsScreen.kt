@@ -1,6 +1,7 @@
 package com.willbsp.habits.ui.screens.settings
 
 import androidx.annotation.StringRes
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -28,8 +29,9 @@ fun SettingsScreen(
     modifier: Modifier = Modifier,
     navigateUp: () -> Unit,
     navigateToAboutScreen: () -> Unit,
-    onShowStreaksPressed: (Boolean) -> Unit,
+    onShowStatisticPressed: (Boolean) -> Unit,
     onShowSubtitlePressed: (Boolean) -> Unit,
+    onShowScorePressed: (Boolean) -> Unit,
     settingsUiState: SettingsUiState
 ) {
 
@@ -59,11 +61,23 @@ fun SettingsScreen(
         ) {
 
             SettingItem(
-                checked = settingsUiState.showStreaks,
-                onCheckedChange = onShowStreaksPressed,
-                title = R.string.settings_display_streaks,
-                subtitle = R.string.settings_display_streaks_subtitle
+                checked = settingsUiState.showStatistic,
+                onCheckedChange = onShowStatisticPressed,
+                title = R.string.settings_display_stats,
+                subtitle = R.string.settings_display_stats_desc
             )
+
+            AnimatedVisibility(visible = settingsUiState.showStatistic) {
+
+                SettingItem(
+                    checked = settingsUiState.showScore,
+                    onCheckedChange = onShowScorePressed,
+                    title = R.string.settings_scores_on_home,
+                    subtitle = R.string.settings_scores_on_home_desc
+                )
+
+            }
+
 
             SettingItem(
                 checked = settingsUiState.showCompletedSubtitle,
@@ -114,6 +128,17 @@ private fun SettingItem(
 @Composable
 private fun SettingsScreenPreview() {
     HabitsTheme {
-        //Settings {}
+        SettingsScreen(
+            navigateUp = {},
+            navigateToAboutScreen = {},
+            onShowStatisticPressed = {},
+            onShowSubtitlePressed = {},
+            onShowScorePressed = {},
+            settingsUiState = SettingsUiState(
+                showStatistic = true,
+                showScore = true,
+                showCompletedSubtitle = false
+            )
+        )
     }
 }

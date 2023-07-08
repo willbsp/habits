@@ -44,10 +44,12 @@
 
     <!--settings screen start-->
     <string name="settings_title">Settings</string>
-    <string name="settings_display_streaks">Display Streaks</string>
-    <string name="settings_display_streaks_subtitle">Display streaks on home screen</string>
-    <string name="settings_completed_subtitle">Show completed subtitle</string>
-    <string name="settings_completed_subtitle_desc">Show completed habit count in today view</string>
+    <string name="settings_display_stats">Display statistic on home</string>
+    <string name="settings_display_stats_desc">Show a statistic on each habit on the home screen. Shows streaks by default.</string>
+    <string name="settings_completed_subtitle">Show completed subtitle on home</string>
+    <string name="settings_completed_subtitle_desc">Show a completed habit count on the home screen.</string>
+    <string name="settings_scores_on_home">Show scores on home</string>
+    <string name="settings_scores_on_home_desc">Show scores on the home screen instead of streaks.</string>
     <string name="settings_about_screen">About screen</string>
     <!--settings screen end-->
 
