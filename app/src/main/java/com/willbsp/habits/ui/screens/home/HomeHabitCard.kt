@@ -44,6 +44,7 @@ fun HomeHabitCard(
     navigateToDetail: (Int) -> Unit,
     modifier: Modifier = Modifier,
     showStreaks: Boolean,
+    showScore: Boolean,
     todaysDate: LocalDate,
     expandedInitialValue: Boolean = false
 ) {
@@ -75,7 +76,12 @@ fun HomeHabitCard(
 
                     Text(text = habit.name, style = Typography.titleLarge)
                     Spacer(modifier = Modifier.weight(1f))
-                    if (showStreaks) {
+                    if (showScore) {
+                        Text(
+                            text = if (habit.score != null) "${habit.score}%" else " ",
+                            style = Typography.titleLarge
+                        )
+                    } else if (showStreaks) {
                         Text(
                             text = (habit.streak ?: " ").toString(),
                             style = Typography.titleLarge

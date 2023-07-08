@@ -172,12 +172,13 @@ private fun HomeScreenNoHabitsPreview() {
 @Composable
 private fun HomeScreenHabitsPreview() {
     val habits = listOf(
-        HomeUiState.Habit(0, "Running", HabitFrequency.DAILY, 3, listOf(), listOf()),
+        HomeUiState.Habit(0, "Running", HabitFrequency.DAILY, 3, 0, listOf(), listOf()),
         HomeUiState.Habit(
             id = 1,
             name = "Boxing",
             type = HabitFrequency.WEEKLY,
             streak = 2,
+            score = 0,
             completed = listOf(LocalDate.parse("2023-07-08")),
             completedByWeek = listOf()
         )
@@ -192,6 +193,7 @@ private fun HomeScreenHabitsPreview() {
                 habits = habits,
                 showStreaks = true,
                 showSubtitle = true,
+                showScore = false,
                 todaysDate = LocalDate.of(2023, 7, 8)
             ),
             completedOnClick = { _, _ -> },

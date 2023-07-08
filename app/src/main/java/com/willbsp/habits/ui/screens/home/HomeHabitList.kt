@@ -68,7 +68,8 @@ fun HomeHabitList(
                 todaysDate = homeUiState.todaysDate,
                 completedOnClick = completedOnClick,
                 navigateToDetail = navigateToDetail,
-                showStreaks = homeUiState.showStreaks
+                showStatistic = homeUiState.showStreaks,
+                showScore = homeUiState.showScore
             )
         }
         this.stickyHeader {
@@ -90,7 +91,8 @@ fun HomeHabitList(
                 todaysDate = homeUiState.todaysDate,
                 completedOnClick = completedOnClick,
                 navigateToDetail = navigateToDetail,
-                showStreaks = homeUiState.showStreaks
+                showStatistic = homeUiState.showStreaks,
+                showScore = homeUiState.showScore
             )
         }
         item {
@@ -123,7 +125,8 @@ private fun HabitListCard(
     habit: HomeUiState.Habit,
     completedOnClick: (Int, LocalDate) -> Unit,
     navigateToDetail: (Int) -> Unit,
-    showStreaks: Boolean
+    showStatistic: Boolean,
+    showScore: Boolean
 ) {
     AnimatedVisibility(
         visible = visible,
@@ -136,7 +139,8 @@ private fun HabitListCard(
             habit = habit,
             completedOnClick = completedOnClick,
             navigateToDetail = navigateToDetail,
-            showStreaks = showStreaks,
+            showStreaks = showStatistic,
+            showScore = showScore,
             todaysDate = todaysDate
         )
 
