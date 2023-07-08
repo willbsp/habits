@@ -34,6 +34,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import com.willbsp.habits.R
+import com.willbsp.habits.data.model.HabitFrequency
 import com.willbsp.habits.ui.common.FullscreenHint
 import com.willbsp.habits.ui.common.HabitsFloatingAction
 import com.willbsp.habits.ui.theme.HabitsTheme
@@ -162,6 +163,37 @@ private fun HomeScreenNoHabitsPreview() {
             navigateToSettings = {},
             navigateToLogbook = {},
             homeUiState = HomeUiState.Empty,
+            completedOnClick = { _, _ -> },
+        )
+    }
+}
+
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+private fun HomeScreenHabitsPreview() {
+    val habits = listOf(
+        HomeUiState.Habit(0, "Running", HabitFrequency.DAILY, 3, listOf(), listOf()),
+        HomeUiState.Habit(
+            id = 1,
+            name = "Boxing",
+            type = HabitFrequency.WEEKLY,
+            streak = 2,
+            completed = listOf(LocalDate.parse("2023-07-08")),
+            completedByWeek = listOf()
+        )
+    )
+    HabitsTheme {
+        HomeScreen(
+            navigateToAddHabit = {},
+            navigateToDetail = {},
+            navigateToSettings = {},
+            navigateToLogbook = {},
+            homeUiState = HomeUiState.Habits(
+                habits = habits,
+                showStreaks = true,
+                showSubtitle = true,
+                todaysDate = LocalDate.of(2023, 7, 8)
+            ),
             completedOnClick = { _, _ -> },
         )
     }
