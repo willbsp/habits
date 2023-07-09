@@ -8,14 +8,20 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ImportExport
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -54,6 +60,8 @@ fun SettingsScreen(
 
         ) { innerPadding ->
 
+        val importDialogOpen = remember { mutableStateOf(false) }
+
         Column(
             modifier = modifier
                 .padding(innerPadding)
@@ -91,12 +99,22 @@ fun SettingsScreen(
                 subtitle = R.string.settings_export_database_desc
             )
 
-            SettingItem( // TODO this will need a warning like for deletion on modify habit screen
-                onClick = { /*TODO*/ },
+            SettingItem(
+                onClick = { importDialogOpen.value = true },
                 title = R.string.settings_import_database,
                 subtitle = R.string.settings_import_database_desc
             )
 
+        }
+
+        if (importDialogOpen.value) {
+            SettingsImportDialog(
+                onDismiss = { importDialogOpen.value = false },
+                onConfirm = {
+                    importDialogOpen.value = false
+                    // TODO onImportClick()
+                }
+            )
         }
 
     }
@@ -157,6 +175,35 @@ private fun SettingToggle(
                 checked = checked,
                 onCheckedChange = onCheckedChange
             )
+        }
+    )
+}
+
+@Composable
+fun SettingsImportDialog(
+    modifier: Modifier = Modifier,
+    onDismiss: () -> Unit,
+    onConfirm: () -> Unit
+) {
+    AlertDialog(
+        modifier = modifier,
+        onDismissRequest = onDismiss,
+        icon = { Icon(Icons.Filled.ImportExport, contentDescription = null) },
+        title = { Text(text = stringResource(R.string.settings_import_data)) },
+        text = { Text(text = stringResource(R.string.settings_import_dialog_desc)) },
+        confirmButton = {
+            Button(
+                onClick = onConfirm
+            ) {
+                Text(stringResource(R.string.settings_import))
+            }
+        },
+        dismissButton = {
+            TextButton(
+                onClick = onDismiss
+            ) {
+                Text(stringResource(R.string.settings_dismiss))
+            }
         }
     )
 }
