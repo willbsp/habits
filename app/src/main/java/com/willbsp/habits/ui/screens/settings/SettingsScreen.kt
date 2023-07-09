@@ -60,7 +60,7 @@ fun SettingsScreen(
                 .fillMaxSize()
         ) {
 
-            SettingItem(
+            SettingToggle(
                 checked = settingsUiState.showStatistic,
                 onCheckedChange = onShowStatisticPressed,
                 title = R.string.settings_display_stats,
@@ -69,7 +69,7 @@ fun SettingsScreen(
 
             AnimatedVisibility(visible = settingsUiState.showStatistic) {
 
-                SettingItem(
+                SettingToggle(
                     checked = settingsUiState.showScore,
                     onCheckedChange = onShowScorePressed,
                     title = R.string.settings_scores_on_home,
@@ -78,12 +78,23 @@ fun SettingsScreen(
 
             }
 
-
-            SettingItem(
+            SettingToggle(
                 checked = settingsUiState.showCompletedSubtitle,
                 onCheckedChange = onShowSubtitlePressed,
                 title = R.string.settings_completed_subtitle,
                 subtitle = R.string.settings_completed_subtitle_desc
+            )
+
+            SettingItem(
+                onClick = { /*TODO*/ },
+                title = R.string.settings_export_database,
+                subtitle = R.string.settings_export_database_desc
+            )
+
+            SettingItem( // TODO this will need a warning like for deletion on modify habit screen
+                onClick = { /*TODO*/ },
+                title = R.string.settings_import_database,
+                subtitle = R.string.settings_import_database_desc
             )
 
         }
@@ -93,6 +104,32 @@ fun SettingsScreen(
 
 @Composable
 private fun SettingItem(
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit,
+    @StringRes title: Int,
+    @StringRes subtitle: Int
+) {
+    ListItem(
+        modifier = modifier
+            .fillMaxWidth()
+            .clickable { onClick() },
+        headlineContent = {
+            Text(
+                text = stringResource(title),
+                style = Typography.titleLarge
+            )
+        },
+        supportingContent = {
+            Text(
+                text = stringResource(subtitle),
+                style = Typography.bodyMedium
+            )
+        },
+    )
+}
+
+@Composable
+private fun SettingToggle(
     modifier: Modifier = Modifier,
     checked: Boolean,
     onCheckedChange: (Boolean) -> Unit,

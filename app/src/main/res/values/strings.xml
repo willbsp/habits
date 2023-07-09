@@ -51,6 +51,10 @@
     <string name="settings_scores_on_home">Show scores on home</string>
     <string name="settings_scores_on_home_desc">Show scores on the home screen instead of streaks.</string>
     <string name="settings_about_screen">About screen</string>
+    <string name="settings_export_database">Export database</string>
+    <string name="settings_export_database_desc">Export the database to a file for backup.</string>
+    <string name="settings_import_database">Import database</string>
+    <string name="settings_import_database_desc">Import a database file. Please note this will erase all existing data.</string>
     <!--settings screen end-->
 
     <!--logbook screen start-->
