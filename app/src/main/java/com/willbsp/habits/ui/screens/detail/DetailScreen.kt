@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -80,118 +79,116 @@ fun DetailScreen(
         }
     ) { innerPadding ->
 
-        Column(
-            modifier = Modifier
-                //.verticalScroll(rememberScrollState())
+        LazyColumn(
+            modifier = modifier
                 .fillMaxSize()
                 .padding(start = 20.dp, end = 20.dp)
                 .padding(innerPadding),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
+            item {
 
-            LazyColumn {
-                item {
-
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(5.dp)
-                    ) {
-                        Icon(imageVector = Icons.Default.CalendarToday, contentDescription = "")
-                        if (detailUiState.type == HabitFrequency.DAILY)
-                            Text(stringResource(R.string.detail_every_day))
-                        else if (detailUiState.type == HabitFrequency.WEEKLY)
-                            Text(
-                                text = pluralStringResource(
-                                    id = R.plurals.detail_times_per_week,
-                                    count = detailUiState.repeat,
-                                    detailUiState.repeat
-                                )
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(5.dp)
+                ) {
+                    Icon(imageVector = Icons.Default.CalendarToday, contentDescription = "")
+                    if (detailUiState.type == HabitFrequency.DAILY)
+                        Text(stringResource(R.string.detail_every_day))
+                    else if (detailUiState.type == HabitFrequency.WEEKLY)
+                        Text(
+                            text = pluralStringResource(
+                                id = R.plurals.detail_times_per_week,
+                                count = detailUiState.repeat,
+                                detailUiState.repeat
                             )
-                    }
-
-                    Spacer(modifier.height(10.dp))
-
-                    CircularDetailScoreCard(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(300.dp),
-                        score = detailUiState.score.toFloat()
-                    )
-
-                    Spacer(modifier.height(10.dp))
-
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .weight(1f),
-                        horizontalArrangement = Arrangement.SpaceEvenly
-                    ) {
-
-                        DetailCard(
-                            modifier = modifier
-                                .weight(1f),
-                            title = stringResource(R.string.detail_streak),
-                            value = detailUiState.streak.toString()
                         )
-
-                        Spacer(modifier.width(10.dp))
-
-                        DetailCard(
-                            modifier = modifier
-                                .weight(1f),
-                            title = stringResource(R.string.detail_longest_streak),
-                            value = detailUiState.longestStreak.toString()
-                        )
-
-                    }
-
-                    Spacer(modifier.height(10.dp))
-
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .weight(1f),
-                        horizontalArrangement = Arrangement.SpaceEvenly
-                    ) {
-
-                        val startedDate =
-                            if (detailUiState.started == null) stringResource(R.string.detail_not_started)
-                            else {
-                                "${detailUiState.started.dayOfMonth} ${
-                                    detailUiState.started.month.getDisplayName(
-                                        TextStyle.SHORT_STANDALONE,
-                                        Locale.getDefault()
-                                    )
-                                }"
-                            }
-
-                        DetailCard(
-                            modifier = modifier.weight(1f),
-                            title = stringResource(R.string.detail_started),
-                            value = startedDate
-                        )
-
-                        Spacer(modifier.width(10.dp))
-
-                        DetailCard(
-                            modifier = modifier.weight(1f),
-                            title = stringResource(R.string.detail_total),
-                            value = detailUiState.total.toString()
-                        )
-
-                    }
-
-                    Spacer(Modifier.height(10.dp))
                 }
+
             }
 
+            item {
+
+                CircularDetailScoreCard(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(300.dp),
+                    score = detailUiState.score.toFloat()
+                )
+
+            }
+
+            item {
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+
+                    DetailCard(
+                        modifier = modifier
+                            .weight(1f),
+                        title = stringResource(R.string.detail_streak),
+                        value = detailUiState.streak.toString()
+                    )
+
+                    DetailCard(
+                        modifier = modifier
+                            .weight(1f),
+                        title = stringResource(R.string.detail_longest_streak),
+                        value = detailUiState.longestStreak.toString()
+                    )
+
+                }
+
+            }
+
+            item {
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+
+                    val startedDate =
+                        if (detailUiState.started == null) stringResource(R.string.detail_not_started)
+                        else {
+                            "${detailUiState.started.dayOfMonth} ${
+                                detailUiState.started.month.getDisplayName(
+                                    TextStyle.SHORT_STANDALONE,
+                                    Locale.getDefault()
+                                )
+                            }"
+                        }
+
+                    DetailCard(
+                        modifier = modifier.weight(1f),
+                        title = stringResource(R.string.detail_started),
+                        value = startedDate
+                    )
+
+                    DetailCard(
+                        modifier = modifier.weight(1f),
+                        title = stringResource(R.string.detail_total),
+                        value = detailUiState.total.toString()
+                    )
+
+                }
+
+            }
+
+            item { Spacer(Modifier.height(10.dp)) }
 
         }
+
 
     }
 
 }
+
 
 @Composable
 fun CircularDetailScoreCard(
