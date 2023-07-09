@@ -131,6 +131,7 @@ fun LogbookMonth(
                     onClick = {
                         scope.launch { pagerState.animateScrollToPage(pagerState.currentPage + 1) }
                     },
+                    enabled = today.month != date.month,
                     modifier = Modifier.testTag(stringResource(R.string.logbook_next_month) + " $monthText")
                 ) {
                     Icon(
