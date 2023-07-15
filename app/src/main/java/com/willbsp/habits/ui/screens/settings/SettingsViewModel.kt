@@ -1,8 +1,10 @@
 package com.willbsp.habits.ui.screens.settings
 
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.willbsp.habits.data.repository.SettingsRepository
+import com.willbsp.habits.domain.usecase.ExportDatabaseUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -13,7 +15,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
-    private val settingsRepository: SettingsRepository
+    private val settingsRepository: SettingsRepository,
+    private val exportDatabaseUseCase: ExportDatabaseUseCase
 ) : ViewModel() {
 
     val uiState: StateFlow<SettingsUiState> = settingsRepository.getSettingsMap().map {
@@ -47,6 +50,18 @@ class SettingsViewModel @Inject constructor(
         viewModelScope.launch {
             settingsRepository.saveScorePreference(value)
         }
+    }
+
+    fun exportDatabase(destinationUri: Uri?) {
+        if (destinationUri != null) {
+            viewModelScope.launch {
+                exportDatabaseUseCase.invoke(destinationUri)
+            }
+        }
+    }
+
+    fun importDatabase() {
+        // TODO
     }
 
     companion object {
