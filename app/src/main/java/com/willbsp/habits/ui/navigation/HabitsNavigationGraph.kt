@@ -260,6 +260,8 @@ fun HabitsNavigationGraph(
                 onShowScorePressed = {
                     viewModel.saveScorePreference(it)
                 },
+                onExportPressed = viewModel::exportDatabase,
+                onImportPressed = viewModel::importDatabase,
                 settingsUiState = state
             )
 

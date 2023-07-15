@@ -1,5 +1,8 @@
 package com.willbsp.habits.ui.screens.settings
 
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
@@ -26,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.willbsp.habits.R
+import com.willbsp.habits.common.DATABASE_EXPORT_FILE_NAME
 import com.willbsp.habits.ui.common.DefaultHabitsAppTopBar
 import com.willbsp.habits.ui.theme.HabitsTheme
 import com.willbsp.habits.ui.theme.Typography
@@ -38,8 +42,15 @@ fun SettingsScreen(
     onShowStatisticPressed: (Boolean) -> Unit,
     onShowSubtitlePressed: (Boolean) -> Unit,
     onShowScorePressed: (Boolean) -> Unit,
+    onExportPressed: (Uri?) -> Unit,
+    onImportPressed: () -> Unit,
     settingsUiState: SettingsUiState
 ) {
+
+    val exportLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.CreateDocument("application/x-sqlite3"),
+        onResult = onExportPressed
+    )
 
     Scaffold(
         topBar = {
@@ -94,7 +105,7 @@ fun SettingsScreen(
             )
 
             SettingItem(
-                onClick = { /*TODO*/ },
+                onClick = { exportLauncher.launch(DATABASE_EXPORT_FILE_NAME) },
                 title = R.string.settings_export_database,
                 subtitle = R.string.settings_export_database_desc
             )
@@ -112,7 +123,7 @@ fun SettingsScreen(
                 onDismiss = { importDialogOpen.value = false },
                 onConfirm = {
                     importDialogOpen.value = false
-                    // TODO onImportClick()
+                    onImportPressed()
                 }
             )
         }
@@ -218,6 +229,8 @@ private fun SettingsScreenPreview() {
             onShowStatisticPressed = {},
             onShowSubtitlePressed = {},
             onShowScorePressed = {},
+            onExportPressed = {},
+            onImportPressed = {},
             settingsUiState = SettingsUiState(
                 showStatistic = true,
                 showScore = true,
