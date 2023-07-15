@@ -30,6 +30,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.willbsp.habits.R
 import com.willbsp.habits.common.DATABASE_EXPORT_FILE_NAME
+import com.willbsp.habits.common.DATABASE_IMPORT_MIME_TYPES
 import com.willbsp.habits.ui.common.DefaultHabitsAppTopBar
 import com.willbsp.habits.ui.theme.HabitsTheme
 import com.willbsp.habits.ui.theme.Typography
@@ -43,13 +44,18 @@ fun SettingsScreen(
     onShowSubtitlePressed: (Boolean) -> Unit,
     onShowScorePressed: (Boolean) -> Unit,
     onExportPressed: (Uri?) -> Unit,
-    onImportPressed: () -> Unit,
+    onImportPressed: (Uri?) -> Unit,
     settingsUiState: SettingsUiState
 ) {
 
     val exportLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.CreateDocument("application/x-sqlite3"),
+        contract = ActivityResultContracts.CreateDocument("*/*"),
         onResult = onExportPressed
+    )
+
+    val importLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.OpenDocument(),
+        onResult = onImportPressed
     )
 
     Scaffold(
@@ -122,8 +128,8 @@ fun SettingsScreen(
             SettingsImportDialog(
                 onDismiss = { importDialogOpen.value = false },
                 onConfirm = {
+                    importLauncher.launch(DATABASE_IMPORT_MIME_TYPES)
                     importDialogOpen.value = false
-                    onImportPressed()
                 }
             )
         }
