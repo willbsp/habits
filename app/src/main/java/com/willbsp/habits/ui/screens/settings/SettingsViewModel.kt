@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.willbsp.habits.data.repository.SettingsRepository
 import com.willbsp.habits.domain.usecase.ExportDatabaseUseCase
+import com.willbsp.habits.domain.usecase.ImportDatabaseUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -16,7 +17,8 @@ import javax.inject.Inject
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
     private val settingsRepository: SettingsRepository,
-    private val exportDatabaseUseCase: ExportDatabaseUseCase
+    private val export: ExportDatabaseUseCase,
+    private val import: ImportDatabaseUseCase
 ) : ViewModel() {
 
     val uiState: StateFlow<SettingsUiState> = settingsRepository.getSettingsMap().map {
@@ -55,13 +57,15 @@ class SettingsViewModel @Inject constructor(
     fun exportDatabase(destinationUri: Uri?) {
         if (destinationUri != null) {
             viewModelScope.launch {
-                exportDatabaseUseCase.invoke(destinationUri)
+                export(destinationUri)
             }
         }
     }
 
     fun importDatabase(sourceUri: Uri?) {
-        // TODO
+        if (sourceUri != null) {
+            import(sourceUri)
+        }
     }
 
     companion object {
