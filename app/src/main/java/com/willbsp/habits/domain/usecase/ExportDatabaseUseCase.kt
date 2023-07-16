@@ -20,14 +20,14 @@ class ExportDatabaseUseCase @Inject constructor(
 
     suspend operator fun invoke(destinationUri: Uri) = withContext(Dispatchers.IO) {
 
-        val database = context.getDatabasePath(DATABASE_NAME)
+        val databaseFile = context.getDatabasePath(DATABASE_NAME)
         val contentResolver = context.contentResolver
 
-        if (database.exists()) {
+        if (databaseFile.exists()) {
             rawDao.rawQuery(checkpointQuery)
             val output = contentResolver.openOutputStream(destinationUri)
             if (output != null) {
-                output.write(database.readBytes())
+                output.write(databaseFile.readBytes())
                 output.close()
             }
         }
