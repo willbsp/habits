@@ -23,19 +23,17 @@ class ImportDatabaseUseCase @Inject constructor(
             if (input != null) {
 
                 habitDatabase.close()
-                //  TODO carry out null checks
                 if (!habitDatabase.isOpen) {
-                    val databaseDirectory = File(database.parent)
+                    val databaseDirectory = File(database.parent!!)
                     if (databaseDirectory.isDirectory) {
-                        for (child: File in databaseDirectory.listFiles()) {
+                        for (child: File in databaseDirectory.listFiles()!!) {
                             child.deleteRecursively()
                         }
                     }
                     database.writeBytes(input.readBytes())
                 }
-                input.close()
 
-                // TODO fix issues with invalid flows after restart
+                input.close()
 
             }
 

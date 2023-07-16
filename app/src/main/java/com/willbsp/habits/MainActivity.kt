@@ -32,7 +32,13 @@ class MainActivity : ComponentActivity() {
                         else
                             ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
                     }
-                    HabitsApp()
+                    HabitsApp(
+                        onDatabaseImport = {
+                            // Restart activity to rebuild the database
+                            finish()
+                            startActivity(intent)
+                        }
+                    )
                 }
             }
         }

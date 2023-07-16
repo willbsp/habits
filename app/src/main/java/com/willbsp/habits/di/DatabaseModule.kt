@@ -8,34 +8,35 @@ import com.willbsp.habits.data.database.MIGRATION_1_2
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ActivityRetainedComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
+import dagger.hilt.android.scopes.ActivityRetainedScoped
+import java.io.File
 
 @Module
-@InstallIn(SingletonComponent::class)
+@InstallIn(ActivityRetainedComponent::class)
 class DatabaseModule {
 
-    @Singleton
+    @ActivityRetainedScoped
     @Provides
     fun provideHabitDatabase(
         @ApplicationContext app: Context
     ) = Room.databaseBuilder(app, HabitDatabase::class.java, DATABASE_NAME)
         .addMigrations(MIGRATION_1_2).build()
 
-    @Singleton
+    @ActivityRetainedScoped
     @Provides
     fun provideHabitDao(db: HabitDatabase) = db.habitDao()
 
-    @Singleton
+    @ActivityRetainedScoped
     @Provides
     fun provideEntryDao(db: HabitDatabase) = db.entryDao()
 
-    @Singleton
+    @ActivityRetainedScoped
     @Provides
     fun provideHabitEntryDao(db: HabitDatabase) = db.habitWithEntriesDao()
 
-    @Singleton
+    @ActivityRetainedScoped
     @Provides
     fun provideRawDao(db: HabitDatabase) = db.rawDao()
 

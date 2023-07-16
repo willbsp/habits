@@ -31,6 +31,7 @@ import com.willbsp.habits.ui.screens.settings.SettingsViewModel
 @Composable
 fun HabitsNavigationGraph(
     navController: NavHostController,
+    onDatabaseImport: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     AnimatedNavHost(
@@ -261,7 +262,7 @@ fun HabitsNavigationGraph(
                     viewModel.saveScorePreference(it)
                 },
                 onExportPressed = viewModel::exportDatabase,
-                onImportPressed = viewModel::importDatabase,
+                onImportPressed = { viewModel.importDatabase(it, onDatabaseImport) },
                 settingsUiState = state
             )
 

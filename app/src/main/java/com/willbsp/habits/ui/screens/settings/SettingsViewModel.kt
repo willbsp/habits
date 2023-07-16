@@ -62,9 +62,10 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
-    fun importDatabase(sourceUri: Uri?) {
+    fun importDatabase(sourceUri: Uri?, onDatabaseImport: () -> Unit) {
         if (sourceUri != null) {
             import(sourceUri)
+            onDatabaseImport()
         }
     }
 
