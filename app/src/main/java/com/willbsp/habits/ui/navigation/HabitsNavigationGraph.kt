@@ -2,6 +2,7 @@ package com.willbsp.habits.ui.navigation
 
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -32,6 +33,7 @@ import com.willbsp.habits.ui.screens.settings.SettingsViewModel
 fun HabitsNavigationGraph(
     navController: NavHostController,
     onDatabaseImport: () -> Unit,
+    snackbarState: SnackbarHostState,
     modifier: Modifier = Modifier,
 ) {
     AnimatedNavHost(
@@ -51,6 +53,7 @@ fun HabitsNavigationGraph(
 
             HomeScreen(
                 homeUiState = state,
+                snackbarHostState = snackbarState,
                 navigateToLogbook = {
                     navController.navigate(HabitsNavigationDestination.LOGBOOK.route)
                 },

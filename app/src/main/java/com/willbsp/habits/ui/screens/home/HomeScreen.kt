@@ -22,6 +22,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -44,6 +46,7 @@ import java.time.LocalDate
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
+    snackbarHostState: SnackbarHostState,
     completedOnClick: (Int, LocalDate) -> Unit,
     navigateToLogbook: () -> Unit,
     navigateToAddHabit: () -> Unit,
@@ -55,6 +58,7 @@ fun HomeScreen(
     var showCompleted by rememberSaveable { mutableStateOf(false) }
 
     Scaffold(
+        snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
@@ -158,6 +162,7 @@ fun HomeScreen(
 private fun HomeScreenNoHabitsPreview() {
     HabitsTheme {
         HomeScreen(
+            snackbarHostState = SnackbarHostState(),
             navigateToAddHabit = {},
             navigateToDetail = {},
             navigateToSettings = {},
@@ -185,6 +190,7 @@ private fun HomeScreenHabitsPreview() {
     )
     HabitsTheme {
         HomeScreen(
+            snackbarHostState = SnackbarHostState(),
             navigateToAddHabit = {},
             navigateToDetail = {},
             navigateToSettings = {},

@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.WindowHeightSizeClass
@@ -14,12 +15,23 @@ import androidx.compose.runtime.remember
 import com.willbsp.habits.ui.HabitsApp
 import com.willbsp.habits.ui.theme.HabitsTheme
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val snackbarHostState = SnackbarHostState()
+        if (intent.getBooleanExtra("DATABASE_IMPORT", false)) {
+            CoroutineScope(Dispatchers.Default).launch {
+                snackbarHostState.showSnackbar("Database import successful")
+            }
+        }
+
         setContent {
             HabitsTheme {
                 Surface(color = MaterialTheme.colorScheme.background) {
@@ -36,8 +48,9 @@ class MainActivity : ComponentActivity() {
                         onDatabaseImport = {
                             // Restart activity to rebuild the database
                             finish()
-                            startActivity(intent)
-                        }
+                            startActivity(intent.putExtra("DATABASE_IMPORT", true))
+                        },
+                        snackbarState = snackbarHostState
                     )
                 }
             }
