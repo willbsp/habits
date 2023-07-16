@@ -40,6 +40,8 @@
     <string name="home_show_completed">Show completed</string>
     <string name="home_logbook">Logbook</string>
     <string name="home_detail">Detail</string>
+    <string name="home_import_successful">Database import successful.</string>
+    <string name="home_import_invalid">Import was invalid. Previous database restored.</string>
     <!--home screen end-->
 
     <!--settings screen start-->

@@ -22,13 +22,21 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 class MainActivity : ComponentActivity() {
+
+    private val IMPORT_SUCCESSFUL = "DATABASE_IMPORT_SUCCESSFUL"
+    private val IMPORT_INVALID = "DATABASE_IMPORT_INVALID"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         val snackbarHostState = SnackbarHostState()
-        if (intent.getBooleanExtra("DATABASE_IMPORT", false)) {
+        if (intent.getBooleanExtra(IMPORT_SUCCESSFUL, false)) {
             CoroutineScope(Dispatchers.Default).launch {
-                snackbarHostState.showSnackbar("Database import successful")
+                snackbarHostState.showSnackbar(getString(R.string.home_import_successful))
+            }
+        } else if (intent.getBooleanExtra(IMPORT_INVALID, false)) {
+            CoroutineScope(Dispatchers.Default).launch {
+                snackbarHostState.showSnackbar(getString(R.string.home_import_invalid))
             }
         }
 
@@ -45,16 +53,20 @@ class MainActivity : ComponentActivity() {
                             ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
                     }
                     HabitsApp(
-                        onDatabaseImport = {
-                            // Restart activity to rebuild the database
-                            finish()
-                            startActivity(intent.putExtra("DATABASE_IMPORT", true))
-                        },
+                        onDatabaseImport = { restartActivityOnImport(it) },
                         snackbarState = snackbarHostState
                     )
                 }
             }
         }
+    }
+
+    private fun restartActivityOnImport(successful: Boolean) {
+        finish()
+        if (successful)
+            startActivity(intent.putExtra(IMPORT_SUCCESSFUL, true))
+        else
+            startActivity(intent.putExtra(IMPORT_INVALID, true))
     }
 
 }

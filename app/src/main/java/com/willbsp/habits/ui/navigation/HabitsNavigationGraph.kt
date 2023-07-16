@@ -32,7 +32,7 @@ import com.willbsp.habits.ui.screens.settings.SettingsViewModel
 @Composable
 fun HabitsNavigationGraph(
     navController: NavHostController,
-    onDatabaseImport: () -> Unit,
+    onDatabaseImport: (Boolean) -> Unit,
     snackbarState: SnackbarHostState,
     modifier: Modifier = Modifier,
 ) {

@@ -11,7 +11,7 @@ import com.willbsp.habits.ui.navigation.HabitsNavigationGraph
 @Composable
 fun HabitsApp(
     navController: NavHostController = rememberAnimatedNavController(),
-    onDatabaseImport: () -> Unit,
+    onDatabaseImport: (Boolean) -> Unit,
     snackbarState: SnackbarHostState
 ) {
     HabitsNavigationGraph(navController, onDatabaseImport, snackbarState)
