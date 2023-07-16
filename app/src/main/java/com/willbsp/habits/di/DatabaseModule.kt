@@ -11,7 +11,6 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityRetainedComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.android.scopes.ActivityRetainedScoped
-import java.io.File
 
 @Module
 @InstallIn(ActivityRetainedComponent::class)
