@@ -18,6 +18,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -85,6 +86,8 @@ fun SettingsScreen(
                 .fillMaxSize()
         ) {
 
+            SettingsHeading(text = stringResource(id = R.string.settings_home))
+
             SettingToggle(
                 checked = settingsUiState.showStatistic,
                 onCheckedChange = onShowStatisticPressed,
@@ -109,6 +112,8 @@ fun SettingsScreen(
                 title = R.string.settings_completed_subtitle,
                 subtitle = R.string.settings_completed_subtitle_desc
             )
+
+            SettingsHeading(text = stringResource(id = R.string.settings_backup))
 
             SettingItem(
                 onClick = { exportLauncher.launch(DATABASE_EXPORT_FILE_NAME) },
@@ -135,6 +140,22 @@ fun SettingsScreen(
         }
 
     }
+}
+
+@Composable
+private fun SettingsHeading(
+    modifier: Modifier = Modifier,
+    text: String
+) {
+    ListItem(
+        headlineContent = {
+            Text(
+                text = text,
+                style = Typography.labelLarge,
+                color = MaterialTheme.colorScheme.primary
+            )
+        }
+    )
 }
 
 @Composable
