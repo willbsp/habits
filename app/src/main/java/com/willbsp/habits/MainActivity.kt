@@ -33,10 +33,12 @@ class MainActivity : ComponentActivity() {
         if (intent.getBooleanExtra(IMPORT_SUCCESSFUL, false)) {
             CoroutineScope(Dispatchers.Default).launch {
                 snackbarHostState.showSnackbar(getString(R.string.home_import_successful))
+                intent.removeExtra(IMPORT_SUCCESSFUL)
             }
         } else if (intent.getBooleanExtra(IMPORT_INVALID, false)) {
             CoroutineScope(Dispatchers.Default).launch {
                 snackbarHostState.showSnackbar(getString(R.string.home_import_invalid))
+                intent.removeExtra(IMPORT_INVALID)
             }
         }
 
