@@ -12,6 +12,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import java.io.File
+import java.io.OutputStream
 import javax.inject.Inject
 
 @HiltViewModel
@@ -54,11 +56,9 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
-    fun exportDatabase(destinationUri: Uri?) {
-        if (destinationUri != null) {
-            viewModelScope.launch {
-                export(destinationUri)
-            }
+    fun exportDatabase(databaseFile: File, output: OutputStream) {
+        viewModelScope.launch {
+            export(databaseFile, output)
         }
     }
 

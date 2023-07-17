@@ -6,6 +6,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
@@ -13,6 +14,7 @@ import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
+import com.willbsp.habits.common.DATABASE_NAME
 import com.willbsp.habits.ui.common.HabitUiState
 import com.willbsp.habits.ui.screens.about.AboutScreen
 import com.willbsp.habits.ui.screens.add.AddHabitScreen
@@ -245,6 +247,7 @@ fun HabitsNavigationGraph(
 
         ) {
 
+            val context = LocalContext.current
             val viewModel = hiltViewModel<SettingsViewModel>()
             val state by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -264,7 +267,15 @@ fun HabitsNavigationGraph(
                 onShowScorePressed = {
                     viewModel.saveScorePreference(it)
                 },
-                onExportPressed = viewModel::exportDatabase,
+                onExportPressed = { destination ->
+                    val databaseFile = context.getDatabasePath(DATABASE_NAME)
+                    if (destination != null) {
+                        val output = context.contentResolver.openOutputStream(destination)
+                        if (output != null) {
+                            viewModel.exportDatabase(databaseFile, output)
+                        }
+                    }
+                },
                 onImportPressed = { viewModel.importDatabase(it, onDatabaseImport) },
                 settingsUiState = state
             )
