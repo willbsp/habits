@@ -62,9 +62,11 @@ class SettingsViewModel @Inject constructor(
     }
 
     fun importDatabase(input: InputStream, onDatabaseImport: (Boolean) -> Unit) {
-        val result = import(input)
-        if (result != null) {
-            onDatabaseImport(result)
+        viewModelScope.launch {
+            val result = import(input)
+            if (result != null) {
+                onDatabaseImport(result)
+            }
         }
     }
 

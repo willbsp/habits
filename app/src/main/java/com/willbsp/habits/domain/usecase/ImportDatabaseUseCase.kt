@@ -1,6 +1,8 @@
 package com.willbsp.habits.domain.usecase
 
 import com.willbsp.habits.data.database.util.DatabaseUtils
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.InputStream
 import javax.inject.Inject
@@ -9,8 +11,7 @@ class ImportDatabaseUseCase @Inject constructor(
     private val databaseUtils: DatabaseUtils
 ) {
 
-    // TODO move off the main thread
-    operator fun invoke(input: InputStream): Boolean? {
+    suspend operator fun invoke(input: InputStream): Boolean? = withContext(Dispatchers.IO) {
 
         val databaseFile = databaseUtils.getDatabasePath()
 
@@ -29,15 +30,15 @@ class ImportDatabaseUseCase @Inject constructor(
                 deleteDatabaseFiles(databaseFile)
                 databaseFile.writeBytes(backupDatabaseFile.readBytes())
                 input.close()
-                return false
+                return@withContext false
             }
 
             input.close()
-            return true
+            return@withContext true
 
         }
 
-        return null
+        return@withContext null
 
     }
 
