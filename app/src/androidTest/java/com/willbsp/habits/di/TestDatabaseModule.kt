@@ -37,4 +37,8 @@ class TestDatabaseModule {
     @Provides
     fun provideHabitEntryDao(db: HabitDatabase) = db.habitWithEntriesDao()
 
+    @Singleton
+    @Provides
+    fun provideRawDao(db: HabitDatabase) = db.rawDao()
+
 }
