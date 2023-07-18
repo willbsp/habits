@@ -31,14 +31,14 @@ class MainActivity : ComponentActivity() {
 
         val snackbarHostState = SnackbarHostState()
         if (intent.getBooleanExtra(IMPORT_SUCCESSFUL, false)) {
+            intent.removeExtra(IMPORT_SUCCESSFUL)
             CoroutineScope(Dispatchers.Default).launch {
                 snackbarHostState.showSnackbar(getString(R.string.home_import_successful))
-                intent.removeExtra(IMPORT_SUCCESSFUL)
             }
         } else if (intent.getBooleanExtra(IMPORT_INVALID, false)) {
+            intent.removeExtra(IMPORT_INVALID)
             CoroutineScope(Dispatchers.Default).launch {
                 snackbarHostState.showSnackbar(getString(R.string.home_import_invalid))
-                intent.removeExtra(IMPORT_INVALID)
             }
         }
 
