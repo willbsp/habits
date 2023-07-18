@@ -1,0 +1,89 @@
+<resources>
+    <string name="app_name">Навици</string>
+    <string name="settings">Настройки</string>
+    <string name="topbar_back">Назад</string>
+
+    <!--habit frequency-->
+    <string name="frequency_daily">Дневна</string>
+    <string name="frequency_weekly">Седмична</string>
+    <!--end habit frequency-->
+
+    <!--modify habit screen start-->
+    <string name="add_habit_title">Добавяне на навик</string>
+    <string name="add_habit_add_habit">Добавяне</string>
+    <string name="edit_habit_title">Променяне на навик</string>
+    <string name="edit_habit_update_habit">Запазване</string>
+    <string name="edit_habit_delete">Премахване</string>
+    <string name="edit_confirm">Потвърждаване</string>
+    <string name="edit_dismiss">Отказ</string>
+    <string name="edit_delete_habit">Премахване на навик?</string>
+    <string name="edit_cannot_undo">Действието е необратимо.</string>
+    <string name="modify_habit_name">Наименование</string>
+    <string name="modify_habit_frequency">Честота</string>
+    <string name="modify_times_per_week">Пъти седмично</string>
+    <string name="modify_frequency">Честота</string>
+    <!--modify habit screen end-->
+
+    <!--home screen start-->
+    <string name="home_add_habit">Добавяне на навик</string>
+    <string name="home_completed">Извършено</string>
+    <string name="home_uncompleted">Неизвършено</string>
+    <string name="home_today">Днес</string>
+    <string name="home_this_week">Тази седмица</string>
+    <string name="home_all_completed">За днес всичко е извършено!</string>
+    <string name="home_all_completed_tick">Всичко е извършено</string>
+    <plurals name="home_habit_list_subtitle">
+        <item quantity="one">Изпълнинието на %d навик е извършено…</item>
+        <item quantity="other">Изпълнението на %d навика е извършено…</item>
+    </plurals>
+    <string name="home_no_habits">Добавете навици с бутона по-долу!</string>
+    <string name="home_show_completed">Извършени</string>
+    <string name="home_logbook">Дневник</string>
+    <string name="home_detail">Подробности</string>
+    <!--home screen end-->
+
+    <!--settings screen start-->
+    <string name="settings_title">Настройки</string>
+    <string name="settings_display_stats">Статистика</string>
+    <string name="settings_display_stats_desc">Показва статистика за навиците на началния екран. По подразбиране – поредни извършвания.</string>
+    <string name="settings_completed_subtitle">Текст за извършените</string>
+    <string name="settings_completed_subtitle_desc">Показва броя на извършените навици на началния екран.</string>
+    <string name="settings_scores_on_home">Резултати</string>
+    <string name="settings_scores_on_home_desc">Показва резултатите на началния екран, вместо поредните извършвания.</string>
+    <string name="settings_about_screen">Относно</string>
+    <!--settings screen end-->
+
+    <!--logbook screen start-->
+    <string name="logbook_title">Дневник</string>
+    <string name="logbook_add_a_new_habit">Добавяне на навик</string>
+    <string name="logbook_empty_text">Не са въведени навици!</string>
+    <string name="logbook_previous_month">Предишен месец</string>
+    <string name="logbook_next_month">Следващ месец</string>
+    <!--logbook screen end-->
+
+    <!--detail screen start-->
+    <string name="detail_edit_habit">Променяне на навик</string>
+    <string name="detail_streak">Поредни</string>
+    <string name="detail_score">Резултат</string>
+    <string name="detail_longest_streak">Без прекъсване</string>
+    <string name="detail_not_started">N/A</string>
+    <string name="detail_started">Начало</string>
+    <string name="detail_total">Общо</string>
+    <string name="detail_every_day">Всеки ден</string>
+    <plurals name="detail_times_per_week">
+        <item quantity="one">Веднъж седмично</item>
+        <item quantity="two">Два пъти седмично</item>
+        <item quantity="other">%d пъти седмично</item>
+    </plurals>
+    <!--detail screen end-->
+
+    <!--about screen start-->
+    <string name="about_title">Относно</string>
+    <string name="about_creator">Will Spooner (@willbsp)</string>
+    <string name="about_view_source">Изходен код в Github</string>
+    <string name="about_report_an_issue">Съобщаване на дефект</string>
+    <string name="about_version_text">"Издание "</string>
+    <string name="about_licence">Лицензирано под GPLv3</string>
+    <!--about screen end-->
+
+</resources>
