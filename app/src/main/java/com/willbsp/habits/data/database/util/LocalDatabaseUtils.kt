@@ -14,7 +14,7 @@ class LocalDatabaseUtils @Inject constructor(
     private val habitDatabase: HabitDatabase
 ) : DatabaseUtils {
 
-    override fun validateDatabase(): Boolean {
+    override fun isDatabaseValid(): Boolean {
         val testDatabase: HabitDatabase =
             Room.databaseBuilder(context, HabitDatabase::class.java, DATABASE_NAME)
                 .addMigrations(MIGRATION_1_2)

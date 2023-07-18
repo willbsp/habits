@@ -25,7 +25,7 @@ class ImportDatabaseUseCase @Inject constructor(
                 databaseFile.writeBytes(input.readBytes())
             }
 
-            if (!databaseUtils.validateDatabase()) {
+            if (!databaseUtils.isDatabaseValid()) {
                 deleteDatabaseFiles(databaseFile)
                 databaseFile.writeBytes(backupDatabaseFile.readBytes())
                 input.close()

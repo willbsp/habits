@@ -4,7 +4,7 @@ import java.io.File
 
 interface DatabaseUtils {
 
-    fun validateDatabase(): Boolean
+    fun isDatabaseValid(): Boolean
 
     fun getDatabasePath(): File
 
