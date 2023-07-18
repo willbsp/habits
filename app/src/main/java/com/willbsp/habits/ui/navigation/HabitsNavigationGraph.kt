@@ -268,11 +268,10 @@ fun HabitsNavigationGraph(
                     viewModel.saveScorePreference(it)
                 },
                 onExportPressed = { destination ->
-                    val databaseFile = context.getDatabasePath(DATABASE_NAME)
                     if (destination != null) {
                         val output = context.contentResolver.openOutputStream(destination)
                         if (output != null) {
-                            viewModel.exportDatabase(databaseFile, output)
+                            viewModel.exportDatabase(output)
                         }
                     }
                 },

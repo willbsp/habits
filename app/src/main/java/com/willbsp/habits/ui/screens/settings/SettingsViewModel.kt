@@ -56,9 +56,9 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
-    fun exportDatabase(databaseFile: File, output: OutputStream) {
+    fun exportDatabase(output: OutputStream) {
         viewModelScope.launch {
-            export(databaseFile, output)
+            export(output)
         }
     }
 
