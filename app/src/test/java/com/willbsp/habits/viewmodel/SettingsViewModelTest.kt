@@ -1,5 +1,9 @@
 package com.willbsp.habits.viewmodel
 
+import com.willbsp.habits.domain.usecase.ExportDatabaseUseCase
+import com.willbsp.habits.domain.usecase.ImportDatabaseUseCase
+import com.willbsp.habits.fake.FakeDatabaseUtils
+import com.willbsp.habits.fake.dao.FakeRawDao
 import com.willbsp.habits.fake.repository.FakeSettingsRepository
 import com.willbsp.habits.rules.TestDispatcherRule
 import com.willbsp.habits.ui.screens.settings.SettingsViewModel
@@ -24,7 +28,11 @@ class SettingsViewModelTest {
 
     @Before
     fun setup() {
-        viewModel = SettingsViewModel(settingsRepository)
+        val fakeDatabaseUtils = FakeDatabaseUtils()
+        val importDatabaseUseCase = ImportDatabaseUseCase(fakeDatabaseUtils)
+        val exportDatabaseUseCase = ExportDatabaseUseCase(fakeDatabaseUtils, FakeRawDao())
+        viewModel =
+            SettingsViewModel(settingsRepository, exportDatabaseUseCase, importDatabaseUseCase)
     }
 
     @Test
