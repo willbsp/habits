@@ -1,6 +1,5 @@
 package com.willbsp.habits.ui.screens.settings
 
-import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.willbsp.habits.data.repository.SettingsRepository
@@ -12,7 +11,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import java.io.File
+import java.io.InputStream
 import java.io.OutputStream
 import javax.inject.Inject
 
@@ -62,12 +61,10 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
-    fun importDatabase(sourceUri: Uri?, onDatabaseImport: (Boolean) -> Unit) {
-        if (sourceUri != null) {
-            val result = import(sourceUri)
-            if (result != null) {
-                onDatabaseImport(result)
-            }
+    fun importDatabase(input: InputStream, onDatabaseImport: (Boolean) -> Unit) {
+        val result = import(input)
+        if (result != null) {
+            onDatabaseImport(result)
         }
     }
 

@@ -14,7 +14,6 @@ import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
-import com.willbsp.habits.common.DATABASE_NAME
 import com.willbsp.habits.ui.common.HabitUiState
 import com.willbsp.habits.ui.screens.about.AboutScreen
 import com.willbsp.habits.ui.screens.add.AddHabitScreen
@@ -275,7 +274,14 @@ fun HabitsNavigationGraph(
                         }
                     }
                 },
-                onImportPressed = { viewModel.importDatabase(it, onDatabaseImport) },
+                onImportPressed = { source ->
+                    if (source != null) {
+                        val input = context.contentResolver.openInputStream(source)
+                        if (input != null) {
+                            viewModel.importDatabase(input, onDatabaseImport)
+                        }
+                    }
+                },
                 settingsUiState = state
             )
 

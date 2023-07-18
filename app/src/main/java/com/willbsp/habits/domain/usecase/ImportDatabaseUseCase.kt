@@ -1,53 +1,39 @@
 package com.willbsp.habits.domain.usecase
 
-import android.content.Context
-import android.net.Uri
-import androidx.room.Room
-import com.willbsp.habits.common.DATABASE_NAME
-import com.willbsp.habits.data.database.HabitDatabase
-import com.willbsp.habits.data.database.MIGRATION_1_2
-import dagger.hilt.android.qualifiers.ApplicationContext
+import com.willbsp.habits.data.database.util.DatabaseUtils
 import java.io.File
+import java.io.InputStream
 import javax.inject.Inject
 
 class ImportDatabaseUseCase @Inject constructor(
-    @ApplicationContext val context: Context,
-    private var habitDatabase: HabitDatabase,
+    private val databaseUtils: DatabaseUtils
 ) {
 
     // TODO move off the main thread
-    operator fun invoke(sourceUri: Uri): Boolean? {
+    operator fun invoke(input: InputStream): Boolean? {
 
-        val databaseFile = context.getDatabasePath(DATABASE_NAME)
-        val contentResolver = context.contentResolver
+        val databaseFile = databaseUtils.getDatabasePath()
 
         if (databaseFile.exists()) {
-            val input = contentResolver.openInputStream(sourceUri)
-            if (input != null) {
 
-                val oldDatabaseFile = File.createTempFile("old", ".db")
-                habitDatabase.close()
-                if (!habitDatabase.isOpen) {
-                    oldDatabaseFile.writeBytes(databaseFile.readBytes())
-                    deleteDatabaseFiles(databaseFile)
-                    databaseFile.writeBytes(input.readBytes())
-                }
+            val backupDatabaseFile = File.createTempFile("old", ".db")
 
-                try {
-                    Room.databaseBuilder(context, HabitDatabase::class.java, DATABASE_NAME)
-                        .addMigrations(MIGRATION_1_2)
-                        .build().openHelper.writableDatabase
-                } catch (e: Exception) {
-                    deleteDatabaseFiles(databaseFile)
-                    databaseFile.writeBytes(oldDatabaseFile.readBytes())
-                    input.close()
-                    return false
-                }
-
-                input.close()
-                return true
-
+            databaseUtils.closeDatabase()
+            if (!databaseUtils.isDatabaseOpen()) {
+                backupDatabaseFile.writeBytes(databaseFile.readBytes())
+                deleteDatabaseFiles(databaseFile)
+                databaseFile.writeBytes(input.readBytes())
             }
+
+            if (!databaseUtils.validateDatabase()) {
+                deleteDatabaseFiles(databaseFile)
+                databaseFile.writeBytes(backupDatabaseFile.readBytes())
+                input.close()
+                return false
+            }
+
+            input.close()
+            return true
 
         }
 
