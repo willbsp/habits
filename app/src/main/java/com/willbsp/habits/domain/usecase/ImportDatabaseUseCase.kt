@@ -1,6 +1,7 @@
 package com.willbsp.habits.domain.usecase
 
 import com.willbsp.habits.data.database.util.DatabaseUtils
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -51,9 +52,12 @@ class ImportDatabaseUseCase(
         val databaseDirectory = File(databaseFile.parent!!)
         if (databaseDirectory.isDirectory) {
             for (child: File in databaseDirectory.listFiles()!!) {
-                child.deleteRecursively()
+                if (child.endsWith("-shm") || child.endsWith("-wal")) {
+                    child.deleteRecursively()
+                }
             }
         }
+        databaseFile.deleteRecursively()
     }
 
 }
