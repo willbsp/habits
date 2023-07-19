@@ -7,6 +7,7 @@ import com.willbsp.habits.fake.dao.FakeRawDao
 import com.willbsp.habits.fake.repository.FakeSettingsRepository
 import com.willbsp.habits.rules.TestDispatcherRule
 import com.willbsp.habits.ui.screens.settings.SettingsViewModel
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -16,6 +17,7 @@ import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import java.io.File
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class SettingsViewModelTest {
@@ -24,13 +26,21 @@ class SettingsViewModelTest {
     val testDispatcher = TestDispatcherRule()
 
     private val settingsRepository = FakeSettingsRepository()
+    private val databaseUtils = FakeDatabaseUtils()
     private lateinit var viewModel: SettingsViewModel
 
     @Before
     fun setup() {
-        val fakeDatabaseUtils = FakeDatabaseUtils()
-        val importDatabaseUseCase = ImportDatabaseUseCase(fakeDatabaseUtils)
-        val exportDatabaseUseCase = ExportDatabaseUseCase(fakeDatabaseUtils, FakeRawDao())
+        val importDatabaseUseCase = ImportDatabaseUseCase(databaseUtils)
+        val exportDatabaseUseCase = ExportDatabaseUseCase(databaseUtils, FakeRawDao())
+        viewModel =
+            SettingsViewModel(settingsRepository, exportDatabaseUseCase, importDatabaseUseCase)
+    }
+
+    private fun dispatcherSetup(coroutineDispatcher: CoroutineDispatcher) {
+        val importDatabaseUseCase = ImportDatabaseUseCase(databaseUtils, coroutineDispatcher)
+        val exportDatabaseUseCase =
+            ExportDatabaseUseCase(databaseUtils, FakeRawDao(), coroutineDispatcher)
         viewModel =
             SettingsViewModel(settingsRepository, exportDatabaseUseCase, importDatabaseUseCase)
     }
@@ -129,6 +139,25 @@ class SettingsViewModelTest {
         viewModel.saveScorePreference(true)
         assertTrue(viewModel.uiState.value.showScore)
         collectJob.cancel()
+    }
+
+    @Test
+    fun exportDatabase_createsIdenticalFile() = runTest {
+        dispatcherSetup(UnconfinedTestDispatcher(testScheduler))
+        val destination = File.createTempFile("test", ".db")
+        viewModel.exportDatabase(destination.outputStream())
+        assertEquals(FakeDatabaseUtils.TEST_FILE_TEXT, destination.readLines()[0])
+    }
+
+    @Test
+    fun importDatabase_createsIdenticalFile() = runTest {
+        dispatcherSetup(UnconfinedTestDispatcher(testScheduler))
+        val testText = "completely different text"
+        val source = File.createTempFile("test", ".db")
+        source.writeText(testText)
+        viewModel.importDatabase(source.inputStream()) {}
+        val destination = databaseUtils.getDatabasePath()
+        assertEquals(testText, destination.readText())
     }
 
 }
