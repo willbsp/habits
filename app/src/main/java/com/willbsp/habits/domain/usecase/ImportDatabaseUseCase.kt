@@ -7,11 +7,16 @@ import java.io.File
 import java.io.InputStream
 import javax.inject.Inject
 
-class ImportDatabaseUseCase @Inject constructor(
-    private val databaseUtils: DatabaseUtils
+class ImportDatabaseUseCase(
+    private val databaseUtils: DatabaseUtils,
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) {
+    @Inject
+    constructor(
+        databaseUtils: DatabaseUtils,
+    ) : this(databaseUtils, Dispatchers.IO)
 
-    suspend operator fun invoke(input: InputStream): Boolean? = withContext(Dispatchers.IO) {
+    suspend operator fun invoke(input: InputStream): Boolean? = withContext(ioDispatcher) {
 
         val databaseFile = databaseUtils.getDatabasePath()
 
