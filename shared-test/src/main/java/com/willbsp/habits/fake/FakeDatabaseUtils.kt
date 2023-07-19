@@ -6,13 +6,24 @@ import java.io.File
 class FakeDatabaseUtils : DatabaseUtils {
 
     private var databaseOpen = true
+    private var databaseValid = true
+    private var databaseFile: File
+
+    init {
+        databaseFile = File.createTempFile("test", ".db")
+        databaseFile.writeText(TEST_FILE_TEXT)
+    }
+
+    fun setDatabaseValidity(valid: Boolean) {
+        databaseValid = valid
+    }
 
     override fun isDatabaseValid(): Boolean {
-        return true
+        return databaseValid
     }
 
     override fun getDatabasePath(): File {
-        return File("test")
+        return databaseFile
     }
 
     override fun closeDatabase() {
@@ -20,5 +31,9 @@ class FakeDatabaseUtils : DatabaseUtils {
     }
 
     override fun isDatabaseOpen(): Boolean = databaseOpen
+
+    companion object {
+        const val TEST_FILE_TEXT = "this is a test file"
+    }
 
 }
