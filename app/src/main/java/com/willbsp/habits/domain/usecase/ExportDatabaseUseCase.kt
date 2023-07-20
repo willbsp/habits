@@ -6,6 +6,7 @@ import com.willbsp.habits.data.database.util.DatabaseUtils
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.io.IOException
 import java.io.OutputStream
 import javax.inject.Inject
 
@@ -31,8 +32,12 @@ class ExportDatabaseUseCase(
 
         if (databaseFile.exists()) {
             rawDao.rawQuery(checkpointQuery)
-            output.write(databaseFile.readBytes())
-            output.close()
+            try {
+                output.write(databaseFile.readBytes())
+                output.close()
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
         }
 
     }
