@@ -14,7 +14,7 @@ import javax.inject.Singleton
     components = [SingletonComponent::class],
     replaces = [SettingsRepositoryModule::class]
 )
-class SettingsRepositoryTestModule {
+class TestSettingsRepositoryModule {
 
     @Singleton
     @Provides

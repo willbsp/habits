@@ -2,9 +2,11 @@ package com.willbsp.habits.ui.navigation
 
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
@@ -31,6 +33,8 @@ import com.willbsp.habits.ui.screens.settings.SettingsViewModel
 @Composable
 fun HabitsNavigationGraph(
     navController: NavHostController,
+    onDatabaseImport: (Boolean) -> Unit,
+    snackbarState: SnackbarHostState,
     modifier: Modifier = Modifier,
 ) {
     AnimatedNavHost(
@@ -50,6 +54,7 @@ fun HabitsNavigationGraph(
 
             HomeScreen(
                 homeUiState = state,
+                snackbarHostState = snackbarState,
                 navigateToLogbook = {
                     navController.navigate(HabitsNavigationDestination.LOGBOOK.route)
                 },
@@ -241,6 +246,7 @@ fun HabitsNavigationGraph(
 
         ) {
 
+            val context = LocalContext.current
             val viewModel = hiltViewModel<SettingsViewModel>()
             val state by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -259,6 +265,22 @@ fun HabitsNavigationGraph(
                 },
                 onShowScorePressed = {
                     viewModel.saveScorePreference(it)
+                },
+                onExportPressed = { destination ->
+                    if (destination != null) {
+                        val output = context.contentResolver.openOutputStream(destination)
+                        if (output != null) {
+                            viewModel.exportDatabase(output)
+                        }
+                    }
+                },
+                onImportPressed = { source ->
+                    if (source != null) {
+                        val input = context.contentResolver.openInputStream(source)
+                        if (input != null) {
+                            viewModel.importDatabase(input, onDatabaseImport)
+                        }
+                    }
                 },
                 settingsUiState = state
             )

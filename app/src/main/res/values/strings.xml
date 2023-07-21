@@ -40,6 +40,8 @@
     <string name="home_show_completed">Show completed</string>
     <string name="home_logbook">Logbook</string>
     <string name="home_detail">Detail</string>
+    <string name="home_import_successful">Database import successful.</string>
+    <string name="home_import_invalid">Import was invalid. Previous database restored.</string>
     <!--home screen end-->
 
     <!--settings screen start-->
@@ -51,6 +53,16 @@
     <string name="settings_scores_on_home">Show scores on home</string>
     <string name="settings_scores_on_home_desc">Show scores on the home screen instead of streaks.</string>
     <string name="settings_about_screen">About screen</string>
+    <string name="settings_export_database">Export database</string>
+    <string name="settings_export_database_desc">Export the database to a file for backup.</string>
+    <string name="settings_import_database">Import database</string>
+    <string name="settings_import_database_desc">Import a database file. Please note this will erase all existing data.</string>
+    <string name="settings_import_data">Import data?</string>
+    <string name="settings_import_dialog_desc">This action will erase ALL existing data. Consider exporting beforehand.</string>
+    <string name="settings_import">Import</string>
+    <string name="settings_dismiss">Dismiss</string>
+    <string name="settings_home">Home</string>
+    <string name="settings_backup">Backup</string>
     <!--settings screen end-->
 
     <!--logbook screen start-->

@@ -1,6 +1,7 @@
 package com.willbsp.habits.ui
 
 import androidx.activity.ComponentActivity
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.test.SemanticsNodeInteraction
@@ -81,6 +82,7 @@ class HomeScreenTest {
     fun setup() {
         hiltRule.inject()
         val clock = Clock.fixed(Instant.parse(date.toString() + time), ZoneOffset.UTC)
+        val snackbarHostState = SnackbarHostState()
         composeTestRule.setContent {
             val getHabitsWithVirtualEntriesUseCase =
                 GetHabitsWithVirtualEntriesUseCase(habitRepository, virtualEntriesUseCase)
@@ -95,6 +97,7 @@ class HomeScreenTest {
             Surface {
                 val state by viewModel.uiState.collectAsStateWithLifecycle()
                 HomeScreen(
+                    snackbarHostState = snackbarHostState,
                     completedOnClick = { id, date -> viewModel.toggleEntry(id, date) },
                     navigateToLogbook = { },
                     navigateToAddHabit = { },

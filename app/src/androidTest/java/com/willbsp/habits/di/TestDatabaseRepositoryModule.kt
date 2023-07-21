@@ -17,7 +17,7 @@ import javax.inject.Singleton
     components = [SingletonComponent::class],
     replaces = [DatabaseRepositoryModule::class]
 )
-class HabitRepositoryTestModule {
+class TestDatabaseRepositoryModule {
 
     val entryRepository = FakeEntryRepository()
     val habitRepository = FakeHabitRepository()

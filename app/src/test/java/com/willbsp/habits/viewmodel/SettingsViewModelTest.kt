@@ -1,5 +1,9 @@
 package com.willbsp.habits.viewmodel
 
+import com.willbsp.habits.domain.usecase.ExportDatabaseUseCase
+import com.willbsp.habits.domain.usecase.ImportDatabaseUseCase
+import com.willbsp.habits.fake.FakeDatabaseUtils
+import com.willbsp.habits.fake.dao.FakeRawDao
 import com.willbsp.habits.fake.repository.FakeSettingsRepository
 import com.willbsp.habits.rules.TestDispatcherRule
 import com.willbsp.habits.ui.screens.settings.SettingsViewModel
@@ -12,19 +16,25 @@ import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import java.io.File
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class SettingsViewModelTest {
 
     @get:Rule
-    val testDispatcher = TestDispatcherRule()
+    val testRule = TestDispatcherRule()
 
     private val settingsRepository = FakeSettingsRepository()
+    private val databaseUtils = FakeDatabaseUtils()
     private lateinit var viewModel: SettingsViewModel
 
     @Before
     fun setup() {
-        viewModel = SettingsViewModel(settingsRepository)
+        val dispatcher = testRule.getDispatcher()
+        val importDatabaseUseCase = ImportDatabaseUseCase(databaseUtils, dispatcher)
+        val exportDatabaseUseCase = ExportDatabaseUseCase(databaseUtils, FakeRawDao(), dispatcher)
+        viewModel =
+            SettingsViewModel(settingsRepository, exportDatabaseUseCase, importDatabaseUseCase)
     }
 
     @Test
@@ -121,6 +131,23 @@ class SettingsViewModelTest {
         viewModel.saveScorePreference(true)
         assertTrue(viewModel.uiState.value.showScore)
         collectJob.cancel()
+    }
+
+    @Test
+    fun exportDatabase_createsIdenticalFile() = runTest {
+        val destination = File.createTempFile("test", ".db")
+        viewModel.exportDatabase(destination.outputStream())
+        assertEquals(FakeDatabaseUtils.TEST_FILE_TEXT, destination.readLines()[0])
+    }
+
+    @Test
+    fun importDatabase_createsIdenticalFile() = runTest {
+        val testText = "completely different text"
+        val source = File.createTempFile("test", ".db")
+        source.writeText(testText)
+        viewModel.importDatabase(source.inputStream()) {}
+        val destination = databaseUtils.getDatabasePath()
+        assertEquals(testText, destination.readText())
     }
 
 }
