@@ -11,6 +11,6 @@ interface HabitWithEntriesDao {
 
     @Transaction
     @Query("SELECT * FROM habit")
-    fun getHabitsWithEntries(): Flow<List<HabitWithEntries>>
+    fun getHabitsWithEntriesStream(): Flow<List<HabitWithEntries>>
 
 }

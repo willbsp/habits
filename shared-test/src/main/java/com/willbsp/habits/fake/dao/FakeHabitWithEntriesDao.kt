@@ -12,10 +12,10 @@ class FakeHabitWithEntriesDao(
     private val entryDao: EntryDao
 ) : HabitWithEntriesDao {
 
-    override fun getHabitsWithEntries(): Flow<List<HabitWithEntries>> {
+    override fun getHabitsWithEntriesStream(): Flow<List<HabitWithEntries>> {
         return combine(
             habitDao.getAllHabitsStream(),
-            entryDao.getAllEntries()
+            entryDao.getAllEntriesStream()
         ) { habitList, entryList ->
             habitList.map { habit ->
                 HabitWithEntries(habit, entryList.filter { it.habitId == habit.id })

@@ -48,29 +48,29 @@ open class EntryDaoTest {
 
     @Test
     fun getAllEntries_whenNoEntries_returnsEmptyList() = runTest {
-        assertEquals(listOf<Entry>(), entryDao.getAllEntries().first())
+        assertEquals(listOf<Entry>(), entryDao.getAllEntriesStream().first())
     }
 
     @Test
     fun getAllEntries_whenEntries_returnsEntries() = runTest {
         habitDao.upsert(habit2)
         entryDao.insert(entry2)
-        assertEquals(listOf(entry2), entryDao.getAllEntries().first())
+        assertEquals(listOf(entry2), entryDao.getAllEntriesStream().first())
         habitDao.upsert(habit3)
         entryDao.insert(entry3)
-        assertEquals(listOf(entry2, entry3), entryDao.getAllEntries().first())
+        assertEquals(listOf(entry2, entry3), entryDao.getAllEntriesStream().first())
     }
 
     @Test
     fun getEntriesForHabit_whenNoEntries_returnsEmptyList() = runTest {
-        assertEquals(listOf<Entry>(), entryDao.getEntriesForHabit(habit2.id).first())
+        assertEquals(listOf<Entry>(), entryDao.getAllEntriesStream(habit2.id).first())
     }
 
     @Test
     fun getEntriesForHabit_whenEntries_returnsEntries() = runTest {
         habitDao.upsert(habit2)
         entryDao.insert(entry2)
-        assertEquals(listOf(entry2), entryDao.getEntriesForHabit(habit2.id).first())
+        assertEquals(listOf(entry2), entryDao.getAllEntriesStream(habit2.id).first())
     }
 
     @Test

@@ -13,9 +13,9 @@ class FakeEntryDao : EntryDao {
     private var observableEntries = MutableStateFlow<List<Entry>>(listOf())
     private suspend fun emit() = observableEntries.emit(entries.toList())
 
-    override fun getAllEntries(): Flow<List<Entry>> = observableEntries
+    override fun getAllEntriesStream(): Flow<List<Entry>> = observableEntries
 
-    override fun getEntriesForHabit(habitId: Int): Flow<List<Entry>> =
+    override fun getAllEntriesStream(habitId: Int): Flow<List<Entry>> =
         observableEntries.map { entry -> entry.filter { it.habitId == habitId } }
 
     override suspend fun getEntryForDate(habitId: Int, date: LocalDate): Entry? =
