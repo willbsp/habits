@@ -14,10 +14,10 @@ interface ReminderDao {
     fun getAllRemindersStream(): Flow<List<Reminder>>
 
     @Query("SELECT * FROM reminders WHERE habit_id = :habitId")
-    fun getRemindersForHabit(habitId: Int): Flow<List<Reminder>>
+    fun getRemindersForHabitStream(habitId: Int): Flow<List<Reminder>>
 
     @Query("SELECT * FROM reminders WHERE day = :day")
-    fun getRemindersForDay(day: Int): Flow<List<Reminder>>
+    fun getRemindersForDayStream(day: Int): Flow<List<Reminder>>
 
     @Upsert
     suspend fun upsert(reminder: Reminder)
