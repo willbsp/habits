@@ -10,6 +10,7 @@ import com.willbsp.habits.data.database.dao.EntryDao
 import com.willbsp.habits.data.database.dao.HabitDao
 import com.willbsp.habits.data.database.dao.HabitWithEntriesDao
 import com.willbsp.habits.data.database.dao.RawDao
+import com.willbsp.habits.data.database.dao.ReminderDao
 import com.willbsp.habits.data.database.util.Converters
 import com.willbsp.habits.data.model.Entry
 import com.willbsp.habits.data.model.Habit
@@ -30,6 +31,7 @@ abstract class HabitDatabase : RoomDatabase() {
     abstract fun habitDao(): HabitDao
     abstract fun entryDao(): EntryDao
     abstract fun habitWithEntriesDao(): HabitWithEntriesDao
+    abstract fun reminderDao(): ReminderDao
     abstract fun rawDao(): RawDao
 
 }
