@@ -13,13 +13,15 @@ import com.willbsp.habits.data.database.dao.RawDao
 import com.willbsp.habits.data.database.util.Converters
 import com.willbsp.habits.data.model.Entry
 import com.willbsp.habits.data.model.Habit
+import com.willbsp.habits.data.model.Reminder
 
 @Database(
-    entities = [Habit::class, Entry::class],
-    version = 3,
+    entities = [Habit::class, Entry::class, Reminder::class],
+    version = 4,
     exportSchema = true,
     autoMigrations = [
-        AutoMigration(from = 2, to = 3)
+        AutoMigration(from = 2, to = 3),
+        AutoMigration(from = 3, to = 4)
     ]
 )
 @TypeConverters(Converters::class)

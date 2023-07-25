@@ -4,21 +4,21 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
-import java.time.LocalDate
+import java.time.LocalTime
 
 @Entity(
-    tableName = "entries", foreignKeys = [ForeignKey(
+    tableName = "reminders", foreignKeys = [ForeignKey(
         entity = Habit::class,
         parentColumns = arrayOf("id"),
         childColumns = arrayOf("habit_id"),
-        onDelete = ForeignKey.CASCADE,
+        onDelete = ForeignKey.CASCADE
     )]
 )
-data class Entry(
+class Reminder(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     @ColumnInfo(name = "habit_id", index = true)
     val habitId: Int,
-    @ColumnInfo(name = "date", index = true)
-    val date: LocalDate,
+    val time: LocalTime,
+    val day: Int // index with Calendar.WEDNESDAY etc
 )

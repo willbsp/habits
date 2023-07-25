@@ -2,6 +2,7 @@ package com.willbsp.habits.data.database.util
 
 import androidx.room.TypeConverter
 import java.time.LocalDate
+import java.time.LocalTime
 
 class Converters {
 
@@ -13,6 +14,16 @@ class Converters {
     @TypeConverter
     fun toDateStamp(date: LocalDate): String {
         return date.toString()
+    }
+
+    @TypeConverter
+    fun fromTimeStamp(time: String): LocalTime {
+        return LocalTime.parse(time)
+    }
+
+    @TypeConverter
+    fun toTimeStamp(time: LocalTime): String {
+        return time.toString()
     }
 
 }
