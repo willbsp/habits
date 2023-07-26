@@ -22,6 +22,11 @@
     <string name="modify_habit_frequency">Frequency</string>
     <string name="modify_times_per_week">How many times per week?</string>
     <string name="modify_frequency">Frequency</string>
+    <string name="modify_reminder">Reminder</string>
+    <string name="modify_reminder_time">Time</string>
+    <string name="modify_reminder_none">None</string>
+    <string name="modify_reminder_every_day">Every day</string>
+    <string name="modify_reminder_specific_days">Specific days</string>
     <string name="timepicker_dismiss">Dismiss</string>
     <string name="timepicker_confirm">Confirm</string>
     <!--modify habit screen end-->

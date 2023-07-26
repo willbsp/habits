@@ -2,12 +2,15 @@ package com.willbsp.habits.ui.common
 
 import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccessAlarm
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -21,11 +24,13 @@ import com.willbsp.habits.data.model.HabitFrequency
 import java.text.DateFormatSymbols
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 
 @Composable
 fun HabitForm(
     modifier: Modifier = Modifier,
     onValueChange: (HabitUiState.Habit) -> Unit,
+    showTimePicker: (Boolean) -> Unit,
     habitUiState: HabitUiState.Habit
 ) {
 
@@ -54,7 +59,8 @@ fun HabitForm(
         HabitReminderDropdown(
             modifier = Modifier.fillMaxWidth(),
             uiState = habitUiState,
-            onValueChange = onValueChange
+            onValueChange = onValueChange,
+            showTimePicker = showTimePicker
         )
 
     }
@@ -63,15 +69,16 @@ fun HabitForm(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun HabitReminderDropdown(
+private fun HabitReminderDropdown( // TODO could make this generic
     modifier: Modifier = Modifier,
     uiState: HabitUiState.Habit,
     onValueChange: (HabitUiState.Habit) -> Unit,
+    showTimePicker: (Boolean) -> Unit
 ) {
 
-    val options = listOf("None", "Every day", "Specific days")
-    var optionSelected: String by remember { mutableStateOf("None") }
-    var expanded by remember { mutableStateOf(false) }
+    val reminderOptions = HabitReminderTypes.values()
+    var reminderSelected by remember { mutableStateOf(HabitReminderTypes.NONE) }
+    var reminderExpanded by remember { mutableStateOf(false) }
 
     Column(
         modifier = modifier,
@@ -80,8 +87,8 @@ private fun HabitReminderDropdown(
 
         ExposedDropdownMenuBox(
             modifier = Modifier,
-            expanded = expanded,
-            onExpandedChange = { expanded = !expanded }
+            expanded = reminderExpanded,
+            onExpandedChange = { reminderExpanded = !reminderExpanded }
         ) {
 
             OutlinedTextField(
@@ -89,41 +96,42 @@ private fun HabitReminderDropdown(
                     .menuAnchor()
                     .fillMaxWidth(),
                 readOnly = true,
-                value = optionSelected,
+                value = stringResource(id = reminderSelected.userReadableStringRes),
                 onValueChange = {},
-                label = { Text("Reminder") },
-                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+                label = { Text(stringResource(R.string.modify_reminder)) },
+                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = reminderExpanded) },
                 colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors()
             )
             ExposedDropdownMenu(
-                expanded = expanded,
-                onDismissRequest = { expanded = false }
+                expanded = reminderExpanded,
+                onDismissRequest = { reminderExpanded = false }
             ) {
-                options.forEach { option ->
+                reminderOptions.forEach { selectionOption ->
                     DropdownMenuItem(
-                        text = { Text(option) },
+                        text = { Text(stringResource(selectionOption.userReadableStringRes)) },
                         onClick = {
-                            optionSelected = option
+                            reminderSelected = selectionOption
                             // onValueChange
-                            expanded = false
-                        }
+                            reminderExpanded = false
+                        },
+                        contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding
                     )
                 }
             }
 
         }
 
-        AnimatedVisibility(visible = (optionSelected == "Every day") || (optionSelected == "Specific days")) {
+        AnimatedVisibility(visible = (reminderSelected == HabitReminderTypes.EVERYDAY) || (reminderSelected == HabitReminderTypes.SPECIFIC)) {
 
             Column(
                 verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                HabitReminderTimeDropdown(
+                HabitReminderTimeField(
                     modifier = Modifier.fillMaxWidth(),
-                    time = LocalTime.NOON,
-                    onClick = {} // TODO open time picker
+                    showTimePicker = { showTimePicker(true) },
+                    time = LocalTime.NOON
                 )
-                AnimatedVisibility(visible = (optionSelected == "Specific days")) {
+                AnimatedVisibility(visible = (reminderSelected == HabitReminderTypes.SPECIFIC)) {
                     HabitReminderDays(
                         modifier = Modifier.fillMaxWidth()
                     )
@@ -137,24 +145,36 @@ private fun HabitReminderDropdown(
 
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun HabitReminderTimeDropdown(
+private fun HabitReminderTimeField(
     modifier: Modifier = Modifier,
-    time: LocalTime,
-    onClick: () -> Unit
+    showTimePicker: () -> Unit,
+    time: LocalTime
 ) {
 
-    val formatter: DateTimeFormatter = DateTimeFormatter.ISO_TIME
+    val formatter = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)
+    val source = remember { MutableInteractionSource() }
 
     OutlinedTextField(
-        modifier = modifier.clickable { onClick() },
-        value = time.format(formatter).toString(),
+        modifier = modifier,
+        value = time.format(formatter),
         readOnly = true,
-        onValueChange = {}, // TODO update viewmodel
-        label = { Text("Time") },
-        trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = false) }
+        onValueChange = {},
+        label = { Text(stringResource(R.string.modify_reminder_time)) },
+        interactionSource = source,
+        trailingIcon = {
+            Icon(
+                imageVector = Icons.Default.AccessAlarm,
+                contentDescription = null
+            )
+        }
     )
+
+    if (source.collectIsPressedAsState().value) {
+        SideEffect {
+            showTimePicker()
+        }
+    }
 
 }
 
@@ -281,5 +301,5 @@ private fun HabitFrequencyDropdown(
 @Preview(showBackground = true)
 @Composable
 private fun HabitFormPreview() {
-    HabitForm(onValueChange = {}, habitUiState = HabitUiState.Habit())
+    HabitForm(onValueChange = {}, showTimePicker = {}, habitUiState = HabitUiState.Habit())
 }

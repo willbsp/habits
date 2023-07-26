@@ -14,8 +14,10 @@ import com.willbsp.habits.ui.common.DefaultHabitsAppTopBar
 import com.willbsp.habits.ui.common.HabitForm
 import com.willbsp.habits.ui.common.HabitUiState
 import com.willbsp.habits.ui.common.HabitsFloatingAction
+import com.willbsp.habits.ui.common.TimePickerDialog
 import com.willbsp.habits.ui.theme.HabitsTheme
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddHabitScreen(
     modifier: Modifier = Modifier,
@@ -42,14 +44,27 @@ fun AddHabitScreen(
         }
     ) { innerPadding ->
 
+        // TODO for 24 hour find users preference
+        val timePickerState = rememberTimePickerState(is24Hour = true)
+        var showTimePicker by remember { mutableStateOf(false) }
+
         HabitForm(
             modifier = modifier
                 .padding(innerPadding)
                 .padding(horizontal = 10.dp)
                 .fillMaxSize(),
             onValueChange = onValueChange,
+            showTimePicker = { showTimePicker = it },
             habitUiState = habitUiState
         )
+
+        if (showTimePicker) {
+            TimePickerDialog(
+                state = timePickerState,
+                onCancel = { showTimePicker = false },
+                onConfirm = { showTimePicker = false }
+            )
+        }
 
     }
 }

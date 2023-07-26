@@ -1,5 +1,7 @@
 package com.willbsp.habits.ui.common
 
+import androidx.annotation.StringRes
+import com.willbsp.habits.R
 import com.willbsp.habits.data.model.Habit
 import com.willbsp.habits.data.model.HabitFrequency
 
@@ -16,6 +18,11 @@ sealed class HabitUiState {
 
 }
 
+enum class HabitReminderTypes(@StringRes val userReadableStringRes: Int) {
+    NONE(R.string.modify_reminder_none),
+    EVERYDAY(R.string.modify_reminder_every_day),
+    SPECIFIC(R.string.modify_reminder_specific_days)
+}
 
 fun HabitUiState.Habit.toHabit(id: Int? = null): Habit {
     return if (id != null) Habit(

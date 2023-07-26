@@ -1,6 +1,11 @@
 package com.willbsp.habits.ui.screens.edit
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.FilledTonalButton
@@ -64,6 +69,7 @@ fun EditHabitScreen(
                         modifier = Modifier
                             .fillMaxWidth(),
                         onValueChange = onValueChange,
+                        showTimePicker = {},
                         habitUiState = habitUiState
                     )
 
