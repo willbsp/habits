@@ -39,7 +39,11 @@ fun TimePickerDialog(
             color = AlertDialogDefaults.containerColor,
             tonalElevation = AlertDialogDefaults.TonalElevation
         ) {
-            Column(modifier = modifier.padding(15.dp)) {
+            Column(
+                modifier = modifier.padding(15.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.SpaceEvenly
+            ) {
                 TimePicker(state = state)
                 FlowRow(
                     modifier = modifier.fillMaxWidth(),
