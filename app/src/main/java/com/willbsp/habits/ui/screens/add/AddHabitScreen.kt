@@ -16,6 +16,7 @@ import com.willbsp.habits.ui.common.HabitUiState
 import com.willbsp.habits.ui.common.HabitsFloatingAction
 import com.willbsp.habits.ui.common.TimePickerDialog
 import com.willbsp.habits.ui.theme.HabitsTheme
+import java.time.LocalTime
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -45,7 +46,10 @@ fun AddHabitScreen(
     ) { innerPadding ->
 
         // TODO for 24 hour find users preference
-        val timePickerState = rememberTimePickerState(is24Hour = true)
+        val timePickerState = rememberTimePickerState(
+            initialHour = habitUiState.reminderTime.hour,
+            initialMinute = habitUiState.reminderTime.minute
+        )
         var showTimePicker by remember { mutableStateOf(false) }
 
         HabitForm(
@@ -62,7 +66,17 @@ fun AddHabitScreen(
             TimePickerDialog(
                 state = timePickerState,
                 onCancel = { showTimePicker = false },
-                onConfirm = { showTimePicker = false }
+                onConfirm = {
+                    onValueChange(
+                        habitUiState.copy(
+                            reminderTime = LocalTime.of(
+                                timePickerState.hour,
+                                timePickerState.minute
+                            )
+                        )
+                    )
+                    showTimePicker = false
+                }
             )
         }
 

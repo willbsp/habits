@@ -129,7 +129,7 @@ private fun HabitReminderDropdown( // TODO could make this generic
                 HabitReminderTimeField(
                     modifier = Modifier.fillMaxWidth(),
                     showTimePicker = { showTimePicker(true) },
-                    time = LocalTime.NOON
+                    time = uiState.reminderTime
                 )
                 AnimatedVisibility(visible = (reminderSelected == HabitReminderTypes.SPECIFIC)) {
                     HabitReminderDays(

@@ -4,6 +4,7 @@ import androidx.annotation.StringRes
 import com.willbsp.habits.R
 import com.willbsp.habits.data.model.Habit
 import com.willbsp.habits.data.model.HabitFrequency
+import java.time.LocalTime
 
 sealed class HabitUiState {
 
@@ -13,7 +14,8 @@ sealed class HabitUiState {
         val name: String = "",
         val nameIsInvalid: Boolean = false,
         val frequency: HabitFrequency = HabitFrequency.DAILY,
-        val repeat: Int = 1
+        val repeat: Int = 1,
+        val reminderTime: LocalTime = LocalTime.of(12, 0)
     ) : HabitUiState()
 
 }
