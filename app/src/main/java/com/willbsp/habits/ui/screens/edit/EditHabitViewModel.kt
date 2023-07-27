@@ -6,9 +6,8 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.willbsp.habits.common.HABIT_NAME_MAX_CHARACTER_LIMIT
 import com.willbsp.habits.data.repository.HabitRepository
-import com.willbsp.habits.domain.usecase.SaveHabitUseCase
+import com.willbsp.habits.domain.usecase.ValidateHabitNameUseCase
 import com.willbsp.habits.ui.common.HabitUiState
 import com.willbsp.habits.ui.common.toHabit
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,8 +16,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class EditHabitViewModel @Inject constructor(
-    private val habitsRepository: HabitRepository,
-    private val saveHabitUseCase: SaveHabitUseCase,
+    private val habitRepository: HabitRepository,
+    private val isValidHabitName: ValidateHabitNameUseCase,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -31,39 +30,34 @@ class EditHabitViewModel @Inject constructor(
         loadHabit()
     }
 
-    fun updateUiState(newHabitsUiState: HabitUiState.Habit) {
-        uiState = if (newHabitsUiState.name.length <= HABIT_NAME_MAX_CHARACTER_LIMIT
-            && !newHabitsUiState.name.contains("\n")
-        ) {
-            newHabitsUiState.copy(nameIsInvalid = false)
-        } else newHabitsUiState.copy(nameIsInvalid = true)
+    fun updateUiState(newUiState: HabitUiState.Habit) {
+        uiState = if (isValidHabitName(newUiState.name)) {
+            newUiState.copy(nameIsInvalid = false)
+        } else newUiState.copy(nameIsInvalid = true)
     }
 
     fun deleteHabit() {
-        viewModelScope.launch {
-            habitsRepository.deleteHabit(habitId)
-        }
+        viewModelScope.launch { habitRepository.deleteHabit(habitId) }
     }
 
     fun saveHabit(): Boolean {
-        return when (uiState) {
+        when (uiState) {
             is HabitUiState.Habit -> {
                 val habitState = uiState as HabitUiState.Habit
-                return if (saveHabitUseCase(habitState.toHabit(habitId), viewModelScope)) {
-                    true
-                } else {
-                    uiState = habitState.copy(nameIsInvalid = true)
-                    false
+                if (isValidHabitName(habitState.name)) {
+                    viewModelScope.launch { habitRepository.upsertHabit(habitState.toHabit(habitId)) }
+                    return true
                 }
+                return false
             }
 
-            else -> false
+            else -> return false
         }
     }
 
     private fun loadHabit() {
         viewModelScope.launch {
-            val habit = habitsRepository.getHabit(habitId)
+            val habit = habitRepository.getHabit(habitId)
             if (habit != null) {
                 uiState = HabitUiState.Habit(
                     name = habit.name,
