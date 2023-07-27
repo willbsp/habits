@@ -15,6 +15,7 @@ sealed class HabitUiState {
         val nameIsInvalid: Boolean = false,
         val frequency: HabitFrequency = HabitFrequency.DAILY,
         val repeat: Int = 1,
+        val reminderType: HabitReminderTypes = HabitReminderTypes.NONE,
         val reminderTime: LocalTime = LocalTime.of(12, 0)
     ) : HabitUiState()
 

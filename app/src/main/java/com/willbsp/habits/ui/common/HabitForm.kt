@@ -111,7 +111,7 @@ private fun HabitReminderDropdown( // TODO could make this generic
                         text = { Text(stringResource(selectionOption.userReadableStringRes)) },
                         onClick = {
                             reminderSelected = selectionOption
-                            // onValueChange
+                            onValueChange(uiState.copy(reminderType = selectionOption))
                             reminderExpanded = false
                         },
                         contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding
