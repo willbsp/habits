@@ -16,6 +16,9 @@ interface HabitDao {
     @Query("SELECT * FROM habit WHERE id = :id")
     suspend fun getHabit(id: Int): Habit?
 
+    @Insert
+    suspend fun insert(habit: Habit): Long
+
     @Upsert
     suspend fun upsert(habit: Habit)
 
