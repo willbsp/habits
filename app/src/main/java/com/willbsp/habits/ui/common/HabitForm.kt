@@ -77,8 +77,8 @@ private fun HabitReminderDropdown( // TODO could make this generic
 ) {
 
     val reminderOptions = HabitReminderTypes.values()
-    var reminderSelected by remember { mutableStateOf(HabitReminderTypes.NONE) }
     var reminderExpanded by remember { mutableStateOf(false) }
+    var reminderSelected by remember { mutableStateOf(uiState.reminderType) }
 
     Column(
         modifier = modifier,

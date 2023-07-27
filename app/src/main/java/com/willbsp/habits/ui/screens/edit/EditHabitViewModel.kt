@@ -7,16 +7,20 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.willbsp.habits.data.repository.HabitRepository
+import com.willbsp.habits.data.repository.ReminderRepository
 import com.willbsp.habits.domain.usecase.ValidateHabitNameUseCase
+import com.willbsp.habits.ui.common.HabitReminderTypes
 import com.willbsp.habits.ui.common.HabitUiState
 import com.willbsp.habits.ui.common.toHabit
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class EditHabitViewModel @Inject constructor(
     private val habitRepository: HabitRepository,
+    private val reminderRepository: ReminderRepository,
     private val isValidHabitName: ValidateHabitNameUseCase,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
@@ -59,12 +63,24 @@ class EditHabitViewModel @Inject constructor(
         viewModelScope.launch {
             val habit = habitRepository.getHabit(habitId)
             if (habit != null) {
+                val reminders = reminderRepository.getRemindersForHabitStream(habitId).first()
                 uiState = HabitUiState.Habit(
                     name = habit.name,
                     frequency = habit.frequency,
-                    repeat = habit.repeat
+                    repeat = habit.repeat,
+                    reminderType = getReminderType(reminders.count()),
+                    reminderTime = reminders.first().time,
+                    reminderDays = reminders.map { it.day }
                 )
             }
+        }
+    }
+
+    private fun getReminderType(reminderCount: Int): HabitReminderTypes {
+        return when (reminderCount) {
+            7 -> HabitReminderTypes.EVERYDAY
+            0 -> HabitReminderTypes.NONE
+            else -> HabitReminderTypes.SPECIFIC
         }
     }
 
