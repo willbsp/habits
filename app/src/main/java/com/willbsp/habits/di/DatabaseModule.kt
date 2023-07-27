@@ -37,6 +37,10 @@ class DatabaseModule {
 
     @ActivityRetainedScoped
     @Provides
+    fun provideReminderRepository(db: HabitDatabase) = db.reminderDao()
+
+    @ActivityRetainedScoped
+    @Provides
     fun provideRawDao(db: HabitDatabase) = db.rawDao()
 
 }

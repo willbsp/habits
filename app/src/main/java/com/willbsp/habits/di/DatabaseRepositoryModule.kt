@@ -4,6 +4,7 @@ import com.willbsp.habits.data.repository.*
 import com.willbsp.habits.data.repository.local.LocalEntryRepository
 import com.willbsp.habits.data.repository.local.LocalHabitRepository
 import com.willbsp.habits.data.repository.local.LocalHabitWithEntriesRepository
+import com.willbsp.habits.data.repository.local.LocalReminderRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -31,5 +32,11 @@ abstract class DatabaseRepositoryModule {
     abstract fun bindHabitWithEntriesRepository(
         localHabitWithEntriesRepository: LocalHabitWithEntriesRepository
     ): HabitWithEntriesRepository
+
+    @Binds
+    @ViewModelScoped
+    abstract fun bindReminderRepository(
+        localReminderRepository: LocalReminderRepository
+    ): ReminderRepository
 
 }
