@@ -15,7 +15,7 @@ import com.willbsp.habits.data.TestData.habit2
 import com.willbsp.habits.data.model.Habit
 import com.willbsp.habits.data.model.HabitFrequency
 import com.willbsp.habits.data.repository.HabitRepository
-import com.willbsp.habits.domain.usecase.SaveHabitUseCase
+import com.willbsp.habits.domain.usecase.ValidateHabitNameUseCase
 import com.willbsp.habits.helper.onNodeWithContentDescriptionId
 import com.willbsp.habits.helper.onNodeWithTextId
 import com.willbsp.habits.ui.common.HabitUiState
@@ -54,8 +54,8 @@ class EditHabitScreenTest {
         runBlocking { habitRepository.upsertHabit(habit1) }
         composeTestRule.setContent {
             val viewModel = EditHabitViewModel(
-                habitsRepository = habitRepository,
-                saveHabitUseCase = SaveHabitUseCase(habitRepository),
+                habitRepository = habitRepository,
+                isValidHabitName = ValidateHabitNameUseCase(),
                 savedStateHandle = SavedStateHandle(mapOf(Pair("habitId", habit1.id)))
             )
             Surface {
@@ -92,7 +92,7 @@ class EditHabitScreenTest {
             .performTextClearance()
         composeTestRule.onNodeWithTextId(R.string.modify_habit_name)
             .performClick()
-            .performTextInput("h")
+            .performTextInput("")
         composeTestRule.onNodeWithContentDescriptionId(R.string.edit_habit_update_habit)
             .performClick()
         composeTestRule.onNodeWithTextId(R.string.modify_habit_name).assertExists()

@@ -3,7 +3,7 @@ package com.willbsp.habits.viewmodel
 import androidx.lifecycle.SavedStateHandle
 import com.willbsp.habits.data.TestData.habit1
 import com.willbsp.habits.data.model.HabitFrequency
-import com.willbsp.habits.domain.usecase.SaveHabitUseCase
+import com.willbsp.habits.domain.usecase.ValidateHabitNameUseCase
 import com.willbsp.habits.fake.repository.FakeHabitRepository
 import com.willbsp.habits.rules.TestDispatcherRule
 import com.willbsp.habits.ui.common.HabitUiState
@@ -29,10 +29,10 @@ class EditHabitViewModelTest {
 
     @Before
     fun setup() {
-        val saveHabitUseCase = SaveHabitUseCase(habitRepository)
         runBlocking { habitRepository.upsertHabit(habit1) }
         val savedStateHandle = SavedStateHandle(mapOf("habitId" to habit1.id))
-        viewModel = EditHabitViewModel(habitRepository, saveHabitUseCase, savedStateHandle)
+        viewModel =
+            EditHabitViewModel(habitRepository, ValidateHabitNameUseCase(), savedStateHandle)
     }
 
     @Test

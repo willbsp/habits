@@ -12,7 +12,7 @@ import com.willbsp.habits.R
 import com.willbsp.habits.data.TestData.habit1
 import com.willbsp.habits.data.model.HabitFrequency
 import com.willbsp.habits.data.repository.HabitRepository
-import com.willbsp.habits.domain.usecase.SaveHabitUseCase
+import com.willbsp.habits.domain.usecase.ValidateHabitNameUseCase
 import com.willbsp.habits.helper.onNodeWithContentDescriptionId
 import com.willbsp.habits.helper.onNodeWithTextId
 import com.willbsp.habits.ui.screens.add.AddHabitScreen
@@ -47,7 +47,7 @@ class AddHabitScreenTest {
     fun setup() {
         hiltRule.inject()
         composeTestRule.setContent {
-            val viewModel = AddHabitViewModel(SaveHabitUseCase(habitRepository))
+            val viewModel = AddHabitViewModel(habitRepository, ValidateHabitNameUseCase())
             Surface {
                 val state = viewModel.uiState
                 AddHabitScreen(
@@ -73,7 +73,7 @@ class AddHabitScreenTest {
     fun habitNameTooShort_isNotSaved() = runTest {
         composeTestRule.onNodeWithTextId(R.string.modify_habit_name)
             .performClick()
-            .performTextInput("h")
+            .performTextInput("")
         composeTestRule.onNodeWithContentDescriptionId(R.string.add_habit_add_habit).performClick()
         composeTestRule.onNodeWithTextId(R.string.modify_habit_name).assertExists()
         val habits = habitRepository.getAllHabitsStream().first()
