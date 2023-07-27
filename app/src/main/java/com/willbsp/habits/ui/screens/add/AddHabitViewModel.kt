@@ -9,7 +9,7 @@ import com.willbsp.habits.data.model.Reminder
 import com.willbsp.habits.data.repository.HabitRepository
 import com.willbsp.habits.data.repository.ReminderRepository
 import com.willbsp.habits.domain.usecase.ValidateHabitNameUseCase
-import com.willbsp.habits.ui.common.HabitReminderTypes
+import com.willbsp.habits.ui.common.HabitReminderType
 import com.willbsp.habits.ui.common.HabitUiState
 import com.willbsp.habits.ui.common.toHabit
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -46,8 +46,8 @@ class AddHabitViewModel @Inject constructor(
 
     private suspend fun saveReminders(habitId: Int) {
         when (uiState.reminderType) {
-            HabitReminderTypes.NONE -> return
-            HabitReminderTypes.EVERYDAY -> {
+            HabitReminderType.NONE -> return
+            HabitReminderType.EVERYDAY -> {
                 for (day in Calendar.SUNDAY..Calendar.SATURDAY) {
                     val reminder =
                         Reminder(habitId = habitId, time = uiState.reminderTime, day = day)
@@ -55,7 +55,7 @@ class AddHabitViewModel @Inject constructor(
                 }
             }
 
-            HabitReminderTypes.SPECIFIC -> {
+            HabitReminderType.SPECIFIC -> {
                 for (day in uiState.reminderDays) {
                     val reminder =
                         Reminder(habitId = habitId, time = uiState.reminderTime, day = day)

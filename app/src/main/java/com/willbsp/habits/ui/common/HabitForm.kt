@@ -76,7 +76,7 @@ private fun HabitReminderDropdown( // TODO could make this generic
     showTimePicker: (Boolean) -> Unit
 ) {
 
-    val reminderOptions = HabitReminderTypes.values()
+    val reminderOptions = HabitReminderType.values()
     var reminderExpanded by remember { mutableStateOf(false) }
     var reminderSelected by remember { mutableStateOf(uiState.reminderType) }
 
@@ -121,7 +121,7 @@ private fun HabitReminderDropdown( // TODO could make this generic
 
         }
 
-        AnimatedVisibility(visible = (reminderSelected == HabitReminderTypes.EVERYDAY) || (reminderSelected == HabitReminderTypes.SPECIFIC)) {
+        AnimatedVisibility(visible = (reminderSelected == HabitReminderType.EVERYDAY) || (reminderSelected == HabitReminderType.SPECIFIC)) {
 
             Column(
                 verticalArrangement = Arrangement.spacedBy(10.dp)
@@ -131,7 +131,7 @@ private fun HabitReminderDropdown( // TODO could make this generic
                     showTimePicker = { showTimePicker(true) },
                     time = uiState.reminderTime
                 )
-                AnimatedVisibility(visible = (reminderSelected == HabitReminderTypes.SPECIFIC)) {
+                AnimatedVisibility(visible = (reminderSelected == HabitReminderType.SPECIFIC)) {
                     HabitReminderDays(
                         modifier = Modifier.fillMaxWidth()
                     )

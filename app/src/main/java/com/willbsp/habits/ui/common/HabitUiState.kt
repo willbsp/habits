@@ -15,14 +15,14 @@ sealed class HabitUiState {
         val nameIsInvalid: Boolean = false,
         val frequency: HabitFrequency = HabitFrequency.DAILY,
         val repeat: Int = 1,
-        val reminderType: HabitReminderTypes = HabitReminderTypes.NONE,
+        val reminderType: HabitReminderType = HabitReminderType.NONE,
         val reminderTime: LocalTime = LocalTime.of(12, 0),
         val reminderDays: List<Int> = listOf()
     ) : HabitUiState()
 
 }
 
-enum class HabitReminderTypes(@StringRes val userReadableStringRes: Int) {
+enum class HabitReminderType(@StringRes val userReadableStringRes: Int) {
     NONE(R.string.modify_reminder_none),
     EVERYDAY(R.string.modify_reminder_every_day),
     SPECIFIC(R.string.modify_reminder_specific_days)

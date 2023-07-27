@@ -9,7 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.willbsp.habits.data.repository.HabitRepository
 import com.willbsp.habits.data.repository.ReminderRepository
 import com.willbsp.habits.domain.usecase.ValidateHabitNameUseCase
-import com.willbsp.habits.ui.common.HabitReminderTypes
+import com.willbsp.habits.ui.common.HabitReminderType
 import com.willbsp.habits.ui.common.HabitUiState
 import com.willbsp.habits.ui.common.toHabit
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -76,11 +76,11 @@ class EditHabitViewModel @Inject constructor(
         }
     }
 
-    private fun getReminderType(reminderCount: Int): HabitReminderTypes {
+    private fun getReminderType(reminderCount: Int): HabitReminderType {
         return when (reminderCount) {
-            7 -> HabitReminderTypes.EVERYDAY
-            0 -> HabitReminderTypes.NONE
-            else -> HabitReminderTypes.SPECIFIC
+            7 -> HabitReminderType.EVERYDAY
+            0 -> HabitReminderType.NONE
+            else -> HabitReminderType.SPECIFIC
         }
     }
 
