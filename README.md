@@ -1,7 +1,12 @@
 # Habits
 
 <p>
-  <img src="https://github.com/willbsp/habits/actions/workflows/android.yml/badge.svg" alt="Android CI">
+  <a>
+    <img src="https://github.com/willbsp/habits/actions/workflows/android.yml/badge.svg" alt="Android CI">
+  </a>
+  <a href="https://github.com/willbsp/habits/releases/latest">
+      <img src="https://img.shields.io/github/v/release/willbsp/habits" />
+  </a>
 </p>
 
 Habits is an app for tracking and helping to maintain good habits. It is available on Google Play and F-Droid.
