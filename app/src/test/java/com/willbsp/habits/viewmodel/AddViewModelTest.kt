@@ -4,8 +4,8 @@ import com.willbsp.habits.data.model.HabitFrequency
 import com.willbsp.habits.domain.usecase.ValidateHabitNameUseCase
 import com.willbsp.habits.fake.repository.FakeHabitRepository
 import com.willbsp.habits.rules.TestDispatcherRule
-import com.willbsp.habits.ui.common.HabitUiState
-import com.willbsp.habits.ui.screens.add.AddHabitViewModel
+import com.willbsp.habits.ui.common.form.HabitFormUiState
+import com.willbsp.habits.ui.screens.add.AddViewModel
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -13,17 +13,17 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-class AddHabitViewModelTest {
+class AddViewModelTest {
 
     @get:Rule
     val testDispatcher = TestDispatcherRule()
 
     private val habitRepository = FakeHabitRepository()
-    private lateinit var viewModel: AddHabitViewModel
+    private lateinit var viewModel: AddViewModel
 
     @Before
     fun setup() {
-        viewModel = AddHabitViewModel(habitRepository, ValidateHabitNameUseCase())
+        viewModel = AddViewModel(habitRepository, ValidateHabitNameUseCase())
     }
 
     @Test
@@ -34,7 +34,7 @@ class AddHabitViewModelTest {
 
     @Test
     fun uiState_whenUpdated_newStateSet() {
-        val expected = HabitUiState.Habit("Reading", false, HabitFrequency.WEEKLY)
+        val expected = HabitFormUiState.HabitData("Reading", false, HabitFrequency.WEEKLY)
         val updatedUiState =
             viewModel.uiState.copy(name = "Reading", frequency = HabitFrequency.WEEKLY)
         viewModel.updateUiState(updatedUiState)

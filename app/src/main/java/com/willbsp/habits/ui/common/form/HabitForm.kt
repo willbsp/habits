@@ -1,4 +1,4 @@
-package com.willbsp.habits.ui.common
+package com.willbsp.habits.ui.common.form
 
 import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
@@ -29,9 +29,9 @@ import java.time.format.FormatStyle
 @Composable
 fun HabitForm(
     modifier: Modifier = Modifier,
-    onValueChange: (HabitUiState.Habit) -> Unit,
+    onValueChange: (HabitFormUiState.HabitData) -> Unit,
     showTimePicker: (Boolean) -> Unit,
-    habitUiState: HabitUiState.Habit
+    habitFormUiState: HabitFormUiState.HabitData
 ) {
 
     Column(
@@ -41,10 +41,10 @@ fun HabitForm(
     ) {
 
         OutlinedTextField(
-            value = habitUiState.name,
+            value = habitFormUiState.name,
             singleLine = true,
-            isError = habitUiState.nameIsInvalid,
-            onValueChange = { onValueChange(habitUiState.copy(name = it)) },
+            isError = habitFormUiState.nameIsInvalid,
+            onValueChange = { onValueChange(habitFormUiState.copy(name = it)) },
             label = { Text(stringResource(R.string.modify_habit_name)) },
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
             modifier = Modifier.fillMaxWidth()
@@ -52,13 +52,13 @@ fun HabitForm(
 
         HabitFrequencyDropdown(
             modifier = Modifier.fillMaxWidth(),
-            uiState = habitUiState,
+            uiState = habitFormUiState,
             onValueChange = onValueChange
         )
 
         HabitReminderDropdown(
             modifier = Modifier.fillMaxWidth(),
-            uiState = habitUiState,
+            uiState = habitFormUiState,
             onValueChange = onValueChange,
             showTimePicker = showTimePicker
         )
@@ -71,8 +71,8 @@ fun HabitForm(
 @Composable
 private fun HabitReminderDropdown( // TODO could make this generic
     modifier: Modifier = Modifier,
-    uiState: HabitUiState.Habit,
-    onValueChange: (HabitUiState.Habit) -> Unit,
+    uiState: HabitFormUiState.HabitData,
+    onValueChange: (HabitFormUiState.HabitData) -> Unit,
     showTimePicker: (Boolean) -> Unit
 ) {
 
@@ -207,8 +207,8 @@ private fun HabitReminderDays(
 @Composable
 private fun HabitFrequencyDropdown(
     modifier: Modifier = Modifier,
-    uiState: HabitUiState.Habit,
-    onValueChange: (HabitUiState.Habit) -> Unit
+    uiState: HabitFormUiState.HabitData,
+    onValueChange: (HabitFormUiState.HabitData) -> Unit
 ) {
 
     val frequencyOptions = HabitFrequency.values()
@@ -301,5 +301,5 @@ private fun HabitFrequencyDropdown(
 @Preview(showBackground = true)
 @Composable
 private fun HabitFormPreview() {
-    HabitForm(onValueChange = {}, showTimePicker = {}, habitUiState = HabitUiState.Habit())
+    HabitForm(onValueChange = {}, showTimePicker = {}, habitFormUiState = HabitFormUiState.HabitData())
 }

@@ -1,4 +1,4 @@
-package com.willbsp.habits.ui.common
+package com.willbsp.habits.ui.common.dialog
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

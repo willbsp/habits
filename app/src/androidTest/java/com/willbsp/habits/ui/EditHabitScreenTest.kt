@@ -18,9 +18,9 @@ import com.willbsp.habits.data.repository.HabitRepository
 import com.willbsp.habits.domain.usecase.ValidateHabitNameUseCase
 import com.willbsp.habits.helper.onNodeWithContentDescriptionId
 import com.willbsp.habits.helper.onNodeWithTextId
-import com.willbsp.habits.ui.common.HabitUiState
-import com.willbsp.habits.ui.screens.edit.EditHabitScreen
-import com.willbsp.habits.ui.screens.edit.EditHabitViewModel
+import com.willbsp.habits.ui.common.form.HabitFormUiState
+import com.willbsp.habits.ui.screens.edit.EditScreen
+import com.willbsp.habits.ui.screens.edit.EditViewModel
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -53,19 +53,19 @@ class EditHabitScreenTest {
         hiltRule.inject()
         runBlocking { habitRepository.upsertHabit(habit1) }
         composeTestRule.setContent {
-            val viewModel = EditHabitViewModel(
+            val viewModel = EditViewModel(
                 habitRepository = habitRepository,
                 isValidHabitName = ValidateHabitNameUseCase(),
                 savedStateHandle = SavedStateHandle(mapOf(Pair("habitId", habit1.id)))
             )
             Surface {
                 val state = viewModel.uiState
-                EditHabitScreen(
+                EditScreen(
                     navigateUp = {},
                     onSaveClick = { viewModel.saveHabit() },
-                    onValueChange = { uiState -> viewModel.updateUiState(uiState as HabitUiState.Habit) },
+                    onValueChange = { uiState -> viewModel.updateUiState(uiState as HabitFormUiState.HabitData) },
                     onDeleteClick = { viewModel.deleteHabit() },
-                    habitUiState = state,
+                    habitFormUiState = state,
                 )
             }
         }

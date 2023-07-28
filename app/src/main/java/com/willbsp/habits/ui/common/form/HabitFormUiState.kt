@@ -1,4 +1,4 @@
-package com.willbsp.habits.ui.common
+package com.willbsp.habits.ui.common.form
 
 import androidx.annotation.StringRes
 import com.willbsp.habits.R
@@ -6,11 +6,11 @@ import com.willbsp.habits.data.model.Habit
 import com.willbsp.habits.data.model.HabitFrequency
 import java.time.LocalTime
 
-sealed class HabitUiState {
+sealed class HabitFormUiState {
 
-    object Loading : HabitUiState()
+    object Loading : HabitFormUiState()
 
-    data class Habit(
+    data class HabitData(
         val name: String = "",
         val nameIsInvalid: Boolean = false,
         val frequency: HabitFrequency = HabitFrequency.DAILY,
@@ -18,7 +18,7 @@ sealed class HabitUiState {
         val reminderType: HabitReminderType = HabitReminderType.NONE,
         val reminderTime: LocalTime = LocalTime.of(12, 0),
         val reminderDays: List<Int> = listOf()
-    ) : HabitUiState()
+    ) : HabitFormUiState()
 
 }
 
@@ -28,7 +28,7 @@ enum class HabitReminderType(@StringRes val userReadableStringRes: Int) {
     SPECIFIC(R.string.modify_reminder_specific_days)
 }
 
-fun HabitUiState.Habit.toHabit(id: Int? = null): Habit {
+fun HabitFormUiState.HabitData.toHabit(id: Int? = null): Habit {
     return if (id != null) Habit(
         id = id,
         name = this.name,

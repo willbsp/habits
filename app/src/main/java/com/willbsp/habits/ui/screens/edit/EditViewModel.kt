@@ -9,23 +9,23 @@ import androidx.lifecycle.viewModelScope
 import com.willbsp.habits.data.repository.HabitRepository
 import com.willbsp.habits.data.repository.ReminderRepository
 import com.willbsp.habits.domain.usecase.ValidateHabitNameUseCase
-import com.willbsp.habits.ui.common.HabitReminderType
-import com.willbsp.habits.ui.common.HabitUiState
-import com.willbsp.habits.ui.common.toHabit
+import com.willbsp.habits.ui.common.form.HabitFormUiState
+import com.willbsp.habits.ui.common.form.HabitReminderType
+import com.willbsp.habits.ui.common.form.toHabit
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class EditHabitViewModel @Inject constructor(
+class EditViewModel @Inject constructor(
     private val habitRepository: HabitRepository,
     private val reminderRepository: ReminderRepository,
     private val isValidHabitName: ValidateHabitNameUseCase,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    var uiState: HabitUiState by mutableStateOf(HabitUiState.Loading)
+    var uiState: HabitFormUiState by mutableStateOf(HabitFormUiState.Loading)
         private set
 
     private var habitId: Int = checkNotNull(savedStateHandle[HABIT_ID_SAVED_STATE_KEY])
@@ -34,7 +34,7 @@ class EditHabitViewModel @Inject constructor(
         loadHabit()
     }
 
-    fun updateUiState(newUiState: HabitUiState.Habit) {
+    fun updateUiState(newUiState: HabitFormUiState.HabitData) {
         uiState = if (isValidHabitName(newUiState.name)) {
             newUiState.copy(nameIsInvalid = false)
         } else newUiState.copy(nameIsInvalid = true)
@@ -46,8 +46,8 @@ class EditHabitViewModel @Inject constructor(
 
     fun saveHabit(): Boolean {
         when (uiState) {
-            is HabitUiState.Habit -> {
-                val habitState = uiState as HabitUiState.Habit
+            is HabitFormUiState.HabitData -> {
+                val habitState = uiState as HabitFormUiState.HabitData
                 if (isValidHabitName(habitState.name)) {
                     viewModelScope.launch { habitRepository.upsertHabit(habitState.toHabit(habitId)) }
                     return true
@@ -64,7 +64,7 @@ class EditHabitViewModel @Inject constructor(
             val habit = habitRepository.getHabit(habitId)
             if (habit != null) {
                 val reminders = reminderRepository.getRemindersForHabitStream(habitId).first()
-                uiState = HabitUiState.Habit(
+                uiState = HabitFormUiState.HabitData(
                     name = habit.name,
                     frequency = habit.frequency,
                     repeat = habit.repeat,

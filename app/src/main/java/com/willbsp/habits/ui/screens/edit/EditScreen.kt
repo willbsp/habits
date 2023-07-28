@@ -20,19 +20,19 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.willbsp.habits.R
 import com.willbsp.habits.ui.common.DefaultHabitsAppTopBar
-import com.willbsp.habits.ui.common.HabitForm
-import com.willbsp.habits.ui.common.HabitUiState
-import com.willbsp.habits.ui.common.HabitsFloatingAction
+import com.willbsp.habits.ui.common.button.HabitsFloatingAction
+import com.willbsp.habits.ui.common.form.HabitForm
+import com.willbsp.habits.ui.common.form.HabitFormUiState
 import com.willbsp.habits.ui.theme.HabitsTheme
 
 @Composable
-fun EditHabitScreen(
+fun EditScreen(
     modifier: Modifier = Modifier,
     navigateUp: () -> Unit,
     onSaveClick: () -> Unit,
     onDeleteClick: () -> Unit,
-    onValueChange: (HabitUiState) -> Unit,
-    habitUiState: HabitUiState
+    onValueChange: (HabitFormUiState) -> Unit,
+    habitFormUiState: HabitFormUiState
 ) {
 
     Scaffold(
@@ -61,16 +61,16 @@ fun EditHabitScreen(
                 .fillMaxSize()
         ) {
 
-            when (habitUiState) {
+            when (habitFormUiState) {
 
-                is HabitUiState.Habit -> {
+                is HabitFormUiState.HabitData -> {
 
                     HabitForm(
                         modifier = Modifier
                             .fillMaxWidth(),
                         onValueChange = onValueChange,
                         showTimePicker = {},
-                        habitUiState = habitUiState
+                        habitFormUiState = habitFormUiState
                     )
 
                     Spacer(Modifier.height(10.dp))
@@ -105,14 +105,14 @@ fun EditHabitScreen(
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-private fun EditHabitScreenPreview() {
+private fun EditScreenPreview() {
     HabitsTheme {
-        EditHabitScreen(
+        EditScreen(
             navigateUp = {},
             onSaveClick = {},
             onDeleteClick = {},
             onValueChange = {},
-            habitUiState = HabitUiState.Loading
+            habitFormUiState = HabitFormUiState.Loading
         )
     }
 }

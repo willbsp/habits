@@ -14,14 +14,14 @@ import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
-import com.willbsp.habits.ui.common.HabitUiState
+import com.willbsp.habits.ui.common.form.HabitFormUiState
 import com.willbsp.habits.ui.screens.about.AboutScreen
-import com.willbsp.habits.ui.screens.add.AddHabitScreen
-import com.willbsp.habits.ui.screens.add.AddHabitViewModel
+import com.willbsp.habits.ui.screens.add.AddScreen
+import com.willbsp.habits.ui.screens.add.AddViewModel
 import com.willbsp.habits.ui.screens.detail.DetailScreen
 import com.willbsp.habits.ui.screens.detail.DetailViewModel
-import com.willbsp.habits.ui.screens.edit.EditHabitScreen
-import com.willbsp.habits.ui.screens.edit.EditHabitViewModel
+import com.willbsp.habits.ui.screens.edit.EditScreen
+import com.willbsp.habits.ui.screens.edit.EditViewModel
 import com.willbsp.habits.ui.screens.home.HomeScreen
 import com.willbsp.habits.ui.screens.home.HomeViewModel
 import com.willbsp.habits.ui.screens.logbook.LogbookScreen
@@ -90,10 +90,10 @@ fun HabitsNavigationGraph(
             }
         ) {
 
-            val viewModel = hiltViewModel<AddHabitViewModel>()
+            val viewModel = hiltViewModel<AddViewModel>()
             val state = viewModel.uiState
 
-            AddHabitScreen(
+            AddScreen(
                 navigateUp = {
                     navController.navigateUp()
                 },
@@ -105,7 +105,7 @@ fun HabitsNavigationGraph(
                 onValueChange = {
                     viewModel.updateUiState(it)
                 },
-                habitUiState = state
+                habitFormUiState = state
             )
 
         }
@@ -166,10 +166,10 @@ fun HabitsNavigationGraph(
 
         ) {
 
-            val viewModel = hiltViewModel<EditHabitViewModel>()
+            val viewModel = hiltViewModel<EditViewModel>()
             val state = viewModel.uiState
 
-            EditHabitScreen(
+            EditScreen(
                 navigateUp = {
                     navController.navigateUp()
                 },
@@ -182,9 +182,9 @@ fun HabitsNavigationGraph(
                     navController.popBackStack(HabitsNavigationDestination.HOME.route, false)
                 },
                 onValueChange = {
-                    viewModel.updateUiState(it as HabitUiState.Habit)
+                    viewModel.updateUiState(it as HabitFormUiState.HabitData)
                 },
-                habitUiState = state
+                habitFormUiState = state
             )
 
         }

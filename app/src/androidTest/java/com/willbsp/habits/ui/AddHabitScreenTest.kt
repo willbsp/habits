@@ -15,8 +15,8 @@ import com.willbsp.habits.data.repository.HabitRepository
 import com.willbsp.habits.domain.usecase.ValidateHabitNameUseCase
 import com.willbsp.habits.helper.onNodeWithContentDescriptionId
 import com.willbsp.habits.helper.onNodeWithTextId
-import com.willbsp.habits.ui.screens.add.AddHabitScreen
-import com.willbsp.habits.ui.screens.add.AddHabitViewModel
+import com.willbsp.habits.ui.screens.add.AddScreen
+import com.willbsp.habits.ui.screens.add.AddViewModel
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -47,14 +47,14 @@ class AddHabitScreenTest {
     fun setup() {
         hiltRule.inject()
         composeTestRule.setContent {
-            val viewModel = AddHabitViewModel(habitRepository, ValidateHabitNameUseCase())
+            val viewModel = AddViewModel(habitRepository, ValidateHabitNameUseCase())
             Surface {
                 val state = viewModel.uiState
-                AddHabitScreen(
+                AddScreen(
                     navigateUp = {},
                     onSaveClick = { viewModel.saveHabit() },
                     onValueChange = { uiState -> viewModel.updateUiState(uiState) },
-                    habitUiState = state,
+                    habitFormUiState = state,
                 )
             }
         }

@@ -11,21 +11,21 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.willbsp.habits.R
 import com.willbsp.habits.ui.common.DefaultHabitsAppTopBar
-import com.willbsp.habits.ui.common.HabitForm
-import com.willbsp.habits.ui.common.HabitUiState
-import com.willbsp.habits.ui.common.HabitsFloatingAction
-import com.willbsp.habits.ui.common.TimePickerDialog
+import com.willbsp.habits.ui.common.button.HabitsFloatingAction
+import com.willbsp.habits.ui.common.dialog.TimePickerDialog
+import com.willbsp.habits.ui.common.form.HabitForm
+import com.willbsp.habits.ui.common.form.HabitFormUiState
 import com.willbsp.habits.ui.theme.HabitsTheme
 import java.time.LocalTime
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddHabitScreen(
+fun AddScreen(
     modifier: Modifier = Modifier,
     navigateUp: () -> Unit,
     onSaveClick: () -> Unit,
-    onValueChange: (HabitUiState.Habit) -> Unit,
-    habitUiState: HabitUiState.Habit
+    onValueChange: (HabitFormUiState.HabitData) -> Unit,
+    habitFormUiState: HabitFormUiState.HabitData
 ) {
 
     Scaffold(
@@ -47,8 +47,8 @@ fun AddHabitScreen(
 
         // TODO for 24 hour find users preference
         val timePickerState = rememberTimePickerState(
-            initialHour = habitUiState.reminderTime.hour,
-            initialMinute = habitUiState.reminderTime.minute
+            initialHour = habitFormUiState.reminderTime.hour,
+            initialMinute = habitFormUiState.reminderTime.minute
         )
         var showTimePicker by remember { mutableStateOf(false) }
 
@@ -59,7 +59,7 @@ fun AddHabitScreen(
                 .fillMaxSize(),
             onValueChange = onValueChange,
             showTimePicker = { showTimePicker = it },
-            habitUiState = habitUiState
+            habitFormUiState = habitFormUiState
         )
 
         if (showTimePicker) {
@@ -68,7 +68,7 @@ fun AddHabitScreen(
                 onCancel = { showTimePicker = false },
                 onConfirm = {
                     onValueChange(
-                        habitUiState.copy(
+                        habitFormUiState.copy(
                             reminderTime = LocalTime.of(
                                 timePickerState.hour,
                                 timePickerState.minute
@@ -87,11 +87,11 @@ fun AddHabitScreen(
 @Composable
 private fun AddHabitScreenPreview() {
     HabitsTheme {
-        AddHabitScreen(
+        AddScreen(
             navigateUp = {},
             onSaveClick = {},
             onValueChange = {},
-            habitUiState = HabitUiState.Habit()
+            habitFormUiState = HabitFormUiState.HabitData()
         )
     }
 }
