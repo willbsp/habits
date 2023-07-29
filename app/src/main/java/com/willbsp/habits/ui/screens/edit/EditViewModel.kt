@@ -15,6 +15,7 @@ import com.willbsp.habits.ui.common.form.toHabit
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import java.time.LocalTime
 import javax.inject.Inject
 
 @HiltViewModel
@@ -69,7 +70,7 @@ class EditViewModel @Inject constructor(
                     frequency = habit.frequency,
                     repeat = habit.repeat,
                     reminderType = getReminderType(reminders.count()),
-                    reminderTime = reminders.first().time,
+                    reminderTime = if (reminders.isNotEmpty()) reminders.first().time else LocalTime.NOON,
                     reminderDays = reminders.map { it.day }
                 )
             }
