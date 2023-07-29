@@ -13,6 +13,7 @@ sealed class HabitFormUiState {
     data class HabitData(
         val name: String = "",
         val nameIsInvalid: Boolean = false,
+        val daysIsInvalid: Boolean = false,
         val frequency: HabitFrequency = HabitFrequency.DAILY,
         val repeat: Int = 1,
         val reminderType: HabitReminderType = HabitReminderType.NONE,

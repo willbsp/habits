@@ -28,13 +28,13 @@ class AddViewModel @Inject constructor(
         private set
 
     fun updateUiState(newUiState: HabitFormUiState.HabitData) {
-        uiState = if (isValidHabitName(newUiState.name)) {
-            newUiState.copy(nameIsInvalid = false)
-        } else newUiState.copy(nameIsInvalid = true)
+        uiState = if (isHabitValid()) {
+            newUiState.copy(nameIsInvalid = false, daysIsInvalid = false)
+        } else newUiState
     }
 
     fun saveHabit(): Boolean {
-        if (isValidHabitName(uiState.name)) {
+        if (isHabitValid()) {
             viewModelScope.launch {
                 val habitId = habitRepository.insertHabit(uiState.toHabit()).toInt()
                 saveReminders(habitId)
@@ -42,6 +42,17 @@ class AddViewModel @Inject constructor(
             return true
         }
         return false
+    }
+
+    private fun isHabitValid(): Boolean {
+        val isNameValid = isValidHabitName(uiState.name)
+        val isDaysEmpty =
+            uiState.reminderType == HabitReminderType.SPECIFIC && uiState.reminderDays.isEmpty()
+        return if (isNameValid && !isDaysEmpty) true
+        else {
+            uiState = uiState.copy(nameIsInvalid = !isNameValid, daysIsInvalid = isDaysEmpty)
+            false
+        }
     }
 
     private suspend fun saveReminders(habitId: Int) {
