@@ -59,7 +59,7 @@ class AddViewModel @Inject constructor(
                 for (day in Calendar.SUNDAY..Calendar.SATURDAY) {
                     val reminder =
                         Reminder(habitId = habitId, time = uiState.reminderTime, day = day)
-                    reminderRepository.upsertReminder(reminder)
+                    reminderRepository.insertReminder(reminder)
                 }
             }
 
@@ -67,7 +67,7 @@ class AddViewModel @Inject constructor(
                 for (day in uiState.reminderDays) {
                     val reminder =
                         Reminder(habitId = habitId, time = uiState.reminderTime, day = day)
-                    reminderRepository.upsertReminder(reminder)
+                    reminderRepository.insertReminder(reminder)
                 }
             }
         }

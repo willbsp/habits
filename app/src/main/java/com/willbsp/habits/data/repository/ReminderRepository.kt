@@ -11,8 +11,10 @@ interface ReminderRepository {
 
     fun getRemindersForDayStream(day: Int): Flow<List<Reminder>>
 
-    suspend fun upsertReminder(reminder: Reminder)
+    suspend fun insertReminder(reminder: Reminder)
 
     suspend fun deleteReminder(reminder: Reminder)
+
+    suspend fun clearReminders(habitId: Int)
 
 }
