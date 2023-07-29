@@ -1,16 +1,15 @@
 package com.willbsp.habits.ui.common.form
 
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccessAlarm
+import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -21,16 +20,19 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.willbsp.habits.R
 import com.willbsp.habits.data.model.HabitFrequency
-import java.text.DateFormatSymbols
+import java.time.DayOfWeek
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
+import java.time.format.TextStyle
+import java.util.Locale
 
 @Composable
 fun HabitForm(
     modifier: Modifier = Modifier,
     onValueChange: (HabitFormUiState.HabitData) -> Unit,
     showTimePicker: (Boolean) -> Unit,
+    showDayPicker: (Boolean) -> Unit,
     habitFormUiState: HabitFormUiState.HabitData
 ) {
 
@@ -60,7 +62,8 @@ fun HabitForm(
             modifier = Modifier.fillMaxWidth(),
             uiState = habitFormUiState,
             onValueChange = onValueChange,
-            showTimePicker = showTimePicker
+            showTimePicker = showTimePicker,
+            showDayPicker = showDayPicker
         )
 
     }
@@ -73,7 +76,8 @@ private fun HabitReminderDropdown( // TODO could make this generic
     modifier: Modifier = Modifier,
     uiState: HabitFormUiState.HabitData,
     onValueChange: (HabitFormUiState.HabitData) -> Unit,
-    showTimePicker: (Boolean) -> Unit
+    showTimePicker: (Boolean) -> Unit,
+    showDayPicker: (Boolean) -> Unit
 ) {
 
     val reminderOptions = HabitReminderType.values()
@@ -132,8 +136,11 @@ private fun HabitReminderDropdown( // TODO could make this generic
                     time = uiState.reminderTime
                 )
                 AnimatedVisibility(visible = (reminderSelected == HabitReminderType.SPECIFIC)) {
-                    HabitReminderDays(
-                        modifier = Modifier.fillMaxWidth()
+                    HabitReminderDayField(
+                        modifier = Modifier.fillMaxWidth(),
+                        showDayPicker = { showDayPicker(true) },
+                        isInvalid = uiState.daysIsInvalid,
+                        days = uiState.reminderDays
                     )
                 }
             }
@@ -179,25 +186,37 @@ private fun HabitReminderTimeField(
 }
 
 @Composable
-private fun HabitReminderDays(
-    // TODO change week start?
+private fun HabitReminderDayField(
     modifier: Modifier = Modifier,
+    showDayPicker: () -> Unit,
+    isInvalid: Boolean,
+    days: Set<Int>
 ) {
 
-    Row(
+    val source = remember { MutableInteractionSource() }
+
+    OutlinedTextField(
         modifier = modifier,
-        horizontalArrangement = Arrangement.SpaceEvenly
-    ) {
-        val weekdays = DateFormatSymbols.getInstance().weekdays
-        for (day in 1..7) {
-            SideEffect {
-                Log.d("reminders", weekdays[day])
-            }
-            OutlinedIconToggleButton(
-                checked = day == 3, onCheckedChange = {}
-            ) {
-                Text(weekdays[day].first().toString())
-            }
+        value = days
+            .map { DayOfWeek.of(it).getDisplayName(TextStyle.SHORT, Locale.getDefault()) }
+            .toString()
+            .drop(1).dropLast(1), // drop [ ]
+        readOnly = true,
+        isError = isInvalid,
+        onValueChange = {},
+        label = { Text("Days") },
+        interactionSource = source,
+        trailingIcon = {
+            Icon(
+                imageVector = Icons.Default.CalendarToday,
+                contentDescription = null
+            )
+        }
+    )
+
+    if (source.collectIsPressedAsState().value) {
+        SideEffect {
+            showDayPicker()
         }
     }
 
@@ -301,5 +320,10 @@ private fun HabitFrequencyDropdown(
 @Preview(showBackground = true)
 @Composable
 private fun HabitFormPreview() {
-    HabitForm(onValueChange = {}, showTimePicker = {}, habitFormUiState = HabitFormUiState.HabitData())
+    HabitForm(
+        onValueChange = {},
+        showTimePicker = {},
+        showDayPicker = {},
+        habitFormUiState = HabitFormUiState.HabitData()
+    )
 }

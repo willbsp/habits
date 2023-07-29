@@ -17,7 +17,7 @@ sealed class HabitFormUiState {
         val repeat: Int = 1,
         val reminderType: HabitReminderType = HabitReminderType.NONE,
         val reminderTime: LocalTime = LocalTime.NOON,
-        val reminderDays: List<Int> = listOf()
+        val reminderDays: Set<Int> = setOf()
     ) : HabitFormUiState()
 
 }

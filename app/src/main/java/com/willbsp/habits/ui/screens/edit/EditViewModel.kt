@@ -71,7 +71,7 @@ class EditViewModel @Inject constructor(
                     repeat = habit.repeat,
                     reminderType = getReminderType(reminders.count()),
                     reminderTime = if (reminders.isNotEmpty()) reminders.first().time else LocalTime.NOON,
-                    reminderDays = reminders.map { it.day }
+                    reminderDays = reminders.map { it.day }.toSet()
                 )
             }
         }

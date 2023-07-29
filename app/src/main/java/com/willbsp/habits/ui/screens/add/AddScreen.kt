@@ -12,6 +12,7 @@ import androidx.compose.ui.unit.dp
 import com.willbsp.habits.R
 import com.willbsp.habits.ui.common.DefaultHabitsAppTopBar
 import com.willbsp.habits.ui.common.button.HabitsFloatingAction
+import com.willbsp.habits.ui.common.dialog.DayPickerDialog
 import com.willbsp.habits.ui.common.dialog.TimePickerDialog
 import com.willbsp.habits.ui.common.form.HabitForm
 import com.willbsp.habits.ui.common.form.HabitFormUiState
@@ -50,7 +51,9 @@ fun AddScreen(
             initialHour = habitFormUiState.reminderTime.hour,
             initialMinute = habitFormUiState.reminderTime.minute
         )
+        var dayPickerState by remember { mutableStateOf(habitFormUiState.reminderDays) }
         var showTimePicker by remember { mutableStateOf(false) }
+        var showDayPicker by remember { mutableStateOf(false) }
 
         HabitForm(
             modifier = modifier
@@ -59,6 +62,7 @@ fun AddScreen(
                 .fillMaxSize(),
             onValueChange = onValueChange,
             showTimePicker = { showTimePicker = it },
+            showDayPicker = { showDayPicker = it },
             habitFormUiState = habitFormUiState
         )
 
@@ -76,6 +80,26 @@ fun AddScreen(
                         )
                     )
                     showTimePicker = false
+                }
+            )
+        }
+
+        if (showDayPicker) {
+            DayPickerDialog(
+                state = dayPickerState,
+                onCancel = { showDayPicker = false },
+                onValueChange = { day, checked ->
+                    val newState = dayPickerState.toMutableSet()
+                    if (checked) {
+                        newState.add(day)
+                    } else {
+                        newState.remove(day)
+                    }
+                    dayPickerState = newState.toSet()
+                },
+                onConfirm = {
+                    onValueChange(habitFormUiState.copy(reminderDays = dayPickerState))
+                    showDayPicker = false
                 }
             )
         }
