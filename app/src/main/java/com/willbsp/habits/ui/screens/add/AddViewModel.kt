@@ -28,12 +28,10 @@ class AddViewModel @Inject constructor(
         private set
 
     fun updateUiState(newUiState: HabitFormUiState.HabitData) {
-        uiState = if (isHabitValid()) {
-            newUiState.copy(nameIsInvalid = false, daysIsInvalid = false)
-        } else newUiState
+        uiState = newUiState
     }
 
-    fun saveHabit(): Boolean {
+    fun saveHabit(): Boolean { // TODO could move this do domain, passing through habitid? if null then insert else update
         if (isHabitValid()) {
             viewModelScope.launch {
                 val habitId = habitRepository.insertHabit(uiState.toHabit()).toInt()
@@ -45,12 +43,11 @@ class AddViewModel @Inject constructor(
     }
 
     private fun isHabitValid(): Boolean {
-        val isNameValid = isValidHabitName(uiState.name)
-        val isDaysEmpty =
-            uiState.reminderType == HabitReminderType.SPECIFIC && uiState.reminderDays.isEmpty()
-        return if (isNameValid && !isDaysEmpty) true
+        val isNameValid = uiState.isNameValid()
+        val isDaysValid = uiState.isDaysValid()
+        return if (isNameValid && isDaysValid) true
         else {
-            uiState = uiState.copy(nameIsInvalid = !isNameValid, daysIsInvalid = isDaysEmpty)
+            uiState = uiState.copy(nameIsInvalid = !isNameValid, daysIsInvalid = !isDaysValid)
             false
         }
     }
