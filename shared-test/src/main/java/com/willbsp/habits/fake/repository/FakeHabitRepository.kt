@@ -21,6 +21,7 @@ class FakeHabitRepository : HabitRepository {
 
     override suspend fun insertHabit(habit: Habit): Long {
         habits.add(habit)
+        emit()
         return habits.indexOfFirst { it.name == habit.name }.toLong()
     }
 

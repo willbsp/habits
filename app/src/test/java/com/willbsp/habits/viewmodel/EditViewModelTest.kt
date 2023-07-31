@@ -3,7 +3,9 @@ package com.willbsp.habits.viewmodel
 import androidx.lifecycle.SavedStateHandle
 import com.willbsp.habits.data.TestData.habit1
 import com.willbsp.habits.data.model.HabitFrequency
+import com.willbsp.habits.domain.usecase.SaveHabitUseCase
 import com.willbsp.habits.fake.repository.FakeHabitRepository
+import com.willbsp.habits.fake.repository.FakeReminderRepository
 import com.willbsp.habits.rules.TestDispatcherRule
 import com.willbsp.habits.ui.common.form.HabitFormUiState
 import com.willbsp.habits.ui.screens.edit.EditViewModel
@@ -21,17 +23,20 @@ import org.junit.Test
 class EditViewModelTest {
 
     @get:Rule
-    val testDispatcher = TestDispatcherRule()
+    val testRule = TestDispatcherRule()
 
     private val habitRepository = FakeHabitRepository()
+    private val reminderRepository = FakeReminderRepository()
     private lateinit var viewModel: EditViewModel
 
     @Before
     fun setup() {
         runBlocking { habitRepository.upsertHabit(habit1) }
         val savedStateHandle = SavedStateHandle(mapOf("habitId" to habit1.id))
+        val saveHabitUseCase =
+            SaveHabitUseCase(habitRepository, reminderRepository, testRule.getDispatcher())
         viewModel =
-            EditViewModel(habitRepository, ValidateHabitNameUseCase(), savedStateHandle)
+            EditViewModel(habitRepository, reminderRepository, saveHabitUseCase, savedStateHandle)
     }
 
     @Test
@@ -43,7 +48,7 @@ class EditViewModelTest {
 
     @Test
     fun uiState_whenUpdated_newStateSet() {
-        val expected = HabitFormUiState.Data("Reading", false, HabitFrequency.WEEKLY)
+        val expected = HabitFormUiState.Data("Reading", HabitFrequency.WEEKLY)
         val updatedUiState =
             (viewModel.uiState as HabitFormUiState.Data).copy(
                 name = "Reading",
@@ -69,6 +74,7 @@ class EditViewModelTest {
         val uiState =
             (viewModel.uiState as HabitFormUiState.Data).copy(name = "this is a really long name hi hi")
         viewModel.updateUiState(uiState)
+        viewModel.saveHabit()
         assertTrue((viewModel.uiState as HabitFormUiState.Data).nameIsInvalid)
     }
 

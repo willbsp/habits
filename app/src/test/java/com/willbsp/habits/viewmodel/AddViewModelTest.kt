@@ -1,7 +1,9 @@
 package com.willbsp.habits.viewmodel
 
 import com.willbsp.habits.data.model.HabitFrequency
+import com.willbsp.habits.domain.usecase.SaveHabitUseCase
 import com.willbsp.habits.fake.repository.FakeHabitRepository
+import com.willbsp.habits.fake.repository.FakeReminderRepository
 import com.willbsp.habits.rules.TestDispatcherRule
 import com.willbsp.habits.ui.common.form.HabitFormUiState
 import com.willbsp.habits.ui.screens.add.AddViewModel
@@ -18,11 +20,17 @@ class AddViewModelTest {
     val testDispatcher = TestDispatcherRule()
 
     private val habitRepository = FakeHabitRepository()
+    private val reminderRepository = FakeReminderRepository()
     private lateinit var viewModel: AddViewModel
 
     @Before
     fun setup() {
-        viewModel = AddViewModel(habitRepository, ValidateHabitNameUseCase())
+        val saveHabitUseCase = SaveHabitUseCase(
+            habitRepository,
+            reminderRepository,
+            testDispatcher.getDispatcher()
+        )
+        viewModel = AddViewModel(saveHabitUseCase)
     }
 
     @Test
@@ -33,7 +41,7 @@ class AddViewModelTest {
 
     @Test
     fun uiState_whenUpdated_newStateSet() {
-        val expected = HabitFormUiState.Data("Reading", false, HabitFrequency.WEEKLY)
+        val expected = HabitFormUiState.Data("Reading", HabitFrequency.WEEKLY)
         val updatedUiState =
             viewModel.uiState.copy(name = "Reading", frequency = HabitFrequency.WEEKLY)
         viewModel.updateUiState(updatedUiState)
@@ -51,6 +59,7 @@ class AddViewModelTest {
     fun uiState_whenStateInvalid_stateInvalid() {
         val uiState = viewModel.uiState.copy(name = "this is a really long name hi hi")
         viewModel.updateUiState(uiState)
+        viewModel.saveHabit()
         assertTrue(viewModel.uiState.nameIsInvalid)
     }
 
