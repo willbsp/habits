@@ -34,7 +34,7 @@ class AddViewModelTest {
 
     @Test
     fun uiState_whenUpdated_newStateSet() {
-        val expected = HabitFormUiState.HabitData("Reading", false, HabitFrequency.WEEKLY)
+        val expected = HabitFormUiState.Data("Reading", false, HabitFrequency.WEEKLY)
         val updatedUiState =
             viewModel.uiState.copy(name = "Reading", frequency = HabitFrequency.WEEKLY)
         viewModel.updateUiState(updatedUiState)

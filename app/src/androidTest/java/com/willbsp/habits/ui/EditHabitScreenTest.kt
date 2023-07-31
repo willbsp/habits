@@ -63,7 +63,7 @@ class EditHabitScreenTest {
                 EditScreen(
                     navigateUp = {},
                     onSaveClick = { viewModel.saveHabit() },
-                    onValueChange = { uiState -> viewModel.updateUiState(uiState as HabitFormUiState.HabitData) },
+                    onValueChange = { uiState -> viewModel.updateUiState(uiState as HabitFormUiState.Data) },
                     onDeleteClick = { viewModel.deleteHabit() },
                     habitFormUiState = state,
                 )

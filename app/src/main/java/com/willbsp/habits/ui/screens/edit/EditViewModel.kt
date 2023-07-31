@@ -35,7 +35,7 @@ class EditViewModel @Inject constructor(
         loadHabit()
     }
 
-    fun updateUiState(newUiState: HabitFormUiState.HabitData) {
+    fun updateUiState(newUiState: HabitFormUiState.Data) {
         uiState = if (isValidHabitName(newUiState.name)) {
             newUiState.copy(nameIsInvalid = false)
         } else newUiState.copy(nameIsInvalid = true)
@@ -47,8 +47,8 @@ class EditViewModel @Inject constructor(
 
     fun saveHabit(): Boolean {
         when (uiState) {
-            is HabitFormUiState.HabitData -> {
-                val habitState = uiState as HabitFormUiState.HabitData
+            is HabitFormUiState.Data -> {
+                val habitState = uiState as HabitFormUiState.Data
                 if (isValidHabitName(habitState.name)) {
                     viewModelScope.launch { habitRepository.upsertHabit(habitState.toHabit(habitId)) }
                     return true
@@ -65,7 +65,7 @@ class EditViewModel @Inject constructor(
             val habit = habitRepository.getHabit(habitId)
             if (habit != null) {
                 val reminders = reminderRepository.getRemindersForHabitStream(habitId).first()
-                uiState = HabitFormUiState.HabitData(
+                uiState = HabitFormUiState.Data(
                     name = habit.name,
                     frequency = habit.frequency,
                     repeat = habit.repeat,

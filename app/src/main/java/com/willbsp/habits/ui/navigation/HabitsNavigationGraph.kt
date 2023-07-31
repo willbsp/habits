@@ -182,7 +182,7 @@ fun HabitsNavigationGraph(
                     navController.popBackStack(HabitsNavigationDestination.HOME.route, false)
                 },
                 onValueChange = {
-                    viewModel.updateUiState(it as HabitFormUiState.HabitData)
+                    viewModel.updateUiState(it as HabitFormUiState.Data)
                 },
                 habitFormUiState = state
             )

@@ -25,8 +25,8 @@ fun AddScreen(
     modifier: Modifier = Modifier,
     navigateUp: () -> Unit,
     onSaveClick: () -> Unit,
-    onValueChange: (HabitFormUiState.HabitData) -> Unit,
-    habitFormUiState: HabitFormUiState.HabitData
+    onValueChange: (HabitFormUiState.Data) -> Unit,
+    habitFormUiState: HabitFormUiState.Data
 ) {
 
     Scaffold(
@@ -115,7 +115,7 @@ private fun AddHabitScreenPreview() {
             navigateUp = {},
             onSaveClick = {},
             onValueChange = {},
-            habitFormUiState = HabitFormUiState.HabitData()
+            habitFormUiState = HabitFormUiState.Data()
         )
     }
 }

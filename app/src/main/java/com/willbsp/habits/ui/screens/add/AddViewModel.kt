@@ -16,10 +16,10 @@ class AddViewModel @Inject constructor(
     private val saveHabit: SaveHabitUseCase
 ) : ViewModel() {
 
-    var uiState by mutableStateOf(HabitFormUiState.HabitData())
+    var uiState by mutableStateOf(HabitFormUiState.Data())
         private set
 
-    fun updateUiState(newUiState: HabitFormUiState.HabitData) {
+    fun updateUiState(newUiState: HabitFormUiState.Data) {
         uiState = newUiState
     }
 

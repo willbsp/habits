@@ -30,10 +30,10 @@ import java.util.Locale
 @Composable
 fun HabitForm(
     modifier: Modifier = Modifier,
-    onValueChange: (HabitFormUiState.HabitData) -> Unit,
+    onValueChange: (HabitFormUiState.Data) -> Unit,
     showTimePicker: (Boolean) -> Unit,
     showDayPicker: (Boolean) -> Unit,
-    habitFormUiState: HabitFormUiState.HabitData
+    habitFormUiState: HabitFormUiState.Data
 ) {
 
     Column(
@@ -74,8 +74,8 @@ fun HabitForm(
 @Composable
 private fun HabitReminderDropdown( // TODO could make this generic
     modifier: Modifier = Modifier,
-    uiState: HabitFormUiState.HabitData,
-    onValueChange: (HabitFormUiState.HabitData) -> Unit,
+    uiState: HabitFormUiState.Data,
+    onValueChange: (HabitFormUiState.Data) -> Unit,
     showTimePicker: (Boolean) -> Unit,
     showDayPicker: (Boolean) -> Unit
 ) {
@@ -226,8 +226,8 @@ private fun HabitReminderDayField(
 @Composable
 private fun HabitFrequencyDropdown(
     modifier: Modifier = Modifier,
-    uiState: HabitFormUiState.HabitData,
-    onValueChange: (HabitFormUiState.HabitData) -> Unit
+    uiState: HabitFormUiState.Data,
+    onValueChange: (HabitFormUiState.Data) -> Unit
 ) {
 
     val frequencyOptions = HabitFrequency.values()
@@ -324,6 +324,6 @@ private fun HabitFormPreview() {
         onValueChange = {},
         showTimePicker = {},
         showDayPicker = {},
-        habitFormUiState = HabitFormUiState.HabitData()
+        habitFormUiState = HabitFormUiState.Data()
     )
 }

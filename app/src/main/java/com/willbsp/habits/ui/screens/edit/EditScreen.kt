@@ -63,7 +63,7 @@ fun EditScreen(
 
             when (habitFormUiState) {
 
-                is HabitFormUiState.HabitData -> {
+                is HabitFormUiState.Data -> {
 
                     HabitForm(
                         modifier = Modifier

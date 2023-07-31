@@ -12,7 +12,7 @@ sealed class HabitFormUiState {
 
     object Loading : HabitFormUiState()
 
-    data class HabitData(
+    data class Data(
         val name: String = "",
         val nameIsInvalid: Boolean = false,
         val daysIsInvalid: Boolean = false,
@@ -43,7 +43,7 @@ enum class HabitReminderType(@StringRes val userReadableStringRes: Int) {
     SPECIFIC(R.string.modify_reminder_specific_days)
 }
 
-fun HabitFormUiState.HabitData.toHabit(id: Int? = null): Habit {
+fun HabitFormUiState.Data.toHabit(id: Int? = null): Habit {
     return if (id != null) Habit(
         id = id,
         name = this.name,

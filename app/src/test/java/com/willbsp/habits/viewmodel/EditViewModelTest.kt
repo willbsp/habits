@@ -37,16 +37,16 @@ class EditViewModelTest {
 
     @Test
     fun uiState_whenLoaded_loadsHabit() {
-        val uiState = viewModel.uiState as HabitFormUiState.HabitData
+        val uiState = viewModel.uiState as HabitFormUiState.Data
         assertEquals(habit1.name, uiState.name)
         assertEquals(habit1.frequency, uiState.frequency)
     }
 
     @Test
     fun uiState_whenUpdated_newStateSet() {
-        val expected = HabitFormUiState.HabitData("Reading", false, HabitFrequency.WEEKLY)
+        val expected = HabitFormUiState.Data("Reading", false, HabitFrequency.WEEKLY)
         val updatedUiState =
-            (viewModel.uiState as HabitFormUiState.HabitData).copy(
+            (viewModel.uiState as HabitFormUiState.Data).copy(
                 name = "Reading",
                 frequency = HabitFrequency.WEEKLY
             )
@@ -57,26 +57,26 @@ class EditViewModelTest {
     @Test
     fun uiState_whenFrequencyUpdated_frequencySet() {
         val updatedUiState =
-            (viewModel.uiState as HabitFormUiState.HabitData).copy(frequency = HabitFrequency.WEEKLY)
+            (viewModel.uiState as HabitFormUiState.Data).copy(frequency = HabitFrequency.WEEKLY)
         viewModel.updateUiState(updatedUiState)
         assertEquals(
             HabitFrequency.WEEKLY,
-            (viewModel.uiState as HabitFormUiState.HabitData).frequency
+            (viewModel.uiState as HabitFormUiState.Data).frequency
         )
     }
 
     @Test
     fun uiState_whenStateInvalid_stateInvalid() {
         val uiState =
-            (viewModel.uiState as HabitFormUiState.HabitData).copy(name = "this is a really long name hi hi")
+            (viewModel.uiState as HabitFormUiState.Data).copy(name = "this is a really long name hi hi")
         viewModel.updateUiState(uiState)
-        assertTrue((viewModel.uiState as HabitFormUiState.HabitData).nameIsInvalid)
+        assertTrue((viewModel.uiState as HabitFormUiState.Data).nameIsInvalid)
     }
 
     @Test
     fun saveHabit_whenStateValid_saved() {
         val updatedUiState =
-            (viewModel.uiState as HabitFormUiState.HabitData).copy(name = "Reading")
+            (viewModel.uiState as HabitFormUiState.Data).copy(name = "Reading")
         viewModel.updateUiState(updatedUiState)
         assertTrue(viewModel.saveHabit())
         assertTrue(habitRepository.habits.any { it.name == "Reading" })
@@ -85,7 +85,7 @@ class EditViewModelTest {
     @Test
     fun saveHabit_whenStateInvalid_notSaved() {
         val uiState =
-            (viewModel.uiState as HabitFormUiState.HabitData).copy(name = "this is a really long name hi hi")
+            (viewModel.uiState as HabitFormUiState.Data).copy(name = "this is a really long name hi hi")
         viewModel.updateUiState(uiState)
         assertFalse(viewModel.saveHabit())
         assertFalse(habitRepository.habits.any { it.name == uiState.name })

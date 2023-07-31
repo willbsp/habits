@@ -37,7 +37,7 @@ class SaveHabitUseCase(
             }
         }
 
-    private suspend fun saveReminders(data: HabitFormUiState.HabitData, habitId: Int) {
+    private suspend fun saveReminders(data: HabitFormUiState.Data, habitId: Int) {
         when (data.reminderType) {
             HabitReminderType.NONE -> return
 
