@@ -9,8 +9,9 @@ import androidx.lifecycle.viewModelScope
 import com.willbsp.habits.data.repository.HabitRepository
 import com.willbsp.habits.data.repository.ReminderRepository
 import com.willbsp.habits.domain.model.HabitReminderType
-import com.willbsp.habits.domain.usecase.ValidateHabitNameUseCase
+import com.willbsp.habits.domain.usecase.SaveHabitUseCase
 import com.willbsp.habits.ui.common.form.HabitFormUiState
+import com.willbsp.habits.ui.common.form.toHabitData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -21,7 +22,7 @@ import javax.inject.Inject
 class EditViewModel @Inject constructor(
     private val habitRepository: HabitRepository,
     private val reminderRepository: ReminderRepository,
-    private val isValidHabitName: ValidateHabitNameUseCase,
+    private val saveHabit: SaveHabitUseCase,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -35,28 +36,35 @@ class EditViewModel @Inject constructor(
     }
 
     fun updateUiState(newUiState: HabitFormUiState.Data) {
-        uiState = if (isValidHabitName(newUiState.name)) {
-            newUiState.copy(nameIsInvalid = false)
-        } else newUiState.copy(nameIsInvalid = true)
+        uiState = newUiState
+    }
+
+    fun saveHabit(): Boolean {
+        if (uiState is HabitFormUiState.Data && isHabitValid()) {
+            viewModelScope.launch {
+                saveHabit((uiState as HabitFormUiState.Data).toHabitData(), habitId)
+            }
+            return true
+        }
+        return false
+    }
+
+    private fun isHabitValid(): Boolean {
+        if (uiState is HabitFormUiState.Data) {
+            val data = uiState as HabitFormUiState.Data
+            val isNameValid = data.isNameValid()
+            val isDaysValid = data.isDaysValid()
+            return if (isNameValid && isDaysValid) true
+            else {
+                uiState = data.copy(nameIsInvalid = !isNameValid, daysIsInvalid = !isDaysValid)
+                false
+            }
+        }
+        return false
     }
 
     fun deleteHabit() {
         viewModelScope.launch { habitRepository.deleteHabit(habitId) }
-    }
-
-    fun saveHabit(): Boolean {
-        when (uiState) {
-            is HabitFormUiState.Data -> {
-                val habitState = uiState as HabitFormUiState.Data
-                if (isValidHabitName(habitState.name)) {
-                    //viewModelScope.launch { habitRepository.upsertHabit(habitState.toHabit(habitId)) }
-                    return true
-                }
-                return false
-            }
-
-            else -> return false
-        }
     }
 
     private fun loadHabit() {
