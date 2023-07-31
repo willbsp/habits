@@ -26,7 +26,7 @@ class FakeEntryRepository : EntryRepository {
     override fun getAllEntriesStream(): Flow<List<Entry>> = observableEntries
 
     override fun getAllEntriesStream(habitId: Int): Flow<List<Entry>> =
-        observableEntries.map { entry -> entry.filter { it.habitId == habitId } }
+        observableEntries.map { entries -> entries.filter { it.habitId == habitId } }
 
     override suspend fun getEntry(date: LocalDate, habitId: Int): Entry? =
         entries.find { it.date == date && it.habitId == habitId }
