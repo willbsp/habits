@@ -19,9 +19,9 @@ junit = "4.13.2"
 kotlinxCoroutines = "1.7.0"
 ksp = "1.8.0-1.0.9"
 kotlin = "1.8.0"
-compileSdk = "33"
+compileSdk = "34"
 minSdk = "26"
-targetSdk = "33"
+targetSdk = "34"
 
 [libraries]
 accompanist-navigation-animation = { group = "com.google.accompanist", name = "accompanist-navigation-animation", version.ref = "accompanist" }
