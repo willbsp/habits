@@ -11,9 +11,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.google.accompanist.navigation.animation.AnimatedNavHost
-import com.google.accompanist.navigation.animation.composable
 import com.willbsp.habits.ui.common.form.HabitFormUiState
 import com.willbsp.habits.ui.screens.about.AboutScreen
 import com.willbsp.habits.ui.screens.add.AddScreen
@@ -29,7 +29,6 @@ import com.willbsp.habits.ui.screens.logbook.LogbookViewModel
 import com.willbsp.habits.ui.screens.settings.SettingsScreen
 import com.willbsp.habits.ui.screens.settings.SettingsViewModel
 
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun HabitsNavigationGraph(
     navController: NavHostController,
@@ -37,7 +36,7 @@ fun HabitsNavigationGraph(
     snackbarState: SnackbarHostState,
     modifier: Modifier = Modifier,
 ) {
-    AnimatedNavHost(
+    NavHost(
         navController = navController,
         startDestination = HabitsNavigationDestination.HOME.route,
         modifier = modifier
@@ -78,13 +77,13 @@ fun HabitsNavigationGraph(
             route = HabitsNavigationDestination.ADD.route,
             enterTransition = {
                 slideIntoContainer(
-                    AnimatedContentScope.SlideDirection.Left,
+                    AnimatedContentTransitionScope.SlideDirection.Left,
                     animationSpec = tween(300)
                 )
             },
             exitTransition = {
                 slideOutOfContainer(
-                    AnimatedContentScope.SlideDirection.Right,
+                    AnimatedContentTransitionScope.SlideDirection.Right,
                     animationSpec = tween(300)
                 )
             }
@@ -117,7 +116,7 @@ fun HabitsNavigationGraph(
                 when (initialState.destination.route) {
                     HabitsNavigationDestination.EDIT.route + "{habitId}" -> fadeIn()
                     else -> slideIntoContainer(
-                        AnimatedContentScope.SlideDirection.Left,
+                        AnimatedContentTransitionScope.SlideDirection.Left,
                         animationSpec = tween(300)
                     )
                 }
@@ -126,7 +125,7 @@ fun HabitsNavigationGraph(
                 when (targetState.destination.route) {
                     HabitsNavigationDestination.EDIT.route + "{habitId}" -> fadeOut()
                     else -> slideOutOfContainer(
-                        AnimatedContentScope.SlideDirection.Right,
+                        AnimatedContentTransitionScope.SlideDirection.Right,
                         animationSpec = tween(300)
                     )
                 }
@@ -153,13 +152,13 @@ fun HabitsNavigationGraph(
             arguments = listOf(navArgument("habitId") { type = NavType.IntType }),
             enterTransition = {
                 slideIntoContainer(
-                    AnimatedContentScope.SlideDirection.Left,
+                    AnimatedContentTransitionScope.SlideDirection.Left,
                     animationSpec = tween(300)
                 )
             },
             exitTransition = {
                 slideOutOfContainer(
-                    AnimatedContentScope.SlideDirection.Right,
+                    AnimatedContentTransitionScope.SlideDirection.Right,
                     animationSpec = tween(300)
                 )
             }
@@ -193,13 +192,13 @@ fun HabitsNavigationGraph(
             route = HabitsNavigationDestination.LOGBOOK.route,
             enterTransition = {
                 slideIntoContainer(
-                    AnimatedContentScope.SlideDirection.Right,
+                    AnimatedContentTransitionScope.SlideDirection.Right,
                     animationSpec = tween(300)
                 )
             },
             exitTransition = {
                 slideOutOfContainer(
-                    AnimatedContentScope.SlideDirection.Left,
+                    AnimatedContentTransitionScope.SlideDirection.Left,
                     animationSpec = tween(300)
                 )
             }
@@ -229,7 +228,7 @@ fun HabitsNavigationGraph(
                 when (initialState.destination.route) {
                     HabitsNavigationDestination.ABOUT.route -> fadeIn()
                     else -> slideIntoContainer(
-                        AnimatedContentScope.SlideDirection.Left,
+                        AnimatedContentTransitionScope.SlideDirection.Left,
                         animationSpec = tween(300)
                     )
                 }
@@ -238,7 +237,7 @@ fun HabitsNavigationGraph(
                 when (targetState.destination.route) {
                     HabitsNavigationDestination.ABOUT.route -> fadeOut()
                     else -> slideOutOfContainer(
-                        AnimatedContentScope.SlideDirection.Right,
+                        AnimatedContentTransitionScope.SlideDirection.Right,
                         animationSpec = tween(300)
                     )
                 }
@@ -291,13 +290,13 @@ fun HabitsNavigationGraph(
             route = HabitsNavigationDestination.ABOUT.route,
             enterTransition = {
                 slideIntoContainer(
-                    AnimatedContentScope.SlideDirection.Left,
+                    AnimatedContentTransitionScope.SlideDirection.Left,
                     animationSpec = tween(300)
                 )
             },
             exitTransition = {
                 slideOutOfContainer(
-                    AnimatedContentScope.SlideDirection.Right,
+                    AnimatedContentTransitionScope.SlideDirection.Right,
                     animationSpec = tween(300)
                 )
             }

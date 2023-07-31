@@ -1,7 +1,6 @@
 package com.willbsp.habits.ui.screens.logbook
 
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -9,6 +8,7 @@ import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
@@ -53,31 +53,37 @@ fun LogbookDatePicker(
     dateOnClick: (LocalDate) -> Unit
 ) {
 
-    val pagerState = rememberPagerState(Integer.MAX_VALUE)
+    val pagerState = rememberPagerState(
+        initialPage = Integer.MAX_VALUE,
+        initialPageOffsetFraction = 0f
+    ) {
+        Integer.MAX_VALUE
+    }
     VerticalPager(
         modifier = modifier,
         state = pagerState,
         userScrollEnabled = false,
         horizontalAlignment = Alignment.CenterHorizontally,
-        pageCount = Integer.MAX_VALUE,
         key = { it }
     ) {
         val date =
             remember { logbookUiState.todaysDate.minusMonths((Integer.MAX_VALUE - it - 1).toLong()) }
-        LogbookMonth(
-            modifier = Modifier
-                .graphicsLayer {
-                    val pageOffset =
-                        ((pagerState.currentPage - it) + pagerState.currentPageOffsetFraction).absoluteValue
-                    val fraction = 1f - pageOffset.coerceIn(0f, 1f)
-                    alpha = lerp(start = 0f, stop = 1f, fraction = fraction)
-                }
-                .fillMaxWidth(),
-            date = date,
-            logbookUiState = logbookUiState,
-            dateOnClick = dateOnClick,
-            pagerState = pagerState
-        )
+        Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center) {
+            LogbookMonth(
+                modifier = Modifier
+                    .graphicsLayer {
+                        val pageOffset =
+                            ((pagerState.currentPage - it) + pagerState.currentPageOffsetFraction).absoluteValue
+                        val fraction = 1f - pageOffset.coerceIn(0f, 1f)
+                        alpha = lerp(start = 0f, stop = 1f, fraction = fraction)
+                    }
+                    .fillMaxWidth(),
+                date = date,
+                logbookUiState = logbookUiState,
+                dateOnClick = dateOnClick,
+                pagerState = pagerState
+            )
+        }
     }
 
 }
@@ -186,7 +192,6 @@ fun LogbookMonth(
 
 }
 
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 private fun DateIconButton(
     modifier: Modifier = Modifier,

@@ -82,7 +82,6 @@ dependencies {
     implementation libs.androidx.material3.windowsizeclass
 
     implementation libs.androidx.navigation.compose
-    implementation libs.accompanist.navigation.animation
 
     implementation libs.androidx.paging.compose
 

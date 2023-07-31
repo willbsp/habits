@@ -1,14 +1,14 @@
 [versions]
 androidxActivity = "1.7.2"
 androidxLifecycle = "2.6.1"
-androidxCompose = "1.4.3"
+androidxCompose = "1.5.0-rc01"
 androidxComposeCompiler = "1.4.0"
 androidxComposeMaterial3 = "1.1.1"
 androidxRoom = "2.5.2"
 androidxEspresso = "3.5.1"
 androidxCoreKtx = "1.10.1"
 androidxDatastore = "1.0.0"
-androidxNavigation = "2.6.0"
+androidxNavigation = "2.7.0-rc01"
 androidxPaging = "3.2.0"
 androidxHiltNavigationCompose = "1.0.0"
 androidxTestExt = "1.1.5"
@@ -24,7 +24,6 @@ minSdk = "26"
 targetSdk = "34"
 
 [libraries]
-accompanist-navigation-animation = { group = "com.google.accompanist", name = "accompanist-navigation-animation", version.ref = "accompanist" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "androidxActivity" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidxCoreKtx" }
 androidx-datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "androidxDatastore" }

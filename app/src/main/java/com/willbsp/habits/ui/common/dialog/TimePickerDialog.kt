@@ -47,7 +47,7 @@ fun TimePickerDialog(
                 TimePicker(state = state)
                 FlowRow(
                     modifier = modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
+                    verticalArrangement = Arrangement.Center,
                     horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
                     TextButton(onClick = onCancel) {

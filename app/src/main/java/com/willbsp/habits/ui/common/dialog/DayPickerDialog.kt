@@ -69,7 +69,7 @@ fun DayPickerDialog(
                 Spacer(Modifier.height(15.dp))
                 FlowRow( // TODO could make generic
                     modifier = modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
+                    verticalArrangement = Arrangement.Center,
                     horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
                     TextButton(onClick = onCancel) {
