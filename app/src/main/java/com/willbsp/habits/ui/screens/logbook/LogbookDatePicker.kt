@@ -208,10 +208,10 @@ private fun DateIconButton(
         containerColor = MaterialTheme.colorScheme.tertiaryContainer
     ) else IconButtonDefaults.filledIconToggleButtonColors()
 
-    AnimatedContent(targetState = checked) {
+    AnimatedContent(targetState = checked, label = "DateIconButton") {
         FilledIconToggleButton(
             modifier = modifier,
-            checked = checked,
+            checked = it,
             enabled = enabled,
             onCheckedChange = {
                 onCheckedChange(date)

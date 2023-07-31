@@ -27,7 +27,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -197,12 +197,12 @@ fun CircularDetailScoreCard(
 ) {
 
     var initialScore by rememberSaveable {
-        mutableStateOf(0f)
+        mutableFloatStateOf(0f)
     }
 
     val animatedScore = animateFloatAsState(
         targetValue = initialScore,
-        animationSpec = tween(durationMillis = 1000)
+        animationSpec = tween(durationMillis = 1000), label = "animatedScore"
     )
 
     LaunchedEffect(score) {
