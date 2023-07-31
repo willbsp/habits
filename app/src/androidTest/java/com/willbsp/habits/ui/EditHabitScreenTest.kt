@@ -15,6 +15,8 @@ import com.willbsp.habits.data.TestData.habit2
 import com.willbsp.habits.data.model.Habit
 import com.willbsp.habits.data.model.HabitFrequency
 import com.willbsp.habits.data.repository.HabitRepository
+import com.willbsp.habits.data.repository.ReminderRepository
+import com.willbsp.habits.domain.usecase.SaveHabitUseCase
 import com.willbsp.habits.helper.onNodeWithContentDescriptionId
 import com.willbsp.habits.helper.onNodeWithTextId
 import com.willbsp.habits.ui.common.form.HabitFormUiState
@@ -47,6 +49,9 @@ class EditHabitScreenTest {
     @Inject
     lateinit var habitRepository: HabitRepository
 
+    @Inject
+    lateinit var reminderRepository: ReminderRepository
+
     @Before
     fun setup() {
         hiltRule.inject()
@@ -54,7 +59,8 @@ class EditHabitScreenTest {
         composeTestRule.setContent {
             val viewModel = EditViewModel(
                 habitRepository = habitRepository,
-                isValidHabitName = ValidateHabitNameUseCase(),
+                reminderRepository = reminderRepository,
+                saveHabit = SaveHabitUseCase(habitRepository, reminderRepository),
                 savedStateHandle = SavedStateHandle(mapOf(Pair("habitId", habit1.id)))
             )
             Surface {

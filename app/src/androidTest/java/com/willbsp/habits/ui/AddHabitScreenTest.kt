@@ -12,6 +12,8 @@ import com.willbsp.habits.R
 import com.willbsp.habits.data.TestData.habit1
 import com.willbsp.habits.data.model.HabitFrequency
 import com.willbsp.habits.data.repository.HabitRepository
+import com.willbsp.habits.data.repository.ReminderRepository
+import com.willbsp.habits.domain.usecase.SaveHabitUseCase
 import com.willbsp.habits.helper.onNodeWithContentDescriptionId
 import com.willbsp.habits.helper.onNodeWithTextId
 import com.willbsp.habits.ui.screens.add.AddScreen
@@ -42,11 +44,15 @@ class AddHabitScreenTest {
     @Inject
     lateinit var habitRepository: HabitRepository
 
+    @Inject
+    lateinit var reminderRepository: ReminderRepository
+
     @Before
     fun setup() {
         hiltRule.inject()
         composeTestRule.setContent {
-            val viewModel = AddViewModel(habitRepository, ValidateHabitNameUseCase())
+            val saveHabitUseCase = SaveHabitUseCase(habitRepository, reminderRepository)
+            val viewModel = AddViewModel(saveHabitUseCase)
             Surface {
                 val state = viewModel.uiState
                 AddScreen(
