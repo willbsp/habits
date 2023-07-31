@@ -74,7 +74,9 @@ class EditHabitScreenTest {
     @Test
     fun emptyHabit_noChange() = runTest {
         val initial = habitRepository.getAllHabitsStream().first()
-        composeTestRule.onNodeWithTextId(R.string.modify_habit_name).performTextClearance()
+        composeTestRule.onNodeWithTextId(R.string.modify_habit_name)
+            .performClick()
+            .performTextClearance()
         composeTestRule.onNodeWithContentDescriptionId(R.string.edit_habit_update_habit)
             .performClick()
         composeTestRule.onNodeWithTextId(R.string.modify_habit_name).assertExists()
@@ -85,6 +87,9 @@ class EditHabitScreenTest {
     @Test
     fun habitNameTooShort_noChange() = runTest {
         val initial = habitRepository.getAllHabitsStream().first()
+        composeTestRule.onNodeWithTextId(R.string.modify_habit_name)
+            .performClick()
+            .performTextClearance()
         composeTestRule.onNodeWithTextId(R.string.modify_habit_name)
             .performClick()
             .performTextInput("h")
@@ -98,6 +103,9 @@ class EditHabitScreenTest {
     @Test
     fun habitNameTooLong_noChange() = runTest {
         val initial = habitRepository.getAllHabitsStream().first()
+        composeTestRule.onNodeWithTextId(R.string.modify_habit_name)
+            .performClick()
+            .performTextClearance()
         composeTestRule.onNodeWithTextId(R.string.modify_habit_name)
             .performClick()
             .performTextInput("this name is too long to be a habit name")

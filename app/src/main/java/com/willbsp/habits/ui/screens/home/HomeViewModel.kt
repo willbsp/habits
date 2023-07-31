@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.willbsp.habits.data.repository.EntryRepository
 import com.willbsp.habits.data.repository.SettingsRepository
 import com.willbsp.habits.domain.model.HabitWithVirtualEntries
+import com.willbsp.habits.domain.usecase.CalculateScoreUseCase
 import com.willbsp.habits.domain.usecase.CalculateStreakUseCase
 import com.willbsp.habits.domain.usecase.GetHabitsWithVirtualEntriesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,6 +23,7 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val entryRepository: EntryRepository,
     private val calculateStreak: CalculateStreakUseCase,
+    private val calculateScore: CalculateScoreUseCase,
     private val clock: Clock,
     getHabitsWithVirtualEntries: GetHabitsWithVirtualEntriesUseCase,
     settingsRepository: SettingsRepository,
@@ -30,10 +32,11 @@ class HomeViewModel @Inject constructor(
     val uiState: StateFlow<HomeUiState> =
         combine(
             getHabitsWithVirtualEntries(),
-            settingsRepository.getStreakPreference(),
-            settingsRepository.getSubtitlePreference()
-        ) { habitWithEntriesList, streakPref, subtitlePref ->
-            habitWithEntriesList.toHomeUiState(streakPref, subtitlePref)
+            settingsRepository.getStatisticPreference(),
+            settingsRepository.getSubtitlePreference(),
+            settingsRepository.getScorePreference()
+        ) { habitWithEntriesList, streakPref, subtitlePref, scorePref ->
+            habitWithEntriesList.toHomeUiState(streakPref, subtitlePref, scorePref)
         }.stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
@@ -48,14 +51,16 @@ class HomeViewModel @Inject constructor(
 
     private suspend fun List<HabitWithVirtualEntries>.toHomeUiState(
         streakPref: Boolean,
-        subtitlePref: Boolean
+        subtitlePref: Boolean,
+        scorePref: Boolean
     ): HomeUiState {
         return if (this.isEmpty()) HomeUiState.Empty
         else HomeUiState.Habits(
             this.map { it.toHabit() },
             LocalDate.now(clock),
             streakPref,
-            subtitlePref
+            scorePref,
+            subtitlePref,
         )
     }
 
@@ -64,6 +69,8 @@ class HomeViewModel @Inject constructor(
             streak.endDate == LocalDate.now(clock)
                     || streak.endDate == LocalDate.now(clock).minusDays(1)
         }
+        var score = calculateScore(habit.id).first()?.times(100)?.toInt()
+        if (score == 0) score = null
         val completed = entries.filter { it.id != null }.map { it.date }.sortedDescending()
         val completedByWeek = entries.filter { it.id == null }.map { it.date }.sortedDescending()
         return HomeUiState.Habit(
@@ -71,6 +78,7 @@ class HomeViewModel @Inject constructor(
             habit.name,
             habit.frequency,
             streak?.length,
+            score,
             completed,
             completedByWeek
         )

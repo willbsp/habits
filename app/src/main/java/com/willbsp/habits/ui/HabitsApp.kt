@@ -9,6 +9,10 @@ import com.willbsp.habits.ui.navigation.HabitsNavigationGraph
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun HabitsApp(navController: NavHostController = rememberAnimatedNavController()) {
-    HabitsNavigationGraph(navController = navController)
+fun HabitsApp(
+    navController: NavHostController = rememberAnimatedNavController(),
+    onDatabaseImport: (Boolean) -> Unit,
+    snackbarState: SnackbarHostState
+) {
+    HabitsNavigationGraph(navController, onDatabaseImport, snackbarState)
 }

@@ -1,6 +1,7 @@
 package com.willbsp.habits.ui
 
 import androidx.activity.ComponentActivity
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.test.SemanticsNodeInteraction
@@ -23,6 +24,7 @@ import com.willbsp.habits.data.model.Entry
 import com.willbsp.habits.data.repository.EntryRepository
 import com.willbsp.habits.data.repository.HabitRepository
 import com.willbsp.habits.data.repository.SettingsRepository
+import com.willbsp.habits.domain.usecase.CalculateScoreUseCase
 import com.willbsp.habits.domain.usecase.CalculateStreakUseCase
 import com.willbsp.habits.domain.usecase.GetHabitsWithVirtualEntriesUseCase
 import com.willbsp.habits.domain.usecase.GetVirtualEntriesUseCase
@@ -80,6 +82,7 @@ class HomeScreenTest {
     fun setup() {
         hiltRule.inject()
         val clock = Clock.fixed(Instant.parse(date.toString() + time), ZoneOffset.UTC)
+        val snackbarHostState = SnackbarHostState()
         composeTestRule.setContent {
             val getHabitsWithVirtualEntriesUseCase =
                 GetHabitsWithVirtualEntriesUseCase(habitRepository, virtualEntriesUseCase)
@@ -88,11 +91,13 @@ class HomeScreenTest {
                 settingsRepository = settingsRepository,
                 getHabitsWithVirtualEntries = getHabitsWithVirtualEntriesUseCase,
                 calculateStreak = CalculateStreakUseCase(virtualEntriesUseCase, clock),
+                calculateScore = CalculateScoreUseCase(virtualEntriesUseCase, clock),
                 clock = clock
             )
             Surface {
                 val state by viewModel.uiState.collectAsStateWithLifecycle()
                 HomeScreen(
+                    snackbarHostState = snackbarHostState,
                     completedOnClick = { id, date -> viewModel.toggleEntry(id, date) },
                     navigateToLogbook = { },
                     navigateToAddHabit = { },
@@ -211,18 +216,26 @@ class HomeScreenTest {
 
     @Test
     fun dailyHabit_streakShownAndCorrect() = runTest {
-        settingsRepository.saveStreaksPreference(true)
+        settingsRepository.saveStatisticPreference(true)
         habitRepository.upsertHabit(habit3)
         (entryRepository as FakeEntryRepository).populate()
         composeTestRule.onNodeWithText("5").assertExists()
     }
 
     @Test
-    fun showStreaksDisabled_doesNotShowStreak() = runTest {
-        settingsRepository.saveStreaksPreference(false)
+    fun showStatisticDisabled_doesNotShowStreak() = runTest {
+        settingsRepository.saveStatisticPreference(false)
         habitRepository.upsertHabit(habit3)
         (entryRepository as FakeEntryRepository).populate()
         composeTestRule.onNodeWithText("5").assertDoesNotExist()
+    }
+
+    @Test
+    fun showScoresEnabled_showsScoreAndCorrect() = runTest {
+        settingsRepository.saveScorePreference(true)
+        habitRepository.upsertHabit(habit3)
+        (entryRepository as FakeEntryRepository).populate()
+        composeTestRule.onNodeWithText("37%").assertExists()
     }
 
     @Test

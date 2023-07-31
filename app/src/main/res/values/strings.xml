@@ -40,15 +40,29 @@
     <string name="home_show_completed">Show completed</string>
     <string name="home_logbook">Logbook</string>
     <string name="home_detail">Detail</string>
+    <string name="home_import_successful">Database import successful.</string>
+    <string name="home_import_invalid">Import was invalid. Previous database restored.</string>
     <!--home screen end-->
 
     <!--settings screen start-->
     <string name="settings_title">Settings</string>
-    <string name="settings_display_streaks">Display Streaks</string>
-    <string name="settings_display_streaks_subtitle">Display streaks on home screen</string>
-    <string name="settings_completed_subtitle">Show completed subtitle</string>
-    <string name="settings_completed_subtitle_desc">Show completed habit count in today view</string>
+    <string name="settings_display_stats">Display statistic on home</string>
+    <string name="settings_display_stats_desc">Show a statistic on each habit on the home screen. Shows streaks by default.</string>
+    <string name="settings_completed_subtitle">Show completed subtitle on home</string>
+    <string name="settings_completed_subtitle_desc">Show a completed habit count on the home screen.</string>
+    <string name="settings_scores_on_home">Show scores on home</string>
+    <string name="settings_scores_on_home_desc">Show scores on the home screen instead of streaks.</string>
     <string name="settings_about_screen">About screen</string>
+    <string name="settings_export_database">Export database</string>
+    <string name="settings_export_database_desc">Export the database to a file for backup.</string>
+    <string name="settings_import_database">Import database</string>
+    <string name="settings_import_database_desc">Import a database file. Please note this will erase all existing data.</string>
+    <string name="settings_import_data">Import data?</string>
+    <string name="settings_import_dialog_desc">This action will erase ALL existing data. Consider exporting beforehand.</string>
+    <string name="settings_import">Import</string>
+    <string name="settings_dismiss">Dismiss</string>
+    <string name="settings_home">Home</string>
+    <string name="settings_backup">Backup</string>
     <!--settings screen end-->
 
     <!--logbook screen start-->
@@ -77,7 +91,7 @@
 
     <!--about screen start-->
     <string name="about_title">About</string>
-    <string name="about_creator">Will Spooner (@wilbsp)</string>
+    <string name="about_creator">Will Spooner (@willbsp)</string>
     <string name="about_view_source">View the source on Github</string>
     <string name="about_report_an_issue">Report an issue</string>
     <string name="about_version_text">"Version "</string>

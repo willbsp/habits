@@ -13,7 +13,8 @@ sealed class HomeUiState {
         val habits: List<Habit>,
         val todaysDate: LocalDate,
         val showStreaks: Boolean,
-        val showSubtitle: Boolean
+        val showScore: Boolean,
+        val showSubtitle: Boolean,
     ) : HomeUiState()
 
     data class Habit(
@@ -21,6 +22,7 @@ sealed class HomeUiState {
         val name: String,
         val type: HabitFrequency,
         val streak: Int?,
+        val score: Int?,
         val completed: List<LocalDate>,
         val completedByWeek: List<LocalDate>
     ) {

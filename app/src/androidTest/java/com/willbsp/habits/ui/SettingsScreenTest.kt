@@ -9,6 +9,10 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.willbsp.habits.HiltComponentActivity
 import com.willbsp.habits.R
 import com.willbsp.habits.data.repository.SettingsRepository
+import com.willbsp.habits.domain.usecase.ExportDatabaseUseCase
+import com.willbsp.habits.domain.usecase.ImportDatabaseUseCase
+import com.willbsp.habits.fake.FakeDatabaseUtils
+import com.willbsp.habits.fake.dao.FakeRawDao
 import com.willbsp.habits.helper.onNodeWithTextId
 import com.willbsp.habits.ui.screens.settings.SettingsScreen
 import com.willbsp.habits.ui.screens.settings.SettingsViewModel
@@ -41,15 +45,22 @@ class SettingsScreenTest {
     @Before
     fun setup() {
         hiltRule.inject()
+        val fakeDatabaseUtils = FakeDatabaseUtils()
+        val importDatabaseUseCase = ImportDatabaseUseCase(fakeDatabaseUtils)
+        val exportDatabaseUseCase = ExportDatabaseUseCase(fakeDatabaseUtils, FakeRawDao())
         composeTestRule.setContent {
-            val viewModel = SettingsViewModel(settingsRepository)
+            val viewModel =
+                SettingsViewModel(settingsRepository, exportDatabaseUseCase, importDatabaseUseCase)
             Surface {
                 val state by viewModel.uiState.collectAsStateWithLifecycle()
                 SettingsScreen(
                     navigateUp = { },
                     navigateToAboutScreen = { },
-                    onShowStreaksPressed = viewModel::saveStreaksPreference,
+                    onShowStatisticPressed = viewModel::saveStatisticPreference,
                     onShowSubtitlePressed = viewModel::saveSubtitlePreference,
+                    onShowScorePressed = viewModel::saveScorePreference,
+                    onExportPressed = {},
+                    onImportPressed = {},
                     settingsUiState = state
                 )
             }
@@ -57,12 +68,12 @@ class SettingsScreenTest {
     }
 
     @Test
-    fun displayStreaks_togglesSettings() = runTest {
-        assertEquals(true, settingsRepository.getStreakPreference().first())
-        composeTestRule.onNodeWithTextId(R.string.settings_display_streaks).performClick()
-        assertEquals(false, settingsRepository.getStreakPreference().first())
-        composeTestRule.onNodeWithTextId(R.string.settings_display_streaks).performClick()
-        assertEquals(true, settingsRepository.getStreakPreference().first())
+    fun displayStatistic_togglesSettings() = runTest {
+        assertEquals(true, settingsRepository.getStatisticPreference().first())
+        composeTestRule.onNodeWithTextId(R.string.settings_display_stats).performClick()
+        assertEquals(false, settingsRepository.getStatisticPreference().first())
+        composeTestRule.onNodeWithTextId(R.string.settings_display_stats).performClick()
+        assertEquals(true, settingsRepository.getStatisticPreference().first())
     }
 
     @Test
@@ -72,6 +83,15 @@ class SettingsScreenTest {
         assertEquals(false, settingsRepository.getSubtitlePreference().first())
         composeTestRule.onNodeWithTextId(R.string.settings_completed_subtitle).performClick()
         assertEquals(true, settingsRepository.getSubtitlePreference().first())
+    }
+
+    @Test
+    fun displayScore_togglesSettings() = runTest {
+        assertEquals(false, settingsRepository.getScorePreference().first())
+        composeTestRule.onNodeWithTextId(R.string.settings_scores_on_home).performClick()
+        assertEquals(true, settingsRepository.getScorePreference().first())
+        composeTestRule.onNodeWithTextId(R.string.settings_scores_on_home).performClick()
+        assertEquals(false, settingsRepository.getScorePreference().first())
     }
 
 }

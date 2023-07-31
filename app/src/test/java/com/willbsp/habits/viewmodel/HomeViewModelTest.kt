@@ -3,6 +3,7 @@ package com.willbsp.habits.viewmodel
 import com.willbsp.habits.data.TestData.habit1
 import com.willbsp.habits.data.TestData.habit2
 import com.willbsp.habits.data.TestData.habit3
+import com.willbsp.habits.domain.usecase.CalculateScoreUseCase
 import com.willbsp.habits.domain.usecase.CalculateStreakUseCase
 import com.willbsp.habits.domain.usecase.GetHabitsWithVirtualEntriesUseCase
 import com.willbsp.habits.domain.usecase.GetVirtualEntriesUseCase
@@ -48,12 +49,14 @@ class HomeViewModelTest {
 
         val clock = Clock.fixed(Instant.parse(date.toString() + time), ZoneOffset.UTC)
         val calculateStreakUseCase = CalculateStreakUseCase(getVirtualEntriesUseCase, clock)
+        val calculateScoreUseCase = CalculateScoreUseCase(getVirtualEntriesUseCase, clock)
         val getHabitsWithVirtualEntries =
             GetHabitsWithVirtualEntriesUseCase(habitRepository, getVirtualEntriesUseCase)
 
         viewModel = HomeViewModel(
             entryRepository = entryRepository,
             calculateStreak = calculateStreakUseCase,
+            calculateScore = calculateScoreUseCase,
             clock = clock,
             getHabitsWithVirtualEntries = getHabitsWithVirtualEntries,
             settingsRepository = settingsRepository
@@ -114,6 +117,17 @@ class HomeViewModelTest {
     }
 
     @Test
+    fun uiState_whenScore_thenShowScore() = runTest {
+        val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
+        val habits = viewModel.uiState.map { (it as HomeUiState.Habits).habits }
+        val expected = 37
+        habitRepository.upsertHabit(habit3)
+        entryRepository.populate()
+        assertEquals(expected, habits.first().find { it.name == habit3.name }?.score)
+        collectJob.cancel()
+    }
+
+    @Test
     fun uiState_whenNoHabits_thenNoHabitsState() = runTest {
         val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
         habitRepository.upsertHabit(habit1)
@@ -155,10 +169,13 @@ class HomeViewModelTest {
         habitRepository.upsertHabit(habit1)
         assertTrue(state.first().showStreaks)
         assertTrue(state.first().showSubtitle)
-        settingsRepository.saveStreaksPreference(false)
+        assertFalse(state.first().showScore)
+        settingsRepository.saveStatisticPreference(false)
         settingsRepository.saveSubtitlePreference(false)
+        settingsRepository.saveScorePreference(true)
         assertFalse(state.first().showStreaks)
         assertFalse(state.first().showSubtitle)
+        assertTrue(state.first().showScore)
         collectJob.cancel()
     }
 

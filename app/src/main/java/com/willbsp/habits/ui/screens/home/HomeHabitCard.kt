@@ -1,5 +1,7 @@
 package com.willbsp.habits.ui.screens.home
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -29,21 +31,25 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.willbsp.habits.R
+import com.willbsp.habits.data.model.HabitFrequency
 import com.willbsp.habits.ui.common.HabitToggleButton
 import com.willbsp.habits.ui.theme.Typography
 import java.time.LocalDate
 import java.time.format.TextStyle
 import java.util.Locale
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun HomeHabitCard(
     habit: HomeUiState.Habit,
     completedOnClick: (Int, LocalDate) -> Unit,
     navigateToDetail: (Int) -> Unit,
     modifier: Modifier = Modifier,
-    showStreaks: Boolean,
+    showStatistic: Boolean,
+    showScore: Boolean,
     todaysDate: LocalDate,
     expandedInitialValue: Boolean = false
 ) {
@@ -75,11 +81,20 @@ fun HomeHabitCard(
 
                     Text(text = habit.name, style = Typography.titleLarge)
                     Spacer(modifier = Modifier.weight(1f))
-                    if (showStreaks) {
-                        Text(
-                            text = (habit.streak ?: " ").toString(),
-                            style = Typography.titleLarge
-                        )
+                    AnimatedContent(targetState = habit.score) {
+                        if (showStatistic) {
+                            if (showScore) {
+                                Text(
+                                    text = if (habit.score != null) "${habit.score}%" else " ",
+                                    style = Typography.titleLarge
+                                )
+                            } else {
+                                Text(
+                                    text = (habit.streak ?: " ").toString(),
+                                    style = Typography.titleLarge
+                                )
+                            }
+                        }
                     }
                     Spacer(modifier = Modifier.width(10.dp))
                     HabitToggleButton(
@@ -198,27 +213,25 @@ private fun HomeHabitCardDay(
 }
 
 
-/*@Preview
+@Preview
 @Composable
 private fun HomeHabitCardPreview() {
     HomeHabitCard(
-        habitUiState = HomeHabitUiState(
+        habit = HomeUiState.Habit(
             id = 1,
             name = "Reading",
-            streak = 4,
-            completedDates = listOf(
-                HomeCompletedUiState(LocalDate.parse("2023-04-12"), false),
-                HomeCompletedUiState(LocalDate.parse("2023-04-11"), true),
-                HomeCompletedUiState(LocalDate.parse("2023-04-10"), false),
-                HomeCompletedUiState(LocalDate.parse("2023-04-09"), true),
-                HomeCompletedUiState(LocalDate.parse("2023-04-08"), false),
-                HomeCompletedUiState(LocalDate.parse("2023-04-07"), true),
-            )
+            type = HabitFrequency.DAILY,
+            streak = null,
+            score = 43,
+            completed = listOf(),
+            completedByWeek = listOf()
         ),
         completedOnClick = { _, _ -> },
         navigateToDetail = {},
         expandedInitialValue = false,
-        showStreaks = true
+        showStatistic = true,
+        showScore = true,
+        todaysDate = LocalDate.parse("2023-07-09")
     )
 }
 
@@ -226,22 +239,24 @@ private fun HomeHabitCardPreview() {
 @Composable
 private fun HomeHabitCardExpandedPreview() {
     HomeHabitCard(
-        habitUiState = HomeHabitUiState(
+        habit = HomeUiState.Habit(
             id = 1,
             name = "Walking",
+            type = HabitFrequency.DAILY,
             streak = 2,
-            completedDates = listOf(
-                HomeCompletedUiState(LocalDate.parse("2023-04-12"), true),
-                HomeCompletedUiState(LocalDate.parse("2023-04-11"), true),
-                HomeCompletedUiState(LocalDate.parse("2023-04-10"), false),
-                HomeCompletedUiState(LocalDate.parse("2023-04-09"), true),
-                HomeCompletedUiState(LocalDate.parse("2023-04-08"), false),
-                HomeCompletedUiState(LocalDate.parse("2023-04-07"), false),
-            )
+            score = null,
+            completed = listOf(
+                LocalDate.parse("2023-07-07"),
+                LocalDate.parse("2023-07-05"),
+                LocalDate.parse("2023-07-08")
+            ),
+            completedByWeek = listOf()
         ),
         completedOnClick = { _, _ -> },
         navigateToDetail = {},
         expandedInitialValue = true,
-        showStreaks = true
+        showStatistic = true,
+        showScore = false,
+        todaysDate = LocalDate.parse("2023-07-09")
     )
-}*/
+}

@@ -22,6 +22,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -34,6 +36,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import com.willbsp.habits.R
+import com.willbsp.habits.data.model.HabitFrequency
 import com.willbsp.habits.ui.common.FullscreenHint
 import com.willbsp.habits.ui.common.HabitsFloatingAction
 import com.willbsp.habits.ui.theme.HabitsTheme
@@ -43,6 +46,7 @@ import java.time.LocalDate
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
+    snackbarHostState: SnackbarHostState,
     completedOnClick: (Int, LocalDate) -> Unit,
     navigateToLogbook: () -> Unit,
     navigateToAddHabit: () -> Unit,
@@ -54,6 +58,7 @@ fun HomeScreen(
     var showCompleted by rememberSaveable { mutableStateOf(false) }
 
     Scaffold(
+        snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
@@ -157,11 +162,46 @@ fun HomeScreen(
 private fun HomeScreenNoHabitsPreview() {
     HabitsTheme {
         HomeScreen(
+            snackbarHostState = SnackbarHostState(),
             navigateToAddHabit = {},
             navigateToDetail = {},
             navigateToSettings = {},
             navigateToLogbook = {},
             homeUiState = HomeUiState.Empty,
+            completedOnClick = { _, _ -> },
+        )
+    }
+}
+
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+private fun HomeScreenHabitsPreview() {
+    val habits = listOf(
+        HomeUiState.Habit(0, "Running", HabitFrequency.DAILY, 3, 0, listOf(), listOf()),
+        HomeUiState.Habit(
+            id = 1,
+            name = "Boxing",
+            type = HabitFrequency.WEEKLY,
+            streak = 2,
+            score = 0,
+            completed = listOf(LocalDate.parse("2023-07-08")),
+            completedByWeek = listOf()
+        )
+    )
+    HabitsTheme {
+        HomeScreen(
+            snackbarHostState = SnackbarHostState(),
+            navigateToAddHabit = {},
+            navigateToDetail = {},
+            navigateToSettings = {},
+            navigateToLogbook = {},
+            homeUiState = HomeUiState.Habits(
+                habits = habits,
+                showStreaks = true,
+                showSubtitle = true,
+                showScore = false,
+                todaysDate = LocalDate.of(2023, 7, 8)
+            ),
             completedOnClick = { _, _ -> },
         )
     }

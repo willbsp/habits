@@ -1,5 +1,6 @@
 package com.willbsp.habits.rules
 
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestDispatcher
@@ -20,6 +21,10 @@ class TestDispatcherRule(
 
     override fun finished(description: Description) {
         Dispatchers.resetMain()
+    }
+
+    fun getDispatcher(): CoroutineDispatcher {
+        return testDispatcher
     }
 
 }

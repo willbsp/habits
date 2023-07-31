@@ -1,6 +1,7 @@
 package com.willbsp.habits.ui
 
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -10,7 +11,11 @@ import androidx.navigation.compose.ComposeNavigator
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.willbsp.habits.HiltComponentActivity
+import com.willbsp.habits.R
+import com.willbsp.habits.data.TestData.habit1
 import com.willbsp.habits.helper.assertCurrentRouteName
+import com.willbsp.habits.helper.onNodeWithContentDescriptionId
+import com.willbsp.habits.helper.onNodeWithTextId
 import com.willbsp.habits.ui.navigation.HabitsNavigationDestination
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -18,10 +23,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import com.willbsp.habits.R
-import com.willbsp.habits.data.TestData.habit1
-import com.willbsp.habits.helper.onNodeWithContentDescriptionId
-import com.willbsp.habits.helper.onNodeWithTextId
 
 @HiltAndroidTest
 @RunWith(AndroidJUnit4::class)
@@ -45,7 +46,12 @@ class NavigationTest {
         composeTestRule.setContent {
             navController = rememberAnimatedNavController()
             navController.navigatorProvider.addNavigator(ComposeNavigator())
-            HabitsApp(navController = navController)
+            val snackbarHostState = SnackbarHostState()
+            HabitsApp(
+                navController = navController,
+                onDatabaseImport = {},
+                snackbarState = snackbarHostState
+            )
         }
     }
 
@@ -111,7 +117,8 @@ class NavigationTest {
         addHabit()
         navigateToDetailScreen()
         navigateToEditHabitScreen()
-        composeTestRule.onNodeWithContentDescriptionId(R.string.edit_habit_update_habit).performClick()
+        composeTestRule.onNodeWithContentDescriptionId(R.string.edit_habit_update_habit)
+            .performClick()
         navController.assertCurrentRouteName(HabitsNavigationDestination.DETAIL.route, "habitId")
     }
 
@@ -240,7 +247,8 @@ class NavigationTest {
     }
 
     private fun navigateToAboutScreen() {
-        composeTestRule.onNodeWithContentDescriptionId(R.string.settings_about_screen).performClick()
+        composeTestRule.onNodeWithContentDescriptionId(R.string.settings_about_screen)
+            .performClick()
     }
 
     private fun navigateToDetailScreen() {
@@ -257,7 +265,8 @@ class NavigationTest {
     }
 
     private fun addHabit() {
-        composeTestRule.onNodeWithTextId(R.string.modify_habit_name).performClick().performTextInput(habit1.name)
+        composeTestRule.onNodeWithTextId(R.string.modify_habit_name).performClick()
+            .performTextInput(habit1.name)
         composeTestRule.onNodeWithContentDescriptionId(R.string.add_habit_add_habit).performClick()
     }
 
