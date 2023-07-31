@@ -20,6 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.willbsp.habits.R
 import com.willbsp.habits.data.model.HabitFrequency
+import com.willbsp.habits.domain.model.HabitReminderType
 import java.time.DayOfWeek
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter

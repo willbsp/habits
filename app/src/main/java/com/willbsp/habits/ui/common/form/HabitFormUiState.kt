@@ -1,11 +1,10 @@
 package com.willbsp.habits.ui.common.form
 
-import androidx.annotation.StringRes
-import com.willbsp.habits.R
 import com.willbsp.habits.common.HABIT_NAME_MAX_CHARACTER_LIMIT
 import com.willbsp.habits.common.HABIT_NAME_MIN_CHARACTER_LIMIT
-import com.willbsp.habits.data.model.Habit
 import com.willbsp.habits.data.model.HabitFrequency
+import com.willbsp.habits.domain.model.HabitData
+import com.willbsp.habits.domain.model.HabitReminderType
 import java.time.LocalTime
 
 sealed class HabitFormUiState {
@@ -14,13 +13,13 @@ sealed class HabitFormUiState {
 
     data class Data(
         val name: String = "",
-        val nameIsInvalid: Boolean = false,
-        val daysIsInvalid: Boolean = false,
         val frequency: HabitFrequency = HabitFrequency.DAILY,
         val repeat: Int = 1,
         val reminderType: HabitReminderType = HabitReminderType.NONE,
         val reminderTime: LocalTime = LocalTime.NOON,
-        val reminderDays: Set<Int> = setOf()
+        val reminderDays: Set<Int> = setOf(),
+        val nameIsInvalid: Boolean = false,
+        val daysIsInvalid: Boolean = false
     ) : HabitFormUiState() {
 
 
@@ -37,18 +36,13 @@ sealed class HabitFormUiState {
 
 }
 
-enum class HabitReminderType(@StringRes val userReadableStringRes: Int) {
-    NONE(R.string.modify_reminder_none),
-    EVERYDAY(R.string.modify_reminder_every_day),
-    SPECIFIC(R.string.modify_reminder_specific_days)
-}
-
-fun HabitFormUiState.Data.toHabit(id: Int? = null): Habit {
-    return if (id != null) Habit(
-        id = id,
+fun HabitFormUiState.Data.toHabitData(): HabitData {
+    return HabitData(
         name = this.name,
         frequency = this.frequency,
-        repeat = this.repeat
+        repeat = this.repeat,
+        reminderType = this.reminderType,
+        reminderTime = this.reminderTime,
+        reminderDays = this.reminderDays
     )
-    else Habit(name = this.name, frequency = this.frequency, repeat = this.repeat)
 }

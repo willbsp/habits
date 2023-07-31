@@ -8,10 +8,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.willbsp.habits.data.repository.HabitRepository
 import com.willbsp.habits.data.repository.ReminderRepository
+import com.willbsp.habits.domain.model.HabitReminderType
 import com.willbsp.habits.domain.usecase.ValidateHabitNameUseCase
 import com.willbsp.habits.ui.common.form.HabitFormUiState
-import com.willbsp.habits.ui.common.form.HabitReminderType
-import com.willbsp.habits.ui.common.form.toHabit
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -50,7 +49,7 @@ class EditViewModel @Inject constructor(
             is HabitFormUiState.Data -> {
                 val habitState = uiState as HabitFormUiState.Data
                 if (isValidHabitName(habitState.name)) {
-                    viewModelScope.launch { habitRepository.upsertHabit(habitState.toHabit(habitId)) }
+                    //viewModelScope.launch { habitRepository.upsertHabit(habitState.toHabit(habitId)) }
                     return true
                 }
                 return false

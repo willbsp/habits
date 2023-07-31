@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.willbsp.habits.domain.usecase.SaveHabitUseCase
 import com.willbsp.habits.ui.common.form.HabitFormUiState
+import com.willbsp.habits.ui.common.form.toHabitData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -26,7 +27,7 @@ class AddViewModel @Inject constructor(
     fun saveHabit(): Boolean {
         if (isHabitValid()) {
             viewModelScope.launch {
-                saveHabit(uiState)
+                saveHabit(uiState.toHabitData())
             }
             return true
         }
