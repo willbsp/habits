@@ -54,7 +54,7 @@ class AddHabitScreenTest {
                     navigateUp = {},
                     onSaveClick = { viewModel.saveHabit() },
                     onValueChange = { uiState -> viewModel.updateUiState(uiState) },
-                    habitFormUiState = state,
+                    formUiState = state,
                 )
             }
         }

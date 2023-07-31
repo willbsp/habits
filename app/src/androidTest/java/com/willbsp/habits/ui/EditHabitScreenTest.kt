@@ -65,7 +65,7 @@ class EditHabitScreenTest {
                     onSaveClick = { viewModel.saveHabit() },
                     onValueChange = { uiState -> viewModel.updateUiState(uiState as HabitFormUiState.Data) },
                     onDeleteClick = { viewModel.deleteHabit() },
-                    habitFormUiState = state,
+                    formUiState = state,
                 )
             }
         }

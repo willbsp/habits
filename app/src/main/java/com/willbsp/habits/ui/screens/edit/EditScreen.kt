@@ -8,12 +8,16 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -21,10 +25,14 @@ import androidx.compose.ui.unit.dp
 import com.willbsp.habits.R
 import com.willbsp.habits.ui.common.DefaultHabitsAppTopBar
 import com.willbsp.habits.ui.common.button.HabitsFloatingAction
+import com.willbsp.habits.ui.common.dialog.DayPickerDialog
+import com.willbsp.habits.ui.common.dialog.TimePickerDialog
 import com.willbsp.habits.ui.common.form.HabitForm
 import com.willbsp.habits.ui.common.form.HabitFormUiState
 import com.willbsp.habits.ui.theme.HabitsTheme
+import java.time.LocalTime
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditScreen(
     modifier: Modifier = Modifier,
@@ -32,7 +40,7 @@ fun EditScreen(
     onSaveClick: () -> Unit,
     onDeleteClick: () -> Unit,
     onValueChange: (HabitFormUiState) -> Unit,
-    habitFormUiState: HabitFormUiState
+    formUiState: HabitFormUiState
 ) {
 
     Scaffold(
@@ -52,53 +60,98 @@ fun EditScreen(
         }
     ) { innerPadding ->
 
-        val deleteDialogOpen = remember { mutableStateOf(false) }
+        when (formUiState) {
 
-        Column(
-            modifier = modifier
-                .padding(innerPadding)
-                .padding(horizontal = 10.dp)
-                .fillMaxSize()
-        ) {
+            is HabitFormUiState.Data -> {
 
-            when (habitFormUiState) {
+                val timePickerState = rememberTimePickerState(
+                    initialHour = formUiState.reminderTime.hour,
+                    initialMinute = formUiState.reminderTime.minute
+                )
+                var dayPickerState by remember { mutableStateOf(formUiState.reminderDays) }
+                var showTimePicker by remember { mutableStateOf(false) }
+                var showDayPicker by remember { mutableStateOf(false) }
+                var deleteDialogOpen by remember { mutableStateOf(false) }
 
-                is HabitFormUiState.Data -> {
+                Column(
+                    modifier = modifier
+                        .padding(innerPadding)
+                        .padding(horizontal = 10.dp)
+                        .fillMaxSize()
+                ) {
 
                     HabitForm(
                         modifier = Modifier
                             .fillMaxWidth(),
                         onValueChange = onValueChange,
-                        showTimePicker = {},
-                        showDayPicker = {}, // TODO
-                        habitFormUiState = habitFormUiState
+                        showTimePicker = { showTimePicker = it },
+                        showDayPicker = { showDayPicker = it },
+                        habitFormUiState = formUiState
                     )
 
                     Spacer(Modifier.height(10.dp))
 
                     FilledTonalButton(
                         modifier = Modifier.fillMaxWidth(),
-                        onClick = { deleteDialogOpen.value = true }
+                        onClick = { deleteDialogOpen = true }
                     ) {
                         Text(stringResource(R.string.edit_habit_delete))
                     }
 
                 }
 
-                else -> {}
+                if (showTimePicker) {
+                    TimePickerDialog(
+                        state = timePickerState,
+                        onCancel = { showTimePicker = false },
+                        onConfirm = {
+                            onValueChange(
+                                formUiState.copy(
+                                    reminderTime = LocalTime.of(
+                                        timePickerState.hour,
+                                        timePickerState.minute
+                                    )
+                                )
+                            )
+                            showTimePicker = false
+                        }
+                    )
+                }
+
+                if (showDayPicker) {
+                    DayPickerDialog(
+                        state = dayPickerState,
+                        onCancel = { showDayPicker = false },
+                        onValueChange = { day, checked ->
+                            val newState = dayPickerState.toMutableSet()
+                            if (checked) {
+                                newState.add(day)
+                            } else {
+                                newState.remove(day)
+                            }
+                            dayPickerState = newState.toSet()
+                        },
+                        onConfirm = {
+                            onValueChange(formUiState.copy(reminderDays = dayPickerState))
+                            showDayPicker = false
+                        }
+                    )
+                }
+
+                if (deleteDialogOpen) {
+                    EditDeleteDialog(
+                        onDismiss = { deleteDialogOpen = false },
+                        onConfirm = {
+                            deleteDialogOpen = false
+                            onDeleteClick()
+                        }
+                    )
+                }
 
             }
 
-        }
+            else -> {}
 
-        if (deleteDialogOpen.value) {
-            EditDeleteDialog(
-                onDismiss = { deleteDialogOpen.value = false },
-                onConfirm = {
-                    deleteDialogOpen.value = false
-                    onDeleteClick()
-                }
-            )
         }
 
     }
@@ -113,7 +166,7 @@ private fun EditScreenPreview() {
             onSaveClick = {},
             onDeleteClick = {},
             onValueChange = {},
-            habitFormUiState = HabitFormUiState.Loading
+            formUiState = HabitFormUiState.Loading
         )
     }
 }

@@ -105,7 +105,7 @@ fun HabitsNavigationGraph(
                 onValueChange = {
                     viewModel.updateUiState(it)
                 },
-                habitFormUiState = state
+                formUiState = state
             )
 
         }
@@ -184,7 +184,7 @@ fun HabitsNavigationGraph(
                 onValueChange = {
                     viewModel.updateUiState(it as HabitFormUiState.Data)
                 },
-                habitFormUiState = state
+                formUiState = state
             )
 
         }

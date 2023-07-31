@@ -26,7 +26,7 @@ fun AddScreen(
     navigateUp: () -> Unit,
     onSaveClick: () -> Unit,
     onValueChange: (HabitFormUiState.Data) -> Unit,
-    habitFormUiState: HabitFormUiState.Data
+    formUiState: HabitFormUiState.Data
 ) {
 
     Scaffold(
@@ -46,12 +46,11 @@ fun AddScreen(
         }
     ) { innerPadding ->
 
-        // TODO for 24 hour find users preference
         val timePickerState = rememberTimePickerState(
-            initialHour = habitFormUiState.reminderTime.hour,
-            initialMinute = habitFormUiState.reminderTime.minute
+            initialHour = formUiState.reminderTime.hour,
+            initialMinute = formUiState.reminderTime.minute
         )
-        var dayPickerState by remember { mutableStateOf(habitFormUiState.reminderDays) }
+        var dayPickerState by remember { mutableStateOf(formUiState.reminderDays) }
         var showTimePicker by remember { mutableStateOf(false) }
         var showDayPicker by remember { mutableStateOf(false) }
 
@@ -63,7 +62,7 @@ fun AddScreen(
             onValueChange = onValueChange,
             showTimePicker = { showTimePicker = it },
             showDayPicker = { showDayPicker = it },
-            habitFormUiState = habitFormUiState
+            habitFormUiState = formUiState
         )
 
         if (showTimePicker) {
@@ -72,7 +71,7 @@ fun AddScreen(
                 onCancel = { showTimePicker = false },
                 onConfirm = {
                     onValueChange(
-                        habitFormUiState.copy(
+                        formUiState.copy(
                             reminderTime = LocalTime.of(
                                 timePickerState.hour,
                                 timePickerState.minute
@@ -98,7 +97,7 @@ fun AddScreen(
                     dayPickerState = newState.toSet()
                 },
                 onConfirm = {
-                    onValueChange(habitFormUiState.copy(reminderDays = dayPickerState))
+                    onValueChange(formUiState.copy(reminderDays = dayPickerState))
                     showDayPicker = false
                 }
             )
@@ -115,7 +114,7 @@ private fun AddHabitScreenPreview() {
             navigateUp = {},
             onSaveClick = {},
             onValueChange = {},
-            habitFormUiState = HabitFormUiState.Data()
+            formUiState = HabitFormUiState.Data()
         )
     }
 }
