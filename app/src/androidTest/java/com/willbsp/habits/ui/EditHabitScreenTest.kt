@@ -15,7 +15,6 @@ import com.willbsp.habits.data.TestData.habit2
 import com.willbsp.habits.data.model.Habit
 import com.willbsp.habits.data.model.HabitFrequency
 import com.willbsp.habits.data.repository.HabitRepository
-import com.willbsp.habits.domain.usecase.ValidateHabitNameUseCase
 import com.willbsp.habits.helper.onNodeWithContentDescriptionId
 import com.willbsp.habits.helper.onNodeWithTextId
 import com.willbsp.habits.ui.common.form.HabitFormUiState

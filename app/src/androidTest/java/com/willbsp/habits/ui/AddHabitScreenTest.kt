@@ -12,7 +12,6 @@ import com.willbsp.habits.R
 import com.willbsp.habits.data.TestData.habit1
 import com.willbsp.habits.data.model.HabitFrequency
 import com.willbsp.habits.data.repository.HabitRepository
-import com.willbsp.habits.domain.usecase.ValidateHabitNameUseCase
 import com.willbsp.habits.helper.onNodeWithContentDescriptionId
 import com.willbsp.habits.helper.onNodeWithTextId
 import com.willbsp.habits.ui.screens.add.AddScreen
