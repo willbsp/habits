@@ -85,6 +85,8 @@ dependencies {
 
     implementation libs.androidx.paging.compose
 
+    implementation libs.accompanist.permissions
+
     implementation libs.androidx.room.runtime
     implementation libs.androidx.room.ktx
     ksp libs.androidx.room.compiler
