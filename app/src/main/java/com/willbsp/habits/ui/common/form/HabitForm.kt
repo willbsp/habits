@@ -1,5 +1,6 @@
 package com.willbsp.habits.ui.common.form
 
+import android.os.Build
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
@@ -18,6 +19,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
 import com.willbsp.habits.R
 import com.willbsp.habits.data.model.HabitFrequency
 import com.willbsp.habits.domain.model.HabitReminderType
@@ -71,7 +75,7 @@ fun HabitForm(
 
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
 @Composable
 private fun HabitReminderDropdown( // TODO could make this generic
     modifier: Modifier = Modifier,
@@ -127,6 +131,16 @@ private fun HabitReminderDropdown( // TODO could make this generic
         }
 
         AnimatedVisibility(visible = (reminderSelected == HabitReminderType.EVERYDAY) || (reminderSelected == HabitReminderType.SPECIFIC)) {
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                val notificationPermissionState =
+                    rememberPermissionState(android.Manifest.permission.POST_NOTIFICATIONS)
+                if (!notificationPermissionState.status.isGranted) {
+                    SideEffect {
+                        notificationPermissionState.launchPermissionRequest()
+                    } // TODO message for when permission has not been granted but message has been shown
+                }
+            }
 
             Column(
                 verticalArrangement = Arrangement.spacedBy(10.dp)
