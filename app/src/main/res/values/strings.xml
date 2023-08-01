@@ -3,6 +3,11 @@
     <string name="settings">Settings</string>
     <string name="topbar_back">Back</string>
 
+    <!--notifications-->
+    <string name="reminder_notification_channel">Reminders</string>
+    <string name="reminder_notification_channel_desc">Reminders for Habits</string>
+    <!--end notifications-->
+
     <!--habit frequency-->
     <string name="frequency_daily">Daily</string>
     <string name="frequency_weekly">Weekly</string>
