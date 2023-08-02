@@ -2,6 +2,7 @@ package com.willbsp.habits.data.repository
 
 import com.willbsp.habits.data.model.Reminder
 import kotlinx.coroutines.flow.Flow
+import java.time.DayOfWeek
 
 interface ReminderRepository {
 
@@ -9,7 +10,7 @@ interface ReminderRepository {
 
     fun getRemindersForHabitStream(habitId: Int): Flow<List<Reminder>>
 
-    fun getRemindersForDayStream(day: Int): Flow<List<Reminder>>
+    fun getRemindersForDayStream(day: DayOfWeek): Flow<List<Reminder>>
 
     suspend fun insertReminder(reminder: Reminder)
 

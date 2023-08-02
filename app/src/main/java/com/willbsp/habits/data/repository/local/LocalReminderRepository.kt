@@ -4,6 +4,7 @@ import com.willbsp.habits.data.database.dao.ReminderDao
 import com.willbsp.habits.data.model.Reminder
 import com.willbsp.habits.data.repository.ReminderRepository
 import kotlinx.coroutines.flow.Flow
+import java.time.DayOfWeek
 import javax.inject.Inject
 
 class LocalReminderRepository @Inject constructor(
@@ -14,7 +15,7 @@ class LocalReminderRepository @Inject constructor(
     override fun getRemindersForHabitStream(habitId: Int): Flow<List<Reminder>> =
         reminderDao.getRemindersForHabitStream(habitId)
 
-    override fun getRemindersForDayStream(day: Int): Flow<List<Reminder>> =
+    override fun getRemindersForDayStream(day: DayOfWeek): Flow<List<Reminder>> =
         reminderDao.getRemindersForDayStream(day)
 
     override suspend fun clearReminders(habitId: Int) = reminderDao.clearReminders(habitId)

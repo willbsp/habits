@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import java.time.DayOfWeek
 import java.time.LocalTime
 
 @Entity(
@@ -20,5 +21,5 @@ class Reminder(
     @ColumnInfo(name = "habit_id", index = true)
     val habitId: Int,
     val time: LocalTime,
-    val day: Int // index with Calendar.WEDNESDAY etc
+    val day: DayOfWeek
 )

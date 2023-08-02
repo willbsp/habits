@@ -4,6 +4,7 @@ import androidx.annotation.StringRes
 import com.willbsp.habits.R
 import com.willbsp.habits.data.model.Habit
 import com.willbsp.habits.data.model.HabitFrequency
+import java.time.DayOfWeek
 import java.time.LocalTime
 
 data class HabitData(
@@ -12,7 +13,7 @@ data class HabitData(
     val repeat: Int = 1,
     val reminderType: HabitReminderType = HabitReminderType.NONE,
     val reminderTime: LocalTime = LocalTime.NOON,
-    val reminderDays: Set<Int> = setOf()
+    val reminderDays: Set<DayOfWeek> = setOf()
 )
 
 fun HabitData.toHabit(id: Int? = null): Habit {

@@ -5,6 +5,7 @@ import com.willbsp.habits.common.HABIT_NAME_MIN_CHARACTER_LIMIT
 import com.willbsp.habits.data.model.HabitFrequency
 import com.willbsp.habits.domain.model.HabitData
 import com.willbsp.habits.domain.model.HabitReminderType
+import java.time.DayOfWeek
 import java.time.LocalTime
 
 sealed class HabitFormUiState {
@@ -17,7 +18,7 @@ sealed class HabitFormUiState {
         val repeat: Int = 1,
         val reminderType: HabitReminderType = HabitReminderType.NONE,
         val reminderTime: LocalTime = LocalTime.NOON,
-        val reminderDays: Set<Int> = setOf(),
+        val reminderDays: Set<DayOfWeek> = setOf(),
         val nameIsInvalid: Boolean = false,
         val daysIsInvalid: Boolean = false
     ) : HabitFormUiState() {

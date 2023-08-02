@@ -35,8 +35,8 @@ import java.util.Locale
 @Composable
 fun DayPickerDialog(
     modifier: Modifier = Modifier,
-    state: Set<Int>,
-    onValueChange: (Int, Boolean) -> Unit,
+    state: Set<DayOfWeek>,
+    onValueChange: (DayOfWeek, Boolean) -> Unit,
     onCancel: () -> Unit,
     onConfirm: () -> Unit
 ) {
@@ -56,12 +56,14 @@ fun DayPickerDialog(
                     verticalArrangement = Arrangement.SpaceEvenly
                 ) {
 
-                    for (day in DayOfWeek.MONDAY.value..DayOfWeek.SUNDAY.value) {
+                    for (day in DayOfWeek.values()) {
                         DayPickerCheckboxItem(
                             modifier = Modifier,
-                            day = DayOfWeek.of(day),
+                            day = day,
                             checked = state.contains(day),
-                            onCheckedChanged = { checked -> onValueChange(day, checked) }
+                            onCheckedChanged = { checked ->
+                                onValueChange(day, checked)
+                            }
                         )
                     }
 
@@ -116,7 +118,7 @@ private fun DayPickerCheckboxItem(
 private fun DayPickerDialogPreview() {
     DayPickerDialog(
         modifier = Modifier.width(300.dp),
-        state = mutableSetOf(3, 4, 7),
+        state = mutableSetOf(DayOfWeek.WEDNESDAY, DayOfWeek.THURSDAY, DayOfWeek.SUNDAY),
         onCancel = { },
         onValueChange = { a, b -> },
         onConfirm = {}

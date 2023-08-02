@@ -205,7 +205,7 @@ private fun HabitReminderDayField(
     modifier: Modifier = Modifier,
     showDayPicker: () -> Unit,
     isInvalid: Boolean,
-    days: Set<Int>
+    days: Set<DayOfWeek>
 ) {
 
     val source = remember { MutableInteractionSource() }
@@ -213,7 +213,7 @@ private fun HabitReminderDayField(
     OutlinedTextField(
         modifier = modifier,
         value = days
-            .map { DayOfWeek.of(it).getDisplayName(TextStyle.SHORT, Locale.getDefault()) }
+            .map { it.getDisplayName(TextStyle.SHORT, Locale.getDefault()) }
             .toString()
             .drop(1).dropLast(1), // drop [ ]
         readOnly = true,

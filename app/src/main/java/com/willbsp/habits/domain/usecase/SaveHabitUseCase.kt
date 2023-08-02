@@ -45,7 +45,7 @@ class SaveHabitUseCase(
                     val reminder = Reminder(
                         habitId = habitId,
                         time = data.reminderTime,
-                        day = day.value
+                        day = day
                     )
                     reminderRepository.insertReminder(reminder)
                 }

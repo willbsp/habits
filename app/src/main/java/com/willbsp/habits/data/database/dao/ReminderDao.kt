@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.Query
 import com.willbsp.habits.data.model.Reminder
 import kotlinx.coroutines.flow.Flow
+import java.time.DayOfWeek
 
 @Dao
 interface ReminderDao {
@@ -17,7 +18,7 @@ interface ReminderDao {
     fun getRemindersForHabitStream(habitId: Int): Flow<List<Reminder>>
 
     @Query("SELECT * FROM reminders WHERE day = :day")
-    fun getRemindersForDayStream(day: Int): Flow<List<Reminder>>
+    fun getRemindersForDayStream(day: DayOfWeek): Flow<List<Reminder>>
 
     @Query("DELETE FROM reminders WHERE habit_id = :habitId")
     suspend fun clearReminders(habitId: Int)

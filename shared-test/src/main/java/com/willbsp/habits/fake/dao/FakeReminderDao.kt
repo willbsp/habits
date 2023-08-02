@@ -5,6 +5,7 @@ import com.willbsp.habits.data.model.Reminder
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
+import java.time.DayOfWeek
 
 class FakeReminderDao : ReminderDao {
 
@@ -17,7 +18,7 @@ class FakeReminderDao : ReminderDao {
     override fun getRemindersForHabitStream(habitId: Int): Flow<List<Reminder>> =
         observableReminders.map { reminders -> reminders.filter { it.habitId == habitId } }
 
-    override fun getRemindersForDayStream(day: Int): Flow<List<Reminder>> =
+    override fun getRemindersForDayStream(day: DayOfWeek): Flow<List<Reminder>> =
         observableReminders.map { reminders -> reminders.filter { it.day == day } }
 
     override suspend fun clearReminders(habitId: Int) {
