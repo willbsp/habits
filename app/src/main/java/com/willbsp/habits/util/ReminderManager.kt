@@ -24,13 +24,12 @@ class ReminderManager @Inject constructor(
             if (!alarmManager.canScheduleExactAlarms()) return
         }
 
-        val intent =
-            Intent(context.applicationContext, ReminderReceiver::class.java).let { intent ->
-                PendingIntent.getBroadcast(
-                    context.applicationContext, reminderId, intent,
-                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-                )
-            }
+        val intent = Intent(context.applicationContext, ReminderReceiver::class.java)
+        intent.putExtra("reminderId", reminderId)
+        val pendingIntent = PendingIntent.getBroadcast(
+            context.applicationContext, reminderId, intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
 
         val reminderTime: Calendar = Calendar.getInstance(Locale.getDefault()).apply {
             set(Calendar.HOUR_OF_DAY, time.hour)
@@ -39,7 +38,7 @@ class ReminderManager @Inject constructor(
         }
 
         alarmManager.setAlarmClock(
-            AlarmManager.AlarmClockInfo(reminderTime.timeInMillis, intent), intent
+            AlarmManager.AlarmClockInfo(reminderTime.timeInMillis, pendingIntent), pendingIntent
         )
 
     }

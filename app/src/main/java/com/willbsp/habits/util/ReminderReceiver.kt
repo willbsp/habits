@@ -22,6 +22,8 @@ class ReminderReceiver : BroadcastReceiver() {
             channelId = REMINDER_NOTIFICATION_CHANNEL_ID
         )
 
+        val reminderId = intent.getIntExtra("reminderId", -1)
+
     }
 
     private fun NotificationManager.sendReminderNotification(
