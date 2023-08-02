@@ -36,6 +36,7 @@ class SaveHabitUseCase(
                 scheduleReminders(id)
             } else {
                 habitRepository.upsertHabit(data.toHabit(habitId))
+                unscheduleReminders(habitId)
                 reminderRepository.clearReminders(habitId)
                 saveReminders(data, habitId)
                 scheduleReminders(habitId)
@@ -73,8 +74,13 @@ class SaveHabitUseCase(
     private suspend fun scheduleReminders(habitId: Int) {
         val reminders = reminderRepository.getRemindersForHabitStream(habitId).first()
         reminders.forEach { reminder ->
-            reminderManager.scheduleReminder(reminder.day, reminder.time, reminder.id)
+            reminderManager.scheduleReminder(reminder.id, reminder.day, reminder.time)
         }
+    }
+
+    private suspend fun unscheduleReminders(habitId: Int) {
+        val reminders = reminderRepository.getRemindersForHabitStream(habitId).first()
+        reminders.forEach { reminder -> reminderManager.unscheduleReminder(reminder.id) }
     }
 
 }

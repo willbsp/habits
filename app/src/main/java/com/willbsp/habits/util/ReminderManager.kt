@@ -16,11 +16,7 @@ class ReminderManager @Inject constructor(
     @ApplicationContext val context: Context
 ) {
 
-    fun scheduleReminder(
-        day: DayOfWeek,
-        time: LocalTime,
-        reminderId: Int
-    ) {
+    fun scheduleReminder(reminderId: Int, day: DayOfWeek, time: LocalTime) {
 
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
@@ -48,9 +44,7 @@ class ReminderManager @Inject constructor(
 
     }
 
-    fun unscheduleReminder(
-        reminderId: Int
-    ) {
+    fun unscheduleReminder(reminderId: Int) {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(context, ReminderReceiver::class.java).let { intent ->
             PendingIntent.getBroadcast(
