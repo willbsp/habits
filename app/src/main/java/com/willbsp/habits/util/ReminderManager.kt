@@ -43,8 +43,7 @@ class ReminderManager @Inject constructor(
         }
 
         alarmManager.setAlarmClock(
-            AlarmManager.AlarmClockInfo(reminderTime.timeInMillis, intent),
-            intent
+            AlarmManager.AlarmClockInfo(reminderTime.timeInMillis, intent), intent
         )
 
     }
