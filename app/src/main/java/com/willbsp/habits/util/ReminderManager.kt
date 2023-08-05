@@ -37,6 +37,11 @@ class ReminderManager @Inject constructor(
             set(Calendar.DAY_OF_WEEK, day.toCalendarDay())
         }
 
+        // if date is in the past, schedule for next week
+        if (Calendar.getInstance(Locale.getDefault()).timeInMillis - reminderTime.timeInMillis > 0) {
+            reminderTime.add(Calendar.WEEK_OF_YEAR, 1)
+        }
+
         alarmManager.setAlarmClock(
             AlarmManager.AlarmClockInfo(reminderTime.timeInMillis, pendingIntent), pendingIntent
         )
