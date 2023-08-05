@@ -17,24 +17,24 @@ class ReminderReceiver : BroadcastReceiver() {
             NotificationManager::class.java
         ) as NotificationManager
 
-        notificationManager.sendReminderNotification(
-            applicationContext = context,
-            channelId = REMINDER_NOTIFICATION_CHANNEL_ID
-        )
+        val habitName = intent.getStringExtra("habitName")
 
-        val reminderId = intent.getIntExtra("reminderId", -1)
+        if (habitName != null) {
+            notificationManager.sendReminderNotification(context, habitName)
+        }
 
     }
 
     private fun NotificationManager.sendReminderNotification(
         applicationContext: Context,
-        channelId: String
+        habitName: String
     ) {
-        val builder = NotificationCompat.Builder(applicationContext, channelId)
-            .setContentTitle("title text")
-            .setContentText("body text")
-            .setSmallIcon(androidx.core.R.drawable.ic_call_answer)
-            .setAutoCancel(true)
+        val builder =
+            NotificationCompat.Builder(applicationContext, REMINDER_NOTIFICATION_CHANNEL_ID)
+                .setContentTitle(habitName)
+                .setContentText("Have you completed your habit today?")
+                .setSmallIcon(androidx.core.R.drawable.ic_call_answer) // TODO
+                .setAutoCancel(true)
         notify(1, builder.build())
     }
 

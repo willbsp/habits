@@ -5,7 +5,10 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import com.willbsp.habits.data.repository.HabitRepository
+import com.willbsp.habits.data.repository.ReminderRepository
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.flow.first
 import java.time.DayOfWeek
 import java.time.LocalTime
 import java.util.Calendar
@@ -13,10 +16,12 @@ import java.util.Locale
 import javax.inject.Inject
 
 class ReminderManager @Inject constructor(
-    @ApplicationContext val context: Context
+    @ApplicationContext val context: Context,
+    val habitRepository: HabitRepository,
+    val reminderRepository: ReminderRepository
 ) {
 
-    fun scheduleReminder(reminderId: Int, day: DayOfWeek, time: LocalTime) {
+    suspend fun scheduleReminder(reminderId: Int, day: DayOfWeek, time: LocalTime) {
 
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
@@ -24,8 +29,14 @@ class ReminderManager @Inject constructor(
             if (!alarmManager.canScheduleExactAlarms()) return
         }
 
+        val reminder = reminderRepository.getReminderStream(reminderId).first()
+        val habit = habitRepository.getHabit(reminder.habitId)
+
         val intent = Intent(context.applicationContext, ReminderReceiver::class.java)
-        intent.putExtra("reminderId", reminderId)
+        if (habit != null) {
+            intent.putExtra("habitName", habit.name)
+        }
+
         val pendingIntent = PendingIntent.getBroadcast(
             context.applicationContext, reminderId, intent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
