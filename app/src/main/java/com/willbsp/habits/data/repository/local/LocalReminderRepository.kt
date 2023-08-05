@@ -18,6 +18,9 @@ class LocalReminderRepository @Inject constructor(
     override fun getRemindersForDayStream(day: DayOfWeek): Flow<List<Reminder>> =
         reminderDao.getRemindersForDayStream(day)
 
+    override fun getReminderStream(reminderId: Int): Flow<Reminder> =
+        reminderDao.getReminderStream(reminderId)
+
     override suspend fun clearReminders(habitId: Int) = reminderDao.clearReminders(habitId)
 
     override suspend fun insertReminder(reminder: Reminder) = reminderDao.insert(reminder)

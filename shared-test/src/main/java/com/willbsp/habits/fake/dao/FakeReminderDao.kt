@@ -21,6 +21,9 @@ class FakeReminderDao : ReminderDao {
     override fun getRemindersForDayStream(day: DayOfWeek): Flow<List<Reminder>> =
         observableReminders.map { reminders -> reminders.filter { it.day == day } }
 
+    override fun getReminderStream(reminderId: Int): Flow<Reminder> =
+        observableReminders.map { reminders -> reminders.first { it.id == reminderId } }
+
     override suspend fun clearReminders(habitId: Int) {
         reminders.removeAll { it.habitId == habitId }
         emit()
