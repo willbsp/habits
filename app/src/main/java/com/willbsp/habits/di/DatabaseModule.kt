@@ -23,23 +23,18 @@ class DatabaseModule {
     ) = Room.databaseBuilder(app, HabitDatabase::class.java, DATABASE_NAME)
         .addMigrations(MIGRATION_1_2).build()
 
-    @ActivityRetainedScoped
     @Provides
     fun provideHabitDao(db: HabitDatabase) = db.habitDao()
 
-    @ActivityRetainedScoped
     @Provides
     fun provideEntryDao(db: HabitDatabase) = db.entryDao()
 
-    @ActivityRetainedScoped
     @Provides
     fun provideHabitEntryDao(db: HabitDatabase) = db.habitWithEntriesDao()
 
-    @ActivityRetainedScoped
     @Provides
-    fun provideReminderRepository(db: HabitDatabase) = db.reminderDao()
+    fun provideReminderDao(db: HabitDatabase) = db.reminderDao()
 
-    @ActivityRetainedScoped
     @Provides
     fun provideRawDao(db: HabitDatabase) = db.rawDao()
 
