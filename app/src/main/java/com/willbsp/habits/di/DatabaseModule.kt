@@ -8,15 +8,16 @@ import com.willbsp.habits.data.database.MIGRATION_1_2
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ActivityRetainedComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.android.scopes.ActivityRetainedScoped
+import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
+
 
 @Module
-@InstallIn(ActivityRetainedComponent::class)
+@InstallIn(SingletonComponent::class)
 class DatabaseModule {
 
-    @ActivityRetainedScoped
+    @Singleton
     @Provides
     fun provideHabitDatabase(
         @ApplicationContext app: Context

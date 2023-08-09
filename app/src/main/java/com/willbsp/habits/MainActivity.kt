@@ -81,6 +81,7 @@ class MainActivity : ComponentActivity() {
             startActivity(intent.putExtra(IMPORT_SUCCESSFUL, true))
         else
             startActivity(intent.putExtra(IMPORT_INVALID, true))
+        Runtime.getRuntime().exit(0)
     }
 
 }
