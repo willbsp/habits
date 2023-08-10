@@ -33,6 +33,7 @@ class ReminderManager @Inject constructor(
         val habit = habitRepository.getHabit(reminder.habitId)
 
         val intent = Intent(context.applicationContext, ReminderReceiver::class.java)
+        intent.putExtra("reminderId", reminderId)
         if (habit != null) {
             intent.putExtra("habitName", habit.name)
         }
@@ -49,7 +50,9 @@ class ReminderManager @Inject constructor(
         }
 
         // if date is in the past, schedule for next week
-        if (Calendar.getInstance(Locale.getDefault()).timeInMillis - reminderTime.timeInMillis > 0) {
+        if (Calendar.getInstance(Locale.getDefault())
+                .apply { add(Calendar.MINUTE, 1) }.timeInMillis - reminderTime.timeInMillis > 0
+        ) {
             reminderTime.add(Calendar.WEEK_OF_YEAR, 1)
         }
 
