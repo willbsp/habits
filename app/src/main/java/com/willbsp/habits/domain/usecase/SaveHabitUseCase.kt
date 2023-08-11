@@ -32,16 +32,23 @@ class SaveHabitUseCase(
         withContext(ioDispatcher) {
             if (habitId == null) {
                 val id = habitRepository.insertHabit(data.toHabit()).toInt()
-                saveReminders(data, id)
-                scheduleReminders(id)
+                saveAndScheduleReminders(data, id)
             } else {
                 habitRepository.upsertHabit(data.toHabit(habitId))
-                unscheduleReminders(habitId)
-                reminderRepository.clearReminders(habitId)
-                saveReminders(data, habitId)
-                scheduleReminders(habitId)
+                clearAllReminders(habitId)
+                saveAndScheduleReminders(data, habitId)
             }
         }
+
+    private suspend fun clearAllReminders(habitId: Int) {
+        unscheduleReminders(habitId)
+        reminderRepository.clearReminders(habitId)
+    }
+
+    private suspend fun saveAndScheduleReminders(data: HabitData, habitId: Int) {
+        saveReminders(data, habitId)
+        scheduleReminders(habitId)
+    }
 
     private suspend fun saveReminders(data: HabitData, habitId: Int) {
         when (data.reminderType) {
