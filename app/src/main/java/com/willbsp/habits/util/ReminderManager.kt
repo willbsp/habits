@@ -25,6 +25,7 @@ class ReminderManager @Inject constructor(
 
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
+        // TODO request permission
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             if (!alarmManager.canScheduleExactAlarms()) return
         }
@@ -56,8 +57,8 @@ class ReminderManager @Inject constructor(
             reminderTime.add(Calendar.WEEK_OF_YEAR, 1)
         }
 
-        alarmManager.setAlarmClock(
-            AlarmManager.AlarmClockInfo(reminderTime.timeInMillis, pendingIntent), pendingIntent
+        alarmManager.setExactAndAllowWhileIdle(
+            AlarmManager.RTC_WAKEUP, reminderTime.timeInMillis, pendingIntent
         )
 
     }
