@@ -8,6 +8,13 @@
     <string name="reminder_notification_channel_desc">Reminders for Habits</string>
     <!--end notifications-->
 
+    <!--permssion requests-->
+    <string name="alarms_and_reminders">Alarms and Reminders</string>
+    <string name="alarms_and_reminders_desc">In order for Habits to send you reminder notifications, it requires permission to schedule alarms and reminders.</string>
+    <string name="notifications">Notifications</string>
+    <string name="notifications_desc">In order for Habits to send you reminder notifications, it requires notification permissions.</string>
+    <!--end permission requests-->
+
     <!--habit frequency-->
     <string name="frequency_daily">Daily</string>
     <string name="frequency_weekly">Weekly</string>
