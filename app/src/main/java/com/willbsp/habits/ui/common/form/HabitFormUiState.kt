@@ -20,7 +20,9 @@ sealed class HabitFormUiState {
         val reminderTime: LocalTime = LocalTime.NOON,
         val reminderDays: Set<DayOfWeek> = setOf(),
         val nameIsInvalid: Boolean = false,
-        val daysIsInvalid: Boolean = false
+        val daysIsInvalid: Boolean = false,
+        val notificationPermissionDialogShown: Boolean = false,
+        val alarmPermissionDialogShown: Boolean = false
     ) : HabitFormUiState() {
 
 

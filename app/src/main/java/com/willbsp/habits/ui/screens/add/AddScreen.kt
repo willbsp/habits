@@ -1,25 +1,43 @@
 package com.willbsp.habits.ui.screens.add
 
-import androidx.compose.foundation.layout.*
+import android.Manifest
+import android.app.Activity
+import android.content.Intent
+import android.os.Build
+import android.provider.Settings
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.rememberTimePickerState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
 import com.willbsp.habits.R
 import com.willbsp.habits.ui.common.DefaultHabitsAppTopBar
 import com.willbsp.habits.ui.common.button.HabitsFloatingAction
+import com.willbsp.habits.ui.common.dialog.AlarmsPermissionDialog
 import com.willbsp.habits.ui.common.dialog.DayPickerDialog
+import com.willbsp.habits.ui.common.dialog.NotificationPermissionDialog
 import com.willbsp.habits.ui.common.dialog.TimePickerDialog
 import com.willbsp.habits.ui.common.form.HabitForm
 import com.willbsp.habits.ui.common.form.HabitFormUiState
 import com.willbsp.habits.ui.theme.HabitsTheme
 import java.time.LocalTime
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
 @Composable
 fun AddScreen(
     modifier: Modifier = Modifier,
@@ -53,6 +71,8 @@ fun AddScreen(
         var dayPickerState by remember { mutableStateOf(formUiState.reminderDays) }
         var showTimePicker by remember { mutableStateOf(false) }
         var showDayPicker by remember { mutableStateOf(false) }
+        var showNotificationPermissionDialog by remember { mutableStateOf(false) }
+        var showAlarmsPermissionDialog by remember { mutableStateOf(false) }
 
         HabitForm(
             modifier = modifier
@@ -60,8 +80,16 @@ fun AddScreen(
                 .padding(horizontal = 10.dp)
                 .fillMaxSize(),
             onValueChange = onValueChange,
-            showTimePicker = { showTimePicker = it },
+            showTimePicker = {
+                showTimePicker = it
+            }, // TODO move dialogs into a habit form dialogs composable, then make enum which you pass to say which one to show
             showDayPicker = { showDayPicker = it },
+            showNotificationPermissionDialog = {
+                showNotificationPermissionDialog = it
+            },
+            showAlarmsPermissionDialog = {
+                showAlarmsPermissionDialog = it
+            },
             habitFormUiState = formUiState
         )
 
@@ -99,6 +127,48 @@ fun AddScreen(
                 onConfirm = {
                     onValueChange(formUiState.copy(reminderDays = dayPickerState))
                     showDayPicker = false
+                }
+            )
+        }
+
+        if (showNotificationPermissionDialog) {
+            val notificationPermissionState =
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    rememberPermissionState(Manifest.permission.POST_NOTIFICATIONS)
+                } else null
+            NotificationPermissionDialog(
+                onDismiss = {
+                    onValueChange(formUiState.copy(notificationPermissionDialogShown = true))
+                    showNotificationPermissionDialog = false
+                },
+                onConfirm = {
+                    onValueChange(formUiState.copy(notificationPermissionDialogShown = true))
+                    if (notificationPermissionState != null) {
+                        if (!notificationPermissionState.status.isGranted) {
+                            notificationPermissionState.launchPermissionRequest()
+                        }
+                    }
+                    showNotificationPermissionDialog = false
+                }
+            )
+        }
+
+        if (showAlarmsPermissionDialog) {
+            val activity = LocalContext.current as Activity
+            AlarmsPermissionDialog(
+                onDismiss = {
+                    onValueChange(formUiState.copy(alarmPermissionDialogShown = true))
+                    showAlarmsPermissionDialog = false
+                },
+                onConfirm = {
+                    onValueChange(formUiState.copy(alarmPermissionDialogShown = true))
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                        val intent = Intent().apply {
+                            action = Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM
+                        }
+                        activity.startActivity(intent)
+                    }
+                    showAlarmsPermissionDialog = false
                 }
             )
         }

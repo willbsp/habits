@@ -86,7 +86,9 @@ fun EditScreen(
                         onValueChange = onValueChange,
                         showTimePicker = { showTimePicker = it },
                         showDayPicker = { showDayPicker = it },
-                        habitFormUiState = formUiState
+                        habitFormUiState = formUiState,
+                        showNotificationPermissionDialog = { _ -> },
+                        showAlarmsPermissionDialog = { _ -> }
                     )
 
                     Spacer(Modifier.height(10.dp))

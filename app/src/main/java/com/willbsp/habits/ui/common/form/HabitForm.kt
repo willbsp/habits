@@ -1,5 +1,8 @@
 package com.willbsp.habits.ui.common.form
 
+import android.app.Activity
+import android.app.AlarmManager
+import android.content.Context
 import android.os.Build
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -15,6 +18,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
@@ -38,6 +42,8 @@ fun HabitForm(
     onValueChange: (HabitFormUiState.Data) -> Unit,
     showTimePicker: (Boolean) -> Unit,
     showDayPicker: (Boolean) -> Unit,
+    showNotificationPermissionDialog: (Boolean) -> Unit,
+    showAlarmsPermissionDialog: (Boolean) -> Unit,
     habitFormUiState: HabitFormUiState.Data
 ) {
 
@@ -68,7 +74,9 @@ fun HabitForm(
             uiState = habitFormUiState,
             onValueChange = onValueChange,
             showTimePicker = showTimePicker,
-            showDayPicker = showDayPicker
+            showDayPicker = showDayPicker,
+            showNotificationPermissionDialog = showNotificationPermissionDialog,
+            showAlarmsPermissionDialog = showAlarmsPermissionDialog
         )
 
     }
@@ -77,17 +85,23 @@ fun HabitForm(
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
 @Composable
-private fun HabitReminderDropdown( // TODO could make this generic
+private fun HabitReminderDropdown(
+    // TODO could make this generic
     modifier: Modifier = Modifier,
     uiState: HabitFormUiState.Data,
     onValueChange: (HabitFormUiState.Data) -> Unit,
     showTimePicker: (Boolean) -> Unit,
-    showDayPicker: (Boolean) -> Unit
+    showDayPicker: (Boolean) -> Unit,
+    showNotificationPermissionDialog: (Boolean) -> Unit,
+    showAlarmsPermissionDialog: (Boolean) -> Unit,
 ) {
 
     val reminderOptions = HabitReminderType.values()
     var reminderExpanded by remember { mutableStateOf(false) }
     var reminderSelected by remember { mutableStateOf(uiState.reminderType) }
+
+    val activity = LocalContext.current as Activity
+    val alarmManager = activity.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
     Column(
         modifier = modifier,
@@ -130,16 +144,51 @@ private fun HabitReminderDropdown( // TODO could make this generic
 
         }
 
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            if (!alarmManager.canScheduleExactAlarms() &&
+                reminderSelected == HabitReminderType.NONE &&
+                uiState.alarmPermissionDialogShown
+            ) {
+                onValueChange(uiState.copy(alarmPermissionDialogShown = false))
+            }
+        }
+
         AnimatedVisibility(visible = (reminderSelected == HabitReminderType.EVERYDAY) || (reminderSelected == HabitReminderType.SPECIFIC)) {
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                val notificationPermissionState =
-                    rememberPermissionState(android.Manifest.permission.POST_NOTIFICATIONS)
-                if (!notificationPermissionState.status.isGranted) {
-                    SideEffect {
-                        notificationPermissionState.launchPermissionRequest()
-                    } // TODO message for when permission has not been granted but message has been shown
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+
+                if (!alarmManager.canScheduleExactAlarms()) {
+                    if (!uiState.alarmPermissionDialogShown) {
+                        SideEffect {
+                            showAlarmsPermissionDialog(true)
+                        }
+                    } else {
+                        reminderSelected = HabitReminderType.NONE
+                        onValueChange(uiState.copy(reminderType = reminderSelected))
+                        // TODO show an error in the form
+                    }
+                } else {
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+
+                        val notificationPermissionState =
+                            rememberPermissionState(android.Manifest.permission.POST_NOTIFICATIONS)
+                        if (!notificationPermissionState.status.isGranted) {
+                            if (!uiState.notificationPermissionDialogShown) {
+                                SideEffect {
+                                    showNotificationPermissionDialog(true)
+                                } // TODO message for when permission has not been granted but message has been shown
+                            } else {
+                                reminderSelected = HabitReminderType.NONE
+                                onValueChange(uiState.copy(reminderType = reminderSelected))
+                            }
+                        }
+
+                    }
                 }
+
             }
 
             Column(
@@ -163,8 +212,6 @@ private fun HabitReminderDropdown( // TODO could make this generic
 
         }
     }
-
-
 }
 
 @Composable
@@ -339,6 +386,8 @@ private fun HabitFormPreview() {
         onValueChange = {},
         showTimePicker = {},
         showDayPicker = {},
+        showNotificationPermissionDialog = {},
+        showAlarmsPermissionDialog = {},
         habitFormUiState = HabitFormUiState.Data()
     )
 }
