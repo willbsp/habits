@@ -18,7 +18,8 @@ import com.willbsp.habits.R
 fun NotificationPermissionDialog(
     modifier: Modifier = Modifier,
     onDismiss: () -> Unit,
-    onConfirm: () -> Unit
+    onConfirm: () -> Unit,
+    showConfirmButton: Boolean
 ) {
     AlertDialog(
         modifier = modifier,
@@ -32,7 +33,8 @@ fun NotificationPermissionDialog(
             )
         },
         confirmButton = {
-            Button(onClick = onConfirm) { Text(stringResource(R.string.edit_confirm)) }
+            if (showConfirmButton)
+                Button(onClick = onConfirm) { Text(stringResource(R.string.edit_confirm)) }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) { Text(stringResource(R.string.edit_dismiss)) }
@@ -43,5 +45,5 @@ fun NotificationPermissionDialog(
 @Preview
 @Composable
 private fun NotificationPermissionDialogPreview() {
-    NotificationPermissionDialog(onConfirm = {}, onDismiss = {})
+    NotificationPermissionDialog(onConfirm = {}, onDismiss = {}, showConfirmButton = true)
 }

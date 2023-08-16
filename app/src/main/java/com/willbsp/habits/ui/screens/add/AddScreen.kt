@@ -2,6 +2,8 @@ package com.willbsp.habits.ui.screens.add
 
 import android.Manifest
 import android.app.Activity
+import android.app.AlarmManager
+import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.provider.Settings
@@ -25,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
+import com.google.accompanist.permissions.shouldShowRationale
 import com.willbsp.habits.R
 import com.willbsp.habits.ui.common.DefaultHabitsAppTopBar
 import com.willbsp.habits.ui.common.button.HabitsFloatingAction
@@ -131,29 +134,27 @@ fun AddScreen(
             )
         }
 
-        if (showNotificationPermissionDialog) {
-            val notificationPermissionState =
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    rememberPermissionState(Manifest.permission.POST_NOTIFICATIONS)
-                } else null
+        if (showNotificationPermissionDialog && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            val notificationPermission =
+                rememberPermissionState(Manifest.permission.POST_NOTIFICATIONS)
             NotificationPermissionDialog(
                 onDismiss = {
                     onValueChange(formUiState.copy(notificationPermissionDialogShown = true))
                     showNotificationPermissionDialog = false
                 },
                 onConfirm = {
-                    onValueChange(formUiState.copy(notificationPermissionDialogShown = true))
-                    if (notificationPermissionState != null) {
-                        if (!notificationPermissionState.status.isGranted) {
-                            notificationPermissionState.launchPermissionRequest()
-                        }
+                    if (notificationPermission.status.isGranted) {
+                        onValueChange(formUiState.copy(notificationPermissionDialogShown = true))
+                        showNotificationPermissionDialog = false
+                    } else {
+                        notificationPermission.launchPermissionRequest()
                     }
-                    showNotificationPermissionDialog = false
-                }
+                },
+                showConfirmButton = notificationPermission.status.shouldShowRationale
             )
         }
 
-        if (showAlarmsPermissionDialog) {
+        if (showAlarmsPermissionDialog && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             val activity = LocalContext.current as Activity
             AlarmsPermissionDialog(
                 onDismiss = {
@@ -161,14 +162,17 @@ fun AddScreen(
                     showAlarmsPermissionDialog = false
                 },
                 onConfirm = {
-                    onValueChange(formUiState.copy(alarmPermissionDialogShown = true))
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    val alarmManager =
+                        activity.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+                    if (alarmManager.canScheduleExactAlarms()) {
+                        onValueChange(formUiState.copy(alarmPermissionDialogShown = true))
+                        showAlarmsPermissionDialog = false
+                    } else {
                         val intent = Intent().apply {
                             action = Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM
                         }
                         activity.startActivity(intent)
                     }
-                    showAlarmsPermissionDialog = false
                 }
             )
         }

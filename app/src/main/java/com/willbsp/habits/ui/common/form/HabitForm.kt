@@ -144,13 +144,23 @@ private fun HabitReminderDropdown(
 
         }
 
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             if (!alarmManager.canScheduleExactAlarms() &&
-                reminderSelected == HabitReminderType.NONE &&
-                uiState.alarmPermissionDialogShown
+                uiState.alarmPermissionDialogShown &&
+                reminderSelected == HabitReminderType.NONE
             ) {
                 onValueChange(uiState.copy(alarmPermissionDialogShown = false))
+            }
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            val notificationPermission =
+                rememberPermissionState(android.Manifest.permission.POST_NOTIFICATIONS)
+            if (!notificationPermission.status.isGranted &&
+                uiState.notificationPermissionDialogShown &&
+                reminderSelected == HabitReminderType.NONE
+            ) {
+                onValueChange(uiState.copy(notificationPermissionDialogShown = false))
             }
         }
 
@@ -158,8 +168,8 @@ private fun HabitReminderDropdown(
 
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-
                 if (!alarmManager.canScheduleExactAlarms()) {
+
                     if (!uiState.alarmPermissionDialogShown) {
                         SideEffect {
                             showAlarmsPermissionDialog(true)
@@ -167,19 +177,18 @@ private fun HabitReminderDropdown(
                     } else {
                         reminderSelected = HabitReminderType.NONE
                         onValueChange(uiState.copy(reminderType = reminderSelected))
-                        // TODO show an error in the form
                     }
-                } else {
 
+                } else {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
 
-                        val notificationPermissionState =
+                        val notificationPermission =
                             rememberPermissionState(android.Manifest.permission.POST_NOTIFICATIONS)
-                        if (!notificationPermissionState.status.isGranted) {
+                        if (!notificationPermission.status.isGranted) {
                             if (!uiState.notificationPermissionDialogShown) {
                                 SideEffect {
                                     showNotificationPermissionDialog(true)
-                                } // TODO message for when permission has not been granted but message has been shown
+                                }
                             } else {
                                 reminderSelected = HabitReminderType.NONE
                                 onValueChange(uiState.copy(reminderType = reminderSelected))
