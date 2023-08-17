@@ -9,7 +9,6 @@ import com.willbsp.habits.domain.model.toHabit
 import com.willbsp.habits.util.ReminderManager
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 import java.time.DayOfWeek
 import javax.inject.Inject
@@ -41,13 +40,13 @@ class SaveHabitUseCase(
         }
 
     private suspend fun clearAllReminders(habitId: Int) {
-        unscheduleReminders(habitId)
+        reminderManager.unscheduleAllReminders(habitId)
         reminderRepository.clearReminders(habitId)
     }
 
     private suspend fun saveAndScheduleReminders(data: HabitData, habitId: Int) {
         saveReminders(data, habitId)
-        scheduleReminders(habitId)
+        reminderManager.scheduleAllReminders(habitId)
     }
 
     private suspend fun saveReminders(data: HabitData, habitId: Int) {
@@ -76,18 +75,6 @@ class SaveHabitUseCase(
                 }
             }
         }
-    }
-
-    private suspend fun scheduleReminders(habitId: Int) {
-        val reminders = reminderRepository.getRemindersForHabitStream(habitId).first()
-        reminders.forEach { reminder ->
-            reminderManager.scheduleReminder(reminder.id, reminder.day, reminder.time)
-        }
-    }
-
-    private suspend fun unscheduleReminders(habitId: Int) {
-        val reminders = reminderRepository.getRemindersForHabitStream(habitId).first()
-        reminders.forEach { reminder -> reminderManager.unscheduleReminder(reminder.id) }
     }
 
 }

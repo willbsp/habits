@@ -7,6 +7,7 @@ import android.content.Intent
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import com.willbsp.habits.common.REMINDER_NOTIFICATION_CHANNEL_ID
+import com.willbsp.habits.data.repository.HabitRepository
 import com.willbsp.habits.data.repository.ReminderRepository
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.first
@@ -19,6 +20,9 @@ class ReminderReceiver : BroadcastReceiver() {
     lateinit var reminderRepository: ReminderRepository
 
     @Inject
+    lateinit var habitRepository: HabitRepository
+
+    @Inject
     lateinit var reminderManager: ReminderManager
 
     override fun onReceive(context: Context, intent: Intent) = goAsync {
@@ -29,12 +33,17 @@ class ReminderReceiver : BroadcastReceiver() {
         ) as NotificationManager
 
         val reminderId = intent.getIntExtra("reminderId", -1)
-        val habitName = intent.getStringExtra("habitName")
 
-        if (habitName != null && reminderId != -1) {
-            notificationManager.sendReminderNotification(context, reminderId, habitName)
+        if (reminderId != -1) {
+
             val reminder = reminderRepository.getReminderStream(reminderId).first()
+            val habitName = habitRepository.getHabit(reminder.habitId)?.name
+
+            if (habitName != null)
+                notificationManager.sendReminderNotification(context, reminderId, habitName)
+
             reminderManager.scheduleReminder(reminder.id, reminder.day, reminder.time)
+
         }
 
     }

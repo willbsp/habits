@@ -5,7 +5,6 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import com.willbsp.habits.data.repository.HabitRepository
 import com.willbsp.habits.data.repository.ReminderRepository
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.first
@@ -17,7 +16,6 @@ import javax.inject.Inject
 
 class ReminderManager @Inject constructor(
     @ApplicationContext val context: Context,
-    val habitRepository: HabitRepository,
     val reminderRepository: ReminderRepository
 ) {
 
@@ -27,23 +25,22 @@ class ReminderManager @Inject constructor(
         }
     }
 
-    suspend fun scheduleReminder(reminderId: Int, day: DayOfWeek, time: LocalTime) {
+    suspend fun scheduleAllReminders(habitId: Int) {
+        reminderRepository.getRemindersForHabitStream(habitId).first().forEach { reminder ->
+            scheduleReminder(reminder.id, reminder.day, reminder.time)
+        }
+    }
+
+    fun scheduleReminder(reminderId: Int, day: DayOfWeek, time: LocalTime) {
 
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
-        // TODO request permission
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             if (!alarmManager.canScheduleExactAlarms()) return
         }
 
-        val reminder = reminderRepository.getReminderStream(reminderId).first()
-        val habit = habitRepository.getHabit(reminder.habitId)
-
         val intent = Intent(context.applicationContext, ReminderReceiver::class.java)
         intent.putExtra("reminderId", reminderId)
-        if (habit != null) {
-            intent.putExtra("habitName", habit.name)
-        }
 
         val pendingIntent = PendingIntent.getBroadcast(
             context.applicationContext, reminderId, intent,
@@ -67,6 +64,11 @@ class ReminderManager @Inject constructor(
             AlarmManager.RTC_WAKEUP, reminderTime.timeInMillis, pendingIntent
         )
 
+    }
+
+    suspend fun unscheduleAllReminders(habitId: Int) {
+        val reminders = reminderRepository.getRemindersForHabitStream(habitId).first()
+        reminders.forEach { reminder -> unscheduleReminder(reminder.id) }
     }
 
     fun unscheduleReminder(reminderId: Int) {
