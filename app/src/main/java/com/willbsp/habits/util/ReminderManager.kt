@@ -21,6 +21,12 @@ class ReminderManager @Inject constructor(
     val reminderRepository: ReminderRepository
 ) {
 
+    suspend fun scheduleAllReminders() {
+        reminderRepository.getAllRemindersStream().first().forEach { reminder ->
+            scheduleReminder(reminder.id, reminder.day, reminder.time)
+        }
+    }
+
     suspend fun scheduleReminder(reminderId: Int, day: DayOfWeek, time: LocalTime) {
 
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
