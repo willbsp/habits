@@ -5,13 +5,8 @@ import android.content.Context
 import android.content.Intent
 import com.willbsp.habits.data.repository.ReminderRepository
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.coroutines.CoroutineContext
-import kotlin.coroutines.EmptyCoroutineContext
 
 @AndroidEntryPoint
 class BootReceiver : BroadcastReceiver() {
@@ -32,18 +27,4 @@ class BootReceiver : BroadcastReceiver() {
 
     }
 
-}
-
-fun BroadcastReceiver.goAsync(
-    context: CoroutineContext = EmptyCoroutineContext,
-    block: suspend CoroutineScope.() -> Unit
-) {
-    val pendingResult = goAsync()
-    CoroutineScope(SupervisorJob()).launch(context) {
-        try {
-            block()
-        } finally {
-            pendingResult.finish()
-        }
-    }
 }
