@@ -7,10 +7,13 @@ import android.content.Intent
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import com.willbsp.habits.common.REMINDER_NOTIFICATION_CHANNEL_ID
+import com.willbsp.habits.data.repository.EntryRepository
 import com.willbsp.habits.data.repository.HabitRepository
 import com.willbsp.habits.data.repository.ReminderRepository
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.first
+import java.time.Clock
+import java.time.LocalDate
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -23,7 +26,13 @@ class ReminderReceiver : BroadcastReceiver() {
     lateinit var habitRepository: HabitRepository
 
     @Inject
+    lateinit var entryRepository: EntryRepository
+
+    @Inject
     lateinit var reminderManager: ReminderManager
+
+    @Inject
+    lateinit var clock: Clock
 
     override fun onReceive(context: Context, intent: Intent) = goAsync {
 
@@ -39,8 +48,12 @@ class ReminderReceiver : BroadcastReceiver() {
             val reminder = reminderRepository.getReminderStream(reminderId).first()
             val habitName = habitRepository.getHabit(reminder.habitId)?.name
 
-            if (habitName != null)
-                notificationManager.sendReminderNotification(context, reminderId, habitName)
+            if (habitName != null) {
+                // if habit has not already been completed today
+                if (entryRepository.getEntry(LocalDate.now(clock), reminder.habitId) == null) {
+                    notificationManager.sendReminderNotification(context, reminderId, habitName)
+                }
+            }
 
             reminderManager.scheduleReminder(reminder.id, reminder.day, reminder.time)
 
