@@ -6,6 +6,7 @@
     <!--notifications-->
     <string name="reminder_notification_channel">Reminders</string>
     <string name="reminder_notification_channel_desc">Reminders for Habits</string>
+    <string name="reminder_notification_desc">Did you complete your habit today?</string>
     <!--end notifications-->
 
     <!--permssion requests-->

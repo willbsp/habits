@@ -79,7 +79,7 @@ class ReminderReceiver : BroadcastReceiver() {
         val builder =
             NotificationCompat.Builder(context, REMINDER_NOTIFICATION_CHANNEL_ID)
                 .setContentTitle(habitName)
-                .setContentText("Did you complete your habit today?")
+                .setContentText(context.getString(R.string.reminder_notification_desc))
                 .setSmallIcon(R.drawable.ic_notification)
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true)
