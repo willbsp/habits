@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
+import com.willbsp.habits.R
 import com.willbsp.habits.common.REMINDER_NOTIFICATION_CHANNEL_ID
 import com.willbsp.habits.data.repository.EntryRepository
 import com.willbsp.habits.data.repository.HabitRepository
@@ -70,7 +71,7 @@ class ReminderReceiver : BroadcastReceiver() {
             NotificationCompat.Builder(applicationContext, REMINDER_NOTIFICATION_CHANNEL_ID)
                 .setContentTitle(habitName)
                 .setContentText("Have you completed your habit today?")
-                .setSmallIcon(androidx.core.R.drawable.ic_call_answer) // TODO
+                .setSmallIcon(R.drawable.ic_notification)
                 .setAutoCancel(true)
         notify(reminderId, builder.build())
     }
