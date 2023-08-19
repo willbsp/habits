@@ -30,4 +30,13 @@ class LocalEntryRepository @Inject constructor(
         else entryDao.delete(entry)
     }
 
+    override suspend fun setEntry(habitId: Int, date: LocalDate, completed: Boolean) {
+        val entry: Entry? = entryDao.getEntryForDate(habitId, date)
+        if (completed && entry == null) {
+            entryDao.insert(Entry(habitId = habitId, date = date))
+        } else if (!completed && entry != null) {
+            entryDao.delete(entry)
+        }
+    }
+
 }

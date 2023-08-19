@@ -44,4 +44,15 @@ class FakeEntryRepository : EntryRepository {
         emit()
     }
 
+    // TODO test this method
+    override suspend fun setEntry(habitId: Int, date: LocalDate, completed: Boolean) {
+        val entry = entries.find { it.habitId == habitId && it.date == date }
+        if (completed && entry == null) {
+            entries.add(Entry(entries.lastIndex + 1, habitId, date))
+        } else if (!completed && entry != null) {
+            entries.remove(entry)
+        }
+        emit()
+    }
+
 }
