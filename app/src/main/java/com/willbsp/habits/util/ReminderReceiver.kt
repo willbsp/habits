@@ -49,13 +49,13 @@ class ReminderReceiver : BroadcastReceiver() {
         if (reminderId != -1) {
 
             val reminder = reminderRepository.getReminderStream(reminderId).first()
-            val habitName = habitRepository.getHabit(reminder.habitId)?.name
 
-            if (habitName != null) {
-                // if habit has not already been completed today
-                if (entryRepository.getEntry(LocalDate.now(clock), reminder.habitId) == null) {
-                    notificationManager.sendReminderNotification(context, reminderId, habitName)
-                }
+            // if habit has not already been completed today
+            if (entryRepository.getEntry(LocalDate.now(clock), reminder.habitId) == null) {
+                notificationManager.sendReminderNotification(
+                    context,
+                    reminderId
+                )
             }
 
             reminderManager.scheduleReminder(reminder.id, reminder.day, reminder.time)
@@ -64,10 +64,9 @@ class ReminderReceiver : BroadcastReceiver() {
 
     }
 
-    private fun NotificationManager.sendReminderNotification(
+    private suspend fun NotificationManager.sendReminderNotification(
         context: Context,
-        reminderId: Int,
-        habitName: String
+        reminderId: Int
     ) {
 
         val intent = Intent(context, MainActivity::class.java).apply {
@@ -76,14 +75,47 @@ class ReminderReceiver : BroadcastReceiver() {
         val pendingIntent =
             PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
 
-        val builder =
-            NotificationCompat.Builder(context, REMINDER_NOTIFICATION_CHANNEL_ID)
-                .setContentTitle(habitName)
-                .setContentText(context.getString(R.string.reminder_notification_desc))
-                .setSmallIcon(R.drawable.ic_notification)
-                .setContentIntent(pendingIntent)
-                .setAutoCancel(true)
-        notify(reminderId, builder.build())
+        val completedIntent = Intent(context, ReminderActionReceiver::class.java).apply {
+            putExtra("reminderId", reminderId)
+            putExtra("completed", true)
+        }
+        val completedPendingIntent =
+            PendingIntent.getBroadcast(context, 0, completedIntent, PendingIntent.FLAG_IMMUTABLE)
+        val completedAction = NotificationCompat.Action(
+            R.drawable.ic_check,
+            context.getString(R.string.notification_yes),
+            completedPendingIntent
+        )
+
+        val notCompletedIntent = Intent(context, ReminderActionReceiver::class.java).apply {
+            putExtra("reminderId", reminderId)
+            putExtra("completed", false)
+        }
+        val notCompletedPendingIntent =
+            PendingIntent.getBroadcast(context, 0, notCompletedIntent, PendingIntent.FLAG_IMMUTABLE)
+        val notCompletedAction = NotificationCompat.Action(
+            R.drawable.ic_cross,
+            context.getString(R.string.notification_no),
+            notCompletedPendingIntent
+        )
+
+        val reminder = reminderRepository.getReminderStream(reminderId).first()
+        val habitName = habitRepository.getHabit(reminder.habitId)?.name
+
+        if (habitName != null) {
+            val builder =
+                NotificationCompat.Builder(context, REMINDER_NOTIFICATION_CHANNEL_ID)
+                    .setContentTitle(habitName)
+                    .setContentText(context.getString(R.string.reminder_notification_desc))
+                    .setSmallIcon(R.drawable.ic_notification)
+                    .setContentIntent(pendingIntent)
+                    .setAllowSystemGeneratedContextualActions(false)
+                    .addAction(completedAction)
+                    .addAction(notCompletedAction)
+                    .setAutoCancel(true)
+            notify(reminderId, builder.build())
+        }
+
     }
 
 }
