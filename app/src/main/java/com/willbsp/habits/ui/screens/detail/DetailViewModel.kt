@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.willbsp.habits.data.model.HabitFrequency
 import com.willbsp.habits.data.repository.HabitRepository
+import com.willbsp.habits.data.repository.ReminderRepository
 import com.willbsp.habits.domain.usecase.CalculateScoreUseCase
 import com.willbsp.habits.domain.usecase.CalculateStatisticsUseCase
 import com.willbsp.habits.domain.usecase.CalculateStreakUseCase
@@ -20,6 +21,7 @@ import javax.inject.Inject
 @HiltViewModel
 class DetailViewModel @Inject constructor(
     habitRepository: HabitRepository,
+    reminderRepository: ReminderRepository,
     savedStateHandle: SavedStateHandle,
     calculateScoreUseCase: CalculateScoreUseCase,
     calculateStreakUseCase: CalculateStreakUseCase,
@@ -34,8 +36,9 @@ class DetailViewModel @Inject constructor(
             calculateScoreUseCase(habitId),
             calculateStreakUseCase(habitId),
             calculateStatisticsUseCase(habitId),
-            habitRepository.getHabitStream(habitId)
-        ) { score, streaks, stats, habit ->
+            habitRepository.getHabitStream(habitId),
+            reminderRepository.getRemindersForHabitStream(habitId)
+        ) { score, streaks, stats, habit, reminders ->
 
             val habitName = habit?.name ?: ""
             val currentStreak = streaks.find { streak ->
@@ -53,7 +56,8 @@ class DetailViewModel @Inject constructor(
                 total = stats.total,
                 type = habit?.frequency ?: HabitFrequency.DAILY,
                 repeat = habit?.repeat ?: 0,
-                score = (score?.times(100))?.toInt() ?: 0
+                score = (score?.times(100))?.toInt() ?: 0,
+                reminderDays = reminders.map { reminder -> reminder.day }
             )
 
         }.stateIn(

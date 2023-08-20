@@ -18,6 +18,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.NotificationsActive
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -93,9 +94,10 @@ fun DetailScreen(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(5.dp)
                 ) {
-                    Icon(imageVector = Icons.Default.CalendarToday, contentDescription = "")
+
+                    Icon(imageVector = Icons.Default.CalendarToday, null)
                     if (detailUiState.type == HabitFrequency.DAILY)
-                        Text(stringResource(R.string.detail_every_day))
+                        Text(stringResource(R.string.detail_daily))
                     else if (detailUiState.type == HabitFrequency.WEEKLY)
                         Text(
                             text = pluralStringResource(
@@ -104,6 +106,22 @@ fun DetailScreen(
                                 detailUiState.repeat
                             )
                         )
+
+                    Spacer(Modifier.weight(1f))
+
+                    if (detailUiState.reminderDays.isNotEmpty()) {
+                        Text(
+                            text = if (detailUiState.reminderDays.count() == 7)
+                                stringResource(id = R.string.detail_every_day) else
+                                pluralStringResource(
+                                    id = R.plurals.detail_reminders,
+                                    count = detailUiState.reminderDays.count(),
+                                    detailUiState.reminderDays.count()
+                                )
+                        )
+                        Icon(imageVector = Icons.Default.NotificationsActive, null)
+                    }
+
                 }
 
             }
