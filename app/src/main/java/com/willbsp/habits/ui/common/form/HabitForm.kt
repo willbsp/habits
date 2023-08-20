@@ -269,6 +269,7 @@ private fun HabitReminderDayField(
     OutlinedTextField(
         modifier = modifier,
         value = days
+            .sorted()
             .map { it.getDisplayName(TextStyle.SHORT, Locale.getDefault()) }
             .toString()
             .drop(1).dropLast(1), // drop [ ]
