@@ -11,7 +11,7 @@ class BootReceiver : BroadcastReceiver() {
 
 
     @Inject
-    lateinit var reminderManager: LocalReminderManager
+    lateinit var reminderManager: ReminderManager
 
     override fun onReceive(context: Context, intent: Intent) = goAsync {
 

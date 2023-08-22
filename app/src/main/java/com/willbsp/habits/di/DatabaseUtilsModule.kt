@@ -5,10 +5,10 @@ import com.willbsp.habits.data.database.util.LocalDatabaseUtils
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ActivityRetainedComponent
+import dagger.hilt.android.components.ViewModelComponent
 
 @Module
-@InstallIn(ActivityRetainedComponent::class)
+@InstallIn(ViewModelComponent::class)
 abstract class DatabaseUtilsModule {
 
     @Binds

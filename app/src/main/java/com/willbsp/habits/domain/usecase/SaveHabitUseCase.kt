@@ -6,7 +6,7 @@ import com.willbsp.habits.data.repository.ReminderRepository
 import com.willbsp.habits.domain.model.HabitData
 import com.willbsp.habits.domain.model.HabitReminderType
 import com.willbsp.habits.domain.model.toHabit
-import com.willbsp.habits.util.LocalReminderManager
+import com.willbsp.habits.util.ReminderManager
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -16,7 +16,7 @@ import javax.inject.Inject
 class SaveHabitUseCase(
     private val habitRepository: HabitRepository,
     private val reminderRepository: ReminderRepository,
-    private val reminderManager: LocalReminderManager,
+    private val reminderManager: ReminderManager,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) {
 
@@ -24,7 +24,7 @@ class SaveHabitUseCase(
     constructor(
         habitRepository: HabitRepository,
         reminderRepository: ReminderRepository,
-        reminderManager: LocalReminderManager
+        reminderManager: ReminderManager
     ) : this(habitRepository, reminderRepository, reminderManager, Dispatchers.IO)
 
     suspend operator fun invoke(data: HabitData, habitId: Int? = null) =

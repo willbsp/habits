@@ -10,8 +10,7 @@ import javax.inject.Inject
 class AlarmPermissionReceiver : BroadcastReceiver() {
 
     @Inject
-    lateinit var reminderManager: LocalReminderManager
-
+    lateinit var reminderManager: ReminderManager
     override fun onReceive(context: Context, intent: Intent) = goAsync {
 
         if (intent.action == "android.app.action.SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED") {
