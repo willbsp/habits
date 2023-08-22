@@ -17,6 +17,7 @@ import com.willbsp.habits.data.model.HabitFrequency
 import com.willbsp.habits.data.repository.HabitRepository
 import com.willbsp.habits.data.repository.ReminderRepository
 import com.willbsp.habits.domain.usecase.SaveHabitUseCase
+import com.willbsp.habits.fake.util.FakeReminderManager
 import com.willbsp.habits.helper.onNodeWithContentDescriptionId
 import com.willbsp.habits.helper.onNodeWithTextId
 import com.willbsp.habits.ui.common.form.HabitFormUiState
@@ -60,7 +61,11 @@ class EditHabitScreenTest {
             val viewModel = EditViewModel(
                 habitRepository = habitRepository,
                 reminderRepository = reminderRepository,
-                saveHabit = SaveHabitUseCase(habitRepository, reminderRepository),
+                saveHabit = SaveHabitUseCase(
+                    habitRepository,
+                    reminderRepository,
+                    FakeReminderManager()
+                ),
                 savedStateHandle = SavedStateHandle(mapOf(Pair("habitId", habit1.id)))
             )
             Surface {

@@ -20,6 +20,7 @@ import com.willbsp.habits.data.TestData.habit4
 import com.willbsp.habits.data.model.Habit
 import com.willbsp.habits.data.repository.EntryRepository
 import com.willbsp.habits.data.repository.HabitRepository
+import com.willbsp.habits.data.repository.ReminderRepository
 import com.willbsp.habits.domain.usecase.CalculateScoreUseCase
 import com.willbsp.habits.domain.usecase.CalculateStatisticsUseCase
 import com.willbsp.habits.domain.usecase.CalculateStreakUseCase
@@ -62,6 +63,9 @@ class DetailScreenTest {
     @Inject
     lateinit var entryRepository: EntryRepository
 
+    @Inject
+    lateinit var reminderRepository: ReminderRepository
+
     private lateinit var activity: ComponentActivity
 
     private lateinit var viewModel: DetailViewModel
@@ -90,6 +94,7 @@ class DetailScreenTest {
         composeTestRule.setContent {
             viewModel = DetailViewModel(
                 habitRepository = habitRepository,
+                reminderRepository = reminderRepository,
                 savedStateHandle = SavedStateHandle(mapOf(Pair("habitId", habit.id))),
                 calculateScoreUseCase = calculateScoreUseCase,
                 calculateStreakUseCase = calculateStreakUseCase,
@@ -111,7 +116,7 @@ class DetailScreenTest {
     @Test
     fun dailyHabit_showsCorrectFrequency() {
         init(habit1)
-        composeTestRule.onNodeWithTextId(R.string.detail_every_day).assertExists()
+        composeTestRule.onNodeWithTextId(R.string.detail_daily).assertExists()
     }
 
     @Test

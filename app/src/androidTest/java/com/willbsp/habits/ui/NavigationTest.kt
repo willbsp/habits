@@ -1,6 +1,5 @@
 package com.willbsp.habits.ui
 
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
@@ -8,8 +7,8 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.ComposeNavigator
+import androidx.navigation.compose.rememberNavController
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.willbsp.habits.HiltComponentActivity
 import com.willbsp.habits.R
 import com.willbsp.habits.data.TestData.habit1
@@ -41,10 +40,9 @@ class NavigationTest {
         setupNavHost()
     }
 
-    @OptIn(ExperimentalAnimationApi::class)
     private fun setupNavHost() {
         composeTestRule.setContent {
-            navController = rememberAnimatedNavController()
+            navController = rememberNavController()
             navController.navigatorProvider.addNavigator(ComposeNavigator())
             val snackbarHostState = SnackbarHostState()
             HabitsApp(
