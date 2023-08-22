@@ -2,9 +2,9 @@ package com.willbsp.habits.viewmodel
 
 import com.willbsp.habits.domain.usecase.ExportDatabaseUseCase
 import com.willbsp.habits.domain.usecase.ImportDatabaseUseCase
-import com.willbsp.habits.fake.FakeDatabaseUtils
 import com.willbsp.habits.fake.dao.FakeRawDao
 import com.willbsp.habits.fake.repository.FakeSettingsRepository
+import com.willbsp.habits.fake.util.FakeDatabaseUtils
 import com.willbsp.habits.rules.TestDispatcherRule
 import com.willbsp.habits.ui.screens.settings.SettingsViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi

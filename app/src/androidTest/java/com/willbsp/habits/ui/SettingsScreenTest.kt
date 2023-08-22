@@ -11,8 +11,8 @@ import com.willbsp.habits.R
 import com.willbsp.habits.data.repository.SettingsRepository
 import com.willbsp.habits.domain.usecase.ExportDatabaseUseCase
 import com.willbsp.habits.domain.usecase.ImportDatabaseUseCase
-import com.willbsp.habits.fake.FakeDatabaseUtils
 import com.willbsp.habits.fake.dao.FakeRawDao
+import com.willbsp.habits.fake.util.FakeDatabaseUtils
 import com.willbsp.habits.helper.onNodeWithTextId
 import com.willbsp.habits.ui.screens.settings.SettingsScreen
 import com.willbsp.habits.ui.screens.settings.SettingsViewModel
