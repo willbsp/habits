@@ -32,7 +32,7 @@ class ReminderReceiver : BroadcastReceiver() {
     lateinit var entryRepository: EntryRepository
 
     @Inject
-    lateinit var reminderManager: ReminderManager
+    lateinit var reminderManager: LocalReminderManager
 
     @Inject
     lateinit var clock: Clock
