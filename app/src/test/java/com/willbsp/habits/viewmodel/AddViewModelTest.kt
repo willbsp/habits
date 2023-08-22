@@ -4,6 +4,7 @@ import com.willbsp.habits.data.model.HabitFrequency
 import com.willbsp.habits.domain.usecase.SaveHabitUseCase
 import com.willbsp.habits.fake.repository.FakeHabitRepository
 import com.willbsp.habits.fake.repository.FakeReminderRepository
+import com.willbsp.habits.fake.util.FakeReminderManager
 import com.willbsp.habits.rules.TestDispatcherRule
 import com.willbsp.habits.ui.common.form.HabitFormUiState
 import com.willbsp.habits.ui.screens.add.AddViewModel
@@ -28,6 +29,7 @@ class AddViewModelTest {
         val saveHabitUseCase = SaveHabitUseCase(
             habitRepository,
             reminderRepository,
+            FakeReminderManager(),
             testDispatcher.getDispatcher()
         )
         viewModel = AddViewModel(saveHabitUseCase)

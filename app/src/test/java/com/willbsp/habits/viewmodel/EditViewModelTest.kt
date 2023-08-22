@@ -6,6 +6,7 @@ import com.willbsp.habits.data.model.HabitFrequency
 import com.willbsp.habits.domain.usecase.SaveHabitUseCase
 import com.willbsp.habits.fake.repository.FakeHabitRepository
 import com.willbsp.habits.fake.repository.FakeReminderRepository
+import com.willbsp.habits.fake.util.FakeReminderManager
 import com.willbsp.habits.rules.TestDispatcherRule
 import com.willbsp.habits.ui.common.form.HabitFormUiState
 import com.willbsp.habits.ui.screens.edit.EditViewModel
@@ -34,7 +35,12 @@ class EditViewModelTest {
         runBlocking { habitRepository.upsertHabit(habit1) }
         val savedStateHandle = SavedStateHandle(mapOf("habitId" to habit1.id))
         val saveHabitUseCase =
-            SaveHabitUseCase(habitRepository, reminderRepository, testRule.getDispatcher())
+            SaveHabitUseCase(
+                habitRepository,
+                reminderRepository,
+                FakeReminderManager(),
+                testRule.getDispatcher()
+            )
         viewModel =
             EditViewModel(habitRepository, reminderRepository, saveHabitUseCase, savedStateHandle)
     }
