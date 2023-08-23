@@ -119,4 +119,34 @@ class EntryRepositoryTest(
         assertNull(repository.getEntry(date, habit1.id))
     }
 
+    @Test
+    fun setEntry_completeEntryWhereEntryDoesNotExist_createsEntry() = runTest {
+        assertNull(repository.getEntry(date, habit1.id))
+        repository.setEntry(habit1.id, date, true)
+        assertEquals(date, repository.getEntry(date, habit1.id)?.date)
+    }
+
+    @Test
+    fun setEntry_completeEntryWhereEntryExists_noChange() = runTest {
+        repository.toggleEntry(habit1.id, date)
+        val entry = repository.getEntry(date, habit1.id)
+        repository.setEntry(habit1.id, date, true)
+        assertEquals(entry, repository.getEntry(date, habit1.id))
+    }
+
+    @Test
+    fun setEntry_removeEntryWhereEntryExists_removesEntry() = runTest {
+        repository.toggleEntry(habit1.id, date)
+        assertNotNull(repository.getEntry(date, habit1.id))
+        repository.setEntry(habit1.id, date, false)
+        assertNull(repository.getEntry(date, habit1.id))
+    }
+
+    @Test
+    fun setEntry_removeEntryWhereEntryDoesNotExist_noChange() = runTest {
+        assertNull(repository.getEntry(date, habit1.id))
+        repository.setEntry(habit1.id, date, false)
+        assertNull(repository.getEntry(date, habit1.id))
+    }
+
 }
