@@ -21,7 +21,7 @@ interface ReminderDao {
     fun getRemindersForDayStream(day: DayOfWeek): Flow<List<Reminder>>
 
     @Query("SELECT * FROM reminders WHERE id = :reminderId")
-    fun getReminderStream(reminderId: Int): Flow<Reminder>
+    fun getReminderStream(reminderId: Int): Flow<Reminder?>
 
     @Query("DELETE FROM reminders WHERE habit_id = :habitId")
     suspend fun clearReminders(habitId: Int)

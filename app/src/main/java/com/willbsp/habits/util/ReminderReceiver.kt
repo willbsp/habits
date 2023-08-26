@@ -48,7 +48,8 @@ class ReminderReceiver : BroadcastReceiver() {
 
         if (reminderId != -1) {
 
-            val reminder = reminderRepository.getReminderStream(reminderId).first()
+            val reminder =
+                reminderRepository.getReminderStream(reminderId).first() ?: return@goAsync
 
             // if habit has not already been completed today
             if (entryRepository.getEntry(LocalDate.now(clock), reminder.habitId) == null) {
@@ -99,7 +100,7 @@ class ReminderReceiver : BroadcastReceiver() {
             notCompletedPendingIntent
         )
 
-        val reminder = reminderRepository.getReminderStream(reminderId).first()
+        val reminder = reminderRepository.getReminderStream(reminderId).first() ?: return
         val habitName = habitRepository.getHabit(reminder.habitId)?.name
 
         if (habitName != null) {

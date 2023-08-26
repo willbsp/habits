@@ -35,7 +35,8 @@ class ReminderActionReceiver : BroadcastReceiver() {
         val reminderId =
             intent.getIntExtra("reminderId", -1) // make these extra names constant TODO
         if (reminderId != -1) {
-            val reminder = reminderRepository.getReminderStream(reminderId).first()
+            val reminder =
+                reminderRepository.getReminderStream(reminderId).first() ?: return@goAsync
             val completed = intent.getBooleanExtra("completed", false)
             entryRepository.setEntry(reminder.habitId, LocalDate.now(clock), completed)
         }
