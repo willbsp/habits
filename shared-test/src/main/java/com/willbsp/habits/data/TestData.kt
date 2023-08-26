@@ -3,7 +3,10 @@ package com.willbsp.habits.data
 import com.willbsp.habits.data.model.Entry
 import com.willbsp.habits.data.model.Habit
 import com.willbsp.habits.data.model.HabitFrequency
+import com.willbsp.habits.data.model.Reminder
+import java.time.DayOfWeek
 import java.time.LocalDate
+import java.time.LocalTime
 
 object TestData {
 
@@ -15,6 +18,11 @@ object TestData {
     val entry1: Entry = Entry(0, 0, LocalDate.parse("2023-01-13"))
     val entry2: Entry = Entry(1, 1, LocalDate.parse("2023-04-15"))
     val entry3: Entry = Entry(2, 2, LocalDate.parse("2023-03-02"))
+
+    val reminder1: Reminder =
+        Reminder(id = 1, habitId = 1, time = LocalTime.NOON, DayOfWeek.MONDAY)
+    val reminder2: Reminder =
+        Reminder(id = 2, habitId = 1, time = LocalTime.NOON, DayOfWeek.MONDAY)
 
     // entries for testing frequency
     // should complete week
