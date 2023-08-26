@@ -15,7 +15,7 @@ import java.time.LocalTime
         onDelete = ForeignKey.CASCADE
     )]
 )
-class Reminder(
+data class Reminder(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     @ColumnInfo(name = "habit_id", index = true)
