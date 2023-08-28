@@ -21,8 +21,8 @@ class FakeReminderRepository : ReminderRepository {
     override fun getRemindersForDayStream(day: DayOfWeek): Flow<List<Reminder>> =
         observableReminders.map { reminders -> reminders.filter { it.day == day } }
 
-    override fun getReminderStream(reminderId: Int): Flow<Reminder> =
-        observableReminders.map { reminders -> reminders.first { it.id == reminderId } }
+    override fun getReminderStream(reminderId: Int): Flow<Reminder?> =
+        observableReminders.map { reminders -> reminders.find { it.id == reminderId } }
 
     override suspend fun insertReminder(reminder: Reminder) {
         reminders.add(reminder)
