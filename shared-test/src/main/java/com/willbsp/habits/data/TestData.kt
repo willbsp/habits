@@ -23,6 +23,8 @@ object TestData {
         Reminder(id = 1, habitId = 1, time = LocalTime.NOON, DayOfWeek.MONDAY)
     val reminder2: Reminder =
         Reminder(id = 2, habitId = 1, time = LocalTime.NOON, DayOfWeek.MONDAY)
+    val reminder3: Reminder =
+        Reminder(id = 3, habitId = 2, time = LocalTime.NOON, DayOfWeek.THURSDAY)
 
     // entries for testing frequency
     // should complete week
