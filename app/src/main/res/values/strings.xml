@@ -39,6 +39,7 @@
     <string name="modify_frequency">Frequency</string>
     <string name="modify_reminder">Reminder</string>
     <string name="modify_reminder_time">Time</string>
+    <string name="modify_reminder_days">Days</string>
     <string name="modify_reminder_none">None</string>
     <string name="modify_reminder_every_day">Every day</string>
     <string name="modify_reminder_specific_days">Specific days</string>
