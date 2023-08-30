@@ -12,6 +12,7 @@ import com.willbsp.habits.domain.model.HabitReminderType
 import com.willbsp.habits.domain.usecase.SaveHabitUseCase
 import com.willbsp.habits.ui.common.form.HabitFormUiState
 import com.willbsp.habits.ui.common.form.toHabitData
+import com.willbsp.habits.util.ReminderManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -21,6 +22,7 @@ import javax.inject.Inject
 @HiltViewModel
 class EditViewModel @Inject constructor(
     private val habitRepository: HabitRepository,
+    private val reminderManager: ReminderManager,
     private val reminderRepository: ReminderRepository,
     private val saveHabit: SaveHabitUseCase,
     savedStateHandle: SavedStateHandle
@@ -64,7 +66,10 @@ class EditViewModel @Inject constructor(
     }
 
     fun deleteHabit() {
-        viewModelScope.launch { habitRepository.deleteHabit(habitId) }
+        viewModelScope.launch {
+            reminderManager.unscheduleAllReminders(habitId)
+            habitRepository.deleteHabit(habitId)
+        }
     }
 
     private fun loadHabit() {
