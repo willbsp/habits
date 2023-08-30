@@ -12,6 +12,7 @@ androidxDatastore = "1.0.0"
 androidxNavigation = "2.7.0-rc01"
 androidxPaging = "3.2.0"
 androidxHiltNavigationCompose = "1.0.0"
+androidxTest = "1.5.0"
 androidxTestExt = "1.1.5"
 androidGradlePlugin = "8.1.1"
 accompanist = "0.28.0"
@@ -31,6 +32,7 @@ androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = 
 androidx-datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "androidxDatastore" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "androidxEspresso" }
 androidx-espresso-intents = { group = "androidx.test.espresso", name = "espresso-intents", version.ref = "androidxEspresso" }
+androidx-test-rules = { group = "androidx.test", name = "rules", version.ref = "androidxTest" }
 androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "androidxHiltNavigationCompose" }
 androidx-test-ext = { group = "androidx.test.ext", name = "junit-ktx", version.ref = "androidxTestExt" }
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "androidxLifecycle" }
