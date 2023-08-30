@@ -23,6 +23,7 @@ import com.willbsp.habits.helper.onNodeWithTextId
 import com.willbsp.habits.ui.common.form.HabitFormUiState
 import com.willbsp.habits.ui.screens.edit.EditScreen
 import com.willbsp.habits.ui.screens.edit.EditViewModel
+import com.willbsp.habits.util.ReminderManager
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -56,15 +57,17 @@ class EditHabitScreenTest {
     @Before
     fun setup() {
         hiltRule.inject()
+        val reminderManager: ReminderManager = FakeReminderManager()
         runBlocking { habitRepository.upsertHabit(habit1) }
         composeTestRule.setContent {
             val viewModel = EditViewModel(
                 habitRepository = habitRepository,
                 reminderRepository = reminderRepository,
+                reminderManager = reminderManager,
                 saveHabit = SaveHabitUseCase(
                     habitRepository,
                     reminderRepository,
-                    FakeReminderManager()
+                    reminderManager
                 ),
                 savedStateHandle = SavedStateHandle(mapOf(Pair("habitId", habit1.id)))
             )

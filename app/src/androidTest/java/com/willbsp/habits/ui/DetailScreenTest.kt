@@ -17,7 +17,10 @@ import com.willbsp.habits.data.TestData.habit1
 import com.willbsp.habits.data.TestData.habit2
 import com.willbsp.habits.data.TestData.habit3
 import com.willbsp.habits.data.TestData.habit4
+import com.willbsp.habits.data.TestData.reminder1
+import com.willbsp.habits.data.TestData.reminder4
 import com.willbsp.habits.data.model.Habit
+import com.willbsp.habits.data.model.Reminder
 import com.willbsp.habits.data.repository.EntryRepository
 import com.willbsp.habits.data.repository.HabitRepository
 import com.willbsp.habits.data.repository.ReminderRepository
@@ -39,8 +42,10 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.time.Clock
+import java.time.DayOfWeek
 import java.time.Instant
 import java.time.LocalDate
+import java.time.LocalTime
 import java.time.ZoneOffset
 import java.time.format.TextStyle
 import java.util.Locale
@@ -243,6 +248,34 @@ class DetailScreenTest {
             .onSiblings().filterToOne(hasText("0")).assertExists()
         composeTestRule.onNodeWithTextId(R.string.detail_longest_streak)
             .onSiblings().filterToOne(hasText("0")).assertExists()
+    }
+
+    @Test
+    fun reminderEveryday_correctReminderTextShown() = runTest {
+        init(habit2)
+        for ((i, day) in DayOfWeek.values().withIndex()) {
+            reminderRepository.insertReminder(Reminder(i, habit2.id, LocalTime.NOON, day))
+        }
+        composeTestRule.onNodeWithTextId(R.string.detail_every_day).assertExists()
+    }
+
+    @Test
+    fun reminderOneDay_correctReminderTextShown() = runTest {
+        init(habit2)
+        reminderRepository.insertReminder(reminder1)
+        composeTestRule.onNodeWithText(
+            activity.resources.getQuantityString(R.plurals.detail_reminders, 1, 1)
+        ).assertExists()
+    }
+
+    @Test
+    fun reminderTwoDays_correctReminderTextShown() = runTest {
+        init(habit2)
+        reminderRepository.insertReminder(reminder1)
+        reminderRepository.insertReminder(reminder4)
+        composeTestRule.onNodeWithText(
+            activity.resources.getQuantityString(R.plurals.detail_reminders, 2, 2)
+        ).assertExists()
     }
 
 }
