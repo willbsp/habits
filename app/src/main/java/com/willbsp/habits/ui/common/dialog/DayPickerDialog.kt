@@ -21,6 +21,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -74,10 +75,16 @@ fun DayPickerDialog(
                     verticalArrangement = Arrangement.Center,
                     horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
-                    TextButton(onClick = onCancel) {
+                    TextButton(
+                        modifier = Modifier.testTag("daypicker_dismiss"),
+                        onClick = onCancel
+                    ) {
                         Text(stringResource(R.string.timepicker_dismiss))
                     }
-                    Button(onClick = onConfirm) {
+                    Button(
+                        modifier = Modifier.testTag("daypicker_confirm"),
+                        onClick = onConfirm
+                    ) {
                         Text(stringResource(R.string.timepicker_confirm))
                     }
                 }
@@ -95,17 +102,20 @@ private fun DayPickerCheckboxItem(
     onCheckedChanged: (Boolean) -> (Unit)
 ) {
 
+    val dayName = day.getDisplayName(TextStyle.FULL, Locale.getDefault())
+
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Start
     ) {
         Checkbox(
+            modifier = Modifier.testTag(dayName),
             checked = checked,
             onCheckedChange = onCheckedChanged
         )
         Text(
-            text = day.getDisplayName(TextStyle.FULL, Locale.getDefault()),
+            text = dayName,
             textAlign = TextAlign.Start,
             style = Typography.labelLarge
         )

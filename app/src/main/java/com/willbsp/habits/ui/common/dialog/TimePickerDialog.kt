@@ -18,6 +18,7 @@ import androidx.compose.material3.TimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.willbsp.habits.R
@@ -50,10 +51,16 @@ fun TimePickerDialog(
                     verticalArrangement = Arrangement.Center,
                     horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
-                    TextButton(onClick = onCancel) {
+                    TextButton(
+                        modifier = Modifier.testTag("timepicker_dismiss"),
+                        onClick = onCancel
+                    ) {
                         Text(stringResource(R.string.timepicker_dismiss))
                     }
-                    Button(onClick = onConfirm) {
+                    Button(
+                        modifier = Modifier.testTag("timepicker_confirm"),
+                        onClick = onConfirm
+                    ) {
                         Text(stringResource(R.string.timepicker_confirm))
                     }
                 }
