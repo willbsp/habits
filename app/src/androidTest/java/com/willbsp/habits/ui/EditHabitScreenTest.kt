@@ -12,6 +12,7 @@ import com.willbsp.habits.HiltComponentActivity
 import com.willbsp.habits.R
 import com.willbsp.habits.data.TestData.habit1
 import com.willbsp.habits.data.TestData.habit2
+import com.willbsp.habits.data.TestData.reminder5
 import com.willbsp.habits.data.model.Habit
 import com.willbsp.habits.data.model.HabitFrequency
 import com.willbsp.habits.data.repository.HabitRepository
@@ -35,6 +36,8 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import java.time.format.TextStyle
+import java.util.Locale
 import javax.inject.Inject
 
 @HiltAndroidTest
@@ -58,7 +61,10 @@ class EditHabitScreenTest {
     fun setup() {
         hiltRule.inject()
         val reminderManager: ReminderManager = FakeReminderManager()
-        runBlocking { habitRepository.upsertHabit(habit1) }
+        runBlocking {
+            habitRepository.upsertHabit(habit1)
+            reminderRepository.insertReminder(reminder5)
+        }
         composeTestRule.setContent {
             val viewModel = EditViewModel(
                 habitRepository = habitRepository,
@@ -164,6 +170,14 @@ class EditHabitScreenTest {
         composeTestRule.onNodeWithTextId(R.string.edit_habit_delete).performClick()
         composeTestRule.onNodeWithTextId(R.string.edit_confirm).performClick()
         assertEquals(emptyList<Habit>(), habitRepository.getAllHabitsStream().first())
+    }
+
+    @Test
+    fun reminderExists_isLoadedCorrectly() = runTest {
+        composeTestRule.onNodeWithTextId(R.string.modify_reminder_specific_days).assertExists()
+        composeTestRule.onNodeWithText(
+            reminder5.day.getDisplayName(TextStyle.SHORT, Locale.getDefault())
+        ).assertExists()
     }
 
 }
