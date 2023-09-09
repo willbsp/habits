@@ -32,6 +32,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -178,6 +179,35 @@ class EditHabitScreenTest {
         composeTestRule.onNodeWithText(
             reminder5.day.getDisplayName(TextStyle.SHORT, Locale.getDefault())
         ).assertExists()
+    }
+
+    @Test
+    fun dailyReminderSelected_timeFieldIsShown() = runTest {
+        composeTestRule.onNodeWithTextId(R.string.modify_habit_name)
+            .performClick()
+            .performTextInput(habit1.name)
+        composeTestRule.onNodeWithTextId(R.string.modify_reminder).performClick()
+        composeTestRule.onNodeWithTextId(R.string.modify_reminder_every_day).performClick()
+        composeTestRule.onNodeWithTextId(R.string.modify_reminder_time).assertExists()
+        composeTestRule.onNodeWithTextId(R.string.modify_reminder_days).assertDoesNotExist()
+    }
+
+    @Test
+    fun specificReminderSelected_timeAndDayFieldsShown() = runTest {
+        composeTestRule.onNodeWithTextId(R.string.modify_reminder).performClick()
+        composeTestRule.onNodeWithTextId(R.string.modify_reminder_specific_days).performClick()
+        composeTestRule.onNodeWithTextId(R.string.modify_reminder_time).assertExists()
+        composeTestRule.onNodeWithTextId(R.string.modify_reminder_days).assertExists()
+    }
+
+    @Test
+    fun noReminder_reminderIsDeleted() = runTest {
+        composeTestRule.onNodeWithTextId(R.string.modify_reminder).performClick()
+        composeTestRule.onNodeWithTextId(R.string.modify_reminder_none).performClick()
+        composeTestRule.onNodeWithContentDescriptionId(R.string.edit_habit_update_habit)
+            .performClick()
+        val reminders = reminderRepository.getAllRemindersStream().first()
+        assertTrue(reminders.isEmpty())
     }
 
 }
