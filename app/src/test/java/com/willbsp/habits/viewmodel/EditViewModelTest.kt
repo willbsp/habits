@@ -10,6 +10,7 @@ import com.willbsp.habits.fake.util.FakeReminderManager
 import com.willbsp.habits.rules.TestDispatcherRule
 import com.willbsp.habits.ui.common.form.HabitFormUiState
 import com.willbsp.habits.ui.screens.edit.EditViewModel
+import com.willbsp.habits.util.ReminderManager
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
@@ -28,6 +29,7 @@ class EditViewModelTest {
 
     private val habitRepository = FakeHabitRepository()
     private val reminderRepository = FakeReminderRepository()
+    private val reminderManager: ReminderManager = FakeReminderManager()
     private lateinit var viewModel: EditViewModel
 
     @Before
@@ -38,11 +40,17 @@ class EditViewModelTest {
             SaveHabitUseCase(
                 habitRepository,
                 reminderRepository,
-                FakeReminderManager(),
+                reminderManager,
                 testRule.getDispatcher()
             )
         viewModel =
-            EditViewModel(habitRepository, reminderRepository, saveHabitUseCase, savedStateHandle)
+            EditViewModel(
+                habitRepository,
+                reminderManager,
+                reminderRepository,
+                saveHabitUseCase,
+                savedStateHandle
+            )
     }
 
     @Test
