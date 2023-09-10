@@ -1,0 +1,101 @@
+<resources>
+    <string name="app_name">Habits</string>
+    <string name="settings">Einstellungen</string>
+    <string name="topbar_back">Zurück</string>
+
+    <!--habit frequency-->
+    <string name="frequency_daily">Täglich</string>
+    <string name="frequency_weekly">Wöchentlich</string>
+    <!--end habit frequency-->
+
+    <!--modify habit screen start-->
+    <string name="add_habit_title">Gewohnheit hinzufügen</string>
+    <string name="add_habit_add_habit">Gegenstand hinzufügen</string>
+    <string name="edit_habit_title">Gewohnheit bearbeiten</string>
+    <string name="edit_habit_update_habit">Gewohnheit aktualisieren</string>
+    <string name="edit_habit_delete">Löschen</string>
+    <string name="edit_confirm">Bestätigen</string>
+    <string name="edit_dismiss">Abbrechen</string>
+    <string name="edit_delete_habit">Gewohnheit löschen?</string>
+    <string name="edit_cannot_undo">Die Änderung kann nicht zurückgekehrt werden.</string>
+    <string name="modify_habit_name">Name</string>
+    <string name="modify_habit_frequency">Frequenz</string>
+    <string name="modify_times_per_week">Wie oft pro Woche?</string>
+    <string name="modify_frequency">Frequenz</string>
+    <!--modify habit screen end-->
+
+    <!--home screen start-->
+    <string name="home_add_habit">Gewohnheit hinzufügen</string>
+    <string name="home_completed">Abgeschlossen</string>
+    <string name="home_uncompleted">Nicht abgeschlossen</string>
+    <string name="home_today">Heute</string>
+    <string name="home_this_week">Diese Woche</string>
+    <string name="home_all_completed">Für heute ist alles abgeschlossen!</string>
+    <string name="home_all_completed_tick">Alles abgeschlossen</string>
+    <plurals name="home_habit_list_subtitle">
+        <item quantity="one">Schon %d Gewohnheiten abgeschlossen</item>
+        <item quantity="other">Schon %d Gewohnheiten abgeschlossen …</item>
+    </plurals>
+    <string name="home_no_habits">Füge eine Gewohnheit mit dem Knopf unten hinzu!</string>
+    <string name="home_show_completed">Abgeschlossene zeigen</string>
+    <string name="home_logbook">Logbuch</string>
+    <string name="home_detail">Detail</string>
+    <string name="home_import_successful">Databank Import erfolgreich.</string>
+    <string name="home_import_invalid">Import war ungültig. Vorherige Datenbank hergestellt.</string>
+    <!--home screen end-->
+
+    <!--settings screen start-->
+    <string name="settings_title">Einstellungen</string>
+    <string name="settings_display_stats">Zeige Statistik auf Startseite</string>
+    <string name="settings_display_stats_desc">Zeige eine Statistik für jede Gewohnheit auf der Startseite. Standardmäßig Streaks anzeigen.</string>
+    <string name="settings_completed_subtitle">Zeige abgeschlossen Untertitel auf der Startseite</string>
+    <string name="settings_completed_subtitle_desc">Zeige Zähler für abgeschlossene Gewohnheiten auf der Startseite.</string>
+    <string name="settings_scores_on_home">Zeige Punktestand auf der Startseite</string>
+    <string name="settings_scores_on_home_desc">Zeige Punktestand statt Streaks auf der Startseite.</string>
+    <string name="settings_about_screen">Über Seite</string>
+    <string name="settings_export_database">Exportiere die Datenbank</string>
+    <string name="settings_export_database_desc">Exportiere die Datenbank zu einer Datei als Sicherung.</string>
+    <string name="settings_import_database">Importiere Datenbank</string>
+    <string name="settings_import_database_desc">Importiere eine Datenbank Datei. Das wird alle existenten Daten löschen.</string>
+    <string name="settings_import_data">Daten importieren?</string>
+    <string name="settings_import_dialog_desc">Das wird ALLE existenten Daten löschen. Ziehe in Betracht vorher zu exportieren.</string>
+    <string name="settings_import">Importieren</string>
+    <string name="settings_dismiss">Abbrechen</string>
+    <string name="settings_home">Startseite</string>
+    <string name="settings_backup">Sicherung</string>
+    <!--settings screen end-->
+
+    <!--logbook screen start-->
+    <string name="logbook_title">Logbuch</string>
+    <string name="logbook_add_a_new_habit">Eine neue Gewohnheit hinzufügen</string>
+    <string name="logbook_empty_text">Du hast keine Gewohnheiten!</string>
+    <string name="logbook_previous_month">Letzter Monat</string>
+    <string name="logbook_next_month">Nächster Monat</string>
+    <!--logbook screen end-->
+
+    <!--detail screen start-->
+    <string name="detail_edit_habit">Gewohnheit bearbeiten</string>
+    <string name="detail_streak">Streak</string>
+    <string name="detail_score">Punktestand</string>
+    <string name="detail_longest_streak">Längste</string>
+    <string name="detail_not_started">N/A</string>
+    <string name="detail_started">Angefangen</string>
+    <string name="detail_total">Insgesamt</string>
+    <string name="detail_every_day">Jeden Tag</string>
+    <plurals name="detail_times_per_week">
+        <item quantity="one">Einmal pro Woche</item>
+        <item quantity="two">Zweimal pro Woche</item>
+        <item quantity="other">%d mal pro Woche</item>
+    </plurals>
+    <!--detail screen end-->
+
+    <!--about screen start-->
+    <string name="about_title">Über</string>
+    <string name="about_creator">Will Spooner (@willbsp)</string>
+    <string name="about_view_source">Quellcode auf Github ansehen</string>
+    <string name="about_report_an_issue">Einen Fehler melden</string>
+    <string name="about_version_text">"Version "</string>
+    <string name="about_licence">Lizensiert unter GPLv3</string>
+    <!--about screen end-->
+
+</resources>
