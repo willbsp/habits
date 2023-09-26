@@ -155,8 +155,8 @@ private fun HomeHabitCardDayRow(
         val days: Int = (maxWidth.value / 60).toInt()
 
         Row(
-            modifier = modifier,
-            horizontalArrangement = Arrangement.spacedBy(15.dp)
+            modifier = modifier.width(maxWidth.value.dp - 45.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
 
             (1..days).forEach { i ->
@@ -193,7 +193,7 @@ private fun HomeHabitCardDay(
     ) {
 
         Text(
-            modifier = Modifier.height(45.dp),
+            modifier = Modifier.height(50.dp),
             text = (weekday + "\n" + dayOfMonth),
             style = Typography.bodyLarge,
             textAlign = TextAlign.Center
@@ -242,6 +242,32 @@ private fun HomeHabitCardExpandedPreview() {
         habit = HomeUiState.Habit(
             id = 1,
             name = "Walking",
+            type = HabitFrequency.DAILY,
+            streak = 2,
+            score = null,
+            completed = listOf(
+                LocalDate.parse("2023-07-07"),
+                LocalDate.parse("2023-07-05"),
+                LocalDate.parse("2023-07-08")
+            ),
+            completedByWeek = listOf()
+        ),
+        completedOnClick = { _, _ -> },
+        navigateToDetail = {},
+        expandedInitialValue = true,
+        showStatistic = true,
+        showScore = false,
+        todaysDate = LocalDate.parse("2023-07-09")
+    )
+}
+
+@Preview(widthDp = 300)
+@Composable
+private fun HomeHabitCardExpandedPreview2() {
+    HomeHabitCard(
+        habit = HomeUiState.Habit(
+            id = 1,
+            name = "10 pages",
             type = HabitFrequency.DAILY,
             streak = 2,
             score = null,
