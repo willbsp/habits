@@ -11,5 +11,6 @@ interface EntryRepository {
     suspend fun getEntry(date: LocalDate, habitId: Int): Entry?
     suspend fun getOldestEntry(habitId: Int): Entry?
     suspend fun toggleEntry(habitId: Int, date: LocalDate)
+    suspend fun setEntry(habitId: Int, date: LocalDate, completed: Boolean)
 
 }

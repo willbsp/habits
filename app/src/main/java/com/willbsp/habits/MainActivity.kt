@@ -1,5 +1,7 @@
 package com.willbsp.habits
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -12,6 +14,7 @@ import androidx.compose.material3.windowsizeclass.WindowHeightSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.remember
+import com.willbsp.habits.common.REMINDER_NOTIFICATION_CHANNEL_ID
 import com.willbsp.habits.ui.HabitsApp
 import com.willbsp.habits.ui.theme.HabitsTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -42,6 +45,15 @@ class MainActivity : ComponentActivity() {
             }
         }
 
+        val name = getString(R.string.reminder_notification_channel)
+        val descriptionText = getString(R.string.reminder_notification_channel_desc)
+        val importance = NotificationManager.IMPORTANCE_DEFAULT
+        val reminderChannel =
+            NotificationChannel(REMINDER_NOTIFICATION_CHANNEL_ID, name, importance)
+        reminderChannel.description = descriptionText
+        val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createNotificationChannel(reminderChannel)
+
         setContent {
             HabitsTheme {
                 Surface(color = MaterialTheme.colorScheme.background) {
@@ -69,6 +81,7 @@ class MainActivity : ComponentActivity() {
             startActivity(intent.putExtra(IMPORT_SUCCESSFUL, true))
         else
             startActivity(intent.putExtra(IMPORT_INVALID, true))
+        Runtime.getRuntime().exit(0)
     }
 
 }

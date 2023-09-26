@@ -38,7 +38,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.willbsp.habits.R
 import com.willbsp.habits.data.model.HabitFrequency
 import com.willbsp.habits.ui.common.FullscreenHint
-import com.willbsp.habits.ui.common.HabitsFloatingAction
+import com.willbsp.habits.ui.common.button.HabitsFloatingAction
 import com.willbsp.habits.ui.theme.HabitsTheme
 import java.time.LocalDate
 

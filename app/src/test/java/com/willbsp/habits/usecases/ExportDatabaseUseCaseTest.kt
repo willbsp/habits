@@ -1,8 +1,8 @@
 package com.willbsp.habits.usecases
 
 import com.willbsp.habits.domain.usecase.ExportDatabaseUseCase
-import com.willbsp.habits.fake.FakeDatabaseUtils
 import com.willbsp.habits.fake.dao.FakeRawDao
+import com.willbsp.habits.fake.util.FakeDatabaseUtils
 import com.willbsp.habits.rules.TestDispatcherRule
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest

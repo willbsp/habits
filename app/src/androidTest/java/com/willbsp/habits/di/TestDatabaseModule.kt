@@ -39,6 +39,10 @@ class TestDatabaseModule {
 
     @Singleton
     @Provides
+    fun provideReminderRepository(db: HabitDatabase) = db.reminderDao()
+
+    @Singleton
+    @Provides
     fun provideRawDao(db: HabitDatabase) = db.rawDao()
 
 }

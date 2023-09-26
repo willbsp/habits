@@ -73,6 +73,7 @@ dependencies {
     testImplementation libs.junit
     testImplementation libs.kotlinx.coroutines.test
     androidTestImplementation libs.androidx.test.ext
+    androidTestImplementation libs.androidx.test.rules
     androidTestImplementation libs.androidx.espresso.core
     androidTestImplementation libs.androidx.espresso.intents
     androidTestImplementation libs.androidx.ui.test.junit4
@@ -82,9 +83,10 @@ dependencies {
     implementation libs.androidx.material3.windowsizeclass
 
     implementation libs.androidx.navigation.compose
-    implementation libs.accompanist.navigation.animation
 
     implementation libs.androidx.paging.compose
+
+    implementation libs.accompanist.permissions
 
     implementation libs.androidx.room.runtime
     implementation libs.androidx.room.ktx

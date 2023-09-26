@@ -1,7 +1,7 @@
 package com.willbsp.habits.usecases
 
 import com.willbsp.habits.domain.usecase.ImportDatabaseUseCase
-import com.willbsp.habits.fake.FakeDatabaseUtils
+import com.willbsp.habits.fake.util.FakeDatabaseUtils
 import com.willbsp.habits.rules.TestDispatcherRule
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals

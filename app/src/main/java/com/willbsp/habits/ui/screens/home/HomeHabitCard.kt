@@ -1,7 +1,6 @@
 package com.willbsp.habits.ui.screens.home
 
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -35,13 +34,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.willbsp.habits.R
 import com.willbsp.habits.data.model.HabitFrequency
-import com.willbsp.habits.ui.common.HabitToggleButton
+import com.willbsp.habits.ui.common.button.HabitToggleButton
 import com.willbsp.habits.ui.theme.Typography
 import java.time.LocalDate
 import java.time.format.TextStyle
 import java.util.Locale
 
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun HomeHabitCard(
     habit: HomeUiState.Habit,
@@ -81,16 +79,19 @@ fun HomeHabitCard(
 
                     Text(text = habit.name, style = Typography.titleLarge)
                     Spacer(modifier = Modifier.weight(1f))
-                    AnimatedContent(targetState = habit.score) {
+                    AnimatedContent(
+                        targetState = Pair(habit.score, habit.streak),
+                        label = "Statistic"
+                    ) {
                         if (showStatistic) {
                             if (showScore) {
                                 Text(
-                                    text = if (habit.score != null) "${habit.score}%" else " ",
+                                    text = if (habit.score != null) "${it.first}%" else " ",
                                     style = Typography.titleLarge
                                 )
                             } else {
                                 Text(
-                                    text = (habit.streak ?: " ").toString(),
+                                    text = (it.second ?: " ").toString(),
                                     style = Typography.titleLarge
                                 )
                             }
