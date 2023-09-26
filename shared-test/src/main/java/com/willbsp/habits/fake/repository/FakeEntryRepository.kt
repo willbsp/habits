@@ -26,7 +26,7 @@ class FakeEntryRepository : EntryRepository {
     override fun getAllEntriesStream(): Flow<List<Entry>> = observableEntries
 
     override fun getAllEntriesStream(habitId: Int): Flow<List<Entry>> =
-        observableEntries.map { entry -> entry.filter { it.habitId == habitId } }
+        observableEntries.map { entries -> entries.filter { it.habitId == habitId } }
 
     override suspend fun getEntry(date: LocalDate, habitId: Int): Entry? =
         entries.find { it.date == date && it.habitId == habitId }
@@ -39,6 +39,17 @@ class FakeEntryRepository : EntryRepository {
         if (entry == null) {
             entries.add(Entry(entries.lastIndex + 1, habitId, date))
         } else {
+            entries.remove(entry)
+        }
+        emit()
+    }
+
+    // TODO test this method
+    override suspend fun setEntry(habitId: Int, date: LocalDate, completed: Boolean) {
+        val entry = entries.find { it.habitId == habitId && it.date == date }
+        if (completed && entry == null) {
+            entries.add(Entry(entries.lastIndex + 1, habitId, date))
+        } else if (!completed && entry != null) {
             entries.remove(entry)
         }
         emit()

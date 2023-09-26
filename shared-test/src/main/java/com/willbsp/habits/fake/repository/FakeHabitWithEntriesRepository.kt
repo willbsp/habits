@@ -24,7 +24,7 @@ class FakeHabitWithEntriesRepository : HabitWithEntriesRepository {
     }
 
     override fun getHabitsWithEntries(): Flow<List<HabitWithEntries>> {
-        if (habitWithEntriesDao != null) return habitWithEntriesDao!!.getHabitsWithEntries()
+        if (habitWithEntriesDao != null) return habitWithEntriesDao!!.getHabitsWithEntriesStream()
         return combine(
             habitRepository!!.getAllHabitsStream(),
             entryRepository!!.getAllEntriesStream()

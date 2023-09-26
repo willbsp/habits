@@ -52,7 +52,10 @@ open class HabitWithEntriesDaoTest {
 
     @Test
     fun getHabitsWithEntries_whenNoHabits_returnEmptyList() = runTest {
-        assertEquals(listOf<HabitWithEntries>(), habitWithEntriesDao.getHabitsWithEntries().first())
+        assertEquals(
+            listOf<HabitWithEntries>(),
+            habitWithEntriesDao.getHabitsWithEntriesStream().first()
+        )
     }
 
     @Test
@@ -60,12 +63,12 @@ open class HabitWithEntriesDaoTest {
         habitDao.upsert(habit2)
         assertEquals(
             listOf(HabitWithEntries(habit2, listOf())),
-            habitWithEntriesDao.getHabitsWithEntries().first()
+            habitWithEntriesDao.getHabitsWithEntriesStream().first()
         )
         habitDao.upsert(habit3)
         assertEquals(
             listOf(HabitWithEntries(habit2, listOf()), HabitWithEntries(habit3, listOf())),
-            habitWithEntriesDao.getHabitsWithEntries().first()
+            habitWithEntriesDao.getHabitsWithEntriesStream().first()
         )
     }
 
@@ -75,7 +78,7 @@ open class HabitWithEntriesDaoTest {
         entryDao.insert(entry2)
         assertEquals(
             listOf(HabitWithEntries(habit2, listOf(entry2))),
-            habitWithEntriesDao.getHabitsWithEntries().first()
+            habitWithEntriesDao.getHabitsWithEntriesStream().first()
         )
         habitDao.upsert(habit3)
         entryDao.insert(entry3)
@@ -84,7 +87,7 @@ open class HabitWithEntriesDaoTest {
                 HabitWithEntries(habit2, listOf(entry2)),
                 HabitWithEntries(habit3, listOf(entry3))
             ),
-            habitWithEntriesDao.getHabitsWithEntries().first()
+            habitWithEntriesDao.getHabitsWithEntriesStream().first()
         )
     }
 

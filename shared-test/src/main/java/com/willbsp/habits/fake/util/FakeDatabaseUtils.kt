@@ -1,4 +1,4 @@
-package com.willbsp.habits.fake
+package com.willbsp.habits.fake.util
 
 import com.willbsp.habits.data.database.util.DatabaseUtils
 import java.io.File

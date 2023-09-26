@@ -12,15 +12,19 @@ import com.willbsp.habits.HiltComponentActivity
 import com.willbsp.habits.R
 import com.willbsp.habits.data.TestData.habit1
 import com.willbsp.habits.data.TestData.habit2
+import com.willbsp.habits.data.TestData.reminder5
 import com.willbsp.habits.data.model.Habit
 import com.willbsp.habits.data.model.HabitFrequency
 import com.willbsp.habits.data.repository.HabitRepository
+import com.willbsp.habits.data.repository.ReminderRepository
 import com.willbsp.habits.domain.usecase.SaveHabitUseCase
+import com.willbsp.habits.fake.util.FakeReminderManager
 import com.willbsp.habits.helper.onNodeWithContentDescriptionId
 import com.willbsp.habits.helper.onNodeWithTextId
-import com.willbsp.habits.ui.common.HabitUiState
-import com.willbsp.habits.ui.screens.edit.EditHabitScreen
-import com.willbsp.habits.ui.screens.edit.EditHabitViewModel
+import com.willbsp.habits.ui.common.form.HabitFormUiState
+import com.willbsp.habits.ui.screens.edit.EditScreen
+import com.willbsp.habits.ui.screens.edit.EditViewModel
+import com.willbsp.habits.util.ReminderManager
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -28,10 +32,13 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import java.time.format.TextStyle
+import java.util.Locale
 import javax.inject.Inject
 
 @HiltAndroidTest
@@ -48,24 +55,37 @@ class EditHabitScreenTest {
     @Inject
     lateinit var habitRepository: HabitRepository
 
+    @Inject
+    lateinit var reminderRepository: ReminderRepository
+
     @Before
     fun setup() {
         hiltRule.inject()
-        runBlocking { habitRepository.upsertHabit(habit1) }
+        val reminderManager: ReminderManager = FakeReminderManager()
+        runBlocking {
+            habitRepository.upsertHabit(habit1)
+            reminderRepository.insertReminder(reminder5)
+        }
         composeTestRule.setContent {
-            val viewModel = EditHabitViewModel(
-                habitsRepository = habitRepository,
-                saveHabitUseCase = SaveHabitUseCase(habitRepository),
+            val viewModel = EditViewModel(
+                habitRepository = habitRepository,
+                reminderRepository = reminderRepository,
+                reminderManager = reminderManager,
+                saveHabit = SaveHabitUseCase(
+                    habitRepository,
+                    reminderRepository,
+                    reminderManager
+                ),
                 savedStateHandle = SavedStateHandle(mapOf(Pair("habitId", habit1.id)))
             )
             Surface {
                 val state = viewModel.uiState
-                EditHabitScreen(
+                EditScreen(
                     navigateUp = {},
                     onSaveClick = { viewModel.saveHabit() },
-                    onValueChange = { uiState -> viewModel.updateUiState(uiState as HabitUiState.Habit) },
+                    onValueChange = { uiState -> viewModel.updateUiState(uiState as HabitFormUiState.Data) },
                     onDeleteClick = { viewModel.deleteHabit() },
-                    habitUiState = state,
+                    formUiState = state,
                 )
             }
         }
@@ -92,7 +112,7 @@ class EditHabitScreenTest {
             .performTextClearance()
         composeTestRule.onNodeWithTextId(R.string.modify_habit_name)
             .performClick()
-            .performTextInput("h")
+            .performTextInput("")
         composeTestRule.onNodeWithContentDescriptionId(R.string.edit_habit_update_habit)
             .performClick()
         composeTestRule.onNodeWithTextId(R.string.modify_habit_name).assertExists()
@@ -151,6 +171,43 @@ class EditHabitScreenTest {
         composeTestRule.onNodeWithTextId(R.string.edit_habit_delete).performClick()
         composeTestRule.onNodeWithTextId(R.string.edit_confirm).performClick()
         assertEquals(emptyList<Habit>(), habitRepository.getAllHabitsStream().first())
+    }
+
+    @Test
+    fun reminderExists_isLoadedCorrectly() = runTest {
+        composeTestRule.onNodeWithTextId(R.string.modify_reminder_specific_days).assertExists()
+        composeTestRule.onNodeWithText(
+            reminder5.day.getDisplayName(TextStyle.SHORT, Locale.getDefault())
+        ).assertExists()
+    }
+
+    @Test
+    fun dailyReminderSelected_timeFieldIsShown() = runTest {
+        composeTestRule.onNodeWithTextId(R.string.modify_habit_name)
+            .performClick()
+            .performTextInput(habit1.name)
+        composeTestRule.onNodeWithTextId(R.string.modify_reminder).performClick()
+        composeTestRule.onNodeWithTextId(R.string.modify_reminder_every_day).performClick()
+        composeTestRule.onNodeWithTextId(R.string.modify_reminder_time).assertExists()
+        composeTestRule.onNodeWithTextId(R.string.modify_reminder_days).assertDoesNotExist()
+    }
+
+    @Test
+    fun specificReminderSelected_timeAndDayFieldsShown() = runTest {
+        composeTestRule.onNodeWithTextId(R.string.modify_reminder).performClick()
+        composeTestRule.onNodeWithTextId(R.string.modify_reminder_specific_days).performClick()
+        composeTestRule.onNodeWithTextId(R.string.modify_reminder_time).assertExists()
+        composeTestRule.onNodeWithTextId(R.string.modify_reminder_days).assertExists()
+    }
+
+    @Test
+    fun noReminder_reminderIsDeleted() = runTest {
+        composeTestRule.onNodeWithTextId(R.string.modify_reminder).performClick()
+        composeTestRule.onNodeWithTextId(R.string.modify_reminder_none).performClick()
+        composeTestRule.onNodeWithContentDescriptionId(R.string.edit_habit_update_habit)
+            .performClick()
+        val reminders = reminderRepository.getAllRemindersStream().first()
+        assertTrue(reminders.isEmpty())
     }
 
 }

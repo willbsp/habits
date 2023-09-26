@@ -3,9 +3,11 @@ package com.willbsp.habits.viewmodel
 import com.willbsp.habits.data.model.HabitFrequency
 import com.willbsp.habits.domain.usecase.SaveHabitUseCase
 import com.willbsp.habits.fake.repository.FakeHabitRepository
+import com.willbsp.habits.fake.repository.FakeReminderRepository
+import com.willbsp.habits.fake.util.FakeReminderManager
 import com.willbsp.habits.rules.TestDispatcherRule
-import com.willbsp.habits.ui.common.HabitUiState
-import com.willbsp.habits.ui.screens.add.AddHabitViewModel
+import com.willbsp.habits.ui.common.form.HabitFormUiState
+import com.willbsp.habits.ui.screens.add.AddViewModel
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -13,17 +15,24 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-class AddHabitViewModelTest {
+class AddViewModelTest {
 
     @get:Rule
     val testDispatcher = TestDispatcherRule()
 
     private val habitRepository = FakeHabitRepository()
-    private lateinit var viewModel: AddHabitViewModel
+    private val reminderRepository = FakeReminderRepository()
+    private lateinit var viewModel: AddViewModel
 
     @Before
     fun setup() {
-        viewModel = AddHabitViewModel(SaveHabitUseCase(habitRepository))
+        val saveHabitUseCase = SaveHabitUseCase(
+            habitRepository,
+            reminderRepository,
+            FakeReminderManager(),
+            testDispatcher.getDispatcher()
+        )
+        viewModel = AddViewModel(saveHabitUseCase)
     }
 
     @Test
@@ -34,7 +43,7 @@ class AddHabitViewModelTest {
 
     @Test
     fun uiState_whenUpdated_newStateSet() {
-        val expected = HabitUiState.Habit("Reading", false, HabitFrequency.WEEKLY)
+        val expected = HabitFormUiState.Data("Reading", HabitFrequency.WEEKLY)
         val updatedUiState =
             viewModel.uiState.copy(name = "Reading", frequency = HabitFrequency.WEEKLY)
         viewModel.updateUiState(updatedUiState)
@@ -52,6 +61,7 @@ class AddHabitViewModelTest {
     fun uiState_whenStateInvalid_stateInvalid() {
         val uiState = viewModel.uiState.copy(name = "this is a really long name hi hi")
         viewModel.updateUiState(uiState)
+        viewModel.saveHabit()
         assertTrue(viewModel.uiState.nameIsInvalid)
     }
 

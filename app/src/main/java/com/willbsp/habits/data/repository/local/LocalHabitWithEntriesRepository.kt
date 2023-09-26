@@ -11,7 +11,7 @@ class LocalHabitWithEntriesRepository @Inject constructor(
 ) : HabitWithEntriesRepository {
 
     override fun getHabitsWithEntries(): Flow<List<HabitWithEntries>> {
-        return habitWithEntriesDao.getHabitsWithEntries()
+        return habitWithEntriesDao.getHabitsWithEntriesStream()
     }
 
 }

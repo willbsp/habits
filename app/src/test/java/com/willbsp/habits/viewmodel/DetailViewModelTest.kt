@@ -9,6 +9,7 @@ import com.willbsp.habits.domain.usecase.CalculateStreakUseCase
 import com.willbsp.habits.domain.usecase.GetVirtualEntriesUseCase
 import com.willbsp.habits.fake.repository.FakeEntryRepository
 import com.willbsp.habits.fake.repository.FakeHabitRepository
+import com.willbsp.habits.fake.repository.FakeReminderRepository
 import com.willbsp.habits.rules.TestDispatcherRule
 import com.willbsp.habits.ui.screens.detail.DetailUiState
 import com.willbsp.habits.ui.screens.detail.DetailViewModel
@@ -36,6 +37,7 @@ class DetailViewModelTest {
     private val date = LocalDate.parse("2023-03-10")
     private val time = "T12:00:00Z"
     private val habitRepository: FakeHabitRepository = FakeHabitRepository()
+    private val reminderRepository: FakeReminderRepository = FakeReminderRepository()
     private val entryRepository: FakeEntryRepository = FakeEntryRepository()
     private lateinit var getVirtualEntriesUseCase: GetVirtualEntriesUseCase
     private lateinit var scoreUseCase: CalculateScoreUseCase
@@ -54,6 +56,7 @@ class DetailViewModelTest {
         statisticsUseCase = CalculateStatisticsUseCase(entryRepository)
         viewModel = DetailViewModel(
             habitRepository,
+            reminderRepository,
             savedStateHandle,
             scoreUseCase,
             streakUseCase,

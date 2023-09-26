@@ -19,6 +19,11 @@ class FakeHabitDao : HabitDao {
 
     override suspend fun getHabit(id: Int): Habit? = habits.find { it.id == id }
 
+    override suspend fun insert(habit: Habit): Long {
+        habits.add(habit)
+        return habits.indexOfFirst { it.name == habit.name }.toLong()
+    }
+
     override suspend fun upsert(habit: Habit) {
         val index = habits.indexOfFirst { it.id == habit.id }
         if (index != -1) habits[index] = habit

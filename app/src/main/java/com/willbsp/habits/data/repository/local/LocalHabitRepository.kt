@@ -16,6 +16,8 @@ class LocalHabitRepository @Inject constructor(
 
     override suspend fun getHabit(habitId: Int): Habit? = habitDao.getHabit(habitId)
 
+    override suspend fun insertHabit(habit: Habit): Long = habitDao.insert(habit)
+
     override suspend fun upsertHabit(habit: Habit) =
         habitDao.upsert(habit)
 
