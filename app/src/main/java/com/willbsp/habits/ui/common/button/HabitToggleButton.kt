@@ -1,4 +1,4 @@
-package com.willbsp.habits.ui.common
+package com.willbsp.habits.ui.common.button
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -28,17 +28,17 @@ fun HabitToggleButton(
     val icon = if (!checkedSecondary && !checked) Icons.Default.Close
     else Icons.Default.Done
 
-    AnimatedContent(targetState = listOf(checked, checkedSecondary)) {
+    AnimatedContent(targetState = Pair(checked, icon), label = "HabitToggleButton") {
         FilledIconToggleButton(
             modifier = modifier.size(40.dp),
             onCheckedChange = { value ->
                 haptic.performHapticFeedback(HapticFeedbackType.LongPress)
                 onCheckedChange(value)
             },
-            checked = checked
+            checked = it.first
         ) {
             Icon(
-                imageVector = icon,
+                imageVector = it.second,
                 contentDescription = contentDescription
             )
         }

@@ -1,6 +1,7 @@
 package com.willbsp.habits.ui.screens.detail
 
 import com.willbsp.habits.data.model.HabitFrequency
+import java.time.DayOfWeek
 import java.time.LocalDate
 
 data class DetailUiState(
@@ -13,4 +14,5 @@ data class DetailUiState(
     val started: LocalDate? = null,
     val total: Int = 0,
     val score: Int = 0,
+    val reminderDays: List<DayOfWeek> = listOf()
 )

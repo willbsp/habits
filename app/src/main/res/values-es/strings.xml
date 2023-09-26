@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Hábitos</string>
+    <string name="settings">Ajustes</string>
+    <string name="topbar_back">Atrás</string>
+
+    <!--habit frequency-->
+    <string name="frequency_daily">Diariamente</string>
+    <string name="frequency_weekly">Semanalmente</string>
+    <!--end habit frequency-->
+
+    <!--modify habit screen start-->
+    <string name="add_habit_title">Añadir hábito</string>
+    <string name="add_habit_add_habit">Añadir elemento</string>
+    <string name="edit_habit_title">Editar hábito</string>
+    <string name="edit_habit_update_habit">Actualizar hábito</string>
+    <string name="edit_habit_delete">Borrar</string>
+    <string name="edit_confirm">Confirmar</string>
+    <string name="edit_dismiss">Descartar</string>
+    <string name="edit_delete_habit">¿Borrar hábito?</string>
+    <string name="edit_cannot_undo">Esta acción no puede deshacerse.</string>
+    <string name="modify_habit_name">Nombre</string>
+    <string name="modify_habit_frequency">Frecuencia</string>
+    <string name="modify_times_per_week">¿Cuántas veces por semana?</string>
+    <string name="modify_frequency">Frecuencia</string>
+    <!--modify habit screen end-->
+
+    <!--home screen start-->
+    <string name="home_add_habit">Añadir hábito</string>
+    <string name="home_completed">Completado</string>
+    <string name="home_uncompleted">No completado</string>
+    <string name="home_today">Hoy</string>
+    <string name="home_this_week">Esta semana</string>
+    <string name="home_all_completed">¡Todo completado por hoy!</string>
+    <string name="home_all_completed_tick">Todo completado</string>
+    <plurals name="home_habit_list_subtitle">
+        <item quantity="one">%d hábito ya completado…</item>
+        <item quantity="other">%d hábitos ya completados…</item>
+    </plurals>
+    <string name="home_no_habits">¡Añade un hábito con el botón de abajo!</string>
+    <string name="home_show_completed">Mostrar completado</string>
+    <string name="home_logbook">Diario</string>
+    <string name="home_detail">Detalle</string>
+    <string name="home_import_successful">Importación de base de datos correcta.</string>
+    <string name="home_import_invalid">Importación no válida. Base de datos anterior restaurada.</string>
+    <!--home screen end-->
+
+    <!--settings screen start-->
+    <string name="settings_title">Ajustes</string>
+    <string name="settings_display_stats">Mostrar estadísticas en el inicio</string>
+    <string name="settings_display_stats_desc">Mostrar una estadística de cada hábito en la pantalla de inicio. Muestra rachas por defecto.</string>
+    <string name="settings_completed_subtitle">Mostrar subtítulos completos en la página de inicio</string>
+    <string name="settings_completed_subtitle_desc">Mostrar un recuento de hábitos completados en la pantalla de inicio.</string>
+    <string name="settings_scores_on_home">Mostrar resultados en el inicio</string>
+    <string name="settings_scores_on_home_desc">Mostrar puntuaciones en la pantalla de inicio en lugar de las rachas.</string>
+    <string name="settings_about_screen">Acerca de</string>
+    <string name="settings_export_database">Exportar base de datos</string>
+    <string name="settings_export_database_desc">Exporta la base de datos a un archivo para realizar una copia de seguridad.</string>
+    <string name="settings_import_database">Importar base de datos</string>
+    <string name="settings_import_database_desc">Importa un archivo de base de datos. Ten en cuenta que esto borrará todos los datos existentes.</string>
+    <string name="settings_import_data">¿Importar datos?</string>
+    <string name="settings_import_dialog_desc">Esta acción borrará TODOS los datos existentes. Considera la posibilidad de exportarlos antes.</string>
+    <string name="settings_import">Importar</string>
+    <string name="settings_dismiss">Descartar</string>
+    <string name="settings_home">Inicio</string>
+    <string name="settings_backup">Copia de seguridad</string>
+    <!--settings screen end-->
+
+    <!--logbook screen start-->
+    <string name="logbook_title">Diario</string>
+    <string name="logbook_add_a_new_habit">Añadir un hábito nuevo</string>
+    <string name="logbook_empty_text">¡No tienes hábitos!</string>
+    <string name="logbook_previous_month">Mes anterior</string>
+    <string name="logbook_next_month">Mes siguiente</string>
+    <!--logbook screen end-->
+
+    <!--detail screen start-->
+    <string name="detail_edit_habit">Editar hábito</string>
+    <string name="detail_streak">Racha</string>
+    <string name="detail_score">Puntuación</string>
+    <string name="detail_longest_streak">Más larga</string>
+    <string name="detail_not_started">N/D</string>
+    <string name="detail_started">Inicio</string>
+    <string name="detail_total">Total</string>
+    <string name="detail_every_day">Todos los días</string>
+    <plurals name="detail_times_per_week">
+        <item quantity="one">Una vez por semana</item>
+        <item quantity="two">Dos veces por semana</item>
+        <item quantity="other">%d veces por semana</item>
+    </plurals>
+    <!--detail screen end-->
+
+    <!--about screen start-->
+    <string name="about_title">Acerca de</string>
+    <string name="about_creator">Will Spooner (@willbsp)</string>
+    <string name="about_view_source">Ver el código fuente en Github</string>
+    <string name="about_report_an_issue">Informar de un problema</string>
+    <string name="about_version_text">Versión</string>
+    <string name="about_licence">Licencia GPLv3</string>
+    <!--about screen end-->
+</resources>

@@ -1,7 +1,6 @@
 package com.willbsp.habits.ui.screens.home
 
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -35,13 +34,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.willbsp.habits.R
 import com.willbsp.habits.data.model.HabitFrequency
-import com.willbsp.habits.ui.common.HabitToggleButton
+import com.willbsp.habits.ui.common.button.HabitToggleButton
 import com.willbsp.habits.ui.theme.Typography
 import java.time.LocalDate
 import java.time.format.TextStyle
 import java.util.Locale
 
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun HomeHabitCard(
     habit: HomeUiState.Habit,
@@ -81,16 +79,19 @@ fun HomeHabitCard(
 
                     Text(text = habit.name, style = Typography.titleLarge)
                     Spacer(modifier = Modifier.weight(1f))
-                    AnimatedContent(targetState = habit.score) {
+                    AnimatedContent(
+                        targetState = Pair(habit.score, habit.streak),
+                        label = "Statistic"
+                    ) {
                         if (showStatistic) {
                             if (showScore) {
                                 Text(
-                                    text = if (habit.score != null) "${habit.score}%" else " ",
+                                    text = if (habit.score != null) "${it.first}%" else " ",
                                     style = Typography.titleLarge
                                 )
                             } else {
                                 Text(
-                                    text = (habit.streak ?: " ").toString(),
+                                    text = (it.second ?: " ").toString(),
                                     style = Typography.titleLarge
                                 )
                             }
@@ -155,8 +156,8 @@ private fun HomeHabitCardDayRow(
         val days: Int = (maxWidth.value / 60).toInt()
 
         Row(
-            modifier = modifier,
-            horizontalArrangement = Arrangement.spacedBy(15.dp)
+            modifier = modifier.width(maxWidth.value.dp - 45.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
 
             (1..days).forEach { i ->
@@ -193,7 +194,7 @@ private fun HomeHabitCardDay(
     ) {
 
         Text(
-            modifier = Modifier.height(45.dp),
+            modifier = Modifier.height(50.dp),
             text = (weekday + "\n" + dayOfMonth),
             style = Typography.bodyLarge,
             textAlign = TextAlign.Center
@@ -242,6 +243,32 @@ private fun HomeHabitCardExpandedPreview() {
         habit = HomeUiState.Habit(
             id = 1,
             name = "Walking",
+            type = HabitFrequency.DAILY,
+            streak = 2,
+            score = null,
+            completed = listOf(
+                LocalDate.parse("2023-07-07"),
+                LocalDate.parse("2023-07-05"),
+                LocalDate.parse("2023-07-08")
+            ),
+            completedByWeek = listOf()
+        ),
+        completedOnClick = { _, _ -> },
+        navigateToDetail = {},
+        expandedInitialValue = true,
+        showStatistic = true,
+        showScore = false,
+        todaysDate = LocalDate.parse("2023-07-09")
+    )
+}
+
+@Preview(widthDp = 300)
+@Composable
+private fun HomeHabitCardExpandedPreview2() {
+    HomeHabitCard(
+        habit = HomeUiState.Habit(
+            id = 1,
+            name = "10 pages",
             type = HabitFrequency.DAILY,
             streak = 2,
             score = null,

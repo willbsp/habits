@@ -1,16 +1,14 @@
 package com.willbsp.habits.ui
 
-import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.material3.*
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
-import com.google.accompanist.navigation.animation.rememberAnimatedNavController
+import androidx.navigation.compose.rememberNavController
 import com.willbsp.habits.ui.navigation.HabitsNavigationGraph
 
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun HabitsApp(
-    navController: NavHostController = rememberAnimatedNavController(),
+    navController: NavHostController = rememberNavController(),
     onDatabaseImport: (Boolean) -> Unit,
     snackbarState: SnackbarHostState
 ) {

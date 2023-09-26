@@ -1,4 +1,4 @@
-package com.willbsp.habits.ui.common
+package com.willbsp.habits.ui.common.button
 
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
