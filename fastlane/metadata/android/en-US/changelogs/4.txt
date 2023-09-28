@@ -1,0 +1,3 @@
+Release 1.2.1
+- Fix bug where reminder actions would not work if multiple notifications had been sent
+- Fix bug where notification permission request would not be shown
