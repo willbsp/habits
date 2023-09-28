@@ -74,14 +74,19 @@ class ReminderReceiver : BroadcastReceiver() {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
         val pendingIntent =
-            PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+            PendingIntent.getActivity(context, reminderId, intent, PendingIntent.FLAG_IMMUTABLE)
 
         val completedIntent = Intent(context, ReminderActionReceiver::class.java).apply {
             putExtra("reminderId", reminderId)
             putExtra("completed", true)
         }
         val completedPendingIntent =
-            PendingIntent.getBroadcast(context, 0, completedIntent, PendingIntent.FLAG_IMMUTABLE)
+            PendingIntent.getBroadcast(
+                context,
+                reminderId,
+                completedIntent,
+                PendingIntent.FLAG_IMMUTABLE
+            )
         val completedAction = NotificationCompat.Action(
             R.drawable.ic_check,
             context.getString(R.string.notification_yes),
@@ -93,7 +98,12 @@ class ReminderReceiver : BroadcastReceiver() {
             putExtra("completed", false)
         }
         val notCompletedPendingIntent =
-            PendingIntent.getBroadcast(context, 0, notCompletedIntent, PendingIntent.FLAG_IMMUTABLE)
+            PendingIntent.getBroadcast(
+                context,
+                -reminderId,
+                notCompletedIntent,
+                PendingIntent.FLAG_IMMUTABLE
+            )
         val notCompletedAction = NotificationCompat.Action(
             R.drawable.ic_cross,
             context.getString(R.string.notification_no),

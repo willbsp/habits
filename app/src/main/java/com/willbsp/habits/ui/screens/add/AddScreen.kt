@@ -150,7 +150,7 @@ fun AddScreen(
                         notificationPermission.launchPermissionRequest()
                     }
                 },
-                showConfirmButton = notificationPermission.status.shouldShowRationale || notificationPermission.status.isGranted
+                showConfirmButton = !notificationPermission.status.shouldShowRationale || notificationPermission.status.isGranted
             )
         }
 
