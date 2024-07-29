@@ -47,7 +47,7 @@ Any data generated or input into Habits is always stored locally on your device,
 ## Licence
 
 ```
-Copyright (C) 2023 Will Spooner
+Copyright (C) 2024 Will Spooner
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
