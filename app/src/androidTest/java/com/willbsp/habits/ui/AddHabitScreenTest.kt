@@ -23,7 +23,6 @@ import com.willbsp.habits.ui.screens.add.AddScreen
 import com.willbsp.habits.ui.screens.add.AddViewModel
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
@@ -39,7 +38,6 @@ import javax.inject.Inject
 
 @HiltAndroidTest
 @RunWith(AndroidJUnit4::class)
-@OptIn(ExperimentalCoroutinesApi::class)
 class AddHabitScreenTest {
 
     @get:Rule(order = 0)
@@ -189,7 +187,7 @@ class AddHabitScreenTest {
         composeTestRule.onNodeWithContentDescriptionId(R.string.add_habit_add_habit).performClick()
         val reminders = reminderRepository.getAllRemindersStream().first()
         assertEquals(7, reminders.count())
-        for (day in DayOfWeek.values()) {
+        for (day in DayOfWeek.entries) {
             assertTrue(reminders.any { it.day == day && it.habitId == habit1.id })
         }
     }

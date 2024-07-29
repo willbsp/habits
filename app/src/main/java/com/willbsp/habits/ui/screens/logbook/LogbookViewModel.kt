@@ -20,10 +20,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LogbookViewModel @Inject constructor(
+    getVirtualEntries: GetHabitsWithVirtualEntriesUseCase,
     private val habitRepository: HabitRepository,
     private val entryRepository: EntryRepository,
-    private val clock: Clock,
-    private val getVirtualEntries: GetHabitsWithVirtualEntriesUseCase
+    private val clock: Clock
 ) : ViewModel() {
 
     private var selectedHabitId: MutableStateFlow<Int> = MutableStateFlow(-1)

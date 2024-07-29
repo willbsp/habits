@@ -4,7 +4,7 @@ import java.time.LocalDate
 
 sealed class LogbookUiState {
 
-    object NoHabits : LogbookUiState()
+    data object NoHabits : LogbookUiState()
 
     data class SelectedHabit(
         val habitId: Int,

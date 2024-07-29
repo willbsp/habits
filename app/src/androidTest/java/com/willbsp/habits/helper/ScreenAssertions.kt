@@ -8,5 +8,5 @@ fun NavController.assertCurrentRouteName(expectedRouteName: String) {
 }
 
 fun NavController.assertCurrentRouteName(expectedRouteName: String, args: String) {
-    assertEquals(expectedRouteName + "{$args}", currentBackStackEntry?.destination?.route)
+    assertEquals("$expectedRouteName{$args}", currentBackStackEntry?.destination?.route)
 }

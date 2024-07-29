@@ -27,7 +27,6 @@ import com.willbsp.habits.ui.screens.edit.EditViewModel
 import com.willbsp.habits.util.ReminderManager
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
@@ -43,7 +42,6 @@ import javax.inject.Inject
 
 @HiltAndroidTest
 @RunWith(AndroidJUnit4::class)
-@OptIn(ExperimentalCoroutinesApi::class)
 class EditHabitScreenTest {
 
     @get:Rule(order = 0)

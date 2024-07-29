@@ -7,7 +7,7 @@ import java.time.LocalDate
 
 sealed class HomeUiState {
 
-    object Empty : HomeUiState()
+    data object Empty : HomeUiState()
 
     data class Habits(
         val habits: List<Habit>,

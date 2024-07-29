@@ -16,7 +16,6 @@ import com.willbsp.habits.data.model.HabitWithEntries
 import com.willbsp.habits.fake.dao.FakeEntryDao
 import com.willbsp.habits.fake.dao.FakeHabitDao
 import com.willbsp.habits.fake.dao.FakeHabitWithEntriesDao
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.After
@@ -27,7 +26,6 @@ import org.junit.runner.RunWith
 import java.io.IOException
 
 @RunWith(AndroidJUnit4::class)
-@OptIn(ExperimentalCoroutinesApi::class)
 open class HabitWithEntriesDaoTest {
 
     lateinit var habitDao: HabitDao

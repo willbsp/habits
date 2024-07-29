@@ -34,7 +34,6 @@ import com.willbsp.habits.ui.screens.detail.DetailScreen
 import com.willbsp.habits.ui.screens.detail.DetailViewModel
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
@@ -53,7 +52,6 @@ import javax.inject.Inject
 
 @HiltAndroidTest
 @RunWith(AndroidJUnit4::class)
-@OptIn(ExperimentalCoroutinesApi::class)
 class DetailScreenTest {
 
     @get:Rule(order = 0)
@@ -253,7 +251,7 @@ class DetailScreenTest {
     @Test
     fun reminderEveryday_correctReminderTextShown() = runTest {
         init(habit2)
-        for ((i, day) in DayOfWeek.values().withIndex()) {
+        for ((i, day) in DayOfWeek.entries.withIndex()) {
             reminderRepository.insertReminder(Reminder(i, habit2.id, LocalTime.NOON, day))
         }
         composeTestRule.onNodeWithTextId(R.string.detail_every_day).assertExists()

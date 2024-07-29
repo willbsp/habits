@@ -14,7 +14,6 @@ import com.willbsp.habits.data.model.Reminder
 import com.willbsp.habits.fake.dao.FakeHabitDao
 import com.willbsp.habits.fake.dao.FakeReminderDao
 import junit.framework.TestCase.assertEquals
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.After
@@ -25,7 +24,6 @@ import java.io.IOException
 import java.time.DayOfWeek
 
 @RunWith(AndroidJUnit4::class)
-@OptIn(ExperimentalCoroutinesApi::class)
 open class ReminderDaoTest {
 
     lateinit var habitDao: HabitDao

@@ -24,6 +24,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -107,7 +108,7 @@ private fun HabitReminderDropdown(
     showAlarmsPermissionDialog: (Boolean) -> Unit,
 ) {
 
-    val reminderOptions = HabitReminderType.values()
+    val reminderOptions = HabitReminderType.entries
     var reminderExpanded by remember { mutableStateOf(false) }
     var reminderSelected by remember { mutableStateOf(uiState.reminderType) }
 
@@ -313,7 +314,7 @@ private fun HabitFrequencyDropdown(
     onValueChange: (HabitFormUiState.Data) -> Unit
 ) {
 
-    val frequencyOptions = HabitFrequency.values()
+    val frequencyOptions = HabitFrequency.entries
     var frequencyExpanded by remember { mutableStateOf(false) }
     var frequencySelected by remember { mutableStateOf(uiState.frequency) }
 
@@ -357,7 +358,7 @@ private fun HabitFrequencyDropdown(
 
         val repeatOptions = 1..6
         var repeatExpanded by remember { mutableStateOf(false) }
-        var selectedRepeat by remember { mutableStateOf(uiState.repeat) }
+        var selectedRepeat by remember { mutableIntStateOf(uiState.repeat) }
 
         AnimatedVisibility(visible = uiState.frequency == HabitFrequency.WEEKLY) {
 
