@@ -96,11 +96,11 @@ dependencies {
 
     implementation libs.androidx.datastore.preferences
 
-    kapt libs.hilt.compiler
-    kaptAndroidTest libs.hilt.compiler
     implementation libs.hilt.android
     implementation libs.androidx.hilt.navigation.compose
+    kapt libs.hilt.compiler
     androidTestImplementation libs.hilt.android.testing
+    kaptAndroidTest libs.hilt.compiler
 
     testImplementation(project(":shared-test"))
     androidTestImplementation(project(":shared-test"))

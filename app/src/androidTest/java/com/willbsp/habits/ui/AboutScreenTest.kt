@@ -21,7 +21,7 @@ class AboutScreenTest {
     @get:Rule(order = 1)
     val hiltRule = HiltAndroidRule(this)
 
-    @get:Rule(order = 1)
+    @get:Rule(order = 2)
     val composeTestRule = createAndroidComposeRule<HiltComponentActivity>()
 
     @Before
