@@ -47,7 +47,7 @@ class LogbookViewModelTest {
     fun setup() {
         clock = Clock.fixed(Instant.parse(date.toString() + time), ZoneOffset.UTC)
         getVirtualEntries = GetHabitsWithVirtualEntriesUseCase(habitRepository, virtualEntries)
-        viewModel = LogbookViewModel(habitRepository, entryRepository, clock, getVirtualEntries)
+        viewModel = LogbookViewModel(getVirtualEntries, habitRepository, entryRepository, clock)
     }
 
     @Test
@@ -61,7 +61,7 @@ class LogbookViewModelTest {
     fun uiState_whenInitialised_getFirstHabitAndSetSelectedHabitId() = runTest {
         habitRepository.upsertHabit(habit2)
         entryRepository.toggleEntry(habit2.id, date)
-        viewModel = LogbookViewModel(habitRepository, entryRepository, clock, getVirtualEntries)
+        viewModel = LogbookViewModel(getVirtualEntries, habitRepository, entryRepository, clock)
         val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
         val uiState = viewModel.uiState.map { (it as LogbookUiState.SelectedHabit) }
         assertEquals(habit2.id, uiState.first().habitId)
@@ -73,7 +73,7 @@ class LogbookViewModelTest {
         habitRepository.upsertHabit(habit2)
         entryRepository.toggleEntry(habit2.id, date)
         entryRepository.toggleEntry(habit2.id, date.minusDays(1))
-        viewModel = LogbookViewModel(habitRepository, entryRepository, clock, getVirtualEntries)
+        viewModel = LogbookViewModel(getVirtualEntries, habitRepository, entryRepository, clock)
         val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
         val uiState = viewModel.uiState.map { it as LogbookUiState.SelectedHabit }
         assertTrue(uiState.first().completed.contains(date))

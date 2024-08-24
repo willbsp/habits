@@ -10,7 +10,7 @@ import java.time.LocalTime
 
 sealed class HabitFormUiState {
 
-    object Loading : HabitFormUiState()
+    data object Loading : HabitFormUiState()
 
     data class Data(
         val name: String = "",

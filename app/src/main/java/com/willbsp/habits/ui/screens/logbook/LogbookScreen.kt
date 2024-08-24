@@ -17,7 +17,6 @@ import com.willbsp.habits.ui.common.DefaultHabitsAppTopBar
 import com.willbsp.habits.ui.common.FullscreenHint
 import java.time.LocalDate
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LogbookScreen(
     modifier: Modifier = Modifier,
@@ -58,7 +57,7 @@ fun LogbookScreen(
                         dateOnClick = completedOnClick
                     )
 
-                    Divider()
+                    HorizontalDivider()
 
                     LazyRow(
                         modifier = Modifier

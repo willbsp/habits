@@ -6,7 +6,6 @@ import com.willbsp.habits.data.model.Entry
 import com.willbsp.habits.data.model.HabitWithEntries
 import com.willbsp.habits.data.repository.HabitWithEntriesRepository
 import com.willbsp.habits.data.repository.local.LocalHabitWithEntriesRepository
-import com.willbsp.habits.fake.*
 import com.willbsp.habits.fake.dao.FakeEntryDao
 import com.willbsp.habits.fake.dao.FakeHabitDao
 import com.willbsp.habits.fake.dao.FakeHabitWithEntriesDao

@@ -54,7 +54,7 @@ class SaveHabitUseCase(
             HabitReminderType.NONE -> return
 
             HabitReminderType.EVERYDAY -> {
-                for (day in DayOfWeek.values()) {
+                for (day in DayOfWeek.entries) {
                     val reminder = Reminder(
                         habitId = habitId,
                         time = data.reminderTime,

@@ -4,6 +4,7 @@ plugins {
     alias libs.plugins.kapt
     alias libs.plugins.hilt
     alias libs.plugins.ksp
+    alias libs.plugins.compose.compiler
 }
 
 android {
@@ -14,8 +15,8 @@ android {
         applicationId "com.willbsp.habits"
         minSdk libs.versions.minSdk.get().toInteger()
         targetSdk libs.versions.targetSdk.get().toInteger()
-        versionCode 4
-        versionName "1.2.1"
+        versionCode 5
+        versionName "1.2.2"
 
         testInstrumentationRunner "com.willbsp.habits.CustomTestRunner"
         vectorDrawables {
@@ -44,6 +45,7 @@ android {
     }
     buildFeatures {
         compose true
+        buildConfig true
     }
     composeOptions {
         kotlinCompilerExtensionVersion libs.versions.androidxComposeCompiler.get()
@@ -94,11 +96,11 @@ dependencies {
 
     implementation libs.androidx.datastore.preferences
 
-    kapt libs.hilt.compiler
-    kaptAndroidTest libs.hilt.compiler
     implementation libs.hilt.android
     implementation libs.androidx.hilt.navigation.compose
+    kapt libs.hilt.compiler
     androidTestImplementation libs.hilt.android.testing
+    kaptAndroidTest libs.hilt.compiler
 
     testImplementation(project(":shared-test"))
     androidTestImplementation(project(":shared-test"))

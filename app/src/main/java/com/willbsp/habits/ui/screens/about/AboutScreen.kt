@@ -11,7 +11,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.BugReport
 import androidx.compose.material.icons.filled.DataObject
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
@@ -81,7 +81,7 @@ fun AboutScreen(
 
             Spacer(Modifier.size(10.dp))
 
-            Divider()
+            HorizontalDivider()
 
             AboutListItem(
                 onClick = { uriHandler.openUri("https://github.com/willbsp/habits") },
@@ -122,5 +122,5 @@ fun AboutListItem(
 @Composable
 @Preview(showBackground = true, showSystemUi = true)
 fun AboutScreenPreview() {
-    AboutScreen({})
+    AboutScreen {}
 }

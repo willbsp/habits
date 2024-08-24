@@ -1,7 +1,6 @@
 package com.willbsp.habits.ui.screens.home
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.TweenSpec
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -42,7 +41,7 @@ import com.willbsp.habits.ui.common.button.HabitsFloatingAction
 import com.willbsp.habits.ui.theme.HabitsTheme
 import java.time.LocalDate
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
