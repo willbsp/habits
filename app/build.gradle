@@ -15,8 +15,8 @@ android {
         applicationId "com.willbsp.habits"
         minSdk libs.versions.minSdk.get().toInteger()
         targetSdk libs.versions.targetSdk.get().toInteger()
-        versionCode 4
-        versionName "1.2.1"
+        versionCode 5
+        versionName "1.2.2"
 
         testInstrumentationRunner "com.willbsp.habits.CustomTestRunner"
         vectorDrawables {
