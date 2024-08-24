@@ -1,0 +1,3 @@
+Release 1.2.2
+- Increase target API to 35
+- Remove animation from logbook screen to prevent crashing
